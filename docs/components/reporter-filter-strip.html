@@ -1,0 +1,10 @@
+<!-- Used in: my-articles-reporter-portal.html -->
+<div class="article-filter-strip surface-paper pad-4 radius-card shadow-subtle margin-bottom-4 flex flex-column md-row align-center justify-between gap-4">
+  <div class="flex flex-wrap align-center gap-2" id="statusFilterPills">
+    <button class="filter-btn active pad-inline-3 pad-block-2 radius-standard text-1 text-label motion-colors surface-ink color-inverse" aria-pressed="true" data-status="All" type="button">All <span>12</span></button>
+    <button class="filter-btn pad-inline-3 pad-block-2 radius-standard text-1 text-label motion-colors surface-panel color-muted" aria-pressed="false" data-status="Draft" type="button">Draft <span>3</span></button>
+    <button class="filter-btn pad-inline-3 pad-block-2 radius-standard text-1 text-label motion-colors surface-panel color-muted" aria-pressed="false" data-status="Pending Review" type="button">Pending Review <span>4</span></button>
+    <button class="filter-btn pad-inline-3 pad-block-2 radius-standard text-1 text-label motion-colors surface-panel color-muted" aria-pressed="false" data-status="Published" type="button">Published <span>3</span></button>
+  </div>
+  <div class="article-filter-controls flex flex-wrap align-center gap-3 width-full"><select class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3" id="categorySelect"><option value="All">All Categories</option><option value="Technology">Technology</option><option value="Campus Life">Campus Life</option><option value="Culture &amp; Arts">Culture &amp; Arts</option></select><input class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3" id="articleSearch" name="q" placeholder="Search articles" type="search" /></div>
+</div>
