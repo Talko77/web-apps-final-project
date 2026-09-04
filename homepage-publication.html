@@ -5,39 +5,33 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>The Daily Web</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap"
-      rel="stylesheet"
-    />
     <link href="styles/style.css" rel="stylesheet" />
   </head>
   <body
-    class="surface-page text-body text-2 color-body height-screen flex flex-column"
+    class="public-page publication-page surface-page text-body text-2 color-body height-screen flex flex-column"
   >
-    <header class="fixed width-full surface-paper shadow-subtle">
+    <header class="site-header site-header-standard fixed width-full surface-paper shadow-subtle">
       <div
-        class="width-content pad-inline-5 flex align-center justify-between gap-4"
+        class="site-header-bar page-shell width-content pad-inline-5 flex align-center justify-between gap-4"
       >
         <div class="flex align-center gap-4">
           <a class="flex align-center gap-2" data-path="home" href="#"
             ><img
               alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
-              class=""
+              class="image-logo"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
             /><span
-              class="text-headline text-5 color-primary state-hidden inline"
+              class="site-brand-name text-headline text-5 color-primary state-hidden inline"
               >The Daily Web</span
             ></a
-          ><span class="state-hidden inline color-subtle">|</span
+          ><span class="site-edition-separator state-hidden inline color-subtle">|</span
           ><span
-            class="state-hidden inline text-label text-1 color-muted text-uppercase"
+            class="site-edition-label state-hidden inline text-label text-1 color-muted text-uppercase"
             >Campus Edition</span
           >
         </div>
         <nav
-          class="state-hidden flex align-center gap-5"
+          class="site-primary-nav state-hidden flex align-center gap-5"
           data-active-classes="color-primary text-bold"
         >
           <a
@@ -69,11 +63,11 @@
           >
         </nav>
         <div class="flex align-center gap-3">
-          <div class="relative state-hidden block width-reading">
-            <span class="material-symbols-outlined absolute color-muted text-4"
+          <div class="site-search relative state-hidden block width-reading">
+            <span class="site-search-icon icon absolute color-muted text-4"
               >search</span
             ><input
-              class="width-full pad-inline-5 pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1 color-body control-input"
+              class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1 color-body control-input"
               placeholder="Search articles..."
               type="text"
             />
@@ -87,14 +81,14 @@
           <div
             class="avatar-small radius-pill surface-ink flex align-center justify-center"
           >
-            <span class="material-symbols-outlined color-inverse text-4"
+            <span class="icon color-inverse text-4"
               >person</span
             >
           </div>
         </div>
       </div>
-      <div class="surface-alert color-alert pad-inline-5 pad-block-2">
-        <div class="width-content flex align-center gap-2 text-label text-1">
+      <div class="site-breaking-bar surface-alert color-alert pad-inline-5 pad-block-2">
+        <div class="page-shell width-content flex align-center gap-2 text-label text-1">
           <span
             class="surface-alert color-inverse text-label text-1 pad-inline-3 pad-block-2 radius-standard text-uppercase text-bold"
             >Breaking</span
@@ -105,12 +99,12 @@
         </div>
       </div>
     </header>
-    <main class="width-full surface-page flex-grow">
-      <div class="width-content pad-inline-5 pad-block-3">
+    <main class="publication-main width-full surface-page flex-grow">
+      <div class="publication-shell page-shell width-content pad-inline-5 pad-block-3">
         <div class="flex flex-column width-full">
           <!-- Breaking News Ticker Strip -->
           <div
-            class="width-full surface-raised radius-card pad-3 margin-bottom-6 flex flex-column sm-row sm-align-center justify-between gap-3 shadow-subtle"
+            class="breaking-card width-full surface-raised radius-card pad-3 margin-bottom-6 flex flex-column sm-row sm-align-center justify-between gap-3 shadow-subtle"
           >
             <div class="flex align-center gap-3">
               <div
@@ -129,20 +123,20 @@
             <div
               class="flex align-center gap-2 flex-no-shrink align-end text-caption text-1 color-muted"
             >
-              <span class="material-symbols-outlined text-2">schedule</span>
+              <span class="icon text-2">schedule</span>
               <span>Updated 12m ago</span>
             </div>
           </div>
           <!-- Main Editorial Grid (8 cols lead + 4 cols sidebar) -->
-          <div class="grid grid-single lg-editorial-grid gap-6">
+          <div class="publication-grid grid grid-single lg-editorial-grid gap-6">
             <!-- Primary Content Area (approx 8 cols) -->
-            <div class="lg-content-span flex flex-column gap-6">
+            <div class="publication-primary lg-content-span flex flex-column gap-6">
               <!-- Dominant Lead Article Card -->
               <article
-                class="surface-paper radius-panel overflow-hidden shadow-subtle motion-shadow flex flex-column"
+                class="publication-lead surface-paper radius-panel overflow-hidden shadow-subtle motion-shadow flex flex-column"
               >
                 <div
-                  class="relative width-full height-feature overflow-hidden surface-panel"
+                  class="publication-lead-media relative width-full height-feature overflow-hidden surface-panel"
                 >
                   <img
                     class="width-full height-full media-cover interaction-zoom motion-transform"
@@ -168,7 +162,7 @@
                     <span>2 hours ago</span>
                     <span>•</span>
                     <span class="flex align-center gap-1">
-                      <span class="material-symbols-outlined text-2"
+                      <span class="icon text-2"
                         >timer</span
                       >
                       5 min read
@@ -194,7 +188,7 @@
                       href="#"
                     >
                       <span>Read Full Report</span>
-                      <span class="material-symbols-outlined text-4"
+                      <span class="icon text-4"
                         >arrow_forward</span
                       >
                     </a>
@@ -203,7 +197,7 @@
                         class="pad-2 radius-standard motion-colors"
                         title="Bookmark article"
                       >
-                        <span class="material-symbols-outlined text-4"
+                        <span class="icon text-4"
                           >bookmark_border</span
                         >
                       </button>
@@ -211,7 +205,7 @@
                         class="pad-2 radius-standard motion-colors"
                         title="Share story"
                       >
-                        <span class="material-symbols-outlined text-4"
+                        <span class="icon text-4"
                           >share</span
                         >
                       </button>
@@ -229,13 +223,13 @@
                     >Editor's Picks</span
                   >
                 </div>
-                <div class="grid grid-single md-grid-triple gap-4">
+                <div class="publication-featured-grid grid grid-single md-grid-triple gap-4">
                   <!-- Card 1 -->
                   <article
-                    class="surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow"
+                    class="publication-feature-card surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow"
                   >
                     <div
-                      class="relative height-feature width-full surface-panel overflow-hidden"
+                      class="publication-feature-media relative height-feature width-full surface-panel overflow-hidden"
                     >
                       <img
                         class="width-full height-full media-cover interaction-zoom motion-transform"
@@ -268,10 +262,10 @@
                   </article>
                   <!-- Card 2 -->
                   <article
-                    class="surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow"
+                    class="publication-feature-card surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow"
                   >
                     <div
-                      class="relative height-feature width-full surface-panel overflow-hidden"
+                      class="publication-feature-media relative height-feature width-full surface-panel overflow-hidden"
                     >
                       <img
                         class="width-full height-full media-cover interaction-zoom motion-transform"
@@ -303,10 +297,10 @@
                   </article>
                   <!-- Card 3 -->
                   <article
-                    class="surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow"
+                    class="publication-feature-card surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow"
                   >
                     <div
-                      class="relative height-feature width-full surface-panel overflow-hidden"
+                      class="publication-feature-media relative height-feature width-full surface-panel overflow-hidden"
                     >
                       <img
                         class="width-full height-full media-cover interaction-zoom motion-transform"
@@ -339,10 +333,10 @@
                 </div>
               </div>
               <!-- Chronological "Latest News" List -->
-              <section class="surface-paper radius-panel pad-5 shadow-subtle">
+              <section class="publication-dispatches surface-paper radius-panel pad-5 shadow-subtle">
                 <div class="flex align-center justify-between margin-bottom-4">
                   <div class="flex align-center gap-2">
-                    <span class="material-symbols-outlined color-primary"
+                    <span class="icon color-primary"
                       >schedule</span
                     >
                     <h2 class="text-headline text-5 color-body">
@@ -488,12 +482,12 @@
               </section>
             </div>
             <!-- Sidebar Area (approx 4 cols) -->
-            <aside class="span-sidebar flex flex-column gap-5">
+            <aside class="publication-sidebar span-sidebar flex flex-column gap-5">
               <!-- Compact Weather Widget -->
               <div class="surface-paper radius-panel pad-5 shadow-subtle">
                 <div class="flex align-center justify-between margin-bottom-2">
                   <div class="flex align-center gap-2">
-                    <span class="material-symbols-outlined color-muted text-4"
+                    <span class="icon color-muted text-4"
                       >location_on</span
                     >
                     <span class="text-label text-2 color-body text-semibold"
@@ -509,7 +503,7 @@
                     <div
                       class="avatar-large radius-panel surface-muted flex align-center justify-center color-muted"
                     >
-                      <span class="material-symbols-outlined text-6"
+                      <span class="icon text-6"
                         >cloud</span
                       >
                     </div>
@@ -541,7 +535,7 @@
                   class="flex align-center justify-between margin-bottom-2 margin-bottom-4"
                 >
                   <div class="flex align-center gap-2">
-                    <span class="material-symbols-outlined color-primary text-4"
+                    <span class="icon color-primary text-4"
                       >trending_up</span
                     >
                     <h3 class="text-headline text-5 color-body">Most Read</h3>
@@ -673,7 +667,7 @@
                 <div
                   class="avatar-medium radius-card surface-ink color-inverse flex align-center justify-center margin-bottom-2"
                 >
-                  <span class="material-symbols-outlined text-4"
+                  <span class="icon text-4"
                     >mark_email_unread</span
                   >
                 </div>
@@ -721,7 +715,7 @@
                   class="state-hidden pad-3 surface-panel radius-standard text-center"
                   id="newsletter-success"
                 >
-                  <span class="material-symbols-outlined color-primary text-5"
+                  <span class="icon color-primary text-5"
                     >check_circle</span
                   >
                   <p class="text-label text-1 color-body margin-top-2">
@@ -737,7 +731,7 @@
                 <div
                   class="flex align-center gap-2 color-primary margin-bottom-2"
                 >
-                  <span class="material-symbols-outlined text-4">verified</span>
+                  <span class="icon text-4">verified</span>
                   <span class="text-label text-1 text-semibold"
                     >Student Newsroom Charter</span
                   >
@@ -753,7 +747,7 @@
         </div>
       </div>
     </main>
-    <footer class="width-full surface-muted">
+    <footer class="public-footer width-full surface-muted">
       <div class="width-content pad-inline-5 pad-block-3">
         <div class="grid grid-single md-grid-triple gap-6">
           <div class="">

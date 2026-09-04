@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Technology &amp; Computing | The Daily Web</title>
     <link rel="stylesheet" href="styles/style.css" />
   </head>
-  <body class="surface-page text-body color-body">
-    <header class="fixed width-full surface-glass shadow-subtle">
+  <body class="public-page technology-page surface-page text-body color-body">
+    <header class="site-header site-header-desk fixed width-full surface-glass shadow-subtle">
       <div
-        class="width-content page-shell pad-inline-5 flex flex-column justify-between pad-block-2"
+        class="desk-header-shell width-content page-shell pad-inline-5 flex flex-column justify-between pad-block-2"
       >
         <div class="flex align-center justify-between pad-block-2">
           <div class="flex align-center gap-4">
@@ -18,7 +19,7 @@
               class="image-logo"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
             />
-            <div class="flex flex-column">
+            <div class="desk-brand-copy flex flex-column">
               <span
                 class="text-kicker text-1 text-uppercase color-body text-bold"
                 >The Daily Web</span
@@ -27,7 +28,7 @@
               >
             </div>
           </div>
-          <div class="flex align-center gap-5 color-muted">
+          <div class="desk-header-context flex align-center gap-5 color-muted">
             <div class="flex align-center gap-2 text-caption text-1">
               <span class="icon text-2">calendar_today</span
               ><span>Tuesday, October 28, 2025</span>
@@ -44,7 +45,7 @@
             >
               <span class="icon text-5">search</span></button
             ><a
-              class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors"
+              class="desk-staff-link inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors"
               data-path="staff-cms"
               href="#"
               ><span>Staff CMS</span
@@ -100,7 +101,7 @@
           >
         </nav>
       </div>
-      <div class="width-full surface-muted rule">
+      <div class="desk-live-wire width-full surface-muted rule">
         <div
           class="width-content page-shell pad-inline-5 pad-block-2 flex align-center gap-3 overflow-hidden"
         >
@@ -123,10 +124,10 @@
         </div>
       </div>
     </header>
-    <main class="width-full pad-6 surface-page">
+    <main class="technology-main width-full surface-page">
       <div class="flex flex-column width-full">
         <!-- Channel Hero Masthead -->
-        <section class="relative width-full surface-muted overflow-hidden">
+        <section class="technology-channel-hero relative width-full surface-muted overflow-hidden">
           <div class="absolute media-overlay state-muted">
             <svg
               class="width-full height-full color-muted"
@@ -218,7 +219,7 @@
           </div>
         </section>
         <!-- Interactive Filter, Search & Sorting Bar -->
-        <section class="sticky surface-glass shadow-subtle">
+        <section class="technology-filter-bar sticky surface-glass shadow-subtle">
           <div
             class="width-content page-shell pad-inline-5 pad-block-3 flex flex-column gap-3"
           >
@@ -318,15 +319,15 @@
           </div>
         </section>
         <!-- Main Narrative Area & Structural Grid -->
-        <main class="width-content page-shell pad-inline-5 pad-6 width-full">
+        <main class="technology-content width-content page-shell pad-inline-5 pad-6 width-full">
           <!-- Hero Feature Package -->
           <article
-            class="relative surface-paper radius-panel shadow-raised overflow-hidden margin-bottom-6 motion-shadow"
+            class="technology-feature relative surface-paper radius-panel shadow-raised overflow-hidden margin-bottom-6 motion-shadow"
           >
             <div class="grid grid-single lg-editorial-grid">
               <!-- Feature Visual -->
               <div
-                class="lg-content-span relative media-hero overflow-hidden surface-ink"
+                class="technology-feature-media lg-content-span relative media-hero overflow-hidden surface-ink"
               >
                 <img
                   class="width-full height-full media-image interaction-zoom motion-transform"
@@ -427,9 +428,9 @@
             </div>
           </article>
           <!-- 12-Column Editorial Spread: 8 Cols Content Ribbon + 4 Cols Strategic Sidebar -->
-          <div class="grid grid-single lg-editorial-grid gap-6">
+          <div class="technology-spread grid grid-single lg-editorial-grid gap-6">
             <!-- Primary 8-Column Articles Track -->
-            <section class="lg-content-span flex flex-column gap-6">
+            <section class="technology-articles lg-content-span flex flex-column gap-6">
               <div class="flex align-center justify-between pad-block-2">
                 <div class="flex align-center gap-2">
                   <span class="surface-ink radius-pill"></span>
@@ -445,7 +446,7 @@
               </div>
               <!-- Dynamic 3-Column Subgrid (Responsive) -->
               <div
-                class="grid grid-single sm-grid-split md-grid-triple gap-4"
+                class="technology-card-grid grid grid-single sm-grid-split md-grid-triple gap-4"
                 id="articleGrid"
               >
                 <!-- Card 1: Breaking / AI -->
@@ -890,7 +891,7 @@
               </div>
             </section>
             <!-- Sidebar: 4 Columns Editorial Dossier & Intelligence Panels -->
-            <aside class="lg-sidebar-span flex flex-column gap-6">
+            <aside class="technology-sidebar lg-sidebar-span flex flex-column gap-6">
               <!-- Widget 1: Most Read in Tech Leaderboard -->
               <div
                 class="surface-paper radius-panel shadow-subtle pad-5 flex flex-column gap-4"
@@ -1296,13 +1297,13 @@
                 if (isBookmarked) {
                   btn.setAttribute("data-active", "false");
                   icon.textContent = "bookmark_border";
-                  icon.style.fontVariationSettings = "'FILL' 0";
+                  icon.classList.remove("icon-filled");
                   btn.classList.remove("color-primary");
                   btn.classList.add("color-muted");
                 } else {
                   btn.setAttribute("data-active", "true");
                   icon.textContent = "bookmark";
-                  icon.style.fontVariationSettings = "'FILL' 1";
+                  icon.classList.add("icon-filled");
                   btn.classList.add("color-primary");
                   btn.classList.remove("color-muted");
                 }
@@ -1336,7 +1337,7 @@
         </script>
       </div>
     </main>
-    <footer class="width-full surface-paper rule-top rule margin-top-6">
+    <footer class="public-footer technology-footer width-full surface-paper rule-top rule margin-top-6">
       <div class="width-content page-shell pad-inline-5 pad-6">
         <div class="grid grid-single sm-grid-split md-grid-triple gap-6 pad-6">
           <div class="lg-sidebar-span stack-3">

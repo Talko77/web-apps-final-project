@@ -5,26 +5,20 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>The Daily Web - Editorial Workspace</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap"
-      rel="stylesheet"
-    />
     <link href="styles/style.css" rel="stylesheet" />
   </head>
   <body
-    class="surface-page text-body text-2 color-body height-screen flex flex-column"
+    class="editor-queue-page surface-page text-body text-2 color-body height-screen flex flex-column"
   >
-    <header class="fixed width-full surface-paper shadow-subtle">
+    <header class="site-header fixed width-full surface-paper shadow-subtle">
       <div
-        class="width-content pad-inline-5 flex align-center justify-between gap-4"
+        class="site-header-inner width-content pad-inline-5 flex align-center justify-between gap-4"
       >
         <div class="flex align-center gap-4">
           <a class="flex align-center gap-2" data-path="articles" href="#"
             ><img
               alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
-              class=""
+              class="brand-logo"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
             /><span class="text-headline text-5 color-primary"
               >The Daily Web</span
@@ -35,7 +29,7 @@
           >
         </div>
         <nav
-          class="state-hidden flex align-center gap-5"
+          class="site-primary-nav state-hidden flex align-center gap-5"
           data-active-classes="color-primary text-bold"
         >
           <a
@@ -56,7 +50,7 @@
             class="text-label text-1 color-muted flex align-center gap-1 motion-colors"
             data-path="home"
             href="#"
-            ><span class="material-symbols-outlined text-2">open_in_new</span
+            ><span class="icon text-2">open_in_new</span
             >View Public Site</a
           ><a
             class="text-label text-1 color-muted motion-colors"
@@ -67,15 +61,15 @@
           <div
             class="avatar-small radius-pill surface-ink flex align-center justify-center"
           >
-            <span class="material-symbols-outlined color-inverse text-4"
+            <span class="icon color-inverse text-4"
               >person</span
             >
           </div>
         </div>
       </div>
     </header>
-    <main class="width-full surface-page flex-grow">
-      <div class="width-content pad-inline-5 pad-block-3">
+    <main class="site-header-offset width-full surface-page flex-grow">
+      <div class="editor-page-content width-content pad-inline-5 pad-block-3">
         <div
           class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
         >
@@ -85,13 +79,13 @@
         </div>
         <div class="flex flex-column width-full">
           <section
-            class="surface-paper radius-panel pad-5 shadow-subtle margin-bottom-5"
+            class="queue-intro-card surface-paper radius-panel pad-5 shadow-subtle margin-bottom-5"
           >
             <div
-              class="flex flex-column md-row sm-align-center justify-between gap-4 margin-bottom-4 surface-muted pad-5 radius-panel"
+              class="queue-console-strip flex flex-column md-row sm-align-center justify-between gap-4 margin-bottom-4 surface-muted pad-5 radius-panel"
             >
               <div class="flex align-center gap-3">
-                <span class="material-symbols-outlined color-primary text-6"
+                <span class="icon color-primary text-6"
                   >assignment_turned_in</span
                 >
                 <div>
@@ -140,7 +134,7 @@
               </div>
             </div>
             <div
-              class="flex flex-column flex-row align-end justify-between gap-4 margin-top-2"
+              class="queue-heading-row flex flex-column flex-row align-end justify-between gap-4 margin-top-2"
             >
               <div>
                 <div class="flex align-center gap-2 margin-bottom-2">
@@ -183,14 +177,14 @@
             </div>
           </section>
           <section
-            class="surface-paper radius-panel pad-4 shadow-subtle margin-bottom-4"
+            class="queue-filters surface-paper radius-panel pad-4 shadow-subtle margin-bottom-4"
           >
             <div
               class="flex flex-column sm-row align-start sm-align-center justify-between gap-3"
             >
-              <div class="relative flex-grow width-reading">
+              <div class="queue-search relative flex-grow width-reading">
                 <span
-                  class="material-symbols-outlined absolute color-subtle text-4"
+                  class="icon absolute color-subtle text-4"
                   >search</span
                 >
                 <input
@@ -201,7 +195,7 @@
                 />
               </div>
               <div class="flex align-center gap-2">
-                <div class="relative">
+                <div class="queue-select relative">
                   <select
                     class="surface-paper text-label text-1 color-body pad-inline-3 pad-inline-5 pad-block-2 radius-card control-pointer control-input shadow-subtle"
                     id="categoryFilter"
@@ -214,22 +208,23 @@
                     <option value="OPINION">Opinion Desk</option>
                   </select>
                   <span
-                    class="material-symbols-outlined absolute color-subtle text-4"
+                    class="icon absolute color-subtle text-4"
                     >expand_more</span
                   >
                 </div>
                 <button
                   class="pad-inline-3 pad-block-2 text-1 text-label color-muted radius-card motion-colors flex align-center gap-1"
                   id="resetFilters"
+                  type="button"
                 >
-                  <span class="material-symbols-outlined text-2">refresh</span>
+                  <span class="icon text-2">refresh</span>
                   Reset
                 </button>
               </div>
             </div>
           </section>
           <div
-            class="surface-paper radius-panel shadow-subtle overflow-hidden margin-bottom-5"
+            class="queue-table-card surface-paper radius-panel shadow-subtle overflow-hidden margin-bottom-5"
           >
             <div class="overflow-scroll">
               <table class="width-full text-left" id="queueTable">
@@ -322,7 +317,7 @@
                         href="#"
                       >
                         <span>Review Article</span>
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >arrow_forward</span
                         >
                       </a>
@@ -405,7 +400,7 @@
                         href="#"
                       >
                         <span>Review Article</span>
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >arrow_forward</span
                         >
                       </a>
@@ -487,7 +482,7 @@
                         href="#"
                       >
                         <span>Review Article</span>
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >arrow_forward</span
                         >
                       </a>
@@ -569,7 +564,7 @@
                         href="#"
                       >
                         <span>Review Article</span>
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >arrow_forward</span
                         >
                       </a>
@@ -651,7 +646,7 @@
                         href="#"
                       >
                         <span>Review Article</span>
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >arrow_forward</span
                         >
                       </a>
@@ -672,17 +667,20 @@
                 <button
                   class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled"
                   disabled=""
+                  type="button"
                 >
                   Previous
                 </button>
                 <button
                   class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 text-semibold"
+                  type="button"
                 >
                   1
                 </button>
                 <button
                   class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled"
                   disabled=""
+                  type="button"
                 >
                   Next
                 </button>
@@ -690,14 +688,14 @@
             </div>
           </div>
           <section
-            class="grid grid-single md-grid-triple gap-4 margin-bottom-6"
+            class="queue-metrics grid grid-single md-grid-triple gap-4 margin-bottom-6"
           >
             <div class="surface-paper pad-4 radius-panel shadow-subtle">
               <div class="flex align-center justify-between margin-bottom-2">
                 <span class="text-label text-1 text-uppercase color-muted"
                   >Dispatch Cadence</span
                 >
-                <span class="material-symbols-outlined color-muted text-4"
+                <span class="icon color-muted text-4"
                   >speed</span
                 >
               </div>
@@ -713,7 +711,7 @@
                 <span class="text-label text-1 text-uppercase color-muted"
                   >Live Reporters</span
                 >
-                <span class="material-symbols-outlined color-muted text-4"
+                <span class="icon color-muted text-4"
                   >group</span
                 >
               </div>
@@ -729,7 +727,7 @@
                 <span class="text-label text-1 text-uppercase color-muted"
                   >Evening Print Lock</span
                 >
-                <span class="material-symbols-outlined color-alert text-4"
+                <span class="icon color-alert text-4"
                   >lock_clock</span
                 >
               </div>
@@ -763,11 +761,7 @@
                   const matchesCategory =
                     category === "ALL" || rowCategory === category;
 
-                  if (matchesQuery && matchesCategory) {
-                    row.style.display = "";
-                  } else {
-                    row.style.display = "none";
-                  }
+                  row.hidden = !(matchesQuery && matchesCategory);
                 });
               }
 

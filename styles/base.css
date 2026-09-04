@@ -63,6 +63,28 @@ button,
   cursor: pointer;
 }
 
+/* EDITOR PARITY: retain the prototype's reset after removing Tailwind preflight. */
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  padding: 0;
+  background: transparent;
+}
+
 button:disabled,
 [aria-disabled="true"] {
   cursor: not-allowed;

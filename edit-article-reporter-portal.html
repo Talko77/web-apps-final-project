@@ -4,27 +4,13 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>The Daily Web - Editorial Workspace</title>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
     <link href="styles/style.css" rel="stylesheet" />
   </head>
   <body
-    class="surface-page text-body color-body height-screen flex flex-column"
+    class="reporter-edit-page surface-page text-body color-body height-screen flex flex-column"
   >
-    <header class="fixed width-full surface-paper shadow-subtle">
-      <div class="page-shell flex align-center justify-between gap-4">
+    <header class="newsroom-site-header fixed width-full surface-paper shadow-subtle">
+      <div class="newsroom-header-shell page-shell flex align-center justify-between gap-4">
         <div class="flex align-center gap-4">
           <a class="flex align-center gap-2" data-path="articles" href="#"
             ><img
@@ -40,7 +26,7 @@
           >
         </div>
         <nav
-          class="flex align-center gap-5"
+          class="newsroom-primary-nav flex align-center gap-5"
           data-active-classes="color-primary text-bold"
         >
           <a
@@ -56,12 +42,12 @@
             >Review Queue</a
           >
         </nav>
-        <div class="flex align-center gap-4">
+        <div class="newsroom-account-actions flex align-center gap-4">
           <a
             class="text-label text-1 color-muted interaction-underline flex align-center gap-1 motion-colors"
             data-path="home"
             href="#"
-            ><span class="material-symbols-outlined text-1">open_in_new</span
+            ><span class="icon text-1">open_in_new</span
             >View Public Site</a
           ><a
             class="text-label text-1 color-muted motion-colors"
@@ -72,15 +58,15 @@
           <div
             class="avatar-small surface-ink flex align-center justify-center"
           >
-            <span class="material-symbols-outlined color-inverse text-4"
+            <span class="icon color-inverse text-4"
               >person</span
             >
           </div>
         </div>
       </div>
     </header>
-    <main class="width-full margin-top-6 surface-page flex-grow">
-      <div class="page-shell pad-block-3">
+    <main class="newsroom-main width-full surface-page flex-grow">
+      <div class="reporter-workspace page-shell pad-block-3">
         <div
           class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
         >
@@ -92,7 +78,7 @@
         <div class="flex flex-column width-full">
           <!-- Top Command Ribbon / Autosave Status -->
           <div
-            class="surface-paper radius-panel shadow-subtle pad-inline-5 pad-block-3 margin-bottom-5 flex flex-column md-row align-center justify-between gap-4"
+            class="command-ribbon surface-paper radius-panel shadow-subtle pad-inline-5 pad-block-3 margin-bottom-5 flex flex-column md-row align-center justify-between gap-4"
           >
             <div class="flex flex-column sm-row sm-align-center gap-3 gap-4">
               <div class="flex align-center gap-2 text-body text-1 color-muted">
@@ -108,7 +94,7 @@
               <div
                 class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-caption text-1"
               >
-                <span class="relative flex">
+                <span class="autosave-indicator relative flex">
                   <span
                     class="state-loading absolute inline-flex height-full width-full radius-pill surface-panel"
                   ></span>
@@ -126,14 +112,14 @@
                 class="control-button control-button-secondary color-body text-label text-2 motion-colors flex align-center gap-2 shadow-subtle"
                 type="button"
               >
-                <span class="material-symbols-outlined text-4">save</span>
+                <span class="icon text-4">save</span>
                 <span class="">Save Draft</span>
               </button>
               <button
                 class="control-button control-button-secondary color-body text-label text-2 motion-colors flex align-center gap-2 shadow-subtle"
                 type="button"
               >
-                <span class="material-symbols-outlined text-4">visibility</span>
+                <span class="icon text-4">visibility</span>
                 <span class="">Preview</span>
               </button>
               <button
@@ -141,18 +127,17 @@
                 id="topSubmitBtn"
                 type="button"
               >
-                <span class="material-symbols-outlined text-4">send</span>
+                <span class="icon text-4">send</span>
                 <span class="">Submit for Review</span>
               </button>
             </div>
           </div>
           <!-- Notice Alert Banner -->
           <div
-            class="surface-info color-info radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+            class="notice-banner surface-info color-info radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
           >
             <span
-              class="material-symbols-outlined color-muted text-5 flex-no-shrink margin-top-2"
-              style="font-variation-settings: &quot;FILL&quot; 1"
+              class="icon icon-filled color-muted text-5 flex-no-shrink margin-top-2"
               >info</span
             >
             <div class="flex-grow text-left text-body text-2">
@@ -166,15 +151,15 @@
           </div>
           <!-- Main Editorial Grid -->
           <form
-            class="grid grid-single lg-editorial-grid gap-5"
+            class="article-editor-grid grid grid-single lg-editorial-grid gap-5"
             id="articleForm"
             onsubmit="event.preventDefault()"
           >
             <!-- Center Editorial Body Flow (8 Cols) -->
-            <div class="lg-content-span flex flex-column gap-5">
+            <div class="article-editor-column lg-content-span flex flex-column gap-5">
               <!-- Article Title Card -->
               <div
-                class="surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
               >
                 <label
                   class="text-label text-1 text-uppercase color-muted text-bold"
@@ -196,7 +181,7 @@
               </div>
               <!-- Standfirst / Subtitle -->
               <div
-                class="surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
               >
                 <div class="flex align-center justify-between">
                   <label
@@ -217,13 +202,11 @@
                   name="articleSubtitle"
                   placeholder="Summarize the core impact in two sentences for the lead feed..."
                   rows="2"
-                >
-Independent researchers reveal an energy-efficient compute block fabricated on open standard ISA, promising accessible hardware for labs.</textarea
-                >
+                >Independent researchers reveal an energy-efficient compute block fabricated on open standard ISA, promising accessible hardware for labs.</textarea>
               </div>
               <!-- Lead Graphic Attachment Box -->
               <div
-                class="surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
               >
                 <div class="flex align-center justify-between">
                   <div>
@@ -246,7 +229,7 @@ Independent researchers reveal an energy-efficient compute block fabricated on o
                   class="surface-muted radius-panel pad-4 flex flex-column sm-row align-center gap-4"
                 >
                   <div
-                    class="width-full media-frame media-thumbnail radius-card flex-no-shrink shadow-subtle"
+                    class="lead-image-preview width-full media-frame media-thumbnail radius-card flex-no-shrink shadow-subtle"
                   >
                     <img
                       class="width-full height-full media-cover interaction-zoom motion-transform"
@@ -262,12 +245,12 @@ Independent researchers reveal an energy-efficient compute block fabricated on o
                     </div>
                   </div>
                   <div
-                    class="flex-grow flex flex-column justify-center text-center gap-1"
+                    class="lead-image-copy flex-grow flex flex-column justify-center text-center gap-1"
                   >
                     <div
                       class="flex align-center justify-center justify-start gap-2 color-body text-label text-2"
                     >
-                      <span class="material-symbols-outlined text-5 color-muted"
+                      <span class="icon text-5 color-muted"
                         >cloud_upload</span
                       >
                       <span class="">Drag &amp; drop or browse image</span>
@@ -294,7 +277,7 @@ Independent researchers reveal an energy-efficient compute block fabricated on o
                   </div>
                 </div>
                 <!-- Caption and Credit Fields -->
-                <div class="grid grid-single sm-grid-split gap-4">
+                <div class="lead-image-fields grid grid-single gap-4">
                   <div class="flex flex-column gap-1">
                     <label
                       class="text-caption text-1 color-muted text-medium"
@@ -325,7 +308,7 @@ Independent researchers reveal an energy-efficient compute block fabricated on o
               </div>
               <!-- Rich Article WYSIWYG Editor Canvas -->
               <div
-                class="surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-3"
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-3"
               >
                 <div class="flex align-center justify-between margin-bottom-2">
                   <label
@@ -338,17 +321,17 @@ Independent researchers reveal an energy-efficient compute block fabricated on o
                 </div>
                 <!-- Familiar Standard Editorial Toolbar -->
                 <div
-                  class="surface-muted radius-card pad-2 flex align-center flex-wrap gap-1 shadow-subtle"
+                  class="editor-toolbar surface-muted radius-card pad-2 flex align-center flex-wrap gap-1 shadow-subtle"
                 >
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Bold"
                     type="button"
                   >
                     <span class="text-bold text-2">B</span>
                   </button>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Italic"
                     type="button"
                   >
@@ -356,84 +339,83 @@ Independent researchers reveal an energy-efficient compute block fabricated on o
                       >I</span
                     >
                   </button>
-                  <div class="surface-panel"></div>
+                  <div class="toolbar-divider surface-panel"></div>
                   <button
-                    class="pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
+                    class="toolbar-control toolbar-text-control pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
                     title="Subheading 2"
                     type="button"
                   >
                     H2
                   </button>
                   <button
-                    class="pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
+                    class="toolbar-control toolbar-text-control pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
                     title="Subheading 3"
                     type="button"
                   >
                     H3
                   </button>
-                  <div class="surface-panel"></div>
+                  <div class="toolbar-divider surface-panel"></div>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Blockquote"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4"
+                    <span class="icon text-4"
                       >format_quote</span
                     >
                   </button>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Hyperlink"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4">link</span>
+                    <span class="icon text-4">link</span>
                   </button>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Bulleted List"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4"
+                    <span class="icon text-4"
                       >format_list_bulleted</span
                     >
                   </button>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Numbered List"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4"
+                    <span class="icon text-4"
                       >format_list_numbered</span
                     >
                   </button>
-                  <div class="surface-panel"></div>
+                  <div class="toolbar-divider surface-panel"></div>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Insert Horizontal Rule"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4"
+                    <span class="icon text-4"
                       >horizontal_rule</span
                     >
                   </button>
                   <button
-                    class="radius-standard color-body flex align-center justify-center motion-colors"
+                    class="toolbar-control toolbar-clear-control radius-standard color-body flex align-center justify-center motion-colors"
                     title="Clear Formatting"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4"
+                    <span class="icon text-4"
                       >format_clear</span
                     >
                   </button>
                 </div>
                 <!-- Broad Editorial Textarea -->
                 <textarea
-                  class="control-input width-full surface-paper pad-4 radius-card text-deck text-article color-body motion-colors text-relaxed shadow-subtle"
+                  class="article-body-input control-input width-full surface-paper pad-4 radius-card text-deck color-body motion-colors text-relaxed shadow-subtle"
                   id="articleBody"
                   placeholder="Draft your story here using broadsheet narrative conventions..."
                   rows="16"
-                >
-In what could mark an inflection point for open computing initiatives across collegiate engineering labs, researchers today demonstrated a silicon prototype running an instruction pipeline with roughly 38% lower power overhead.
+                >In what could mark an inflection point for open computing initiatives across collegiate engineering labs, researchers today demonstrated a silicon prototype running an instruction pipeline with roughly 38% lower power overhead.
 
 Unlike commercial alternatives subject to strict proprietary licensing, the blueprint released under permissive academic licenses will allow student developers and open labs to fabricate bespoke accelerator units directly on shared multi-project semiconductor runs.
 
@@ -444,13 +426,13 @@ Further demonstrations are scheduled throughout the week, with initial hardware 
               </div>
             </div>
             <!-- Right Column Sidebar / Meta Settings (4 Cols) -->
-            <div class="span-sidebar flex flex-column gap-5">
+            <div class="article-settings-column span-sidebar flex flex-column gap-5">
               <!-- Taxonomy & Classification Card -->
               <div
-                class="surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
               >
                 <div class="flex align-center gap-2">
-                  <span class="material-symbols-outlined color-muted text-5"
+                  <span class="icon color-muted text-5"
                     >category</span
                   >
                   <h3 class="text-headline text-4 color-primary">
@@ -464,7 +446,7 @@ Further demonstrations are scheduled throughout the week, with initial hardware 
                     for="articleCategory"
                     >Editorial Desk</label
                   >
-                  <div class="relative">
+                  <div class="select-control relative">
                     <select
                       class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-colors"
                       id="articleCategory"
@@ -478,7 +460,7 @@ Further demonstrations are scheduled throughout the week, with initial hardware 
                       <option value="Sports">Athletics</option>
                     </select>
                     <span
-                      class="material-symbols-outlined color-muted text-5 absolute"
+                      class="icon color-muted text-5 absolute"
                       >expand_more</span
                     >
                   </div>
@@ -520,12 +502,40 @@ Further demonstrations are scheduled throughout the week, with initial hardware 
                   </div>
                 </div>
                 <!-- Placement Tier / Prominence -->
+                <fieldset class="placement-fieldset">
+                  <legend class="text-label text-1 text-uppercase color-muted text-bold">Layout Prominence</legend>
+                  <div class="grid grid-split gap-2 margin-top-2">
+                    <label class="placement-option surface-muted radius-standard flex align-center gap-2 pad-inline-3 pad-block-2 text-label text-1">
+                      <input checked name="placementTier" type="radio" value="lead" />
+                      Lead Story
+                    </label>
+                    <label class="placement-option surface-muted radius-standard flex align-center gap-2 pad-inline-3 pad-block-2 text-label text-1">
+                      <input name="placementTier" type="radio" value="standard" />
+                      Standard Flow
+                    </label>
+                  </div>
+                </fieldset>
               </div>
               <!-- Publishing Ledger & Metadata -->
+              <section class="editor-card surface-paper pad-5 radius-panel shadow-subtle" aria-labelledby="revisionMetadataTitle">
+                <div class="flex align-center gap-2 margin-bottom-4">
+                  <span class="icon color-muted text-5">history_edu</span>
+                  <h3 class="text-headline text-4 color-primary" id="revisionMetadataTitle">Revision Metadata</h3>
+                </div>
+                <dl class="revision-ledger stack-2">
+                  <div><dt>Current assigned editor</dt><dd>Jordan Vance (Faculty)</dd></div>
+                  <div><dt>Original author</dt><dd>Marcus Chen</dd></div>
+                  <div><dt>Current live version</dt><dd class="text-semibold">v1.0 (Live)</dd></div>
+                </dl>
+                <p class="revision-note surface-muted radius-standard pad-3 margin-top-4 text-caption text-1 color-muted flex align-start gap-2">
+                  <span class="icon text-4">policy</span>
+                  <span>Submitting sends notifications to the student copy desk for fact-checking and layout clearance.</span>
+                </p>
+              </section>
 
               <!-- Quick Desk Notes -->
               <div
-                class="surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
               >
                 <label
                   class="text-label text-1 text-uppercase color-muted text-bold"
@@ -537,22 +547,21 @@ Further demonstrations are scheduled throughout the week, with initial hardware 
                   id="deskNotes"
                   placeholder="Optional notes for the reviewing editor (e.g. quotes re-verified with dean)..."
                   rows="3"
-                >
-Updated section 2 with Chen's confirmed tape-out quote. Replaced preview wafer graphic with high-res licensed photo.</textarea
+                >Updated section 2 with Chen's confirmed tape-out quote. Replaced preview wafer graphic with high-res licensed photo.</textarea
                 >
               </div>
             </div>
           </form>
           <!-- Bottom Workspace Actions Sticky Bar -->
           <div
-            class="margin-top-6 margin-top-5 margin-bottom-6 flex flex-column sm-row align-center justify-between gap-4"
+            class="workspace-actions margin-top-6 margin-bottom-6 flex flex-column sm-row align-center justify-between gap-4"
           >
             <button
               class="color-alert pad-inline-4 pad-block-2 radius-card text-label text-2 motion-colors flex align-center gap-1"
               id="deleteDraftBtn"
               type="button"
             >
-              <span class="material-symbols-outlined text-4">delete</span>
+              <span class="icon text-4">delete</span>
               <span class="">Delete Draft</span>
             </button>
             <div class="flex align-center gap-3 width-full justify-end">
@@ -567,7 +576,7 @@ Updated section 2 with Chen's confirmed tape-out quote. Replaced preview wafer g
                 id="bottomSubmitBtn"
                 type="button"
               >
-                <span class="material-symbols-outlined text-5">send</span>
+                <span class="icon text-5">send</span>
                 <span class="">Submit for Review</span>
               </button>
             </div>
@@ -595,11 +604,11 @@ Updated section 2 with Chen's confirmed tape-out quote. Replaced preview wafer g
                   const originalHTML = this.innerHTML;
                   this.disabled = true;
                   this.innerHTML =
-                    '<span class="material-symbols-outlined state-spinning text-4">progress_activity</span><span>Dispatching...</span>';
+                    '<span class="icon state-spinning text-4">progress_activity</span><span>Dispatching...</span>';
 
                   setTimeout(() => {
                     this.innerHTML =
-                      '<span class="material-symbols-outlined text-4">check</span><span>Submitted!</span>';
+                      '<span class="icon text-4">check</span><span>Submitted!</span>';
                     setTimeout(() => {
                       this.innerHTML = originalHTML;
                       this.disabled = false;
@@ -626,10 +635,8 @@ Updated section 2 with Chen's confirmed tape-out quote. Replaced preview wafer g
         </div>
       </div>
     </main>
-    <footer class="width-full surface-muted pad-block-3">
-      <div
-        class="width-content pad-inline-5 text-center text-caption text-1 color-muted"
-      >
+    <footer class="newsroom-footer width-full surface-muted pad-block-3">
+      <div class="page-shell text-center text-caption text-1 color-muted">
         The Daily Web Student Newsroom CMS • Internal Editorial Dispatch •
         v1.2.0
       </div>

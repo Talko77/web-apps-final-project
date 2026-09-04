@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web | Global Editorial Edition</title>
     <link rel="stylesheet" href="styles/style.css" />
   </head>
-  <body class="surface-page text-body color-body">
-    <header class="fixed width-full surface-glass shadow-subtle">
+  <body class="public-page editorial-home-page surface-page text-body color-body">
+    <header class="site-header site-header-desk fixed width-full surface-glass shadow-subtle">
       <div
-        class="width-content page-shell pad-inline-5 flex flex-column justify-between pad-block-2"
+        class="desk-header-shell width-content page-shell pad-inline-5 flex flex-column justify-between pad-block-2"
       >
         <div class="flex align-center justify-between pad-block-2">
           <div class="flex align-center gap-4">
@@ -18,7 +19,7 @@
               class="image-logo"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
             />
-            <div class="flex flex-column">
+            <div class="desk-brand-copy flex flex-column">
               <span
                 class="text-kicker text-1 text-uppercase color-body text-bold"
                 >The Daily Web</span
@@ -27,7 +28,7 @@
               >
             </div>
           </div>
-          <div class="flex align-center gap-5 color-muted">
+          <div class="desk-header-context flex align-center gap-5 color-muted">
             <div class="flex align-center gap-2 text-caption text-1">
               <span class="icon text-2">calendar_today</span
               ><span>Tuesday, October 28, 2025</span>
@@ -44,7 +45,7 @@
             >
               <span class="icon text-5">search</span></button
             ><a
-              class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors"
+              class="desk-staff-link inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors"
               data-path="staff-cms"
               href="#"
               ><span>Staff CMS</span
@@ -100,7 +101,7 @@
           >
         </nav>
       </div>
-      <div class="width-full surface-muted rule">
+      <div class="desk-live-wire width-full surface-muted rule">
         <div
           class="width-content page-shell pad-inline-5 pad-block-2 flex align-center gap-3 overflow-hidden"
         >
@@ -123,7 +124,7 @@
         </div>
       </div>
     </header>
-    <main class="width-full pad-6 surface-page">
+    <main class="editorial-home-main width-full surface-page">
       <div class="flex flex-column width-full">
         <!-- Top Global Briefing & Ticker Banner -->
         <div class="width-full surface-paper shadow-subtle margin-bottom-5">
@@ -173,10 +174,10 @@
         <!-- Primary Broadsheet Grid Shell -->
         <div class="width-content page-shell pad-inline-5 width-full stack-5">
           <!-- Hero Row: 8-Column Dominant Lead + 4-Column Secondary / Realtime Sidebar -->
-          <section class="grid grid-single lg-editorial-grid gap-6">
+          <section class="editorial-lead-grid grid grid-single lg-editorial-grid gap-6">
             <!-- Dominant Lead Story (8 Cols) -->
             <article
-              class="lg-content-span flex flex-column surface-paper pad-4 pad-6 radius-standard shadow-subtle"
+              class="editorial-lead-story lg-content-span flex flex-column surface-paper pad-4 pad-6 radius-standard shadow-subtle"
             >
               <div
                 class="flex flex-wrap align-center justify-between gap-2 pad-block-3 margin-bottom-2"
@@ -295,7 +296,7 @@
               </div>
             </article>
             <!-- Sidebar: Live Dispatches & Market Weather (4 Cols) -->
-            <aside class="lg-sidebar-span flex flex-column gap-5">
+            <aside class="editorial-live-sidebar lg-sidebar-span flex flex-column gap-5">
               <!-- Cached Micro-Weather Card -->
               <div class="surface-paper pad-4 radius-standard shadow-subtle">
                 <div class="flex align-center justify-between margin-bottom-2">
@@ -520,7 +521,7 @@
             </aside>
           </section>
           <!-- Secondary Lead Stories Grid (3 Columns Balanced) -->
-          <section class="stack-4">
+          <section class="editorial-secondary stack-4">
             <div class="flex align-center justify-between">
               <div class="flex align-center gap-2">
                 <span
@@ -672,7 +673,7 @@
           </section>
           <!-- Mid-Page Inset: Data Visualization / Global Yield & Compute Ingestion -->
           <section
-            class="surface-ink color-inverse radius-standard pad-5 pad-6 shadow-raised"
+            class="editorial-telemetry surface-ink color-inverse radius-standard pad-5 pad-6 shadow-raised"
           >
             <div class="grid grid-single lg-editorial-grid gap-5 align-center">
               <div class="lg-sidebar-span stack-3">
@@ -799,7 +800,7 @@
             </div>
           </section>
           <!-- Editorial Modules Row: Editor's Picks (Quote Callout) + Most Read Leaderboard -->
-          <section class="grid grid-single lg-editorial-grid gap-6 align-start">
+          <section class="editorial-modules grid grid-single lg-editorial-grid gap-6 align-start">
             <!-- Editor's Picks & Quotation Callout (7 Cols) -->
             <div class="lg-content-span stack-4">
               <div class="flex align-center justify-between">
@@ -1078,7 +1079,7 @@
             </div>
           </section>
           <!-- Section Spotlights: 4 Thematic Columns (Tech, Business, Science, Opinion) -->
-          <section class="stack-4">
+          <section class="editorial-spotlights stack-4">
             <div class="flex align-center justify-between">
               <h2 class="text-headline text-6 color-primary text-bold">
                 Desk Dossiers &amp; Focus Sectors
@@ -1315,7 +1316,7 @@
         </div>
       </div>
     </main>
-    <footer class="width-full surface-paper rule-top rule margin-top-6">
+    <footer class="public-footer editorial-footer width-full surface-paper rule-top rule margin-top-6">
       <div class="width-content page-shell pad-inline-5 pad-6">
         <div class="grid grid-single sm-grid-split md-grid-triple gap-6 pad-6">
           <div class="lg-sidebar-span stack-3">

@@ -170,4 +170,60 @@
   --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
   --shadow-menu: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
   --shadow-modal: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+
+  /* EDITOR PARITY: shared newsroom geometry and workflow colors. */
+  --site-header-height: 64px;
+  --workspace-review-max-height: 720px;
+  --comparison-media-height: 192px;
+  --analytics-chart-height: 224px;
+  --layer-site-header: 50;
+  --layer-workspace-header: 40;
+  --color-pending-dot: #d97706;
+  --color-pending-beacon: #f59e0b;
+  --color-returned-container: #ffedd5;
+  --color-returned-ink: #7c2d12;
+  --color-returned-dot: #ea580c;
+  --color-published-dot: #059669;
+
+  /* REPORTER PARITY: portal, article-table, and authentication details. */
+  --reporter-control-compact-height: 32px;
+  --reporter-thumbnail-size: 48px;
+  --reporter-status-dot-size: 6px;
+  --reporter-presence-dot-size: 8px;
+  --login-panel-width: 448px;
+  --login-logo-width: 224px;
+  --surface-reporter-row-alternate: rgb(242 244 246 / 45%);
+  --surface-reporter-row-hover: rgb(242 244 246 / 75%);
+  --color-status-published-container: #d1fae5;
+  --color-status-published-ink: #047857;
+  --color-status-pending-container: #fef3c7;
+  --color-status-pending-ink: #92400e;
+  --color-status-changes-container: #ffedd5;
+  --color-status-changes-ink: #9a3412;
+  --color-status-draft-container: #e5e7eb;
+  --color-status-draft-ink: #1f2937;
+  --color-status-rejected-container: #fee2e2;
+  --color-status-rejected-ink: #991b1b;
+  --color-submit-success: #047857;
+
+  /* PUBLIC PARITY: shared public-page shells, media, and responsive offsets. */
+  --public-standard-header-height: 64px;
+  --public-breaking-bar-height: 32px;
+  --public-standard-offset: 96px;
+  --public-desk-header-height: 112px;
+  --public-desk-offset: 136px;
+  --public-filter-height: 56px;
+  --article-content-width: 820px;
+  --article-related-media-height: 144px;
+  --publication-lead-media-mobile: 320px;
+  --publication-lead-media-tablet: 384px;
+  --publication-card-media-height: 176px;
+  --search-result-media-width: 192px;
+  --search-result-media-height: 144px;
+  --technology-feature-media-mobile: 380px;
+  --technology-feature-media-desktop: 500px;
+  --technology-card-media-height: 176px;
+  --editorial-hero-media-mobile: 360px;
+  --editorial-hero-media-desktop: 460px;
+  --editorial-sidebar-scroll-height: 580px;
 }

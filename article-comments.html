@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="styles/style.css" />
   </head>
   <body
-    class="surface-page text-body color-body height-screen flex flex-column"
+    class="public-page article-page surface-page text-body color-body height-screen flex flex-column"
   >
-    <header class="fixed width-full surface-paper shadow-subtle">
+    <header class="site-header site-header-standard fixed width-full surface-paper shadow-subtle">
       <div
-        class="width-content page-shell pad-inline-5 flex align-center justify-between gap-4"
+        class="site-header-bar width-content page-shell pad-inline-5 flex align-center justify-between gap-4"
       >
         <div class="flex align-center gap-4">
           <a class="flex align-center gap-2" data-path="home" href="#"
@@ -20,16 +20,16 @@
               alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
               class="image-logo"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
-            /><span class="text-headline text-5 color-primary"
+            /><span class="site-brand-name text-headline text-5 color-primary"
               >The Daily Web</span
             ></a
-          ><span class="color-subtle">|</span
-          ><span class="text-label text-1 color-muted text-uppercase"
+          ><span class="site-edition-separator color-subtle">|</span
+          ><span class="site-edition-label text-label text-1 color-muted text-uppercase"
             >Campus Edition</span
           >
         </div>
         <nav
-          class="flex align-center gap-5"
+          class="site-primary-nav flex align-center gap-5"
           data-active-classes="color-primary text-bold"
         >
           <a
@@ -61,8 +61,8 @@
           >
         </nav>
         <div class="flex align-center gap-3">
-          <div class="relative">
-            <span class="icon absolute color-muted text-4">search</span
+          <div class="site-search relative">
+            <span class="site-search-icon icon absolute color-muted text-4">search</span
             ><input
               class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1"
               placeholder="Search articles..."
@@ -82,7 +82,7 @@
           </div>
         </div>
       </div>
-      <div class="surface-alert color-alert pad-inline-5 pad-block-2">
+      <div class="site-breaking-bar surface-alert color-alert pad-inline-5 pad-block-2">
         <div
           class="width-content page-shell flex align-center gap-2 text-label text-1"
         >
@@ -96,15 +96,15 @@
         </div>
       </div>
     </header>
-    <main class="width-full pad-6 surface-page flex-grow">
+    <main class="article-page-main width-full surface-page flex-grow">
       <div class="width-content page-shell pad-inline-5 pad-block-3">
         <div class="flex flex-column width-full">
           <!-- Article Main Container -->
-          <article class="width-content page-shell width-full">
+          <article class="article-reading width-content page-shell width-full">
             <!-- Editorial Navigation / Breadcrumb -->
             <nav
               aria-label="Breadcrumb"
-              class="flex align-center gap-2 text-label text-1 color-muted margin-bottom-5"
+              class="article-breadcrumb flex align-center gap-2 text-label text-1 color-muted margin-bottom-5"
             >
               <a class="motion-colors" href="#">Home</a>
               <span class="icon color-subtle text-1">chevron_right</span>
@@ -113,7 +113,7 @@
               <span class="text-semibold">Artificial Intelligence</span>
             </nav>
             <!-- Header Block -->
-            <header class="margin-bottom-6">
+            <header class="article-heading margin-bottom-6">
               <div class="flex align-center gap-3 margin-bottom-2">
                 <span
                   class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
@@ -140,7 +140,7 @@
               </p>
               <!-- Byline Row -->
               <div
-                class="flex flex-wrap align-center justify-between gap-4 pad-block-3 surface-muted pad-inline-4 radius-card"
+                class="article-byline flex flex-wrap align-center justify-between gap-4 pad-block-3 surface-muted pad-inline-4 radius-card"
               >
                 <div class="flex align-center gap-3">
                   <img
@@ -180,7 +180,7 @@
             <!-- Featured Visual -->
             <figure class="margin-bottom-6">
               <div
-                class="width-full height-feature radius-card overflow-hidden surface-panel shadow-raised"
+                class="article-feature-media width-full height-feature radius-card overflow-hidden surface-panel shadow-raised"
               >
                 <img
                   class="media-image"
@@ -294,7 +294,7 @@
               </p>
             </div>
             <!-- Article Tag Footer -->
-            <div class="margin-top-6 pad-5 flex flex-wrap align-center gap-2">
+            <div class="article-tags margin-top-6 pad-5 flex flex-wrap align-center gap-2">
               <span class="text-kicker text-1 color-muted text-uppercase"
                 >Filed Under:</span
               >
@@ -318,7 +318,7 @@
             <!-- Related Stories (Clean Cards) -->
             <section
               aria-labelledby="related-heading"
-              class="margin-top-6 margin-bottom-6"
+              class="related-dispatches margin-top-6 margin-bottom-6"
             >
               <div class="flex align-center justify-between margin-bottom-5">
                 <h3
@@ -427,7 +427,7 @@
             <!-- Comments Section (Simple, Guest-Friendly) -->
             <section
               aria-labelledby="comments-title"
-              class="surface-paper pad-6 radius-panel shadow-subtle"
+              class="comment-thread surface-paper pad-6 radius-panel shadow-subtle"
             >
               <!-- Section Header -->
               <div
@@ -737,7 +737,7 @@
         </div>
       </div>
     </main>
-    <footer class="width-full surface-muted">
+    <footer class="public-footer width-full surface-muted">
       <div class="width-content page-shell pad-inline-5 pad-6">
         <div class="grid grid-single md-grid-triple gap-6">
           <div>

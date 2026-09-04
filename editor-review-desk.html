@@ -4,9 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web - Editor Review Desk</title>
     <link href="styles/style.css" rel="stylesheet" />
   </head>
-  <body class="surface-page text-body text-2 color-body">
+  <body class="editor-diff-page surface-page text-body text-2 color-body">
     <aside
       class="newsroom-sidebar height-full surface-muted rule flex flex-column justify-between pad-block-3"
     >
@@ -36,32 +37,32 @@
             class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
             data-path="staff-cms"
             href="#"
-            ><span class="material-symbols-outlined text-4">dashboard</span
+            ><span class="icon text-4">dashboard</span
             ><span class="text-label text-1">Overview</span></a
           ><a
             class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
             data-path="cms-wire-feed"
             href="#"
-            ><span class="material-symbols-outlined text-4">rss_feed</span
+            ><span class="icon text-4">rss_feed</span
             ><span class="text-label text-1">Wire Queue</span></a
           ><a
             class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
             data-path="cms-article-editor"
             href="#"
-            ><span class="material-symbols-outlined text-4">edit_note</span
+            ><span class="icon text-4">edit_note</span
             ><span class="text-label text-1">Article Editor</span></a
           ><a
             aria-current="page"
             class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard motion-colors surface-raised color-body text-semibold"
             data-path="cms-review-desk"
             href="#"
-            ><span class="material-symbols-outlined text-4">fact_check</span
+            ><span class="icon text-4">fact_check</span
             ><span class="text-label text-1">Review Desk</span></a
           ><a
             class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
             data-path="cms-publishing-telemetry"
             href="#"
-            ><span class="material-symbols-outlined text-4">analytics</span
+            ><span class="icon text-4">analytics</span
             ><span class="text-label text-1">Telemetry</span></a
           >
         </nav>
@@ -71,14 +72,14 @@
           class="flex align-center gap-2 color-muted motion-colors text-label text-1"
           data-path="home"
           href="#"
-          ><span class="material-symbols-outlined text-4">arrow_back</span
+          ><span class="icon text-4">arrow_back</span
           ><span>Back to Publication</span></a
         >
       </div>
     </aside>
     <div class="newsroom-content">
       <header
-        class="fixed surface-glass rule-bottom flex align-center justify-between pad-inline-5"
+        class="workspace-header fixed surface-glass rule-bottom flex align-center justify-between pad-inline-5"
       >
         <div class="flex align-center gap-3">
           <span
@@ -93,13 +94,13 @@
             aria-label="Notifications"
             class="pad-2 color-muted motion-colors"
           >
-            <span class="material-symbols-outlined text-4">notifications</span>
+            <span class="icon text-4">notifications</span>
           </button>
           <div class="flex align-center gap-2 text-label text-1 color-body">
             <div
               class="avatar-small radius-pill surface-ink flex align-center justify-center"
             >
-              <span class="material-symbols-outlined color-inverse text-4"
+              <span class="icon color-inverse text-4"
                 >person</span
               >
             </div>
@@ -107,11 +108,11 @@
           </div>
         </div>
       </header>
-      <main class="relative width-full pad-inline-5 surface-page">
+      <main class="workspace-main relative width-full pad-inline-5 surface-page">
         <div class="flex flex-column width-full margin-bottom-6">
           <!-- Top Editorial Control Panel -->
           <section
-            class="width-full surface-paper shadow-subtle radius-panel pad-4 margin-bottom-5"
+            class="review-command-card width-full surface-paper shadow-subtle radius-panel pad-4 margin-bottom-5"
           >
             <div
               class="flex flex-column flex-row align-center justify-between gap-4"
@@ -124,13 +125,13 @@
                   <span class="motion-colors control-pointer"
                     >Editorial Desk</span
                   >
-                  <span class="material-symbols-outlined text-2"
+                  <span class="icon text-2"
                     >chevron_right</span
                   >
                   <span class="motion-colors control-pointer"
                     >Review Queue</span
                   >
-                  <span class="material-symbols-outlined text-2"
+                  <span class="icon text-2"
                     >chevron_right</span
                   >
                   <span
@@ -150,7 +151,7 @@
                   <span
                     class="text-label text-1 color-body text-semibold flex align-center gap-1"
                   >
-                    <span class="material-symbols-outlined text-2 color-muted"
+                    <span class="icon text-2 color-muted"
                       >badge</span
                     >
                     Eleanor Vance
@@ -162,7 +163,7 @@
                   <span
                     class="text-caption text-1 color-muted flex align-center gap-1"
                   >
-                    <span class="material-symbols-outlined text-2"
+                    <span class="icon text-2"
                       >schedule</span
                     >
                     Submitted: Today at 09:42 AM
@@ -181,14 +182,14 @@
                   class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1 text-medium"
                   id="btn-preview"
                 >
-                  <span class="material-symbols-outlined text-4">devices</span>
+                  <span class="icon text-4">devices</span>
                   <span>Preview Responsive</span>
                 </button>
                 <button
                   class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-muted color-muted motion-colors text-label text-1"
                   id="btn-unpublish"
                 >
-                  <span class="material-symbols-outlined text-4"
+                  <span class="icon text-4"
                     >unpublished</span
                   >
                   <span>Unpublish Live v1.0</span>
@@ -197,14 +198,14 @@
                   class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-raised color-muted motion-all text-label text-1"
                   id="btn-reject"
                 >
-                  <span class="material-symbols-outlined text-4">close</span>
+                  <span class="icon text-4">close</span>
                   <span>Reject Draft</span>
                 </button>
                 <button
                   class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-info color-inverse motion-colors text-label text-1 shadow-subtle"
                   id="btn-request-revisions"
                 >
-                  <span class="material-symbols-outlined text-4"
+                  <span class="icon text-4"
                     >assignment_return</span
                   >
                   <span>Request Revisions</span>
@@ -213,14 +214,14 @@
                   class="inline-flex align-center gap-1 pad-inline-4 pad-block-2 radius-standard surface-ink color-inverse motion-all text-label text-1 shadow-subtle"
                   id="btn-approve"
                 >
-                  <span class="material-symbols-outlined text-4">verified</span>
+                  <span class="icon text-4">verified</span>
                   <span>Approve &amp; Publish Live</span>
                 </button>
               </div>
             </div>
           </section>
           <!-- Diff Telemetry Banner -->
-          <section class="grid grid-single grid-triple gap-3 margin-bottom-5">
+          <section class="review-telemetry grid grid-single grid-triple gap-3 margin-bottom-5">
             <div
               class="surface-paper pad-4 radius-panel shadow-subtle flex align-center justify-between"
             >
@@ -236,7 +237,7 @@
               <div
                 class="avatar-medium radius-pill surface-info flex align-center justify-center color-info"
               >
-                <span class="material-symbols-outlined text-4"
+                <span class="icon text-4"
                   >format_size</span
                 >
               </div>
@@ -256,7 +257,7 @@
               <div
                 class="avatar-medium radius-pill surface-panel flex align-center justify-center color-primary"
               >
-                <span class="material-symbols-outlined text-4">fact_check</span>
+                <span class="icon text-4">fact_check</span>
               </div>
             </div>
             <div
@@ -274,7 +275,7 @@
               <div
                 class="avatar-medium radius-pill surface-raised flex align-center justify-center color-muted"
               >
-                <span class="material-symbols-outlined text-4"
+                <span class="icon text-4"
                   >strikethrough_s</span
                 >
               </div>
@@ -294,18 +295,18 @@
               <div
                 class="avatar-medium radius-pill surface-info flex align-center justify-center color-info"
               >
-                <span class="material-symbols-outlined text-4">gavel</span>
+                <span class="icon text-4">gavel</span>
               </div>
             </div>
           </section>
           <!-- Main Viewport: Side-by-Side Comparison & Sidebar -->
-          <div class="grid grid-single lg-editorial-grid gap-5 align-start">
+          <div class="review-workspace grid grid-single lg-editorial-grid gap-5 align-start">
             <!-- Left + Right Comparison Canvas (8 Columns) -->
             <div class="lg-content-span flex flex-column gap-4">
               <div class="grid grid-single grid-split gap-4">
                 <!-- Left Pane: Currently Published v1.0 -->
                 <div
-                  class="surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
+                  class="comparison-pane comparison-pane-live surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
                 >
                   <!-- Pane Header -->
                   <div class="pad-4 surface-muted flex flex-column gap-2">
@@ -313,7 +314,7 @@
                       <span
                         class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 text-uppercase"
                       >
-                        <span class="material-symbols-outlined text-1"
+                        <span class="icon text-1"
                           >public</span
                         >
                         Live on Web (v1.0)
@@ -326,19 +327,19 @@
                       class="flex align-center gap-4 margin-top-2 color-muted"
                     >
                       <span class="text-caption text-1 flex align-center gap-1">
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >visibility</span
                         >
                         14,289 Pageviews
                       </span>
                       <span class="text-caption text-1 flex align-center gap-1">
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >mode_comment</span
                         >
                         48 Reader Comments
                       </span>
                       <span class="text-caption text-1 flex align-center gap-1">
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >share</span
                         >
                         312 Shares
@@ -357,7 +358,7 @@
                       Micro-Clusters
                     </h1>
                     <div
-                      class="relative width-full height-feature radius-standard overflow-hidden surface-panel"
+                      class="comparison-media relative width-full height-feature radius-standard overflow-hidden surface-panel"
                     >
                       <img
                         class="width-full height-full media-cover"
@@ -405,7 +406,7 @@
                 </div>
                 <!-- Right Pane: Submitted Draft v2.0 (Diff Engine) -->
                 <div
-                  class="surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column rule"
+                  class="comparison-pane comparison-pane-draft surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column rule"
                 >
                   <!-- Pane Header -->
                   <div class="pad-4 surface-info flex flex-column gap-2">
@@ -413,7 +414,7 @@
                       <span
                         class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-info color-inverse text-label text-1 text-uppercase"
                       >
-                        <span class="material-symbols-outlined text-1"
+                        <span class="icon text-1"
                           >difference</span
                         >
                         Submitted Draft (v2.0)
@@ -428,13 +429,13 @@
                       <span
                         class="text-caption text-1 color-info text-semibold flex align-center gap-1"
                       >
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >draw</span
                         >
                         Author: Eleanor Vance
                       </span>
                       <span class="text-caption text-1 flex align-center gap-1">
-                        <span class="material-symbols-outlined text-2"
+                        <span class="icon text-2"
                           >update</span
                         >
                         Updated 41m ago
@@ -450,7 +451,8 @@
                     >
                     <h1 class="text-headline text-6 color-body">
                       Autonomous Grid Operator
-                      <span class="surface-raised pad-inline-3 color-muted"
+                      <span
+                        class="surface-raised pad-inline-3 color-muted text-struck"
                         >Signals Pivot Toward Local Micro-Clusters</span
                       >
                       <span
@@ -460,7 +462,7 @@
                       >
                     </h1>
                     <div
-                      class="relative width-full height-feature radius-standard overflow-hidden surface-panel"
+                      class="comparison-media relative width-full height-feature radius-standard overflow-hidden surface-panel"
                     >
                       <img
                         class="width-full height-full media-cover"
@@ -476,20 +478,25 @@
                     <p class="text-headline text-deck color-body text-italic">
                       Regional power dispatchers
                       <span
-                        class="surface-info color-info pad-inline-3 radius-standard text-medium"
+                        class="surface-info color-info pad-inline-3 radius-standard text-medium text-not-italic"
                         >have quietly halted</span
                       >
                       automated frequency tests across suburban hubs, citing
-                      <span class="color-muted">transmission bottlenecks</span>
+                      <span class="color-muted text-struck"
+                        >transmission bottlenecks</span
+                      >
                       <span
-                        class="surface-info color-info pad-inline-3 radius-standard text-semibold"
+                        class="surface-info color-info pad-inline-3 radius-standard text-semibold text-not-italic"
                         >undisclosed cascading failovers uncovered by
                         engineers</span
                       >.
                     </p>
                     <div class="stack-3 text-body text-2 color-muted">
                       <p>
-                        In a <span class="color-muted">brief memorandum</span>
+                        In a
+                        <span class="color-muted text-struck"
+                          >brief memorandum</span
+                        >
                         <span
                           class="surface-info color-info pad-inline-3 radius-standard text-medium"
                           >series of leaked internal communications</span
@@ -497,7 +504,7 @@
                         obtained by The Daily Web, the National Grid Operations
                         Council confirmed that initial stress simulations had
                         exposed
-                        <span class="color-muted"
+                        <span class="color-muted text-struck"
                           >latency delays in cross-state dispatch loops</span
                         >
                         <span
@@ -507,7 +514,7 @@
                         >.
                       </p>
                       <p
-                        class="color-muted surface-raised pad-2 radius-standard text-1"
+                        class="color-muted surface-raised pad-2 radius-standard text-1 text-struck"
                       >
                         Spokesperson Raymond Croft maintained that customer
                         disruptions were negligible, emphasizing that the
@@ -532,7 +539,7 @@
                           >have escalated formal subpoenas</span
                         >
                         regarding long-term cost and safety models,
-                        <span class="color-muted"
+                        <span class="color-muted text-struck"
                           >though formal advisory hearings were not
                           scheduled</span
                         >
@@ -547,11 +554,11 @@
               </div>
               <!-- Revision Commentary & Editorial Feedback Module -->
               <section
-                class="surface-paper radius-panel shadow-subtle pad-5 margin-top-2"
+                class="feedback-card surface-paper radius-panel shadow-subtle pad-5 margin-top-2"
               >
                 <div class="flex align-center justify-between margin-bottom-2">
                   <div class="flex align-center gap-2">
-                    <span class="material-symbols-outlined text-4 color-primary"
+                    <span class="icon text-4 color-primary"
                       >rate_review</span
                     >
                     <h2 class="text-headline text-4 color-body">
@@ -570,7 +577,7 @@
                   <button
                     class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1"
                   >
-                    <span class="material-symbols-outlined text-2"
+                    <span class="icon text-2"
                       >verified_user</span
                     >
                     Fact Check Cleared
@@ -578,19 +585,19 @@
                   <button
                     class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-info color-info motion-colors text-label text-1"
                   >
-                    <span class="material-symbols-outlined text-2">policy</span>
+                    <span class="icon text-2">policy</span>
                     Requires Source Verification
                   </button>
                   <button
                     class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1"
                   >
-                    <span class="material-symbols-outlined text-2">title</span>
+                    <span class="icon text-2">title</span>
                     Headline Polish
                   </button>
                   <button
                     class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1"
                   >
-                    <span class="material-symbols-outlined text-2">shield</span>
+                    <span class="icon text-2">shield</span>
                     Legal Advisory Note
                   </button>
                 </div>
@@ -601,31 +608,31 @@
                     class="flex align-center gap-2 margin-bottom-2 surface-paper pad-inline-3 pad-block-2 radius-standard"
                   >
                     <button class="pad-2 radius-standard color-muted">
-                      <span class="material-symbols-outlined text-2"
+                      <span class="icon text-2"
                         >format_bold</span
                       >
                     </button>
                     <button class="pad-2 radius-standard color-muted">
-                      <span class="material-symbols-outlined text-2"
+                      <span class="icon text-2"
                         >format_italic</span
                       >
                     </button>
                     <button class="pad-2 radius-standard color-muted">
-                      <span class="material-symbols-outlined text-2"
+                      <span class="icon text-2"
                         >format_underlined</span
                       >
                     </button>
                     <span class="color-subtle">|</span>
                     <button class="pad-2 radius-standard color-muted">
-                      <span class="material-symbols-outlined text-2">link</span>
+                      <span class="icon text-2">link</span>
                     </button>
                     <button class="pad-2 radius-standard color-muted">
-                      <span class="material-symbols-outlined text-2"
+                      <span class="icon text-2"
                         >format_quote</span
                       >
                     </button>
                     <button class="pad-2 radius-standard color-muted">
-                      <span class="material-symbols-outlined text-2"
+                      <span class="icon text-2"
                         >format_list_bulleted</span
                       >
                     </button>
@@ -694,14 +701,14 @@
               </section>
             </div>
             <!-- Right Column: Version History & Audit Trail (4 Columns) -->
-            <aside class="span-sidebar flex flex-column gap-4">
+            <aside class="review-audit-sidebar span-sidebar flex flex-column gap-4">
               <!-- Timeline Module -->
               <div class="surface-paper radius-panel shadow-subtle pad-4">
                 <div
                   class="flex align-center justify-between margin-bottom-4 margin-bottom-2"
                 >
                   <div class="flex align-center gap-2">
-                    <span class="material-symbols-outlined text-4 color-primary"
+                    <span class="icon text-4 color-primary"
                       >history</span
                     >
                     <h3 class="text-headline text-4 color-body">
@@ -806,7 +813,7 @@
                       <div
                         class="flex align-center gap-1 margin-top-2 color-muted text-caption text-1"
                       >
-                        <span class="material-symbols-outlined text-1"
+                        <span class="icon text-1"
                           >done_all</span
                         >
                         Archived in Permanent Library
@@ -818,7 +825,7 @@
               <!-- Reviewer Audit & Policy Checklist -->
               <div class="surface-paper radius-panel shadow-subtle pad-4">
                 <div class="flex align-center gap-2 margin-bottom-2">
-                  <span class="material-symbols-outlined text-4 color-primary"
+                  <span class="icon text-4 color-primary"
                     >checklist</span
                   >
                   <h3 class="text-headline text-4 color-body">
@@ -917,8 +924,7 @@
                   class="width-full surface-raised radius-pill overflow-hidden"
                 >
                   <div
-                    class="surface-ink height-full radius-pill"
-                    style="width: 78%"
+                    class="telemetry-progress-value surface-ink height-full radius-pill"
                   ></div>
                 </div>
                 <div

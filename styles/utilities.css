@@ -89,6 +89,8 @@
 .text-semibold { font-weight: 600; }
 .text-bold { font-weight: 700; }
 .text-italic { font-style: italic; }
+.text-not-italic { font-style: normal; }
+.text-struck { text-decoration: line-through; }
 .text-uppercase { text-transform: uppercase; }
 .text-tight { line-height: 1.25; }
 .text-relaxed { line-height: 1.625; }

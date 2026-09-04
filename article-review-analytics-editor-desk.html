@@ -8,17 +8,17 @@
     <link href="styles/style.css" rel="stylesheet" />
   </head>
   <body
-    class="surface-page text-body text-2 color-body height-screen flex flex-column"
+    class="editor-analytics-page surface-page text-body text-2 color-body height-screen flex flex-column"
   >
-    <header class="fixed width-full surface-paper shadow-subtle">
+    <header class="site-header fixed width-full surface-paper shadow-subtle">
       <div
-        class="width-content pad-inline-5 flex align-center justify-between gap-4"
+        class="site-header-inner width-content pad-inline-5 flex align-center justify-between gap-4"
       >
         <div class="flex align-center gap-4">
           <a class="flex align-center gap-2" data-path="articles" href="#"
             ><img
               alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
-              class="avatar-small"
+              class="brand-logo"
               src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
             /><span class="text-headline text-5 color-primary"
               >The Daily Web</span
@@ -29,7 +29,7 @@
           >
         </div>
         <nav
-          class="state-hidden flex align-center gap-5"
+          class="site-primary-nav state-hidden flex align-center gap-5"
           data-active-classes="color-primary text-bold"
         >
           <a
@@ -50,7 +50,7 @@
             class="text-label text-1 color-muted flex align-center gap-1 motion-colors"
             data-path="home"
             href="#"
-            ><span class="material-symbols-outlined text-1">open_in_new</span
+            ><span class="icon text-1">open_in_new</span
             >View Public Site</a
           ><a
             class="text-label text-1 color-muted motion-colors"
@@ -61,15 +61,15 @@
           <div
             class="avatar-small radius-pill surface-ink flex align-center justify-center"
           >
-            <span class="material-symbols-outlined color-inverse text-4"
+            <span class="icon color-inverse text-4"
               >person</span
             >
           </div>
         </div>
       </div>
     </header>
-    <main class="width-full surface-page flex-grow">
-      <div class="width-content pad-inline-5 pad-block-3">
+    <main class="site-header-offset width-full surface-page flex-grow">
+      <div class="editor-page-content width-content pad-inline-5 pad-block-3">
         <div
           class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
         >
@@ -80,13 +80,13 @@
         <div class="flex flex-column width-full gap-5">
           <!-- Notice Banner: Revision Awareness -->
           <div
-            class="width-full surface-info color-info radius-panel pad-4 shadow-subtle flex flex-column md-row justify-between gap-3"
+            class="revision-notice width-full surface-info color-info radius-panel pad-4 shadow-subtle flex flex-column md-row justify-between gap-3"
           >
             <div class="flex align-start gap-3">
               <div
                 class="avatar-medium radius-pill surface-ink color-inverse flex align-center justify-center flex-no-shrink"
               >
-                <span class="material-symbols-outlined text-4">info</span>
+                <span class="icon text-4">info</span>
               </div>
               <div>
                 <div class="text-label text-2 color-info">
@@ -106,7 +106,7 @@
                 data-path="articles"
                 href="#"
               >
-                <span class="material-symbols-outlined text-1">visibility</span>
+                <span class="icon text-1">visibility</span>
                 View Live Article (v1.0)
               </a>
             </div>
@@ -117,7 +117,7 @@
             <div class="lg-content-span flex flex-column gap-5">
               <!-- Draft Article Header & Body Card -->
               <article
-                class="surface-paper radius-panel pad-6 shadow-subtle flex flex-column gap-4"
+                class="review-article-card surface-paper radius-panel pad-6 shadow-subtle flex flex-column gap-4"
               >
                 <!-- Metadata Header -->
                 <div
@@ -141,7 +141,7 @@
                   <span
                     class="text-caption text-1 color-muted flex align-center gap-1"
                   >
-                    <span class="material-symbols-outlined text-1"
+                    <span class="icon text-1"
                       >schedule</span
                     >
                     Submitted Today at 09:42 AM
@@ -153,7 +153,7 @@
                 </h1>
                 <!-- Reporter Metadata Pill -->
                 <div
-                  class="flex align-center gap-3 pad-block-2 surface-muted pad-inline-4 radius-card"
+                  class="reporter-strip flex align-center gap-3 pad-block-2 surface-muted pad-inline-4 radius-card"
                 >
                   <div
                     class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-label text-1"
@@ -244,7 +244,7 @@
                   <h2
                     class="text-headline text-4 color-body flex align-center gap-2"
                   >
-                    <span class="material-symbols-outlined text-4 color-muted"
+                    <span class="icon text-4 color-muted"
                       >history</span
                     >
                     Version History
@@ -321,7 +321,7 @@
                       href="#"
                     >
                       <span>View Live</span>
-                      <span class="material-symbols-outlined text-1"
+                      <span class="icon text-1"
                         >open_in_new</span
                       >
                     </a>
@@ -330,7 +330,7 @@
               </section>
               <!-- Simple Views Over Time Chart Card -->
               <section
-                class="surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
+                class="analytics-card surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
               >
                 <div
                   class="flex flex-column sm-row sm-align-center justify-between gap-2"
@@ -339,7 +339,7 @@
                     <h2
                       class="text-headline text-4 color-body flex align-center gap-2"
                     >
-                      <span class="material-symbols-outlined text-4 color-muted"
+                      <span class="icon text-4 color-muted"
                         >trending_up</span
                       >
                       Audience Traction: Daily Page Views
@@ -367,7 +367,7 @@
                 </div>
                 <!-- Clean SVG Chart (Mon: 2.1k, Tue: 4.8k, Wed: 8.2k, Thu: 14.2k) -->
                 <div class="width-full surface-muted radius-card pad-4">
-                  <div class="relative width-full height-feature">
+                  <div class="analytics-plot relative width-full height-feature">
                     <svg
                       class="width-full height-full"
                       preserveaspectratio="none"
@@ -614,7 +614,7 @@
                   </div>
                   <!-- Bottom Summary Stat Grid -->
                   <div
-                    class="grid grid-split gap-3 margin-top-4 margin-top-2 surface-paper radius-card pad-3 text-center"
+                    class="analytics-summary grid grid-split gap-3 margin-top-4 margin-top-2 surface-paper radius-card pad-3 text-center"
                   >
                     <div>
                       <span class="text-caption text-1 color-muted block"
@@ -657,10 +657,10 @@
               </section>
             </div>
             <!-- Right Column (4 Cols): Review Actions Desk Sticky Sidebar -->
-            <aside class="span-sidebar flex flex-column gap-5 lg-sticky">
+            <aside class="decision-sidebar span-sidebar flex flex-column gap-5 lg-sticky">
               <!-- Editorial Decision & Actions Card -->
               <div
-                class="surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
+                class="decision-card surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
               >
                 <div class="margin-bottom-2">
                   <h2 class="text-headline text-5 color-body">
@@ -694,7 +694,7 @@
                   class="pad-3 surface-muted radius-card flex align-center justify-between"
                 >
                   <div class="flex align-center gap-2">
-                    <span class="material-symbols-outlined text-4 color-muted"
+                    <span class="icon text-4 color-muted"
                       >mail</span
                     >
                     <span class="text-body text-1 color-body"
@@ -711,31 +711,31 @@
                 <div class="flex flex-column gap-2 margin-top-2">
                   <!-- Primary Action: Approve & Publish Live -->
                   <button
-                    class="width-full pad-block-3 pad-inline-4 surface-ink color-inverse radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all shadow-subtle"
+                    class="editor-action editor-action-approve width-full pad-block-3 pad-inline-4 surface-ink color-inverse radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all shadow-subtle"
                     onclick="handleEditorialAction('approve')"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4"
+                    <span class="icon text-4"
                       >check_circle</span
                     >
                     <span>✓ Approve &amp; Publish Live</span>
                   </button>
                   <!-- Secondary Action: Request Changes -->
                   <button
-                    class="width-full pad-block-3 pad-inline-4 surface-info color-info radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all"
+                    class="editor-action editor-action-revise width-full pad-block-3 pad-inline-4 surface-info color-info radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all"
                     onclick="handleEditorialAction('request-changes')"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4">reply</span>
+                    <span class="icon text-4">reply</span>
                     <span>↩ Request Changes</span>
                   </button>
                   <!-- Danger Action: Reject Draft -->
                   <button
-                    class="width-full pad-block-3 pad-inline-4 surface-alert color-alert radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all margin-top-2"
+                    class="editor-action editor-action-reject width-full pad-block-3 pad-inline-4 surface-alert color-alert radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all margin-top-2"
                     onclick="handleEditorialAction('reject')"
                     type="button"
                   >
-                    <span class="material-symbols-outlined text-4">cancel</span>
+                    <span class="icon text-4">cancel</span>
                     <span>✕ Reject Draft</span>
                   </button>
                 </div>
@@ -760,19 +760,19 @@
                   class="flex flex-column gap-2 text-body text-1 color-muted margin-top-2"
                 >
                   <li class="flex align-center gap-2">
-                    <span class="material-symbols-outlined text-1 color-muted"
+                    <span class="icon text-1 color-muted"
                       >check</span
                     >
                     Source quotes attributed to lab director
                   </li>
                   <li class="flex align-center gap-2">
-                    <span class="material-symbols-outlined text-1 color-muted"
+                    <span class="icon text-1 color-muted"
                       >check</span
                     >
                     Open silicon GitHub repo linked correctly
                   </li>
                   <li class="flex align-center gap-2">
-                    <span class="material-symbols-outlined text-1 color-muted"
+                    <span class="icon text-1 color-muted"
                       >check</span
                     >
                     Lead photography photo credit included
