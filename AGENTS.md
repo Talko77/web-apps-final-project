@@ -10,7 +10,11 @@ The product has three user roles:
 - **Reporter:** creates and edits owned articles, autosaves work, and submits articles for review.
 - **Editor:** reviews all articles, edits and approves submissions, publishes content, requests changes, and removes content.
 
-The current repository contains the page-level HTML prototypes and design references for this product. The implementation should remain focused on this scope and should not introduce a more complex architecture than the course requirements need.
+The current repository contains the CSS design system and project
+documentation. The former HTML prototypes have been removed from the active
+source tree; historical versions remain recoverable through Git history.
+The implementation should remain focused on this scope and should not
+introduce a more complex architecture than the course requirements need.
 
 ## Required Technology
 
@@ -90,23 +94,54 @@ Do not replace the established visual language with generic dashboard styling. K
 
 ### Local Stylesheets
 
-The `styles/` directory contains the local stylesheet system for all page prototypes. Keep its files separated by responsibility:
+The `styles/` directory is the token-driven visual system for the public,
+reporter, editor, analytics, and staff-login prototypes. Treat
+[`styles/DESIGN.md`](styles/DESIGN.md) as the detailed CSS reference and keep
+each file limited to its responsibility:
 
-- `styles/style.css` is the future entry point and defines the stylesheet loading order.
-- `styles/variables.css` contains shared colors, typography, spacing, breakpoints, widths, radii, and shadows.
-- `styles/base.css` contains document resets, browser defaults, form inheritance, focus behavior, and scrollbar rules.
-- `styles/utilities.css` contains reusable layout, spacing, typography, color, responsive, state, and animation classes.
-- `styles/components.css` contains shared interface patterns such as buttons, forms, cards, navigation, badges, tables, and status surfaces.
-- `styles/layouts.css` contains shared page composition such as reading columns, editorial grids, and newsroom workspace structure.
-- `styles/pages.css` contains thin page-family details that do not belong in the shared layers.
+- `styles/style.css` imports Google Fonts and the local layers in order:
+	variables, base, utilities, components, layouts, then pages.
+- `styles/variables.css` contains semantic colors, Newsreader/Inter typography,
+	spacing, responsive breakpoints, media dimensions, radii, shadows, workflow
+	states, and page-parity geometry tokens.
+- `styles/base.css` contains sizing resets, document defaults, media defaults,
+	form inheritance, focus behavior, disabled controls, scrollbar rules, and
+	reduced-motion behavior.
+- `styles/utilities.css` contains reusable layout, spacing, typography, color,
+	surface, media, responsive, state, motion, and interaction classes.
+- `styles/components.css` contains shared links, buttons, inputs, media frames,
+	icons, tables, newsroom controls, public mastheads, and status treatments.
+- `styles/layouts.css` contains page shells, reading columns, four/eight/twelve
+	column editorial grids, newsroom navigation, public offsets, and workspaces.
+- `styles/pages.css` contains page-family details for public reading/search/
+	technology views, reporter editing/articles/login, and editor
+	analytics/queue/diff workflows.
 
-Document each stylesheet with a clear responsibility header and section comments. Preserve existing class names and script-controlled state classes. The stylesheet entry point is intentionally not connected to the HTML prototypes during the CSS-only styling phase.
+Use the existing Newsreader and Inter pairing, semantic surface/color tokens,
+and named utility classes. The responsive grid is four columns on mobile,
+eight at 768px, and twelve at 1024px; newsroom navigation is 256px wide on
+desktop and stacks below 768px. Reuse the existing 640px, 768px, 1024px, and
+1280px breakpoints rather than adding a second scale.
+
+Preserve accessible focus states, reduced-motion behavior, semantic HTML,
+existing class names, and script-controlled state hooks such as
+`.filter-btn.active`, `.is-authenticating`, and `.state-hidden`. Do not add
+React or another frontend framework, arbitrary-value utility names, or a
+second token scale. Keep stylesheet headers and section comments current when
+CSS changes are made.
 
 ## Repository and Documentation
 
-The root HTML files are the current page prototypes for the public publication, reporter portal, editor desk, login, search, comments, analytics, and technology views. They describe the screens being built and should remain aligned with the functional requirements above.
+The active repository no longer contains the former root page prototypes or
+the design-reference HTML files. Do not recreate or add HTML prototype files
+to the project. Any archived prototype material is outside the project source
+tree and is not an implementation dependency.
 
-The [`docs/design-ideas`](docs/design-ideas/) directory contains the design explorations for those screens. Each subdirectory contains a `code.html` reference for a particular page. The [`docs/design-ideas/editorial_authority/DESIGN.md`](docs/design-ideas/editorial_authority/DESIGN.md) file is the shared visual system: colors, typography, spacing, layout, and surface guidance. Use these files as design references, not as a reason to add a new framework or duplicate complex architecture.
+The [`styles/DESIGN.md`](styles/DESIGN.md) file is the authoritative reference
+for the CSS system: layer order, tokens, typography, spacing, responsive
+layout, visual roles, and page-family contracts. Use documentation as design
+guidance, not as a reason to add a new framework or duplicate complex
+architecture.
 
 Keep [`README.md`](README.md) up to date with installation and run instructions, required environment variables, the main folder structure, and the implemented features. It may also document demo users, seed instructions, key routes, models, indexes, team contributions, and AI usage required by the course.
 

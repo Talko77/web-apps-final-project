@@ -55,6 +55,4 @@ The project is based on the **Editorial Authority** design direction: a contempo
 
 ## Design References
 
-The design explorations are stored in [`docs/design-ideas`](docs/design-ideas/). They include public publication pages, article reading and comments, search results, staff login, reporter tools, editor review, and article analytics.
-
-The full visual system is documented in [`docs/design-ideas/editorial_authority/DESIGN.md`](docs/design-ideas/editorial_authority/DESIGN.md).
+The active visual system is documented in [`styles/DESIGN.md`](styles/DESIGN.md).

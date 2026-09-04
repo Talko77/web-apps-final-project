@@ -1,16 +1,48 @@
 # The Daily Web CSS Design System
 
-This directory contains the local visual language for The Daily Web. The CSS is intentionally independent from the current HTML during the class-migration phase. HTML class attributes will be updated in a later, separate task.
+This directory is the local visual system for The Daily Web. The styles are
+organized as a token-driven cascade and currently support public publication
+pages, reporter workflows, editor review tools, analytics, and staff login.
+The CSS files are the source of truth for the contracts documented here.
 
 ## File responsibilities
 
-- `style.css`: imports the files in their required cascade order.
-- `variables.css`: design tokens only, including color, typography, spacing, geometry, and elevation.
-- `base.css`: browser normalization, document defaults, media defaults, form inheritance, focus treatment, and reduced-motion behavior.
-- `utilities.css`: small composable classes named by editorial intent.
-- `components.css`: recurring controls and visual patterns such as buttons, article copy, icons, status surfaces, and tables.
-- `layouts.css`: page composition such as content shells, reading columns, editorial grids, and newsroom navigation.
-- `pages.css`: rules that apply only to a page family or structural fallback.
+`style.css` loads the layers in this order:
+
+1. Google Fonts: Newsreader, Inter, and Material Symbols Outlined.
+2. `variables.css`: semantic color, typography, spacing, geometry, media,
+	workflow, and responsive tokens.
+3. `base.css`: sizing reset, document defaults, media defaults, form
+	inheritance, focus treatment, disabled controls, and reduced motion.
+4. `utilities.css`: composable layout, type, surface, color, media, state,
+	interaction, and responsive utility classes.
+5. `components.css`: shared links, buttons, inputs, media frames, icons,
+	tables, newsroom controls, public mastheads, and status details.
+6. `layouts.css`: page shells, reading columns, responsive editorial grids,
+	newsroom navigation, public offsets, and editor workspaces.
+7. `pages.css`: page-family rules for article reading, publication, search,
+	technology, reporter, login, review queue, analytics, and diff views.
+
+Keep new rules in the layer that owns their responsibility. Do not modify the
+CSS files while updating this document; this file records their current data.
+
+## Visual language
+
+The system uses a crisp paper-like canvas with deep ink structure and restrained
+crimson for error and urgent states. Editorial display text uses Newsreader;
+interface text, metadata, forms, tables, and captions use Inter. Material
+Symbols Outlined is reserved for interface icons through the `.icon` class.
+
+The light palette is defined with semantic tokens such as:
+
+- Surfaces: `--color-background` and `--color-surface-container-*`.
+- Ink: `--color-on-surface`, `--color-on-surface-variant`, and inverse tokens.
+- Actions: `--color-primary`, `--color-secondary`, and their container tokens.
+- Feedback: error, info, warning, and success container/ink pairs.
+- Workflow: pending, returned, published, draft, rejected, and submit-success
+	colors, including reporter and editor-specific status tokens.
+
+Dark mode remains reserved. No dark palette or dark selectors are implemented.
 
 ## Naming rules
 
@@ -36,23 +68,12 @@ Use `text-heading-*`, `text-kicker`, `text-meta`, `text-byline`, `text-deck`,
 `media-hero`, `media-card`, `media-thumbnail`, `media-image`, `avatar-small`,
 `avatar-medium`, `avatar-large`, and `image-logo` for imagery.
 
-## Dark mode tokens
-
-The prototypes declare that a dark mode may be selected, but they do not
-currently provide a dark color palette or dark-specific color rules. The
-variables file therefore reserves the dark-mode section without inventing
-values. When the palette is approved, add dark values there using the same
-semantic names as the light palette; dark-mode selectors will be implemented
-in a later phase.
-
-The foundational layout names `flex`, `grid`, `relative`, `absolute`, and
-`sticky` are intentionally short because they are universal composition
-primitives. All scales and visual roles use the project vocabulary described
-below. Avoid arbitrary-value names such as `width-[500px]`.
-
 ## Token usage
 
-Use the custom properties in `variables.css` for repeated values. Do not introduce a second color, spacing, typography, radius, or shadow scale in a page file. Keep the existing paper, ink, slate, and crimson palette and the Newsreader plus Inter type pairing.
+Use the custom properties in `variables.css` for repeated values. Do not
+introduce a second color, spacing, typography, radius, shadow, or breakpoint
+scale in a page file. Keep the existing paper, ink, slate, and crimson palette
+and the Newsreader plus Inter type pairing.
 
 ## Typography system
 
@@ -72,43 +93,68 @@ Use the existing weight range rather than synthesizing new hierarchy: regular
 for reading text, medium for supporting headings, semibold for headlines and
 actions, and bold for caps labels and strong status text.
 
-## Migration policy
+## Layout and responsive behavior
 
-HTML is not changed while CSS names are being designed. The stylesheet contains the canonical local classes only; current HTML may still contain older class names and therefore will not use the new rules until the later HTML migration.
+`page-shell` centers content at the shared maximum width. `reading-column`
+protects long-form text. `editorial-grid` uses four columns on mobile, eight
+at 768px, and twelve at 1024px. The `grid-single`, `grid-split`,
+`grid-triple`, `span-sidebar`, `span-content`, and `span-wide` utilities
+describe common compositions without arbitrary-value class names.
 
-During that later migration:
+Newsroom navigation is fixed at 256px on desktop and becomes a normal,
+full-width block below 768px. Public pages use separate geometry for standard
+headers (64px bar, 96px content offset) and editorial desk headers (112px
+header, 136px content offset). Reporter and editor workspaces use a 64px site
+header, with editor workspace content reserving that header height.
 
-1. Replace old class names with the closest documented local class.
-2. Combine multiple semantic classes when one old utility represented multiple responsibilities.
-3. Do not create new property-based names to avoid updating markup.
-4. Keep JavaScript state names separate from visual class names unless the state itself is a reusable design-system state.
-5. Verify desktop, tablet, and mobile layouts after each page family is migrated.
+Use the existing responsive utilities at 640px, 768px, 1024px, and 1280px.
+Page rules also provide mobile-specific media heights, stacking, table
+scrolling, compact controls, and navigation visibility.
 
-## Class mapping examples
+## Shared class vocabulary
 
-| Previous style name | Canonical design-system name | Responsibility |
-| --- | --- | --- |
-| `dw-page-container` | `page-shell` | centered page width |
-| `dw-reading-column` | `reading-column` | long-form reading measure |
-| `dw-editorial-grid` | `editorial-grid` | responsive editorial grid |
-| `dw-newsroom-sidebar` | `newsroom-sidebar` | fixed newsroom navigation |
-| `dw-newsroom-content` | `newsroom-content` | workspace content offset |
-| `flex` plus alignment classes | `layout-flex` plus alignment class | flex composition |
-| `text-headline-lg` | `text-6 text-headline` | editorial headline role |
-| `bg-surface-container` | `surface-panel` | panel background |
-| `text-secondary` | `color-muted` | supporting metadata |
-| `hidden` | `state-hidden` | intentionally hidden content |
-| `material-symbols-outlined` | `icon` | project-owned icon alignment |
+Use lowercase hyphenated names that describe purpose:
 
-## Numbered scales
+- Composition: `flex`, `grid`, `relative`, `absolute`, `sticky`, `page-shell`,
+  `reading-column`, `editorial-grid`, `newsroom-sidebar`, `newsroom-content`.
+- Surfaces and color: `surface-page`, `surface-paper`, `surface-panel`,
+  `surface-ink`, `surface-alert`, `surface-info`, `surface-warning`,
+  `surface-success`, `surface-scrim`, `surface-hero-fade`, `surface-glass`,
+  `color-primary`, `color-muted`, `color-subtle`, and `color-alert`.
+- Media: `media-frame`, `media-hero`, `media-card`, `media-thumbnail`,
+  `media-image`, `media-overlay`, `media-caption`, `avatar-*`, and `image-logo`.
+- Controls and state: `control-button`, `control-button-secondary`,
+  `control-input`, `control-pointer`, `control-disabled`, `state-hidden`,
+  `state-muted`, `state-loading`, and `state-spinning`.
+- Motion and interaction: `motion-colors`, `motion-shadow`, `motion-transform`,
+  `motion-all`, `interaction-zoom`, and `interaction-underline`.
 
-The numeric scales are intentionally small and stable. `text-1` is 12px,
-`text-2` is 15px, `text-3` is 17px, `text-4` is 18px, `text-5` is 22px,
-`text-6` is 28px, `text-7` is 40px, and `text-8` is 56px. Spacing uses the
-same idea: `gap-1` is 4px through `gap-8` at 64px. Use named classes for
-meaningful geometry: `width-reading`, `width-content`, `height-feature`, and
-`grid-editorial`. Never add arbitrary dimension classes to markup.
+Icons must use `.icon`; icon buttons should retain accessible labels. Existing
+script-controlled hooks such as `.filter-btn.active`, `.is-authenticating`,
+and `state-hidden` are behavioral contracts and should not be renamed casually.
 
-## Working rule
+## Page-family contracts
 
-Read the file header before editing a stylesheet. Add new rules to the file that owns their responsibility, reuse existing tokens, and add a short section comment when a rule is unusual or depends on a future HTML or JavaScript contract.
+`pages.css` contains the current parity rules for these surfaces:
+
+- Public article, publication homepage, search results, editorial homepage,
+  technology channel, comments, related dispatches, and public footer.
+- Reporter article editing, article list/table, autosave, revision ledger,
+  status filters, staff login, and runtime feedback.
+- Editor analytics/review, queue filters and tables, comparison panes,
+  revision feedback, audit timelines, decision sidebars, and telemetry.
+
+Important named tokens include `--article-content-width` (820px), public and
+technology media heights, `--workspace-review-max-height` (720px),
+`--comparison-media-height` (192px), `--analytics-chart-height` (224px),
+reporter thumbnail/status sizes, and the login panel/logo widths.
+
+## Working rules
+
+Reuse tokens from `variables.css`; do not create a second color, type, spacing,
+radius, shadow, or breakpoint scale in a page rule. Prefer semantic utilities
+and stable structural hooks over arbitrary-value classes. Keep page-specific
+selectors in `pages.css`, shared patterns in `components.css`, and composition
+in `layouts.css`. Preserve accessible focus states, reduced-motion behavior,
+keyboard-friendly controls, readable contrast, and the existing HTML/JavaScript
+state hooks when migrating markup.
