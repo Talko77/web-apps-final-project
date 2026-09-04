@@ -1,0 +1,961 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web</title>
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body
+    class="public-page search-page surface-page text-body color-body height-screen flex flex-column"
+  >
+    <header class="site-header site-header-standard fixed width-full surface-paper shadow-subtle">
+      <div
+        class="site-header-bar width-content page-shell pad-inline-5 flex align-center justify-between gap-4"
+      >
+        <div class="flex align-center gap-4">
+          <a class="flex align-center gap-2" data-path="home" href="#"
+            ><img
+              alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
+              class="image-logo"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+            /><span class="site-brand-name text-headline text-5 color-primary inline"
+              >The Daily Web</span
+            ></a
+          ><span class="site-edition-separator inline color-subtle">|</span
+          ><span class="site-edition-label inline text-label text-1 color-muted text-uppercase"
+            >Campus Edition</span
+          >
+        </div>
+        <nav
+          class="site-primary-nav flex align-center gap-5"
+          data-active-classes="color-primary text-bold"
+        >
+          <a
+            aria-current="page"
+            class="motion-colors color-primary text-bold"
+            data-path="home"
+            href="#"
+            >Home</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="technology"
+            href="#"
+            >Technology</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="business"
+            href="#"
+            >Business</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="science"
+            href="#"
+            >Science</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="opinion"
+            href="#"
+            >Opinion</a
+          >
+        </nav>
+        <div class="flex align-center gap-3">
+          <div class="site-search relative block">
+            <span class="site-search-icon icon absolute color-muted text-4">search</span
+            ><input
+              class="width-full pad-block-2 surface-muted radius-standard text-body text-1 color-body"
+              placeholder="Search articles..."
+              type="text"
+            />
+          </div>
+          <a
+            class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 motion-colors"
+            data-path="login"
+            href="#"
+            >Reporter Portal</a
+          >
+          <div
+            class="avatar-small image-logo radius-pill surface-ink flex align-center justify-center"
+          >
+            <span class="icon color-inverse text-4">person</span>
+          </div>
+        </div>
+      </div>
+      <div class="site-breaking-bar surface-alert color-alert pad-inline-5 pad-block-2">
+        <div
+          class="width-content page-shell flex align-center gap-2 text-label text-1"
+        >
+          <span
+            class="surface-alert color-inverse text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
+            >Breaking</span
+          ><span class="truncate text-body text-1"
+            >University Senate approves new student publication funding charter
+            for upcoming term.</span
+          >
+        </div>
+      </div>
+    </header>
+    <main class="search-page-main width-full surface-page flex-grow">
+      <div class="width-content page-shell pad-inline-5 pad-5">
+        <div class="flex flex-column width-full">
+          <!-- Query Header & Search Control Console -->
+          <section
+            class="search-console surface-paper pad-5 pad-6 radius-panel shadow-subtle margin-bottom-6"
+          >
+            <div class="width-reading page-shell flex flex-column gap-4">
+              <div class="flex align-center justify-between">
+                <span
+                  class="text-kicker text-1 text-uppercase color-muted flex align-center gap-1"
+                >
+                  <span class="radius-pill surface-alert"></span>
+                  Archive &amp; Dispatch Index
+                </span>
+                <span class="text-caption text-1 color-subtle"
+                  >Database: Fall 2024 Index</span
+                >
+              </div>
+              <!-- Search Input Toolbar -->
+              <form
+                class="flex flex-column sm-row gap-2 align-start"
+                id="searchForm"
+                onsubmit="event.preventDefault()"
+              >
+                <div class="relative flex-grow">
+                  <span class="icon absolute color-muted text-5">search</span>
+                  <input
+                    aria-label="Search query"
+                    class="width-full pad-block-3 surface-muted radius-standard text-body text-3 color-body motion-colors"
+                    id="searchInput"
+                    type="search"
+                    value="silicon architecture"
+                  />
+                </div>
+                <button
+                  class="inline-flex align-center justify-center gap-2 pad-inline-5 pad-block-3 surface-ink color-inverse text-label text-2 radius-standard shadow-subtle motion-transform"
+                  type="submit"
+                >
+                  <span class="icon text-4">manage_search</span>
+                  <span>Search</span>
+                </button>
+              </form>
+              <!-- Search Meta & Metrics Bar -->
+              <div
+                class="flex flex-wrap align-center justify-between gap-3 pad-block-2"
+              >
+                <div
+                  class="flex align-center gap-2 text-body text-1 color-body"
+                >
+                  <span class="text-bold color-body">Found 18 results</span>
+                  <span class="color-muted">for</span>
+                  <span class="text-headline text-4 color-primary text-italic"
+                    >“silicon architecture”</span
+                  >
+                  <span class="text-1 text-caption color-subtle inline"
+                    >(0.042 seconds)</span
+                  >
+                </div>
+                <div class="flex align-center gap-2">
+                  <span class="text-caption text-1 color-muted"
+                    >Active tags:</span
+                  >
+                  <span
+                    class="inline-flex align-center gap-1 surface-panel pad-inline-3 pad-block-2 radius-standard text-kicker text-1 color-body"
+                  >
+                    Technology
+                    <button aria-label="Remove filter" type="button">×</button>
+                  </span>
+                  <span
+                    class="inline-flex align-center gap-1 surface-panel pad-inline-3 pad-block-2 radius-standard text-kicker text-1 color-body"
+                  >
+                    Semiconductors
+                    <button aria-label="Remove filter" type="button">×</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- 2-Column Grid (Left Filter Sidebar ~3 cols, Main Results ~9 cols) -->
+          <div class="search-layout grid grid-single lg-editorial-grid gap-6 align-start">
+            <!-- Filter Sidebar (Col Span 4 on 12-col broadsheet layout) -->
+            <aside class="search-filters lg-sidebar-span flex flex-column gap-5">
+              <div
+                class="surface-paper pad-5 radius-panel shadow-subtle stack-5 sticky"
+              >
+                <div class="flex align-center justify-between pad-block-2">
+                  <h2
+                    class="text-headline text-4 color-primary flex align-center gap-2"
+                  >
+                    <span class="icon color-muted text-5">tune</span>
+                    Refine Query
+                  </h2>
+                  <button
+                    class="text-label text-1 color-alert interaction-underline motion-all"
+                    id="resetBtn"
+                    type="reset"
+                  >
+                    Reset All
+                  </button>
+                </div>
+                <!-- Category Radio Filter -->
+                <div class="stack-2">
+                  <label
+                    class="block text-kicker text-1 text-uppercase color-muted"
+                    >Publication Section</label
+                  >
+                  <div class="stack-2 surface-muted pad-2 radius-standard">
+                    <label
+                      class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors"
+                    >
+                      <span
+                        class="flex align-center gap-2 text-body text-1 color-body"
+                      >
+                        <input
+                          class="control-pointer"
+                          name="category"
+                          type="radio"
+                          value="all"
+                        />
+                        <span>All Sections</span>
+                      </span>
+                      <span class="text-caption text-1 color-muted">18</span>
+                    </label>
+                    <label
+                      class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard surface-paper shadow-subtle control-pointer motion-colors"
+                    >
+                      <span
+                        class="flex align-center gap-2 text-body text-1 text-semibold color-primary"
+                      >
+                        <input
+                          checked=""
+                          class="control-pointer"
+                          name="category"
+                          type="radio"
+                          value="technology"
+                        />
+                        <span>Technology</span>
+                      </span>
+                      <span class="text-caption text-1 color-body text-semibold"
+                        >12</span
+                      >
+                    </label>
+                    <label
+                      class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors"
+                    >
+                      <span
+                        class="flex align-center gap-2 text-body text-1 color-body"
+                      >
+                        <input
+                          class="control-pointer"
+                          name="category"
+                          type="radio"
+                          value="business"
+                        />
+                        <span>Business &amp; Markets</span>
+                      </span>
+                      <span class="text-caption text-1 color-muted">3</span>
+                    </label>
+                    <label
+                      class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors"
+                    >
+                      <span
+                        class="flex align-center gap-2 text-body text-1 color-body"
+                      >
+                        <input
+                          class="control-pointer"
+                          name="category"
+                          type="radio"
+                          value="science"
+                        />
+                        <span>Science &amp; Labs</span>
+                      </span>
+                      <span class="text-caption text-1 color-muted">2</span>
+                    </label>
+                    <label
+                      class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors"
+                    >
+                      <span
+                        class="flex align-center gap-2 text-body text-1 color-body"
+                      >
+                        <input
+                          class="control-pointer"
+                          name="category"
+                          type="radio"
+                          value="opinion"
+                        />
+                        <span>Opinion &amp; Essays</span>
+                      </span>
+                      <span class="text-caption text-1 color-muted">1</span>
+                    </label>
+                  </div>
+                </div>
+                <!-- Date Range Filter -->
+                <div class="stack-2">
+                  <label
+                    class="block text-kicker text-1 text-uppercase color-muted"
+                    >Date Published</label
+                  >
+                  <div class="grid grid-split gap-1">
+                    <button
+                      class="pad-block-2 pad-inline-3 text-center radius-standard surface-muted text-label text-1 color-body motion-colors"
+                      type="button"
+                    >
+                      Past 24h
+                    </button>
+                    <button
+                      class="pad-block-2 pad-inline-3 text-center radius-standard surface-muted text-label text-1 color-body motion-colors"
+                      type="button"
+                    >
+                      Past Week
+                    </button>
+                    <button
+                      class="pad-block-2 pad-inline-3 text-center radius-standard surface-ink color-inverse text-label text-1 shadow-subtle motion-colors"
+                      type="button"
+                    >
+                      Past Month
+                    </button>
+                    <button
+                      class="pad-block-2 pad-inline-3 text-center radius-standard surface-muted text-label text-1 color-body motion-colors"
+                      type="button"
+                    >
+                      Any Time
+                    </button>
+                  </div>
+                </div>
+                <!-- Sort By Dropdown -->
+                <div class="stack-2">
+                  <label
+                    class="block text-kicker text-1 text-uppercase color-muted"
+                    for="sortBySelect"
+                    >Sort Hierarchy</label
+                  >
+                  <div class="relative">
+                    <select
+                      class="width-full surface-muted radius-standard pad-block-2 text-body text-1 color-body"
+                      id="sortBySelect"
+                    >
+                      <option selected="">Most Relevant (Ranked)</option>
+                      <option>Newest First (Chronological)</option>
+                      <option>Most Viewed (Impact)</option>
+                    </select>
+                    <span class="icon absolute color-muted text-4"
+                      >expand_more</span
+                    >
+                  </div>
+                </div>
+                <!-- Editorial Content Type Toggles -->
+                <div class="stack-2">
+                  <label
+                    class="block text-kicker text-1 text-uppercase color-muted"
+                    >Format Options</label
+                  >
+                  <div class="stack-2">
+                    <label
+                      class="flex align-center gap-2 text-body text-1 color-body control-pointer"
+                    >
+                      <input
+                        checked=""
+                        class="radius-standard control-pointer"
+                        type="checkbox"
+                      />
+                      <span>Campus Investigative Reports</span>
+                    </label>
+                    <label
+                      class="flex align-center gap-2 text-body text-1 color-body control-pointer"
+                    >
+                      <input
+                        checked=""
+                        class="radius-standard control-pointer"
+                        type="checkbox"
+                      />
+                      <span>Peer-Reviewed Lab Briefs</span>
+                    </label>
+                    <label
+                      class="flex align-center gap-2 text-body text-1 color-body control-pointer"
+                    >
+                      <input
+                        class="radius-standard control-pointer"
+                        type="checkbox"
+                      />
+                      <span>Multimedia &amp; Podcasts</span>
+                    </label>
+                  </div>
+                </div>
+                <!-- Filter Actions -->
+                <div class="pad-block-2 flex flex-column gap-2">
+                  <button
+                    class="width-full pad-block-2 surface-ink color-inverse text-label text-1 radius-standard text-center motion-colors"
+                    type="button"
+                  >
+                    Apply Filter Rules
+                  </button>
+                  <p class="text-center text-caption text-1 color-muted">
+                    Synchronized with Collegiate News Wire
+                  </p>
+                </div>
+                <!-- Search Telemetry Mini Box -->
+                <div class="surface-panel pad-3 radius-standard stack-2">
+                  <div
+                    class="flex align-center justify-between text-1 text-caption color-muted"
+                  >
+                    <span>Query Sentiment</span>
+                    <span class="text-bold color-body"
+                      >Neutral / Analytical</span
+                    >
+                  </div>
+                  <div
+                    class="width-full surface-raised radius-pill overflow-hidden"
+                  >
+                    <div class="surface-ink height-full"></div>
+                  </div>
+                  <p class="text-caption text-1 color-subtle">
+                    Keywords indexed against 4,820 campus archives.
+                  </p>
+                </div>
+              </div>
+            </aside>
+            <!-- Main Results Area (Col Span 8 on 12-col broadsheet layout) -->
+            <main class="search-results-list lg-content-span flex flex-column gap-4">
+              <!-- Editorial Ticker / View Controls Header -->
+              <div
+                class="flex align-center justify-between surface-paper pad-inline-4 pad-block-2 radius-panel shadow-subtle"
+              >
+                <div class="flex align-center gap-2">
+                  <span class="text-kicker text-1 text-uppercase color-muted"
+                    >Display Mode:</span
+                  >
+                  <button
+                    class="pad-inline-3 pad-block-2 radius-standard surface-panel text-label text-1 color-primary text-bold"
+                  >
+                    Standard Detailed
+                  </button>
+                  <button
+                    class="pad-inline-3 pad-block-2 radius-standard color-muted text-label text-1"
+                  >
+                    Compact Headlines
+                  </button>
+                </div>
+                <div class="text-caption text-1 color-muted block">
+                  Showing <strong>1 – 4</strong> of 18 records
+                </div>
+              </div>
+              <!-- Result Card 1 (Top Match) -->
+              <article
+                class="search-result-card surface-paper pad-4 pad-5 radius-panel shadow-subtle motion-shadow flex flex-column sm-row gap-4"
+              >
+                <div
+                  class="media-card width-full flex-no-shrink relative overflow-hidden radius-standard"
+                >
+                  <img
+                    class="width-full height-full media-image interaction-zoom motion-transform"
+                    data-alt="Close up macro photograph of a 3nm semiconductor silicon wafer processor die shimmering with iridescent cyan and amber circuitry under clean laboratory cleanroom lighting, high tech editorial aesthetic"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAYFX-hg9aqV9FOIc9p7LZavNXnWV4meI9PBJ6vcjVKCKBzmAPuwanPX-9S5N1JEdz2kR1duFuhKG4bQg1WBJVUFsZQFtE5kzDwlymy5U5ykWufub6t3HUCJNA33MSCuKWz_CLnJq9iWCyoMyj0CmPhXPZv8VpmGgX22Ps_Q7GPp8GnaWZfbXKMeaoZvj3X3Utpb5kvOj9WSejhEjkuAMJHNM1z_7DFpH0eyEsFmJXHK5c18iyxjNOnQ"
+                  />
+                  <span
+                    class="absolute surface-ink color-inverse text-kicker text-1 pad-block-2 radius-standard"
+                    >Featured Match</span
+                  >
+                </div>
+                <div class="flex flex-column justify-between flex-grow">
+                  <div>
+                    <div
+                      class="flex align-center justify-between gap-2 margin-bottom-2"
+                    >
+                      <div class="flex align-center gap-2">
+                        <span
+                          class="surface-panel color-body text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
+                          >Technology</span
+                        >
+                        <span class="color-subtle">•</span>
+                        <time
+                          class="text-caption text-1 color-muted"
+                          datetime="2024-10-14"
+                          >Oct 14, 2024</time
+                        >
+                      </div>
+                      <div
+                        class="flex align-center gap-1 text-caption text-1 color-muted"
+                      >
+                        <span class="icon text-2">visibility</span>
+                        <span>3.4k reads</span>
+                      </div>
+                    </div>
+                    <h3
+                      class="text-headline text-5 color-primary margin-bottom-2 motion-colors"
+                    >
+                      <a href="#"
+                        >The Post-Moore Dilemma: How Next-Gen
+                        <mark class="surface-info color-inverse radius-standard"
+                          >Silicon Architecture</mark
+                        >
+                        Reinvents Neural Compute</a
+                      >
+                    </h3>
+                    <p
+                      class="text-body text-2 color-muted title-clamp margin-bottom-2"
+                    >
+                      Engineering breakthroughs at the University
+                      Microelectronics Core demonstrate that 3D-stacked
+                      <mark class="surface-info color-inverse radius-standard"
+                        >silicon architecture</mark
+                      >
+                      reduces thermal throttles by 38% while multiplying tensor
+                      throughput for autonomous robotics.
+                    </p>
+                  </div>
+                  <div class="flex align-center justify-between pad-block-2">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-raised flex align-center justify-center text-kicker text-1 color-primary text-bold"
+                      >
+                        EM
+                      </div>
+                      <span class="text-body text-1 color-body text-medium"
+                        >Elena Morales</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >• Senior Tech Correspondent</span
+                      >
+                    </div>
+                    <a
+                      class="text-label text-1 color-primary interaction-underline flex align-center gap-1"
+                      href="#"
+                    >
+                      Read dispatch
+                      <span class="icon text-2">arrow_forward</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <!-- Result Card 2 -->
+              <article
+                class="search-result-card surface-paper pad-4 pad-5 radius-panel shadow-subtle motion-shadow flex flex-column sm-row gap-4"
+              >
+                <div
+                  class="media-card width-full flex-no-shrink relative overflow-hidden radius-standard"
+                >
+                  <img
+                    class="width-full height-full media-image interaction-zoom motion-transform"
+                    data-alt="Editorial photograph of university engineering students working in a modern cleanroom silicon fabrication lab with yellow safety lighting, vacuum chambers, and robotic wafer handling equipment"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY2tzdJhzBr1G-mnf6iGCgMPiwRzdzEq98nQN_ffaOyURk6-84RPt1gsV_bJek_nkK-ZhC7xZS2FhnQ-TM9cyHyV3vHiPu3YE_uVcUwK-39m-WOWYcLovTZho7Ry13OiIKpaTU1FRrJ-dU2lh1D22f1s3GqD7WkE343InEeyIxB2oXhC9Ql-_6xBfRLi0_7iBqmZUNhR52gz1jkP9BqnvD_5cgKzztHQaUDrzSuEkDXV-1UPmwUInZPg"
+                  />
+                </div>
+                <div class="flex flex-column justify-between flex-grow">
+                  <div>
+                    <div
+                      class="flex align-center justify-between gap-2 margin-bottom-2"
+                    >
+                      <div class="flex align-center gap-2">
+                        <span
+                          class="surface-panel color-body text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
+                          >Science &amp; Labs</span
+                        >
+                        <span class="color-subtle">•</span>
+                        <time
+                          class="text-caption text-1 color-muted"
+                          datetime="2024-10-09"
+                          >Oct 9, 2024</time
+                        >
+                      </div>
+                      <div
+                        class="flex align-center gap-1 text-caption text-1 color-muted"
+                      >
+                        <span class="icon text-2">visibility</span>
+                        <span>1.8k reads</span>
+                      </div>
+                    </div>
+                    <h3
+                      class="text-headline text-5 color-primary margin-bottom-2 motion-colors"
+                    >
+                      <a href="#"
+                        >Beyond Traditional Fab: Quantum Wells in Micro-Scale
+                        <mark class="surface-info color-inverse radius-standard"
+                          >Architecture</mark
+                        ></a
+                      >
+                    </h3>
+                    <p
+                      class="text-body text-2 color-muted title-clamp margin-bottom-2"
+                    >
+                      Researchers abandon conventional planar topologies in
+                      pursuit of gate-all-around
+                      <mark class="surface-info color-inverse radius-standard"
+                        >silicon</mark
+                      >
+                      substrates, opening viable paths toward cryogenic campus
+                      compute facilities.
+                    </p>
+                  </div>
+                  <div class="flex align-center justify-between pad-block-2">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-raised flex align-center justify-center text-kicker text-1 color-primary text-bold"
+                      >
+                        DR
+                      </div>
+                      <span class="text-body text-1 color-body text-medium"
+                        >Prof. David Rawlins</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >• Contributing Faculty</span
+                      >
+                    </div>
+                    <a
+                      class="text-label text-1 color-primary interaction-underline flex align-center gap-1"
+                      href="#"
+                    >
+                      Read dispatch
+                      <span class="icon text-2">arrow_forward</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <!-- Result Card 3 -->
+              <article
+                class="search-result-card surface-paper pad-4 pad-5 radius-panel shadow-subtle motion-shadow flex flex-column sm-row gap-4"
+              >
+                <div
+                  class="media-card width-full flex-no-shrink relative overflow-hidden radius-standard"
+                >
+                  <img
+                    class="width-full height-full media-image interaction-zoom motion-transform"
+                    data-alt="Editorial still life of stock market financial charts overlaid across crystalline silicon ingot wafers, dark slate and cool metallic lighting with crisp editorial focus"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXWetSYjfyU_XntMYrv_XA14B0MJZtJNyb0W1CL2FeaUbv7J1aw3HxcjVNsBucDk65icKtDASB_SdKSIuzkvuL48avycBzQT1AwDW9bZxvzmBtsjmMEOT8E1dB5RfW3bWeJOtHl9kRrFRaCCztwZJCXUDrn1ahORscbJceuyRBfAZfcHPewweZ-TVfwGcKGNzkLu_E9eYHd2slxaFWqhkCmyRnn1jR4QmqQglnekvKOPj57-NQqkd0Ug"
+                  />
+                </div>
+                <div class="flex flex-column justify-between flex-grow">
+                  <div>
+                    <div
+                      class="flex align-center justify-between gap-2 margin-bottom-2"
+                    >
+                      <div class="flex align-center gap-2">
+                        <span
+                          class="surface-panel color-body text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
+                          >Business</span
+                        >
+                        <span class="color-subtle">•</span>
+                        <time
+                          class="text-caption text-1 color-muted"
+                          datetime="2024-09-28"
+                          >Sep 28, 2024</time
+                        >
+                      </div>
+                      <div
+                        class="flex align-center gap-1 text-caption text-1 color-muted"
+                      >
+                        <span class="icon text-2">visibility</span>
+                        <span>2.1k reads</span>
+                      </div>
+                    </div>
+                    <h3
+                      class="text-headline text-5 color-primary margin-bottom-2 motion-colors"
+                    >
+                      <a href="#"
+                        >Venture Capital Floods Custom
+                        <mark class="surface-info color-inverse radius-standard"
+                          >Silicon</mark
+                        >
+                        Startups as Cloud Monopolies Pivot</a
+                      >
+                    </h3>
+                    <p
+                      class="text-body text-2 color-muted title-clamp margin-bottom-2"
+                    >
+                      An institutional audit of Series-B tech deals reveals
+                      student-founded hardware hubs pivoting away from commodity
+                      GPUs toward proprietary server
+                      <mark class="surface-info color-inverse radius-standard"
+                        >architecture</mark
+                      >.
+                    </p>
+                  </div>
+                  <div class="flex align-center justify-between pad-block-2">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-raised flex align-center justify-center text-kicker text-1 color-primary text-bold"
+                      >
+                        KS
+                      </div>
+                      <span class="text-body text-1 color-body text-medium"
+                        >Kavita Sharma</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >• Markets Editor</span
+                      >
+                    </div>
+                    <a
+                      class="text-label text-1 color-primary interaction-underline flex align-center gap-1"
+                      href="#"
+                    >
+                      Read dispatch
+                      <span class="icon text-2">arrow_forward</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <!-- Result Card 4 -->
+              <article
+                class="search-result-card surface-paper pad-4 pad-5 radius-panel shadow-subtle motion-shadow flex flex-column sm-row gap-4"
+              >
+                <div
+                  class="media-card width-full flex-no-shrink relative overflow-hidden radius-standard"
+                >
+                  <div
+                    class="width-full height-full surface-panel flex flex-column align-center justify-center pad-3 text-center"
+                  >
+                    <span class="icon color-muted text-7 margin-bottom-2"
+                      >forum</span
+                    >
+                    <span class="text-kicker text-1 text-uppercase color-muted"
+                      >Editorial Column</span
+                    >
+                  </div>
+                </div>
+                <div class="flex flex-column justify-between flex-grow">
+                  <div>
+                    <div
+                      class="flex align-center justify-between gap-2 margin-bottom-2"
+                    >
+                      <div class="flex align-center gap-2">
+                        <span
+                          class="surface-panel color-body text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
+                          >Opinion</span
+                        >
+                        <span class="color-subtle">•</span>
+                        <time
+                          class="text-caption text-1 color-muted"
+                          datetime="2024-09-15"
+                          >Sep 15, 2024</time
+                        >
+                      </div>
+                      <div
+                        class="flex align-center gap-1 text-caption text-1 color-muted"
+                      >
+                        <span class="icon text-2">visibility</span>
+                        <span>940 reads</span>
+                      </div>
+                    </div>
+                    <h3
+                      class="text-headline text-5 color-primary margin-bottom-2 motion-colors"
+                    >
+                      <a href="#"
+                        >The Sovereignty of Open Instruction Sets: Why RISC-V
+                        Must Define Public
+                        <mark class="surface-info color-inverse radius-standard"
+                          >Architecture</mark
+                        ></a
+                      >
+                    </h3>
+                    <p
+                      class="text-body text-2 color-muted title-clamp margin-bottom-2"
+                    >
+                      Proprietary foundry licensing threatens open-source
+                      research. Academic facilities must assert independence by
+                      fabricating royalty-free
+                      <mark class="surface-info color-inverse radius-standard"
+                        >silicon</mark
+                      >
+                      alternatives.
+                    </p>
+                  </div>
+                  <div class="flex align-center justify-between pad-block-2">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-raised flex align-center justify-center text-kicker text-1 color-primary text-bold"
+                      >
+                        MB
+                      </div>
+                      <span class="text-body text-1 color-body text-medium"
+                        >Marcus Brody</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >• Opinion Board Member</span
+                      >
+                    </div>
+                    <a
+                      class="text-label text-1 color-primary interaction-underline flex align-center gap-1"
+                      href="#"
+                    >
+                      Read dispatch
+                      <span class="icon text-2">arrow_forward</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <!-- Standard Pagination (Clean Broadsheet / Bootstrap Equivalent) -->
+              <nav
+                aria-label="Search results pagination"
+                class="margin-top-5 flex flex-column sm-row align-center justify-between gap-4 surface-paper pad-4 radius-panel shadow-subtle"
+              >
+                <div class="text-caption text-1 color-muted">
+                  Page <strong class="color-body">1</strong> of
+                  <strong class="color-body">5</strong> pages
+                </div>
+                <ul class="flex align-center gap-1">
+                  <!-- Previous Button (Disabled State) -->
+                  <li>
+                    <button
+                      aria-label="Previous Page"
+                      class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled flex align-center gap-1"
+                      disabled=""
+                      type="button"
+                    >
+                      <span class="icon text-2">chevron_left</span>
+                      <span class="inline">Previous</span>
+                    </button>
+                  </li>
+                  <!-- Numeric Pages -->
+                  <li>
+                    <button
+                      aria-current="page"
+                      class="avatar-medium radius-standard surface-ink color-inverse text-label text-1 text-bold shadow-subtle"
+                      type="button"
+                    >
+                      1
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="avatar-medium radius-standard surface-muted color-body text-label text-1 motion-colors"
+                      type="button"
+                    >
+                      2
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="avatar-medium radius-standard surface-muted color-body text-label text-1 motion-colors"
+                      type="button"
+                    >
+                      3
+                    </button>
+                  </li>
+                  <li class="color-subtle text-body">…</li>
+                  <li>
+                    <button
+                      class="avatar-medium radius-standard surface-muted color-body text-label text-1 motion-colors"
+                      type="button"
+                    >
+                      5
+                    </button>
+                  </li>
+                  <!-- Next Button -->
+                  <li>
+                    <button
+                      aria-label="Next Page"
+                      class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 motion-colors flex align-center gap-1"
+                      type="button"
+                    >
+                      <span class="inline">Next</span>
+                      <span class="icon text-2">chevron_right</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+              <!-- Search Tips Card -->
+              <div
+                class="surface-muted pad-4 radius-panel flex align-start gap-3"
+              >
+                <span class="icon color-muted text-5">lightbulb</span>
+                <div>
+                  <h4 class="text-label text-2 color-body">
+                    Newsroom Archive Pro-Tip
+                  </h4>
+                  <p class="text-body text-1 color-muted">
+                    Wrap phrases in quotes for verbatim matching (e.g.
+                    <code
+                      class="surface-panel pad-block-2 radius-standard color-primary"
+                      >"RISC-V architecture"</code
+                    >) or use section prefix operators like
+                    <code
+                      class="surface-panel pad-block-2 radius-standard color-primary"
+                      >sec:opinion</code
+                    >
+                    to jump straight to editorial commentaries.
+                  </p>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+        <script>
+          (function initSearchInteractions() {
+            const resetBtn = document.getElementById("resetBtn");
+            const searchInput = document.getElementById("searchInput");
+
+            if (resetBtn && searchInput) {
+              resetBtn.addEventListener("click", () => {
+                searchInput.value = "";
+                searchInput.focus();
+              });
+            }
+          })();
+        </script>
+      </div>
+    </main>
+    <footer class="public-footer width-full surface-muted">
+      <div class="width-content page-shell pad-inline-5 pad-6">
+        <div class="grid grid-single md-grid-triple gap-6">
+          <div>
+            <div class="flex align-center gap-2 margin-bottom-2">
+              <img
+                alt="The Daily Web logo"
+                class="avatar-small image-logo"
+                src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+              /><span class="text-headline text-4 color-primary"
+                >The Daily Web</span
+              >
+            </div>
+            <p class="text-body text-1 color-muted">
+              The independent digital news publication edited and maintained by
+              collegiate journalists.
+            </p>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 color-body text-uppercase margin-bottom-2"
+            >
+              Sections
+            </h4>
+            <ul class="stack-2 text-body text-1">
+              <li class="color-muted">Technology</li>
+              <li class="color-muted">Business &amp; Campus Finance</li>
+              <li class="color-muted">Science &amp; Research</li>
+              <li class="color-muted">Editorial &amp; Opinion</li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 color-body text-uppercase margin-bottom-2"
+            >
+              About Publication
+            </h4>
+            <ul class="stack-2 text-body text-1">
+              <li class="color-muted">Editorial Board</li>
+              <li class="color-muted">Ethics Policy</li>
+              <li class="color-muted">Archive Index</li>
+              <li class="color-muted">Academic Masthead</li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 color-body text-uppercase margin-bottom-2"
+            >
+              Newsroom Contact
+            </h4>
+            <p class="text-body text-1 color-muted margin-bottom-2">
+              Newsroom Lab 304, Student Memorial Hall
+            </p>
+            <p class="text-body text-1 color-muted">tips@dailyweb.edu</p>
+          </div>
+        </div>
+        <div
+          class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle"
+        >
+          © 2024 The Daily Web Student Newsroom. Built with clean semantic
+          modular templates.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

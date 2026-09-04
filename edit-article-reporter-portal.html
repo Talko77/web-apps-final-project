@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web - Editorial Workspace</title>
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+  <body
+    class="reporter-edit-page surface-page text-body color-body height-screen flex flex-column"
+  >
+    <header class="newsroom-site-header fixed width-full surface-paper shadow-subtle">
+      <div class="newsroom-header-shell page-shell flex align-center justify-between gap-4">
+        <div class="flex align-center gap-4">
+          <a class="flex align-center gap-2" data-path="articles" href="#"
+            ><img
+              alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
+              class="image-logo"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+            /><span class="text-headline text-5 color-primary"
+              >The Daily Web</span
+            ></a
+          ><span
+            class="pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-uppercase text-semibold"
+            >Editor</span
+          >
+        </div>
+        <nav
+          class="newsroom-primary-nav flex align-center gap-5"
+          data-active-classes="color-primary text-bold"
+        >
+          <a
+            aria-current="page"
+            class="motion-colors color-primary text-bold"
+            data-path="articles"
+            href="#"
+            >Articles</a
+          ><a
+            class="text-label text-2 color-muted interaction-underline motion-colors"
+            data-path="review-queue"
+            href="#"
+            >Review Queue</a
+          >
+        </nav>
+        <div class="newsroom-account-actions flex align-center gap-4">
+          <a
+            class="text-label text-1 color-muted interaction-underline flex align-center gap-1 motion-colors"
+            data-path="home"
+            href="#"
+            ><span class="icon text-1">open_in_new</span
+            >View Public Site</a
+          ><a
+            class="text-label text-1 color-muted motion-colors"
+            data-path="login"
+            href="#"
+            >Logout</a
+          >
+          <div
+            class="avatar-small surface-ink flex align-center justify-center"
+          >
+            <span class="icon color-inverse text-4"
+              >person</span
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="newsroom-main width-full surface-page flex-grow">
+      <div class="reporter-workspace page-shell pad-block-3">
+        <div
+          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
+        >
+          <a class="interaction-underline" data-path="articles" href="#"
+            >Newsroom CMS</a
+          ><span class="color-subtle">/</span
+          ><span class="color-body text-semibold">Desk Console</span>
+        </div>
+        <div class="flex flex-column width-full">
+          <!-- Top Command Ribbon / Autosave Status -->
+          <div
+            class="command-ribbon surface-paper radius-panel shadow-subtle pad-inline-5 pad-block-3 margin-bottom-5 flex flex-column md-row align-center justify-between gap-4"
+          >
+            <div class="flex flex-column sm-row sm-align-center gap-3 gap-4">
+              <div class="flex align-center gap-2 text-body text-1 color-muted">
+                <span class="text-semibold color-primary">Articles</span>
+                <span class="color-subtle">/</span>
+                <span class="color-body text-medium"
+                  >Edit Article
+                  <span class="color-muted text-label text-1"
+                    >(ART-8924)</span
+                  ></span
+                >
+              </div>
+              <div
+                class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-caption text-1"
+              >
+                <span class="autosave-indicator relative flex">
+                  <span
+                    class="state-loading absolute inline-flex height-full width-full radius-pill surface-panel"
+                  ></span>
+                  <span
+                    class="relative inline-flex radius-pill surface-panel"
+                  ></span>
+                </span>
+                <span class="text-medium color-body"
+                  >✓ All changes saved to cloud (10:42 AM)</span
+                >
+              </div>
+            </div>
+            <div class="flex align-center gap-2 gap-3 flex-wrap">
+              <button
+                class="control-button control-button-secondary color-body text-label text-2 motion-colors flex align-center gap-2 shadow-subtle"
+                type="button"
+              >
+                <span class="icon text-4">save</span>
+                <span class="">Save Draft</span>
+              </button>
+              <button
+                class="control-button control-button-secondary color-body text-label text-2 motion-colors flex align-center gap-2 shadow-subtle"
+                type="button"
+              >
+                <span class="icon text-4">visibility</span>
+                <span class="">Preview</span>
+              </button>
+              <button
+                class="control-button color-inverse text-label text-2 motion-all shadow-subtle flex align-center gap-2"
+                id="topSubmitBtn"
+                type="button"
+              >
+                <span class="icon text-4">send</span>
+                <span class="">Submit for Review</span>
+              </button>
+            </div>
+          </div>
+          <!-- Notice Alert Banner -->
+          <div
+            class="notice-banner surface-info color-info radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+          >
+            <span
+              class="icon icon-filled color-muted text-5 flex-no-shrink margin-top-2"
+              >info</span
+            >
+            <div class="flex-grow text-left text-body text-2">
+              <span class="text-semibold">Notice:</span> v1.0 is currently
+              published on the live site. You are editing a draft update (<span
+                class="text-semibold color-primary"
+                >v2.0</span
+              >). The live version will remain active until an editor approves
+              your revisions.
+            </div>
+          </div>
+          <!-- Main Editorial Grid -->
+          <form
+            class="article-editor-grid grid grid-single lg-editorial-grid gap-5"
+            id="articleForm"
+            onsubmit="event.preventDefault()"
+          >
+            <!-- Center Editorial Body Flow (8 Cols) -->
+            <div class="article-editor-column lg-content-span flex flex-column gap-5">
+              <!-- Article Title Card -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <label
+                  class="text-label text-1 text-uppercase color-muted text-bold"
+                  for="articleTitle"
+                  >Headline / Article Title</label
+                >
+                <input
+                  class="control-input width-full text-headline text-6 surface-muted pad-inline-4 pad-block-3 radius-card color-body motion-all"
+                  id="articleTitle"
+                  name="articleTitle"
+                  placeholder="e.g. Breakthrough In Open Silicon: Next-Generation Architecture"
+                  type="text"
+                  value="Breakthrough In Open Silicon: Next-Generation Architecture Unveiled at Tech Symposium"
+                />
+                <span class="text-caption text-1 color-muted"
+                  >Craft clear, descriptive headlines for newsstand indexing
+                  &amp; student syndication.</span
+                >
+              </div>
+              <!-- Standfirst / Subtitle -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <div class="flex align-center justify-between">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    for="articleSubtitle"
+                    >Subtitle &amp; Social Summary</label
+                  >
+                  <span
+                    class="text-label text-1 color-muted text-medium"
+                    id="charCounter"
+                    >138 / 250 characters</span
+                  >
+                </div>
+                <textarea
+                  class="control-input width-full text-body text-2 surface-muted pad-4 radius-card color-body motion-all control-no-resize"
+                  id="articleSubtitle"
+                  maxlength="250"
+                  name="articleSubtitle"
+                  placeholder="Summarize the core impact in two sentences for the lead feed..."
+                  rows="2"
+                >Independent researchers reveal an energy-efficient compute block fabricated on open standard ISA, promising accessible hardware for labs.</textarea>
+              </div>
+              <!-- Lead Graphic Attachment Box -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+              >
+                <div class="flex align-center justify-between">
+                  <div>
+                    <h3
+                      class="text-label text-1 text-uppercase color-muted text-bold"
+                    >
+                      Lead Imagery
+                    </h3>
+                    <p class="text-caption text-1 color-muted">
+                      Clean single asset upload with newsroom attribution.
+                    </p>
+                  </div>
+                  <span
+                    class="pad-inline-3 pad-block-2 radius-standard surface-panel color-body text-caption text-1"
+                    >16:9 Landscape Preferred</span
+                  >
+                </div>
+                <!-- Drag & Drop Container -->
+                <div
+                  class="surface-muted radius-panel pad-4 flex flex-column sm-row align-center gap-4"
+                >
+                  <div
+                    class="lead-image-preview width-full media-frame media-thumbnail radius-card flex-no-shrink shadow-subtle"
+                  >
+                    <img
+                      class="width-full height-full media-cover interaction-zoom motion-transform"
+                      data-alt="Close up architectural detail of an advanced modern semiconductor microchip wafer on a clean lab desk with diffused blue backlighting and subtle reflections"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA96Cj3_Zh_cgDzyJw7qxPH6eggt2_-FhxoFBG2V6EMQwJAY0EOnPJyZ9OkBH6IJDTjUjb1rwgBQA2l7LuGnemDUR073BoYil_XsM6nf8l08S5-HVbvaDGk9N0_YQD46txt_JMBLax80WVftggJ4XRFLo5vAYzrDi4ruCtznXvoCo7DfJ1GyEQe320vsxqrvf1g1D2q3_VOo_xqRMVJe1Tcllrup68neVV87BYzth5SjgFefmsWDnJ1Vw"
+                    />
+                    <div
+                      class="media-overlay surface-scrim-soft state-muted motion-all flex align-center justify-center"
+                    >
+                      <span class="color-inverse text-label text-1"
+                        >Replace File</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="lead-image-copy flex-grow flex flex-column justify-center text-center gap-1"
+                  >
+                    <div
+                      class="flex align-center justify-center justify-start gap-2 color-body text-label text-2"
+                    >
+                      <span class="icon text-5 color-muted"
+                        >cloud_upload</span
+                      >
+                      <span class="">Drag &amp; drop or browse image</span>
+                    </div>
+                    <p class="text-caption text-1 color-muted">
+                      Supported formats: JPEG, PNG, WebP (Max 8MB compressed)
+                    </p>
+                    <div
+                      class="margin-top-2 flex align-center justify-center justify-start gap-2"
+                    >
+                      <button
+                        class="pad-inline-3 pad-block-2 radius-card surface-raised color-body text-label text-1 motion-colors"
+                        type="button"
+                      >
+                        Choose Local File
+                      </button>
+                      <button
+                        class="pad-inline-3 pad-block-2 radius-card color-alert text-label text-1 motion-colors"
+                        type="button"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Caption and Credit Fields -->
+                <div class="lead-image-fields grid grid-single gap-4">
+                  <div class="flex flex-column gap-1">
+                    <label
+                      class="text-caption text-1 color-muted text-medium"
+                      for="imgCaption"
+                      >Image Caption</label
+                    >
+                    <input
+                      class="control-input width-full surface-muted pad-inline-3 pad-block-2 radius-card text-body text-1 color-body motion-all"
+                      id="imgCaption"
+                      type="text"
+                      value="Wafer inspection under polarized optical microscopy at university nanofab."
+                    />
+                  </div>
+                  <div class="flex flex-column gap-1">
+                    <label
+                      class="text-caption text-1 color-muted text-medium"
+                      for="imgCredit"
+                      >Photo Credit / Agency</label
+                    >
+                    <input
+                      class="control-input width-full surface-muted pad-inline-3 pad-block-2 radius-card text-body text-1 color-body motion-all"
+                      id="imgCredit"
+                      type="text"
+                      value="Elena Rostova / Student Gazette Wire"
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- Rich Article WYSIWYG Editor Canvas -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-3"
+              >
+                <div class="flex align-center justify-between margin-bottom-2">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    >Article Body &amp; Narrative</label
+                  >
+                  <span class="text-caption text-1 color-muted"
+                    >Format: Rich HTML Block</span
+                  >
+                </div>
+                <!-- Familiar Standard Editorial Toolbar -->
+                <div
+                  class="editor-toolbar surface-muted radius-card pad-2 flex align-center flex-wrap gap-1 shadow-subtle"
+                >
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Bold"
+                    type="button"
+                  >
+                    <span class="text-bold text-2">B</span>
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Italic"
+                    type="button"
+                  >
+                    <span class="text-italic text-display text-4 text-tight"
+                      >I</span
+                    >
+                  </button>
+                  <div class="toolbar-divider surface-panel"></div>
+                  <button
+                    class="toolbar-control toolbar-text-control pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
+                    title="Subheading 2"
+                    type="button"
+                  >
+                    H2
+                  </button>
+                  <button
+                    class="toolbar-control toolbar-text-control pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
+                    title="Subheading 3"
+                    type="button"
+                  >
+                    H3
+                  </button>
+                  <div class="toolbar-divider surface-panel"></div>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Blockquote"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_quote</span
+                    >
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Hyperlink"
+                    type="button"
+                  >
+                    <span class="icon text-4">link</span>
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Bulleted List"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_list_bulleted</span
+                    >
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Numbered List"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_list_numbered</span
+                    >
+                  </button>
+                  <div class="toolbar-divider surface-panel"></div>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Insert Horizontal Rule"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >horizontal_rule</span
+                    >
+                  </button>
+                  <button
+                    class="toolbar-control toolbar-clear-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Clear Formatting"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_clear</span
+                    >
+                  </button>
+                </div>
+                <!-- Broad Editorial Textarea -->
+                <textarea
+                  class="article-body-input control-input width-full surface-paper pad-4 radius-card text-deck color-body motion-colors text-relaxed shadow-subtle"
+                  id="articleBody"
+                  placeholder="Draft your story here using broadsheet narrative conventions..."
+                  rows="16"
+                >In what could mark an inflection point for open computing initiatives across collegiate engineering labs, researchers today demonstrated a silicon prototype running an instruction pipeline with roughly 38% lower power overhead.
+
+Unlike commercial alternatives subject to strict proprietary licensing, the blueprint released under permissive academic licenses will allow student developers and open labs to fabricate bespoke accelerator units directly on shared multi-project semiconductor runs.
+
+"The economics of modern computing have historically locked out universities from genuine low-level iteration," explained lead researcher Marcus Chen during the morning panel. "By grounding our tape-out entirely in open toolchains, we demonstrate that student collectives can engineer meaningful architectural breakthroughs without seven-figure industrial software seats."
+
+Further demonstrations are scheduled throughout the week, with initial hardware boards slated for arrival at partner institutions early next semester.</textarea
+                >
+              </div>
+            </div>
+            <!-- Right Column Sidebar / Meta Settings (4 Cols) -->
+            <div class="article-settings-column span-sidebar flex flex-column gap-5">
+              <!-- Taxonomy & Classification Card -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+              >
+                <div class="flex align-center gap-2">
+                  <span class="icon color-muted text-5"
+                    >category</span
+                  >
+                  <h3 class="text-headline text-4 color-primary">
+                    Desk &amp; Classification
+                  </h3>
+                </div>
+                <!-- Category Dropdown -->
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    for="articleCategory"
+                    >Editorial Desk</label
+                  >
+                  <div class="select-control relative">
+                    <select
+                      class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-colors"
+                      id="articleCategory"
+                      name="articleCategory"
+                    >
+                      <option selected="" value="Technology">Technology</option>
+                      <option value="Science">Science &amp; Research</option>
+                      <option value="Business">Campus Economics</option>
+                      <option value="Culture">Arts &amp; Culture</option>
+                      <option value="Opinion">Staff Editorial</option>
+                      <option value="Sports">Athletics</option>
+                    </select>
+                    <span
+                      class="icon color-muted text-5 absolute"
+                      >expand_more</span
+                    >
+                  </div>
+                </div>
+                <!-- Tags Input Field -->
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    for="articleTags"
+                    >Tags &amp; Keywords</label
+                  >
+                  <input
+                    class="control-input width-full surface-muted pad-inline-4 pad-block-2 radius-card text-body text-1 color-body motion-colors"
+                    id="articleTags"
+                    name="articleTags"
+                    placeholder="Separate with commas"
+                    type="text"
+                    value="Hardware, OpenSource, RISC-V, CampusResearch"
+                  />
+                  <div class="flex flex-wrap gap-2 margin-top-2">
+                    <span
+                      class="pad-inline-3 pad-block-2 radius-standard surface-panel color-muted text-caption text-1 flex align-center gap-1"
+                    >
+                      #Hardware
+                      <button class="" type="button">×</button>
+                    </span>
+                    <span
+                      class="pad-inline-3 pad-block-2 radius-standard surface-panel color-muted text-caption text-1 flex align-center gap-1"
+                    >
+                      #RISC-V
+                      <button class="" type="button">×</button>
+                    </span>
+                    <span
+                      class="pad-inline-3 pad-block-2 radius-standard surface-panel color-muted text-caption text-1 flex align-center gap-1"
+                    >
+                      #CampusResearch
+                      <button class="" type="button">×</button>
+                    </span>
+                  </div>
+                </div>
+                <!-- Placement Tier / Prominence -->
+                <fieldset class="placement-fieldset">
+                  <legend class="text-label text-1 text-uppercase color-muted text-bold">Layout Prominence</legend>
+                  <div class="grid grid-split gap-2 margin-top-2">
+                    <label class="placement-option surface-muted radius-standard flex align-center gap-2 pad-inline-3 pad-block-2 text-label text-1">
+                      <input checked name="placementTier" type="radio" value="lead" />
+                      Lead Story
+                    </label>
+                    <label class="placement-option surface-muted radius-standard flex align-center gap-2 pad-inline-3 pad-block-2 text-label text-1">
+                      <input name="placementTier" type="radio" value="standard" />
+                      Standard Flow
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+              <!-- Publishing Ledger & Metadata -->
+              <section class="editor-card surface-paper pad-5 radius-panel shadow-subtle" aria-labelledby="revisionMetadataTitle">
+                <div class="flex align-center gap-2 margin-bottom-4">
+                  <span class="icon color-muted text-5">history_edu</span>
+                  <h3 class="text-headline text-4 color-primary" id="revisionMetadataTitle">Revision Metadata</h3>
+                </div>
+                <dl class="revision-ledger stack-2">
+                  <div><dt>Current assigned editor</dt><dd>Jordan Vance (Faculty)</dd></div>
+                  <div><dt>Original author</dt><dd>Marcus Chen</dd></div>
+                  <div><dt>Current live version</dt><dd class="text-semibold">v1.0 (Live)</dd></div>
+                </dl>
+                <p class="revision-note surface-muted radius-standard pad-3 margin-top-4 text-caption text-1 color-muted flex align-start gap-2">
+                  <span class="icon text-4">policy</span>
+                  <span>Submitting sends notifications to the student copy desk for fact-checking and layout clearance.</span>
+                </p>
+              </section>
+
+              <!-- Quick Desk Notes -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <label
+                  class="text-label text-1 text-uppercase color-muted text-bold"
+                  for="deskNotes"
+                  >Notes for Managing Desk</label
+                >
+                <textarea
+                  class="control-input width-full surface-muted pad-3 radius-card text-body text-1 color-body motion-colors control-no-resize"
+                  id="deskNotes"
+                  placeholder="Optional notes for the reviewing editor (e.g. quotes re-verified with dean)..."
+                  rows="3"
+                >Updated section 2 with Chen's confirmed tape-out quote. Replaced preview wafer graphic with high-res licensed photo.</textarea
+                >
+              </div>
+            </div>
+          </form>
+          <!-- Bottom Workspace Actions Sticky Bar -->
+          <div
+            class="workspace-actions margin-top-6 margin-bottom-6 flex flex-column sm-row align-center justify-between gap-4"
+          >
+            <button
+              class="color-alert pad-inline-4 pad-block-2 radius-card text-label text-2 motion-colors flex align-center gap-1"
+              id="deleteDraftBtn"
+              type="button"
+            >
+              <span class="icon text-4">delete</span>
+              <span class="">Delete Draft</span>
+            </button>
+            <div class="flex align-center gap-3 width-full justify-end">
+              <button
+                class="control-button control-button-secondary color-body text-label text-2 motion-colors shadow-subtle"
+                type="button"
+              >
+                Save Draft
+              </button>
+              <button
+                class="control-button color-inverse text-label text-2 motion-all shadow-raised flex align-center gap-2"
+                id="bottomSubmitBtn"
+                type="button"
+              >
+                <span class="icon text-5">send</span>
+                <span class="">Submit for Review</span>
+              </button>
+            </div>
+          </div>
+          <!-- Interactive Client-side Script -->
+          <script>
+            (function () {
+              // Subtitle live counter
+              const subtitle = document.getElementById("articleSubtitle");
+              const counter = document.getElementById("charCounter");
+              if (subtitle && counter) {
+                subtitle.addEventListener("input", function () {
+                  counter.textContent = `${this.value.length} / 250 characters`;
+                });
+              }
+
+              // Submit feedback micro-interaction
+              const submitButtons = [
+                document.getElementById("topSubmitBtn"),
+                document.getElementById("bottomSubmitBtn"),
+              ];
+              submitButtons.forEach((btn) => {
+                if (!btn) return;
+                btn.addEventListener("click", function () {
+                  const originalHTML = this.innerHTML;
+                  this.disabled = true;
+                  this.innerHTML =
+                    '<span class="icon state-spinning text-4">progress_activity</span><span>Dispatching...</span>';
+
+                  setTimeout(() => {
+                    this.innerHTML =
+                      '<span class="icon text-4">check</span><span>Submitted!</span>';
+                    setTimeout(() => {
+                      this.innerHTML = originalHTML;
+                      this.disabled = false;
+                    }, 2000);
+                  }, 700);
+                });
+              });
+
+              // Draft discard micro-prompt
+              const deleteBtn = document.getElementById("deleteDraftBtn");
+              if (deleteBtn) {
+                deleteBtn.addEventListener("click", function () {
+                  if (
+                    confirm(
+                      "Discard changes in this draft (v2.0)? The live published version (v1.0) will remain unaffected.",
+                    )
+                  ) {
+                    window.location.hash = "#articles";
+                  }
+                });
+              }
+            })();
+          </script>
+        </div>
+      </div>
+    </main>
+    <footer class="newsroom-footer width-full surface-muted pad-block-3">
+      <div class="page-shell text-center text-caption text-1 color-muted">
+        The Daily Web Student Newsroom CMS • Internal Editorial Dispatch •
+        v1.2.0
+      </div>
+    </footer>
+  </body>
+</html>
