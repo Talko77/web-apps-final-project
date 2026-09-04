@@ -27,15 +27,9 @@ main table {
   min-width: 640px;
 }
 
-/* Narrow screens use the same readable rhythm while allowing cards to stack. */
+/* Narrow screens keep tables scrollable and allow cards to stack. */
 @media (max-width: 639px) {
   main table {
     min-width: 560px;
-  }
-
-  .text-display-hero,
-  .sm\:text-display-hero {
-    font-size: 38px;
-    line-height: 44px;
   }
 }

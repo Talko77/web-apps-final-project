@@ -42,6 +42,12 @@
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
+  --color-info-container: #d5e3fc;
+  --color-on-info-container: #0d1c2e;
+  --color-warning-container: #fef3c7;
+  --color-on-warning-container: #78350f;
+  --color-success-container: #dcfce7;
+  --color-on-success-container: #14532d;
   --color-primary-fixed: #dae2fd;
   --color-primary-fixed-dim: #bec6e0;
   --color-on-primary-fixed: #131b2e;
@@ -55,9 +61,16 @@
   --color-on-tertiary-fixed: #410002;
   --color-on-tertiary-fixed-variant: #93000b;
 
+  /* Dark mode palette is intentionally reserved until approved values exist. */
+  /* The page references a dark-mode switch, but supplies no dark color values. */
+
   /* Typography */
-  --font-display: "Newsreader", Georgia, serif;
-  --font-interface: "Inter", Arial, sans-serif;
+  /* Editorial fallback: preserve serif character when the web font is absent. */
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  /* Interface fallback: use the platform UI sans-serif before a generic sans. */
+  --font-interface: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Icon fallback keeps symbols legible if the symbol font cannot load. */
+  --font-icons: "Material Symbols Outlined", sans-serif;
   --text-display-hero: 56px;
   --text-display-hero-line: 64px;
   --text-headline-xl: 40px;
@@ -85,7 +98,35 @@
   --text-caption: 12px;
   --text-caption-line: 18px;
 
+  /* Stable numbered type scale used by the local utility classes. */
+  --text-1: 12px;
+  --text-2: 15px;
+  --text-3: 17px;
+  --text-4: 18px;
+  --text-5: 22px;
+  --text-6: 28px;
+  --text-7: 40px;
+  --text-8: 56px;
+  --line-1: 18px;
+  --line-2: 24px;
+  --line-3: 28px;
+  --line-4: 24px;
+  --line-5: 28px;
+  --line-6: 36px;
+  --line-7: 48px;
+  --line-8: 64px;
+  --text-display-mobile: 38px;
+  --line-display-mobile: 44px;
+
   /* Spacing and geometry */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
   --space-xxs: 4px;
   --space-xs: 8px;
   --space-sm: 12px;
@@ -99,6 +140,25 @@
   --column-gap: 32px;
   --max-content-width: 1280px;
   --reading-column-width: 680px;
+  --feature-media-height: 440px;
+  --hero-media-height: 500px;
+  --hero-media-height-mobile: 360px;
+  --card-media-ratio: 3 / 2;
+  --hero-media-ratio: 16 / 9;
+  --thumbnail-media-ratio: 4 / 3;
+  --scrim-color: 19 27 46;
+  --scrim-strong-opacity: 0.8;
+  --scrim-soft-opacity: 0.4;
+  --glass-surface-opacity: 0.95;
+  --glass-blur: 12px;
+  --focus-ring-opacity: 0.12;
+  --portrait-size: 44px;
+  --avatar-small: 28px;
+  --avatar-medium: 40px;
+  --avatar-large: 48px;
+  --logo-height: 28px;
+  --control-height: 40px;
+  --newsroom-sidebar-width: 256px;
   --radius-sm: 2px;
   --radius-default: 4px;
   --radius-md: 6px;

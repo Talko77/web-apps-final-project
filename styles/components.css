@@ -4,58 +4,151 @@
  * These selectors describe recurring visual patterns. Utility classes remain
  * the primary contract, so component rules avoid unnecessary specificity.
  */
-/* Links and action controls */
+/* Shared link defaults keep navigation and inline actions visually consistent. */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-button,
-.button {
+/* Base button geometry gives every action control the same editorial shape. */
+button {
   border: 0;
   border-radius: var(--radius-default);
 }
 
-/* Editorial surfaces */
+/* Editorial content elements remove browser margins before local composition. */
 figure,
 blockquote,
 cite {
   margin: 0;
 }
 
-article p {
+/* Article copy stays within the long-form reading measure. */
+.article-copy p {
   max-width: var(--reading-column-width);
 }
 
-/* Form controls */
+/* Media frames keep image ratios stable while content and images load. */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-primary-container);
+}
+
+.media-hero {
+  min-height: var(--feature-media-height);
+  aspect-ratio: var(--hero-media-ratio);
+}
+
+.media-card {
+  aspect-ratio: var(--card-media-ratio);
+}
+
+.media-thumbnail {
+  aspect-ratio: var(--thumbnail-media-ratio);
+}
+
+.media-frame > img,
+.media-frame > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Media overlays create a predictable positioning layer for labels and fades. */
+.media-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Overlay content remains above the image treatment with readable inverse ink. */
+.media-overlay-content {
+  position: relative;
+  z-index: 1;
+  color: var(--color-on-primary);
+}
+
+/* The hero fade protects overlaid text without obscuring the source image. */
+.media-overlay-fade {
+  background: linear-gradient(to top, rgb(var(--scrim-color) / var(--scrim-strong-opacity)), transparent 70%);
+}
+
+/* Media captions provide consistent supporting metadata below an image. */
+.media-caption {
+  margin-top: var(--space-1);
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+/* Form controls share borders, radius, focus treatment, and action sizing. */
 input,
 select,
 textarea {
   min-width: 0;
-  border: 0;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
   outline: 0;
+}
+
+/* Primary buttons provide the default high-emphasis newsroom action. */
+.control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-interface);
+  font-size: var(--text-label-lg);
+  font-weight: 600;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.control-button:hover {
+  background: var(--color-primary-container);
+}
+
+/* Secondary buttons provide a quieter alternative to the primary action. */
+.control-button-secondary {
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+}
+
+.control-button-secondary:hover {
+  background: var(--color-surface-container-high);
+}
+
+/* Focus treatment makes keyboard interaction visible without changing layout. */
+.control-input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgb(0 0 0 / var(--focus-ring-opacity));
+}
+
+@media (max-width: 639px) {
+  /* Smaller screens reduce hero media height to preserve the reading rhythm. */
+  .media-hero {
+    min-height: var(--hero-media-height-mobile);
+  }
 }
 
 input::placeholder,
 textarea::placeholder {
+  /* Placeholder text stays visible but subordinate to entered content. */
   opacity: 1;
 }
 
-/* Status surfaces keep their text color explicit; utility text classes can
- * still override these defaults when a page needs a different contrast tone.
- */
-.bg-error-container {
-  color: var(--color-on-error-container);
-}
-
-.bg-error {
-  color: var(--color-on-error);
-}
-
-/* Material Symbols are loaded by the pages and should align like inline icons. */
-.material-symbols-outlined {
+/* Icons align symbol-font glyphs consistently with surrounding interface text. */
+.icon {
   display: inline-block;
-  font-family: "Material Symbols Outlined";
+  font-family: var(--font-icons);
   font-size: 1em;
   font-weight: normal;
   font-style: normal;
@@ -65,19 +158,19 @@ textarea::placeholder {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
+  font-feature-settings: "liga";
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-/* Keep table geometry predictable; existing overflow wrappers own scrolling. */
+/* Tables keep predictable geometry while existing wrappers own horizontal scrolling. */
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-/* Script-controlled status visibility remains class-driven. */
-[hidden],
-.hidden {
+/* Hidden content remains available to scripts without affecting layout. */
+[hidden] {
   display: none !important;
 }
