@@ -1,682 +1,969 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        "colors": {
-          "surface-tint": "#565e74",
-          "on-tertiary-container": "#f63a35",
-          "tertiary-fixed": "#ffdad6",
-          "on-primary-fixed": "#131b2e",
-          "on-primary": "#ffffff",
-          "on-primary-container": "#7c839b",
-          "surface-container-low": "#f2f4f6",
-          "inverse-surface": "#2d3133",
-          "primary": "#000000",
-          "surface-container": "#eceef0",
-          "primary-fixed-dim": "#bec6e0",
-          "error-container": "#ffdad6",
-          "background": "#f7f9fb",
-          "error": "#ba1a1a",
-          "surface-dim": "#d8dadc",
-          "inverse-on-surface": "#eff1f3",
-          "on-surface-variant": "#45464d",
-          "secondary-fixed": "#d5e3fc",
-          "on-tertiary": "#ffffff",
-          "on-secondary-fixed-variant": "#3a485b",
-          "secondary-container": "#d5e3fc",
-          "tertiary": "#000000",
-          "secondary": "#515f74",
-          "primary-container": "#131b2e",
-          "secondary-fixed-dim": "#b9c7df",
-          "inverse-primary": "#bec6e0",
-          "on-secondary": "#ffffff",
-          "outline-variant": "#c6c6cd",
-          "on-secondary-fixed": "#0d1c2e",
-          "on-background": "#191c1e",
-          "surface-bright": "#f7f9fb",
-          "surface-container-high": "#e6e8ea",
-          "surface-variant": "#e0e3e5",
-          "on-tertiary-fixed": "#410002",
-          "on-secondary-container": "#57657a",
-          "on-error": "#ffffff",
-          "on-tertiary-fixed-variant": "#93000b",
-          "on-error-container": "#93000a",
-          "primary-fixed": "#dae2fd",
-          "outline": "#76777d",
-          "surface": "#f7f9fb",
-          "on-primary-fixed-variant": "#3f465c",
-          "tertiary-container": "#410002",
-          "surface-container-highest": "#e0e3e5",
-          "surface-container-lowest": "#ffffff",
-          "on-surface": "#191c1e",
-          "tertiary-fixed-dim": "#ffb4ab"
-        },
-        "borderRadius": {
-          "DEFAULT": "0.125rem",
-          "lg": "0.25rem",
-          "xl": "0.5rem",
-          "full": "0.75rem"
-        },
-        "spacing": {
-          "space-3xl": "4rem",
-          "reading-column-width": "680px",
-          "column-gap": "2rem",
-          "space-lg": "1.5rem",
-          "space-xs": "0.5rem",
-          "max-content-width": "1280px",
-          "space-md": "1rem",
-          "gutter-desktop": "1.5rem",
-          "gutter-mobile": "1rem",
-          "space-2xl": "3rem",
-          "space-xl": "2rem",
-          "space-sm": "0.75rem",
-          "space-xxs": "0.25rem"
-        },
-        "fontFamily": {
-          "headline-sm": [
-            "Newsreader"
-          ],
-          "body-sm": [
-            "Inter"
-          ],
-          "body-md": [
-            "Inter"
-          ],
-          "body-lead": [
-            "Newsreader"
-          ],
-          "display-hero": [
-            "Newsreader"
-          ],
-          "label-caps": [
-            "Inter"
-          ],
-          "headline-md": [
-            "Newsreader"
-          ],
-          "caption": [
-            "Inter"
-          ],
-          "headline-xl": [
-            "Newsreader"
-          ],
-          "body-lg": [
-            "Inter"
-          ],
-          "headline-xl-mobile": [
-            "Newsreader"
-          ],
-          "display-hero-mobile": [
-            "Newsreader"
-          ],
-          "label-md": [
-            "Inter"
-          ],
-          "label-lg": [
-            "Inter"
-          ],
-          "headline-lg": [
-            "Newsreader"
-          ]
-        },
-        "fontSize": {
-          "headline-sm": [
-            "18px",
-            {
-              "lineHeight": "24px",
-              "letterSpacing": "-0.005em",
-              "fontWeight": "600"
-            }
-          ],
-          "body-sm": [
-            "13px",
-            {
-              "lineHeight": "20px",
-              "fontWeight": "400"
-            }
-          ],
-          "body-md": [
-            "15px",
-            {
-              "lineHeight": "24px",
-              "fontWeight": "400"
-            }
-          ],
-          "body-lead": [
-            "20px",
-            {
-              "lineHeight": "32px",
-              "letterSpacing": "-0.005em",
-              "fontWeight": "400"
-            }
-          ],
-          "display-hero": [
-            "56px",
-            {
-              "lineHeight": "64px",
-              "letterSpacing": "-0.025em",
-              "fontWeight": "600"
-            }
-          ],
-          "label-caps": [
-            "11px",
-            {
-              "lineHeight": "14px",
-              "letterSpacing": "0.08em",
-              "fontWeight": "700"
-            }
-          ],
-          "headline-md": [
-            "22px",
-            {
-              "lineHeight": "28px",
-              "letterSpacing": "-0.01em",
-              "fontWeight": "600"
-            }
-          ],
-          "caption": [
-            "12px",
-            {
-              "lineHeight": "18px",
-              "fontWeight": "400"
-            }
-          ],
-          "headline-xl": [
-            "40px",
-            {
-              "lineHeight": "48px",
-              "letterSpacing": "-0.02em",
-              "fontWeight": "600"
-            }
-          ],
-          "body-lg": [
-            "17px",
-            {
-              "lineHeight": "28px",
-              "fontWeight": "400"
-            }
-          ],
-          "headline-xl-mobile": [
-            "30px",
-            {
-              "lineHeight": "36px",
-              "letterSpacing": "-0.015em",
-              "fontWeight": "600"
-            }
-          ],
-          "display-hero-mobile": [
-            "38px",
-            {
-              "lineHeight": "44px",
-              "letterSpacing": "-0.02em",
-              "fontWeight": "600"
-            }
-          ],
-          "label-md": [
-            "12px",
-            {
-              "lineHeight": "16px",
-              "letterSpacing": "0.04em",
-              "fontWeight": "600"
-            }
-          ],
-          "label-lg": [
-            "14px",
-            {
-              "lineHeight": "18px",
-              "letterSpacing": "0.01em",
-              "fontWeight": "600"
-            }
-          ],
-          "headline-lg": [
-            "28px",
-            {
-              "lineHeight": "36px",
-              "letterSpacing": "-0.015em",
-              "fontWeight": "500"
-            }
-          ]
-        }
-      },
-    },
-  }</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-surface-container-high z-50 flex flex-col justify-between py-space-md"><div class="flex flex-col"><div class="px-space-md pb-space-md border-b border-surface-container-high flex items-center gap-space-xs"><img alt="The Daily Web Logo (English)" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"/><div class="flex flex-col"><span class="font-label-caps text-label-caps uppercase text-primary font-bold">Newsroom CMS</span><span class="font-caption text-caption text-secondary">Editorial Terminal</span></div></div><nav class="p-space-xs space-y-space-xxs" data-active-classes="bg-surface-container-high text-on-surface font-semibold"><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="staff-cms" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-md text-label-md">Overview</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cms-wire-feed" href="#"><span class="material-symbols-outlined text-[20px]">rss_feed</span><span class="font-label-md text-label-md">Wire Queue</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cms-article-editor" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-label-md text-label-md">Article Editor</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-xs rounded transition-colors bg-surface-container-high text-on-surface font-semibold" data-path="cms-review-desk" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span><span class="font-label-md text-label-md">Review Desk</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cms-publishing-telemetry" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span class="font-label-md text-label-md">Telemetry</span></a></nav></div><div class="px-space-md pt-space-md border-t border-surface-container-high"><a class="flex items-center gap-space-xs text-secondary hover:text-primary transition-colors font-label-md text-label-md" data-path="home" href="#"><span class="material-symbols-outlined text-[18px]">arrow_back</span><span>Back to Publication</span></a></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/95 backdrop-blur-md border-b border-surface-container-high z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-sm"><span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span><span class="font-label-caps text-label-caps uppercase text-secondary">Live Editorial Pipeline Online</span></div><div class="flex items-center gap-space-md"><button aria-label="Notifications" class="p-space-xs text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span></button><div class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-medium">Senior News Desk Editor</span></div></div></header><main class="relative pt-16 w-full px-8 bg-background"><div class="flex flex-col w-full pb-space-3xl">
-<!-- Top Editorial Control Panel -->
-<section class="w-full bg-surface-container-lowest shadow-sm rounded-xl p-space-md mb-space-lg">
-<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
-<!-- Breadcrumbs and Meta Details -->
-<div class="flex flex-col gap-space-xs">
-<div class="flex items-center gap-space-xs font-caption text-caption text-secondary">
-<span class="hover:text-primary transition-colors cursor-pointer">Editorial Desk</span>
-<span class="material-symbols-outlined text-[14px]">chevron_right</span>
-<span class="hover:text-primary transition-colors cursor-pointer">Review Queue</span>
-<span class="material-symbols-outlined text-[14px]">chevron_right</span>
-<span class="font-label-caps text-label-caps uppercase text-primary font-bold">ART-8924</span>
-</div>
-<div class="flex flex-wrap items-center gap-space-sm pt-space-xxs">
-<span class="inline-flex items-center gap-space-xxs px-space-xs py-1 rounded bg-secondary-container text-on-secondary-container font-label-caps text-label-caps tracking-wider uppercase font-semibold">
-<span class="w-1.5 h-1.5 rounded-full bg-on-secondary-container animate-pulse"></span>
-            Pending Review • Draft v2.3
-          </span>
-<span class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-secondary">badge</span>
-            Eleanor Vance <span class="font-normal text-secondary">(Senior Tech Reporter)</span>
-</span>
-<span class="text-secondary">•</span>
-<span class="font-caption text-caption text-secondary flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">schedule</span>
-            Submitted: Today at 09:42 AM
-          </span>
-<span class="text-secondary">•</span>
-<span class="font-caption text-caption bg-surface-container px-2 py-0.5 rounded text-on-surface-variant font-medium">
-            Desk: Silicon &amp; Autonomous Systems
-          </span>
-</div>
-</div>
-<!-- Action Toolbar -->
-<div class="flex flex-wrap items-center gap-space-xs">
-<button class="inline-flex items-center gap-space-xxs px-space-sm py-2 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md font-medium" id="btn-preview">
-<span class="material-symbols-outlined text-[18px]">devices</span>
-<span>Preview Responsive</span>
-</button>
-<button class="inline-flex items-center gap-space-xxs px-space-sm py-2 rounded bg-surface-container-low text-secondary hover:text-error hover:bg-error-container transition-colors font-label-md text-label-md" id="btn-unpublish">
-<span class="material-symbols-outlined text-[18px]">unpublished</span>
-<span>Unpublish Live v1.0</span>
-</button>
-<button class="inline-flex items-center gap-space-xxs px-space-sm py-2 rounded bg-surface-container-high text-on-surface-variant hover:bg-error hover:text-on-error transition-all font-label-md text-label-md" id="btn-reject">
-<span class="material-symbols-outlined text-[18px]">close</span>
-<span>Reject Draft</span>
-</button>
-<button class="inline-flex items-center gap-space-xxs px-space-sm py-2 rounded bg-secondary text-on-secondary hover:bg-secondary/90 transition-colors font-label-md text-label-md shadow-sm" id="btn-request-revisions">
-<span class="material-symbols-outlined text-[18px]">assignment_return</span>
-<span>Request Revisions</span>
-</button>
-<button class="inline-flex items-center gap-space-xxs px-space-md py-2 rounded bg-primary text-on-primary hover:bg-primary-container transition-all font-label-md text-label-md shadow-sm" id="btn-approve">
-<span class="material-symbols-outlined text-[18px]">verified</span>
-<span>Approve &amp; Publish Live</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Diff Telemetry Banner -->
-<section class="grid grid-cols-1 md:grid-cols-4 gap-space-sm mb-space-lg">
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
-<div class="flex flex-col">
-<span class="font-label-caps text-label-caps text-secondary uppercase">Word Count Delta</span>
-<span class="font-headline-md text-headline-md text-on-surface font-bold mt-1">+342 words</span>
-</div>
-<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
-<span class="material-symbols-outlined text-[20px]">format_size</span>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
-<div class="flex flex-col">
-<span class="font-label-caps text-label-caps text-secondary uppercase">Inserted Claims</span>
-<span class="font-headline-md text-headline-md text-on-surface font-bold mt-1">4 verified</span>
-</div>
-<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary">
-<span class="material-symbols-outlined text-[20px]">fact_check</span>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
-<div class="flex flex-col">
-<span class="font-label-caps text-label-caps text-secondary uppercase">Struck Paragraphs</span>
-<span class="font-headline-md text-headline-md text-secondary font-bold mt-1">2 obsolete</span>
-</div>
-<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-[20px]">strikethrough_s</span>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
-<div class="flex flex-col">
-<span class="font-label-caps text-label-caps text-secondary uppercase">Legal Pre-Clearance</span>
-<span class="font-headline-md text-headline-md text-on-surface font-bold mt-1">Passed (A-Tier)</span>
-</div>
-<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
-<span class="material-symbols-outlined text-[20px]">gavel</span>
-</div>
-</div>
-</section>
-<!-- Main Viewport: Side-by-Side Comparison & Sidebar -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-<!-- Left + Right Comparison Canvas (8 Columns) -->
-<div class="lg:col-span-8 flex flex-col gap-space-md">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
-<!-- Left Pane: Currently Published v1.0 -->
-<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
-<!-- Pane Header -->
-<div class="p-space-md bg-surface-container-low flex flex-col gap-space-xs">
-<div class="flex items-center justify-between">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary text-on-primary font-label-caps text-label-caps uppercase">
-<span class="material-symbols-outlined text-[13px]">public</span>
-                Live on Web (v1.0)
-              </span>
-<span class="font-caption text-caption text-secondary">Published: Oct 24, 08:15 EST</span>
-</div>
-<div class="flex items-center gap-space-md pt-space-xxs text-secondary">
-<span class="font-caption text-caption flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">visibility</span>
-                14,289 Pageviews
-              </span>
-<span class="font-caption text-caption flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">mode_comment</span>
-                48 Reader Comments
-              </span>
-<span class="font-caption text-caption flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">share</span>
-                312 Shares
-              </span>
-</div>
-</div>
-<!-- Content Stream v1.0 -->
-<article class="p-space-lg flex flex-col space-y-space-md overflow-y-auto max-h-[720px]">
-<span class="font-label-caps text-label-caps uppercase text-secondary">Slug: autonomous-grid-pivot</span>
-<h1 class="font-headline-lg text-headline-lg text-on-surface">
-              Autonomous Grid Operator Signals Pivot Toward Local Micro-Clusters
-            </h1>
-<div class="relative w-full h-48 rounded overflow-hidden bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="Monochrome aerial photography of modern electric grid infrastructure with architectural high-voltage pylons rising through morning coastal fog, high contrast editorial photojournalism style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs-bYvBOtBlgDsp4JsIausDjvNhREx_nobajRpMvgecepfhrLmOkLP1O2PGsMRg2WXS_VxN8cgvf1-Va5tXJBJEytWhVKsqswi6p8MR7Qd2zOmFcUDDzddKQxXzDVCQY1GBVv06W_72wcZJQGNPjV8K-j1Wa2UYutmEjMwm7QIBeeW30zngh2eNFs9UCM5TjYt8Rpey0CepHAC_JlwY81M_jVcz4Dj2kdtSwEanNdUxgpAMhed_6Qf3w"/>
-<div class="absolute bottom-2 left-2 bg-surface/90 backdrop-blur px-2 py-0.5 rounded text-[11px] font-caption text-on-surface">
-                Archive Bureau / Oct 24
-              </div>
-</div>
-<p class="font-body-lead text-body-lead text-on-surface italic">
-              Regional power dispatchers initiated tests yesterday redirecting automated frequency modulation across suburban hubs, citing transmission bottlenecks.
-            </p>
-<div class="space-y-space-sm font-body-md text-body-md text-on-surface-variant">
-<p>
-                In a brief memorandum issued early Tuesday morning, the National Grid Operations Council confirmed that initial stress simulations had exposed latency delays in cross-state dispatch loops. 
-              </p>
-<p>
-                Spokesperson Raymond Croft maintained that customer disruptions were negligible, emphasizing that the prototype load balancer operated within allowable tolerance margins of 0.4 Hertz.
-              </p>
-<p>
-                The program relied entirely on second-generation sensor arrays deployed during the 2021 infrastructure modernization rollout, with no immediate plans for capital reallocations toward silicon replacements.
-              </p>
-<p>
-                Municipal regulators in three adjacent districts requested informal briefings regarding long-term cost models, though formal advisory hearings were not scheduled.
-              </p>
-</div>
-</article>
-</div>
-<!-- Right Pane: Submitted Draft v2.0 (Diff Engine) -->
-<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col ring-1 ring-secondary/20">
-<!-- Pane Header -->
-<div class="p-space-md bg-secondary-container/40 flex flex-col gap-space-xs">
-<div class="flex items-center justify-between">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-secondary text-on-secondary font-label-caps text-label-caps uppercase">
-<span class="material-symbols-outlined text-[13px]">difference</span>
-                Submitted Draft (v2.0)
-              </span>
-<span class="font-caption text-caption text-secondary font-medium">Ready for Sign-Off</span>
-</div>
-<div class="flex items-center gap-space-md pt-space-xxs text-secondary">
-<span class="font-caption text-caption text-on-secondary-container font-semibold flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">draw</span>
-                Author: Eleanor Vance
-              </span>
-<span class="font-caption text-caption flex items-center gap-1">
-<span class="material-symbols-outlined text-[15px]">update</span>
-                Updated 41m ago
-              </span>
-</div>
-</div>
-<!-- Content Stream v2.0 with Visual Diffs -->
-<article class="p-space-lg flex flex-col space-y-space-md overflow-y-auto max-h-[720px] bg-surface-container-lowest">
-<span class="font-label-caps text-label-caps uppercase text-secondary">Slug: autonomous-grid-pivot-v2</span>
-<h1 class="font-headline-lg text-headline-lg text-on-surface">
-              Autonomous Grid Operator <span class="bg-surface-container-high px-1 line-through text-secondary">Signals Pivot Toward Local Micro-Clusters</span> <span class="bg-secondary-container text-on-secondary-container px-1 rounded font-semibold">Abruptly Halts Autonomous Relay Trials Following Internal Fault Whistleblower</span>
-</h1>
-<div class="relative w-full h-48 rounded overflow-hidden bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="Crisp close-up photograph of a modern glass server boardroom overlooking industrial cooling towers at dawn, cool steel blues and slate charcoal tones, journalistic editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARhvkTGJjf0bHT2u8eD2z-cE8SYv-PqmS5xmlesP5_JLLAMvefe7x54AReKcNS-9ei1oelPKBhbAPp1mkQjqQmgGnaZX2ozTpdlunE3t-wN3DGA-KA3fxHbOXzE1VzUUrFo1uzRLLm7HffNsCeC1US3ao7jZBGYJN9toRxCT_m3iQ5XkwWeOAaW73KMiXrcw5uAof5XKE226XEuf2gS5QPmJ8W30HQUppDRgHKEteVsMTHSJPwb9LhmQ"/>
-<div class="absolute bottom-2 left-2 bg-surface/90 backdrop-blur px-2 py-0.5 rounded text-[11px] font-caption text-on-surface">
-                Updated Photo Asset: Vance / Technical Desk
-              </div>
-</div>
-<p class="font-body-lead text-body-lead text-on-surface italic">
-              Regional power dispatchers <span class="bg-secondary-container text-on-secondary-container px-1 rounded not-italic font-medium">have quietly halted</span> automated frequency tests across suburban hubs, citing <span class="line-through text-secondary">transmission bottlenecks</span> <span class="bg-secondary-container text-on-secondary-container px-1 rounded not-italic font-semibold">undisclosed cascading failovers uncovered by engineers</span>.
-            </p>
-<div class="space-y-space-sm font-body-md text-body-md text-on-surface-variant">
-<p>
-                In a <span class="line-through text-secondary">brief memorandum</span> <span class="bg-secondary-container text-on-secondary-container px-1 rounded font-medium">series of leaked internal communications</span> obtained by The Daily Web, the National Grid Operations Council confirmed that initial stress simulations had exposed <span class="line-through text-secondary">latency delays in cross-state dispatch loops</span> <span class="bg-secondary-container text-on-secondary-container px-1 rounded font-medium">critical synchronization drops exceeding 1.2 Hertz across major metro conduits</span>.
-              </p>
-<p class="line-through text-secondary bg-surface-container-high/60 p-2 rounded text-body-sm">
-                Spokesperson Raymond Croft maintained that customer disruptions were negligible, emphasizing that the prototype load balancer operated within allowable tolerance margins of 0.4 Hertz.
-              </p>
-<p class="bg-secondary-container/30 p-2.5 rounded text-on-surface">
-<strong class="font-semibold text-primary block text-label-md font-label-md mb-0.5">[Added Paragraph - Verified Sourcing]</strong>
-                Senior safety auditors formally filed three non-compliance notifications between August and October, alleging regional directors bypassed primary fail-safe audits to meet federal decarbonization milestones ahead of Q4 reporting deadlines.
-              </p>
-<p>
-                Municipal regulators in three adjacent districts <span class="bg-secondary-container text-on-secondary-container px-1 rounded font-medium">have escalated formal subpoenas</span> regarding long-term cost and safety models, <span class="line-through text-secondary">though formal advisory hearings were not scheduled</span> <span class="bg-secondary-container text-on-secondary-container px-1 rounded font-semibold">with public testimony set for next Thursday</span>.
-              </p>
-</div>
-</article>
-</div>
-</div>
-<!-- Revision Commentary & Editorial Feedback Module -->
-<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg mt-space-xs">
-<div class="flex items-center justify-between mb-space-sm">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-[20px] text-primary">rate_review</span>
-<h2 class="font-headline-sm text-headline-sm text-on-surface">Editorial Desk Feedback &amp; Directives</h2>
-</div>
-<span class="font-caption text-caption text-secondary">Auto-syncing to author workspace</span>
-</div>
-<!-- Quick Tags -->
-<div class="flex flex-wrap items-center gap-space-xs mb-space-sm">
-<span class="font-label-caps text-label-caps uppercase text-secondary mr-1">Quick Directives:</span>
-<button class="inline-flex items-center gap-1 px-space-xs py-1 rounded bg-surface-container text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-colors font-label-md text-label-md">
-<span class="material-symbols-outlined text-[14px]">verified_user</span>
-            Fact Check Cleared
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+  <body class="surface-page text-body text-2 color-body">
+    <aside
+      class="newsroom-sidebar height-full surface-muted rule flex flex-column justify-between pad-block-3"
+    >
+      <div class="flex flex-column">
+        <div
+          class="pad-inline-4 margin-bottom-4 rule-bottom flex align-center gap-2"
+        >
+          <img
+            alt="The Daily Web Logo (English)"
+            class="image-logo"
+            src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+          />
+          <div class="flex flex-column">
+            <span
+              class="text-label text-1 text-uppercase color-primary text-bold"
+              >Newsroom CMS</span
+            ><span class="text-caption text-1 color-muted"
+              >Editorial Terminal</span
+            >
+          </div>
+        </div>
+        <nav
+          class="pad-2 stack-2"
+          data-active-classes="surface-raised color-body text-semibold"
+        >
+          <a
+            class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
+            data-path="staff-cms"
+            href="#"
+            ><span class="material-symbols-outlined text-4">dashboard</span
+            ><span class="text-label text-1">Overview</span></a
+          ><a
+            class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
+            data-path="cms-wire-feed"
+            href="#"
+            ><span class="material-symbols-outlined text-4">rss_feed</span
+            ><span class="text-label text-1">Wire Queue</span></a
+          ><a
+            class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
+            data-path="cms-article-editor"
+            href="#"
+            ><span class="material-symbols-outlined text-4">edit_note</span
+            ><span class="text-label text-1">Article Editor</span></a
+          ><a
+            aria-current="page"
+            class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard motion-colors surface-raised color-body text-semibold"
+            data-path="cms-review-desk"
+            href="#"
+            ><span class="material-symbols-outlined text-4">fact_check</span
+            ><span class="text-label text-1">Review Desk</span></a
+          ><a
+            class="flex align-center gap-3 pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
+            data-path="cms-publishing-telemetry"
+            href="#"
+            ><span class="material-symbols-outlined text-4">analytics</span
+            ><span class="text-label text-1">Telemetry</span></a
+          >
+        </nav>
+      </div>
+      <div class="pad-inline-4 margin-top-4 rule-top">
+        <a
+          class="flex align-center gap-2 color-muted motion-colors text-label text-1"
+          data-path="home"
+          href="#"
+          ><span class="material-symbols-outlined text-4">arrow_back</span
+          ><span>Back to Publication</span></a
+        >
+      </div>
+    </aside>
+    <div class="newsroom-content">
+      <header
+        class="fixed surface-glass rule-bottom flex align-center justify-between pad-inline-5"
+      >
+        <div class="flex align-center gap-3">
+          <span
+            class="avatar-small radius-pill surface-alert state-loading"
+          ></span
+          ><span class="text-label text-1 text-uppercase color-muted"
+            >Live Editorial Pipeline Online</span
+          >
+        </div>
+        <div class="flex align-center gap-4">
+          <button
+            aria-label="Notifications"
+            class="pad-2 color-muted motion-colors"
+          >
+            <span class="material-symbols-outlined text-4">notifications</span>
           </button>
-<button class="inline-flex items-center gap-1 px-space-xs py-1 rounded bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary hover:text-on-secondary transition-colors font-label-md text-label-md">
-<span class="material-symbols-outlined text-[14px]">policy</span>
-            Requires Source Verification
-          </button>
-<button class="inline-flex items-center gap-1 px-space-xs py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md">
-<span class="material-symbols-outlined text-[14px]">title</span>
-            Headline Polish
-          </button>
-<button class="inline-flex items-center gap-1 px-space-xs py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md">
-<span class="material-symbols-outlined text-[14px]">shield</span>
-            Legal Advisory Note
-          </button>
-</div>
-<!-- Rich Text Box Container -->
-<div class="bg-surface-container-low rounded-lg p-space-sm">
-<!-- Textarea Formatting Bar -->
-<div class="flex items-center gap-space-xs pb-space-xs mb-space-xs bg-surface-container-lowest px-2 py-1 rounded">
-<button class="p-1 hover:bg-surface-container rounded text-secondary hover:text-primary"><span class="material-symbols-outlined text-[16px]">format_bold</span></button>
-<button class="p-1 hover:bg-surface-container rounded text-secondary hover:text-primary"><span class="material-symbols-outlined text-[16px]">format_italic</span></button>
-<button class="p-1 hover:bg-surface-container rounded text-secondary hover:text-primary"><span class="material-symbols-outlined text-[16px]">format_underlined</span></button>
-<span class="text-surface-container-high">|</span>
-<button class="p-1 hover:bg-surface-container rounded text-secondary hover:text-primary"><span class="material-symbols-outlined text-[16px]">link</span></button>
-<button class="p-1 hover:bg-surface-container rounded text-secondary hover:text-primary"><span class="material-symbols-outlined text-[16px]">format_quote</span></button>
-<button class="p-1 hover:bg-surface-container rounded text-secondary hover:text-primary"><span class="material-symbols-outlined text-[16px]">format_list_bulleted</span></button>
-<div class="ml-auto font-caption text-caption text-secondary">Markdown Supported</div>
-</div>
-<textarea class="w-full bg-surface-container-lowest rounded p-space-sm font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary resize-none" placeholder="Type confidential editorial guidance to Eleanor Vance... (e.g. Ensure we have dual confirmation on the subpoena issuance from District 4 prior to hitting front-page wire dispatch)." rows="3"></textarea>
-<div class="flex items-center justify-between pt-space-xs mt-space-xxs">
-<div class="flex items-center gap-space-xs">
-<label class="flex items-center gap-1.5 cursor-pointer font-caption text-caption text-secondary">
-<input checked="" class="rounded accent-primary" type="checkbox"/>
-<span>Notify Eleanor Vance via Secure Desk Chat</span>
-</label>
-</div>
-<div class="flex items-center gap-space-xs">
-<button class="px-space-sm py-1.5 rounded text-secondary hover:text-primary font-label-md text-label-md">Clear</button>
-<button class="px-space-md py-1.5 rounded bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-sm">
-                Attach Note to Draft v2.3
-              </button>
-</div>
-</div>
-</div>
-<!-- Threaded Editorial Discussion -->
-<div class="mt-space-md space-y-space-sm">
-<div class="p-space-sm bg-surface-container-low rounded-lg flex gap-space-sm">
-<div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-label-md text-label-md shrink-0">
-              MK
+          <div class="flex align-center gap-2 text-label text-1 color-body">
+            <div
+              class="avatar-small radius-pill surface-ink flex align-center justify-center"
+            >
+              <span class="material-symbols-outlined color-inverse text-4"
+                >person</span
+              >
             </div>
-<div class="flex flex-col flex-1">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md font-semibold text-on-surface">Marcus Keller (Managing Editor)</span>
-<span class="font-caption text-caption text-secondary">08:15 AM</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                Paragraph 4 regarding District Subpoenas has been confirmed via clerk records. Vance has uploaded the supporting PDF into vault docket #4092. Legal has stamped green.
-              </p>
-</div>
-</div>
-</div>
-</section>
-</div>
-<!-- Right Column: Version History & Audit Trail (4 Columns) -->
-<aside class="lg:col-span-4 flex flex-col gap-space-md">
-<!-- Timeline Module -->
-<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md">
-<div class="flex items-center justify-between mb-space-md pb-space-xs">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-[20px] text-primary">history</span>
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Version History</h3>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary">5 Revisions</span>
-</div>
-<!-- Vertical Timeline Ribbons -->
-<div class="relative pl-6 space-y-space-lg before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-surface-container-high">
-<!-- v2.3 Active Draft -->
-<div class="relative">
-<div class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-primary ring-4 ring-background"></div>
-<div class="bg-secondary-container/30 p-space-sm rounded-lg">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md font-bold text-primary">v2.3 (Current Draft)</span>
-<span class="font-caption text-caption text-secondary">09:42 AM</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                Major rewrite by Eleanor Vance incorporating whistleblower testimony and regulatory filings.
-              </p>
-<div class="flex items-center gap-2 mt-2">
-<span class="font-caption text-caption bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">4 Commits</span>
-<span class="font-caption text-caption text-secondary">Review in progress</span>
-</div>
-</div>
-</div>
-<!-- v2.1 Fact Check Update -->
-<div class="relative">
-<div class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-secondary ring-4 ring-background"></div>
-<div class="bg-surface-container-low p-space-sm rounded-lg">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md font-semibold text-on-surface">v2.1 Interim Check</span>
-<span class="font-caption text-caption text-secondary">Yesterday 18:20</span>
-</div>
-<p class="font-body-sm text-body-sm text-secondary mt-1">
-                Desk editor notes incorporated. 2 quotes cleared through Legal Council.
-              </p>
-<div class="text-secondary font-caption text-caption mt-1">Audit hash: e7f09c1</div>
-</div>
-</div>
-<!-- v1.1 Correction added -->
-<div class="relative">
-<div class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-outline ring-4 ring-background"></div>
-<div class="bg-surface-container-low p-space-sm rounded-lg">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md font-semibold text-on-surface">v1.1 Formal Correction</span>
-<span class="font-caption text-caption text-secondary">Oct 25, 11:30</span>
-</div>
-<p class="font-body-sm text-body-sm text-secondary mt-1">
-                Updated spokesperson title from Regional Deputy to Chief Operating Officer.
-              </p>
-</div>
-</div>
-<!-- v1.0 Published -->
-<div class="relative">
-<div class="absolute -left-[27px] top-1.5 w-3 h-3 rounded-full bg-outline ring-4 ring-background"></div>
-<div class="bg-surface-container-low p-space-sm rounded-lg">
-<div class="flex items-center justify-between">
-<span class="font-label-md text-label-md font-semibold text-on-surface">v1.0 Published Wire</span>
-<span class="font-caption text-caption text-secondary">Oct 24, 08:15</span>
-</div>
-<p class="font-body-sm text-body-sm text-secondary mt-1">
-                Initial wire copy posted by Morning Dispatch Desk.
-              </p>
-<div class="flex items-center gap-1 mt-1 text-secondary font-caption text-caption">
-<span class="material-symbols-outlined text-[13px]">done_all</span>
-                Archived in Permanent Library
+            <span class="text-medium">Senior News Desk Editor</span>
+          </div>
+        </div>
+      </header>
+      <main class="relative width-full pad-inline-5 surface-page">
+        <div class="flex flex-column width-full margin-bottom-6">
+          <!-- Top Editorial Control Panel -->
+          <section
+            class="width-full surface-paper shadow-subtle radius-panel pad-4 margin-bottom-5"
+          >
+            <div
+              class="flex flex-column flex-row align-center justify-between gap-4"
+            >
+              <!-- Breadcrumbs and Meta Details -->
+              <div class="flex flex-column gap-2">
+                <div
+                  class="flex align-center gap-2 text-caption text-1 color-muted"
+                >
+                  <span class="motion-colors control-pointer"
+                    >Editorial Desk</span
+                  >
+                  <span class="material-symbols-outlined text-2"
+                    >chevron_right</span
+                  >
+                  <span class="motion-colors control-pointer"
+                    >Review Queue</span
+                  >
+                  <span class="material-symbols-outlined text-2"
+                    >chevron_right</span
+                  >
+                  <span
+                    class="text-label text-1 text-uppercase color-primary text-bold"
+                    >ART-8924</span
+                  >
+                </div>
+                <div class="flex flex-wrap align-center gap-3 margin-top-2">
+                  <span
+                    class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-uppercase text-semibold"
+                  >
+                    <span
+                      class="avatar-small radius-pill surface-info state-loading"
+                    ></span>
+                    Pending Review • Draft v2.3
+                  </span>
+                  <span
+                    class="text-label text-1 color-body text-semibold flex align-center gap-1"
+                  >
+                    <span class="material-symbols-outlined text-2 color-muted"
+                      >badge</span
+                    >
+                    Eleanor Vance
+                    <span class="text-normal color-muted"
+                      >(Senior Tech Reporter)</span
+                    >
+                  </span>
+                  <span class="color-muted">•</span>
+                  <span
+                    class="text-caption text-1 color-muted flex align-center gap-1"
+                  >
+                    <span class="material-symbols-outlined text-2"
+                      >schedule</span
+                    >
+                    Submitted: Today at 09:42 AM
+                  </span>
+                  <span class="color-muted">•</span>
+                  <span
+                    class="text-caption text-1 surface-panel pad-inline-3 pad-block-2 radius-standard color-muted text-medium"
+                  >
+                    Desk: Silicon &amp; Autonomous Systems
+                  </span>
+                </div>
               </div>
-</div>
-</div>
-</div>
-</div>
-<!-- Reviewer Audit & Policy Checklist -->
-<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md">
-<div class="flex items-center gap-space-xs mb-space-sm">
-<span class="material-symbols-outlined text-[20px] text-primary">checklist</span>
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Publishing Policy Pre-flight</h3>
-</div>
-<div class="space-y-space-xs font-body-sm text-body-sm">
-<label class="flex items-start gap-space-xs p-2 rounded hover:bg-surface-container cursor-pointer transition-colors">
-<input checked="" class="mt-1 rounded accent-primary" type="checkbox"/>
-<div class="flex flex-col">
-<span class="font-medium text-on-surface">Independent Sourcing Standard</span>
-<span class="font-caption text-caption text-secondary">Minimum two unrelated named sources on record.</span>
-</div>
-</label>
-<label class="flex items-start gap-space-xs p-2 rounded hover:bg-surface-container cursor-pointer transition-colors">
-<input checked="" class="mt-1 rounded accent-primary" type="checkbox"/>
-<div class="flex flex-col">
-<span class="font-medium text-on-surface">Right of Reply Extended</span>
-<span class="font-caption text-caption text-secondary">Grid Council given 6-hour window for official response.</span>
-</div>
-</label>
-<label class="flex items-start gap-space-xs p-2 rounded hover:bg-surface-container cursor-pointer transition-colors">
-<input checked="" class="mt-1 rounded accent-primary" type="checkbox"/>
-<div class="flex flex-col">
-<span class="font-medium text-on-surface">Media Licensure Verified</span>
-<span class="font-caption text-caption text-secondary">Boardroom photo cleared for international syndication.</span>
-</div>
-</label>
-<label class="flex items-start gap-space-xs p-2 rounded hover:bg-surface-container cursor-pointer transition-colors">
-<input class="mt-1 rounded accent-primary" type="checkbox"/>
-<div class="flex flex-col">
-<span class="font-medium text-on-surface">SEO &amp; Social Graph Sign-off</span>
-<span class="font-caption text-caption text-secondary">Headline metadata and OpenGraph tag generation review.</span>
-</div>
-</label>
-</div>
-</div>
-<!-- Quick Metrics Telemetry Card -->
-<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-sm">
-<span class="font-label-caps text-label-caps uppercase text-secondary">Editorial Telemetry</span>
-<div class="flex items-center justify-between">
-<span class="font-body-sm text-body-sm text-on-surface">Reading Ease Index</span>
-<span class="font-label-md text-label-md font-bold text-on-surface">Grade 11.2 (Standard)</span>
-</div>
-<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
-<div class="bg-primary h-full rounded-full" style="width: 78%;"></div>
-</div>
-<div class="flex items-center justify-between pt-space-xxs text-secondary font-caption text-caption">
-<span>Est. Reading Time: 4 min 12 sec</span>
-<span>Target: Broadsheet Frontpage</span>
-</div>
-</div>
-</aside>
-</div>
-</div>
-<script>
-  // Simple micro-interactions for editorial workflow feedback
-  document.getElementById('btn-approve')?.addEventListener('click', () => {
-    if(confirm('Are you certain you wish to sign off and push ART-8924 (v2.3) directly to live syndication feeds?')) {
-      alert('Action Logged: Article ART-8924 approved and scheduled for immediate CDN propagation.');
-    }
-  });
+              <!-- Action Toolbar -->
+              <div class="flex flex-wrap align-center gap-2">
+                <button
+                  class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1 text-medium"
+                  id="btn-preview"
+                >
+                  <span class="material-symbols-outlined text-4">devices</span>
+                  <span>Preview Responsive</span>
+                </button>
+                <button
+                  class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-muted color-muted motion-colors text-label text-1"
+                  id="btn-unpublish"
+                >
+                  <span class="material-symbols-outlined text-4"
+                    >unpublished</span
+                  >
+                  <span>Unpublish Live v1.0</span>
+                </button>
+                <button
+                  class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-raised color-muted motion-all text-label text-1"
+                  id="btn-reject"
+                >
+                  <span class="material-symbols-outlined text-4">close</span>
+                  <span>Reject Draft</span>
+                </button>
+                <button
+                  class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-info color-inverse motion-colors text-label text-1 shadow-subtle"
+                  id="btn-request-revisions"
+                >
+                  <span class="material-symbols-outlined text-4"
+                    >assignment_return</span
+                  >
+                  <span>Request Revisions</span>
+                </button>
+                <button
+                  class="inline-flex align-center gap-1 pad-inline-4 pad-block-2 radius-standard surface-ink color-inverse motion-all text-label text-1 shadow-subtle"
+                  id="btn-approve"
+                >
+                  <span class="material-symbols-outlined text-4">verified</span>
+                  <span>Approve &amp; Publish Live</span>
+                </button>
+              </div>
+            </div>
+          </section>
+          <!-- Diff Telemetry Banner -->
+          <section class="grid grid-single grid-triple gap-3 margin-bottom-5">
+            <div
+              class="surface-paper pad-4 radius-panel shadow-subtle flex align-center justify-between"
+            >
+              <div class="flex flex-column">
+                <span class="text-label text-1 color-muted text-uppercase"
+                  >Word Count Delta</span
+                >
+                <span
+                  class="text-headline text-5 color-body text-bold margin-top-2"
+                  >+342 words</span
+                >
+              </div>
+              <div
+                class="avatar-medium radius-pill surface-info flex align-center justify-center color-info"
+              >
+                <span class="material-symbols-outlined text-4"
+                  >format_size</span
+                >
+              </div>
+            </div>
+            <div
+              class="surface-paper pad-4 radius-panel shadow-subtle flex align-center justify-between"
+            >
+              <div class="flex flex-column">
+                <span class="text-label text-1 color-muted text-uppercase"
+                  >Inserted Claims</span
+                >
+                <span
+                  class="text-headline text-5 color-body text-bold margin-top-2"
+                  >4 verified</span
+                >
+              </div>
+              <div
+                class="avatar-medium radius-pill surface-panel flex align-center justify-center color-primary"
+              >
+                <span class="material-symbols-outlined text-4">fact_check</span>
+              </div>
+            </div>
+            <div
+              class="surface-paper pad-4 radius-panel shadow-subtle flex align-center justify-between"
+            >
+              <div class="flex flex-column">
+                <span class="text-label text-1 color-muted text-uppercase"
+                  >Struck Paragraphs</span
+                >
+                <span
+                  class="text-headline text-5 color-muted text-bold margin-top-2"
+                  >2 obsolete</span
+                >
+              </div>
+              <div
+                class="avatar-medium radius-pill surface-raised flex align-center justify-center color-muted"
+              >
+                <span class="material-symbols-outlined text-4"
+                  >strikethrough_s</span
+                >
+              </div>
+            </div>
+            <div
+              class="surface-paper pad-4 radius-panel shadow-subtle flex align-center justify-between"
+            >
+              <div class="flex flex-column">
+                <span class="text-label text-1 color-muted text-uppercase"
+                  >Legal Pre-Clearance</span
+                >
+                <span
+                  class="text-headline text-5 color-body text-bold margin-top-2"
+                  >Passed (A-Tier)</span
+                >
+              </div>
+              <div
+                class="avatar-medium radius-pill surface-info flex align-center justify-center color-info"
+              >
+                <span class="material-symbols-outlined text-4">gavel</span>
+              </div>
+            </div>
+          </section>
+          <!-- Main Viewport: Side-by-Side Comparison & Sidebar -->
+          <div class="grid grid-single lg-editorial-grid gap-5 align-start">
+            <!-- Left + Right Comparison Canvas (8 Columns) -->
+            <div class="lg-content-span flex flex-column gap-4">
+              <div class="grid grid-single grid-split gap-4">
+                <!-- Left Pane: Currently Published v1.0 -->
+                <div
+                  class="surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
+                >
+                  <!-- Pane Header -->
+                  <div class="pad-4 surface-muted flex flex-column gap-2">
+                    <div class="flex align-center justify-between">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 text-uppercase"
+                      >
+                        <span class="material-symbols-outlined text-1"
+                          >public</span
+                        >
+                        Live on Web (v1.0)
+                      </span>
+                      <span class="text-caption text-1 color-muted"
+                        >Published: Oct 24, 08:15 EST</span
+                      >
+                    </div>
+                    <div
+                      class="flex align-center gap-4 margin-top-2 color-muted"
+                    >
+                      <span class="text-caption text-1 flex align-center gap-1">
+                        <span class="material-symbols-outlined text-2"
+                          >visibility</span
+                        >
+                        14,289 Pageviews
+                      </span>
+                      <span class="text-caption text-1 flex align-center gap-1">
+                        <span class="material-symbols-outlined text-2"
+                          >mode_comment</span
+                        >
+                        48 Reader Comments
+                      </span>
+                      <span class="text-caption text-1 flex align-center gap-1">
+                        <span class="material-symbols-outlined text-2"
+                          >share</span
+                        >
+                        312 Shares
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Content Stream v1.0 -->
+                  <article
+                    class="pad-5 flex flex-column stack-4 overflow-scroll"
+                  >
+                    <span class="text-label text-1 text-uppercase color-muted"
+                      >Slug: autonomous-grid-pivot</span
+                    >
+                    <h1 class="text-headline text-6 color-body">
+                      Autonomous Grid Operator Signals Pivot Toward Local
+                      Micro-Clusters
+                    </h1>
+                    <div
+                      class="relative width-full height-feature radius-standard overflow-hidden surface-panel"
+                    >
+                      <img
+                        class="width-full height-full media-cover"
+                        data-alt="Monochrome aerial photography of modern electric grid infrastructure with architectural high-voltage pylons rising through morning coastal fog, high contrast editorial photojournalism style."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs-bYvBOtBlgDsp4JsIausDjvNhREx_nobajRpMvgecepfhrLmOkLP1O2PGsMRg2WXS_VxN8cgvf1-Va5tXJBJEytWhVKsqswi6p8MR7Qd2zOmFcUDDzddKQxXzDVCQY1GBVv06W_72wcZJQGNPjV8K-j1Wa2UYutmEjMwm7QIBeeW30zngh2eNFs9UCM5TjYt8Rpey0CepHAC_JlwY81M_jVcz4Dj2kdtSwEanNdUxgpAMhed_6Qf3w"
+                      />
+                      <div
+                        class="absolute surface-glass pad-inline-3 pad-block-2 radius-standard text-1 text-caption color-body"
+                      >
+                        Archive Bureau / Oct 24
+                      </div>
+                    </div>
+                    <p class="text-headline text-deck color-body text-italic">
+                      Regional power dispatchers initiated tests yesterday
+                      redirecting automated frequency modulation across suburban
+                      hubs, citing transmission bottlenecks.
+                    </p>
+                    <div class="stack-3 text-body text-2 color-muted">
+                      <p>
+                        In a brief memorandum issued early Tuesday morning, the
+                        National Grid Operations Council confirmed that initial
+                        stress simulations had exposed latency delays in
+                        cross-state dispatch loops.
+                      </p>
+                      <p>
+                        Spokesperson Raymond Croft maintained that customer
+                        disruptions were negligible, emphasizing that the
+                        prototype load balancer operated within allowable
+                        tolerance margins of 0.4 Hertz.
+                      </p>
+                      <p>
+                        The program relied entirely on second-generation sensor
+                        arrays deployed during the 2021 infrastructure
+                        modernization rollout, with no immediate plans for
+                        capital reallocations toward silicon replacements.
+                      </p>
+                      <p>
+                        Municipal regulators in three adjacent districts
+                        requested informal briefings regarding long-term cost
+                        models, though formal advisory hearings were not
+                        scheduled.
+                      </p>
+                    </div>
+                  </article>
+                </div>
+                <!-- Right Pane: Submitted Draft v2.0 (Diff Engine) -->
+                <div
+                  class="surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column rule"
+                >
+                  <!-- Pane Header -->
+                  <div class="pad-4 surface-info flex flex-column gap-2">
+                    <div class="flex align-center justify-between">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-info color-inverse text-label text-1 text-uppercase"
+                      >
+                        <span class="material-symbols-outlined text-1"
+                          >difference</span
+                        >
+                        Submitted Draft (v2.0)
+                      </span>
+                      <span class="text-caption text-1 color-muted text-medium"
+                        >Ready for Sign-Off</span
+                      >
+                    </div>
+                    <div
+                      class="flex align-center gap-4 margin-top-2 color-muted"
+                    >
+                      <span
+                        class="text-caption text-1 color-info text-semibold flex align-center gap-1"
+                      >
+                        <span class="material-symbols-outlined text-2"
+                          >draw</span
+                        >
+                        Author: Eleanor Vance
+                      </span>
+                      <span class="text-caption text-1 flex align-center gap-1">
+                        <span class="material-symbols-outlined text-2"
+                          >update</span
+                        >
+                        Updated 41m ago
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Content Stream v2.0 with Visual Diffs -->
+                  <article
+                    class="pad-5 flex flex-column stack-4 overflow-scroll surface-paper"
+                  >
+                    <span class="text-label text-1 text-uppercase color-muted"
+                      >Slug: autonomous-grid-pivot-v2</span
+                    >
+                    <h1 class="text-headline text-6 color-body">
+                      Autonomous Grid Operator
+                      <span class="surface-raised pad-inline-3 color-muted"
+                        >Signals Pivot Toward Local Micro-Clusters</span
+                      >
+                      <span
+                        class="surface-info color-info pad-inline-3 radius-standard text-semibold"
+                        >Abruptly Halts Autonomous Relay Trials Following
+                        Internal Fault Whistleblower</span
+                      >
+                    </h1>
+                    <div
+                      class="relative width-full height-feature radius-standard overflow-hidden surface-panel"
+                    >
+                      <img
+                        class="width-full height-full media-cover"
+                        data-alt="Crisp close-up photograph of a modern glass server boardroom overlooking industrial cooling towers at dawn, cool steel blues and slate charcoal tones, journalistic editorial aesthetic."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuARhvkTGJjf0bHT2u8eD2z-cE8SYv-PqmS5xmlesP5_JLLAMvefe7x54AReKcNS-9ei1oelPKBhbAPp1mkQjqQmgGnaZX2ozTpdlunE3t-wN3DGA-KA3fxHbOXzE1VzUUrFo1uzRLLm7HffNsCeC1US3ao7jZBGYJN9toRxCT_m3iQ5XkwWeOAaW73KMiXrcw5uAof5XKE226XEuf2gS5QPmJ8W30HQUppDRgHKEteVsMTHSJPwb9LhmQ"
+                      />
+                      <div
+                        class="absolute surface-glass pad-inline-3 pad-block-2 radius-standard text-1 text-caption color-body"
+                      >
+                        Updated Photo Asset: Vance / Technical Desk
+                      </div>
+                    </div>
+                    <p class="text-headline text-deck color-body text-italic">
+                      Regional power dispatchers
+                      <span
+                        class="surface-info color-info pad-inline-3 radius-standard text-medium"
+                        >have quietly halted</span
+                      >
+                      automated frequency tests across suburban hubs, citing
+                      <span class="color-muted">transmission bottlenecks</span>
+                      <span
+                        class="surface-info color-info pad-inline-3 radius-standard text-semibold"
+                        >undisclosed cascading failovers uncovered by
+                        engineers</span
+                      >.
+                    </p>
+                    <div class="stack-3 text-body text-2 color-muted">
+                      <p>
+                        In a <span class="color-muted">brief memorandum</span>
+                        <span
+                          class="surface-info color-info pad-inline-3 radius-standard text-medium"
+                          >series of leaked internal communications</span
+                        >
+                        obtained by The Daily Web, the National Grid Operations
+                        Council confirmed that initial stress simulations had
+                        exposed
+                        <span class="color-muted"
+                          >latency delays in cross-state dispatch loops</span
+                        >
+                        <span
+                          class="surface-info color-info pad-inline-3 radius-standard text-medium"
+                          >critical synchronization drops exceeding 1.2 Hertz
+                          across major metro conduits</span
+                        >.
+                      </p>
+                      <p
+                        class="color-muted surface-raised pad-2 radius-standard text-1"
+                      >
+                        Spokesperson Raymond Croft maintained that customer
+                        disruptions were negligible, emphasizing that the
+                        prototype load balancer operated within allowable
+                        tolerance margins of 0.4 Hertz.
+                      </p>
+                      <p class="surface-info pad-3 radius-standard color-body">
+                        <strong
+                          class="text-semibold color-primary block text-1 text-label margin-bottom-2"
+                          >[Added Paragraph - Verified Sourcing]</strong
+                        >
+                        Senior safety auditors formally filed three
+                        non-compliance notifications between August and October,
+                        alleging regional directors bypassed primary fail-safe
+                        audits to meet federal decarbonization milestones ahead
+                        of Q4 reporting deadlines.
+                      </p>
+                      <p>
+                        Municipal regulators in three adjacent districts
+                        <span
+                          class="surface-info color-info pad-inline-3 radius-standard text-medium"
+                          >have escalated formal subpoenas</span
+                        >
+                        regarding long-term cost and safety models,
+                        <span class="color-muted"
+                          >though formal advisory hearings were not
+                          scheduled</span
+                        >
+                        <span
+                          class="surface-info color-info pad-inline-3 radius-standard text-semibold"
+                          >with public testimony set for next Thursday</span
+                        >.
+                      </p>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              <!-- Revision Commentary & Editorial Feedback Module -->
+              <section
+                class="surface-paper radius-panel shadow-subtle pad-5 margin-top-2"
+              >
+                <div class="flex align-center justify-between margin-bottom-2">
+                  <div class="flex align-center gap-2">
+                    <span class="material-symbols-outlined text-4 color-primary"
+                      >rate_review</span
+                    >
+                    <h2 class="text-headline text-4 color-body">
+                      Editorial Desk Feedback &amp; Directives
+                    </h2>
+                  </div>
+                  <span class="text-caption text-1 color-muted"
+                    >Auto-syncing to author workspace</span
+                  >
+                </div>
+                <!-- Quick Tags -->
+                <div class="flex flex-wrap align-center gap-2 margin-bottom-2">
+                  <span class="text-label text-1 text-uppercase color-muted"
+                    >Quick Directives:</span
+                  >
+                  <button
+                    class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1"
+                  >
+                    <span class="material-symbols-outlined text-2"
+                      >verified_user</span
+                    >
+                    Fact Check Cleared
+                  </button>
+                  <button
+                    class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-info color-info motion-colors text-label text-1"
+                  >
+                    <span class="material-symbols-outlined text-2">policy</span>
+                    Requires Source Verification
+                  </button>
+                  <button
+                    class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1"
+                  >
+                    <span class="material-symbols-outlined text-2">title</span>
+                    Headline Polish
+                  </button>
+                  <button
+                    class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-panel color-body motion-colors text-label text-1"
+                  >
+                    <span class="material-symbols-outlined text-2">shield</span>
+                    Legal Advisory Note
+                  </button>
+                </div>
+                <!-- Rich Text Box Container -->
+                <div class="surface-muted radius-card pad-3">
+                  <!-- Textarea Formatting Bar -->
+                  <div
+                    class="flex align-center gap-2 margin-bottom-2 surface-paper pad-inline-3 pad-block-2 radius-standard"
+                  >
+                    <button class="pad-2 radius-standard color-muted">
+                      <span class="material-symbols-outlined text-2"
+                        >format_bold</span
+                      >
+                    </button>
+                    <button class="pad-2 radius-standard color-muted">
+                      <span class="material-symbols-outlined text-2"
+                        >format_italic</span
+                      >
+                    </button>
+                    <button class="pad-2 radius-standard color-muted">
+                      <span class="material-symbols-outlined text-2"
+                        >format_underlined</span
+                      >
+                    </button>
+                    <span class="color-subtle">|</span>
+                    <button class="pad-2 radius-standard color-muted">
+                      <span class="material-symbols-outlined text-2">link</span>
+                    </button>
+                    <button class="pad-2 radius-standard color-muted">
+                      <span class="material-symbols-outlined text-2"
+                        >format_quote</span
+                      >
+                    </button>
+                    <button class="pad-2 radius-standard color-muted">
+                      <span class="material-symbols-outlined text-2"
+                        >format_list_bulleted</span
+                      >
+                    </button>
+                    <div class="text-caption text-1 color-muted">
+                      Markdown Supported
+                    </div>
+                  </div>
+                  <textarea
+                    class="width-full surface-paper radius-standard pad-3 text-body text-2 color-body control-input control-no-resize"
+                    placeholder="Type confidential editorial guidance to Eleanor Vance... (e.g. Ensure we have dual confirmation on the subpoena issuance from District 4 prior to hitting front-page wire dispatch)."
+                    rows="3"
+                  ></textarea>
+                  <div class="flex align-center justify-between margin-top-2">
+                    <div class="flex align-center gap-2">
+                      <label
+                        class="flex align-center gap-2 control-pointer text-caption text-1 color-muted"
+                      >
+                        <input
+                          checked=""
+                          class="radius-standard"
+                          type="checkbox"
+                        />
+                        <span>Notify Eleanor Vance via Secure Desk Chat</span>
+                      </label>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <button
+                        class="pad-inline-3 pad-block-2 radius-standard color-muted text-label text-1"
+                      >
+                        Clear
+                      </button>
+                      <button
+                        class="pad-inline-4 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 shadow-subtle"
+                      >
+                        Attach Note to Draft v2.3
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Threaded Editorial Discussion -->
+                <div class="margin-top-4 stack-3">
+                  <div class="pad-3 surface-muted radius-card flex gap-3">
+                    <div
+                      class="avatar-small radius-pill surface-info flex align-center justify-center color-inverse text-label text-1 flex-no-shrink"
+                    >
+                      MK
+                    </div>
+                    <div class="flex flex-column flex-grow">
+                      <div class="flex align-center justify-between">
+                        <span class="text-label text-1 text-semibold color-body"
+                          >Marcus Keller (Managing Editor)</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >08:15 AM</span
+                        >
+                      </div>
+                      <p class="text-body text-1 color-muted margin-top-2">
+                        Paragraph 4 regarding District Subpoenas has been
+                        confirmed via clerk records. Vance has uploaded the
+                        supporting PDF into vault docket #4092. Legal has
+                        stamped green.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <!-- Right Column: Version History & Audit Trail (4 Columns) -->
+            <aside class="span-sidebar flex flex-column gap-4">
+              <!-- Timeline Module -->
+              <div class="surface-paper radius-panel shadow-subtle pad-4">
+                <div
+                  class="flex align-center justify-between margin-bottom-4 margin-bottom-2"
+                >
+                  <div class="flex align-center gap-2">
+                    <span class="material-symbols-outlined text-4 color-primary"
+                      >history</span
+                    >
+                    <h3 class="text-headline text-4 color-body">
+                      Version History
+                    </h3>
+                  </div>
+                  <span class="text-label text-1 text-uppercase color-muted"
+                    >5 Revisions</span
+                  >
+                </div>
+                <!-- Vertical Timeline Ribbons -->
+                <div class="relative pad-inline-5 stack-5">
+                  <!-- v2.3 Active Draft -->
+                  <div class="relative">
+                    <div
+                      class="absolute avatar-small radius-pill surface-ink rule"
+                    ></div>
+                    <div class="surface-info pad-3 radius-card">
+                      <div class="flex align-center justify-between">
+                        <span class="text-label text-1 text-bold color-primary"
+                          >v2.3 (Current Draft)</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >09:42 AM</span
+                        >
+                      </div>
+                      <p class="text-body text-1 color-muted margin-top-2">
+                        Major rewrite by Eleanor Vance incorporating
+                        whistleblower testimony and regulatory filings.
+                      </p>
+                      <div class="flex align-center gap-2 margin-top-2">
+                        <span
+                          class="text-caption text-1 surface-panel pad-inline-3 pad-block-2 radius-standard color-muted"
+                          >4 Commits</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >Review in progress</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <!-- v2.1 Fact Check Update -->
+                  <div class="relative">
+                    <div
+                      class="absolute avatar-small radius-pill surface-info rule"
+                    ></div>
+                    <div class="surface-muted pad-3 radius-card">
+                      <div class="flex align-center justify-between">
+                        <span class="text-label text-1 text-semibold color-body"
+                          >v2.1 Interim Check</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >Yesterday 18:20</span
+                        >
+                      </div>
+                      <p class="text-body text-1 color-muted margin-top-2">
+                        Desk editor notes incorporated. 2 quotes cleared through
+                        Legal Council.
+                      </p>
+                      <div class="color-muted text-caption text-1 margin-top-2">
+                        Audit hash: e7f09c1
+                      </div>
+                    </div>
+                  </div>
+                  <!-- v1.1 Correction added -->
+                  <div class="relative">
+                    <div
+                      class="absolute avatar-small radius-pill surface-panel rule"
+                    ></div>
+                    <div class="surface-muted pad-3 radius-card">
+                      <div class="flex align-center justify-between">
+                        <span class="text-label text-1 text-semibold color-body"
+                          >v1.1 Formal Correction</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >Oct 25, 11:30</span
+                        >
+                      </div>
+                      <p class="text-body text-1 color-muted margin-top-2">
+                        Updated spokesperson title from Regional Deputy to Chief
+                        Operating Officer.
+                      </p>
+                    </div>
+                  </div>
+                  <!-- v1.0 Published -->
+                  <div class="relative">
+                    <div
+                      class="absolute avatar-small radius-pill surface-panel rule"
+                    ></div>
+                    <div class="surface-muted pad-3 radius-card">
+                      <div class="flex align-center justify-between">
+                        <span class="text-label text-1 text-semibold color-body"
+                          >v1.0 Published Wire</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >Oct 24, 08:15</span
+                        >
+                      </div>
+                      <p class="text-body text-1 color-muted margin-top-2">
+                        Initial wire copy posted by Morning Dispatch Desk.
+                      </p>
+                      <div
+                        class="flex align-center gap-1 margin-top-2 color-muted text-caption text-1"
+                      >
+                        <span class="material-symbols-outlined text-1"
+                          >done_all</span
+                        >
+                        Archived in Permanent Library
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Reviewer Audit & Policy Checklist -->
+              <div class="surface-paper radius-panel shadow-subtle pad-4">
+                <div class="flex align-center gap-2 margin-bottom-2">
+                  <span class="material-symbols-outlined text-4 color-primary"
+                    >checklist</span
+                  >
+                  <h3 class="text-headline text-4 color-body">
+                    Publishing Policy Pre-flight
+                  </h3>
+                </div>
+                <div class="stack-2 text-body text-1">
+                  <label
+                    class="flex align-start gap-2 pad-2 radius-standard control-pointer motion-colors"
+                  >
+                    <input
+                      checked=""
+                      class="margin-top-2 radius-standard"
+                      type="checkbox"
+                    />
+                    <div class="flex flex-column">
+                      <span class="text-medium color-body"
+                        >Independent Sourcing Standard</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Minimum two unrelated named sources on record.</span
+                      >
+                    </div>
+                  </label>
+                  <label
+                    class="flex align-start gap-2 pad-2 radius-standard control-pointer motion-colors"
+                  >
+                    <input
+                      checked=""
+                      class="margin-top-2 radius-standard"
+                      type="checkbox"
+                    />
+                    <div class="flex flex-column">
+                      <span class="text-medium color-body"
+                        >Right of Reply Extended</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Grid Council given 6-hour window for official
+                        response.</span
+                      >
+                    </div>
+                  </label>
+                  <label
+                    class="flex align-start gap-2 pad-2 radius-standard control-pointer motion-colors"
+                  >
+                    <input
+                      checked=""
+                      class="margin-top-2 radius-standard"
+                      type="checkbox"
+                    />
+                    <div class="flex flex-column">
+                      <span class="text-medium color-body"
+                        >Media Licensure Verified</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Boardroom photo cleared for international
+                        syndication.</span
+                      >
+                    </div>
+                  </label>
+                  <label
+                    class="flex align-start gap-2 pad-2 radius-standard control-pointer motion-colors"
+                  >
+                    <input
+                      class="margin-top-2 radius-standard"
+                      type="checkbox"
+                    />
+                    <div class="flex flex-column">
+                      <span class="text-medium color-body"
+                        >SEO &amp; Social Graph Sign-off</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Headline metadata and OpenGraph tag generation
+                        review.</span
+                      >
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <!-- Quick Metrics Telemetry Card -->
+              <div
+                class="surface-muted radius-panel pad-4 flex flex-column gap-3"
+              >
+                <span class="text-label text-1 text-uppercase color-muted"
+                  >Editorial Telemetry</span
+                >
+                <div class="flex align-center justify-between">
+                  <span class="text-body text-1 color-body"
+                    >Reading Ease Index</span
+                  >
+                  <span class="text-label text-1 text-bold color-body"
+                    >Grade 11.2 (Standard)</span
+                  >
+                </div>
+                <div
+                  class="width-full surface-raised radius-pill overflow-hidden"
+                >
+                  <div
+                    class="surface-ink height-full radius-pill"
+                    style="width: 78%"
+                  ></div>
+                </div>
+                <div
+                  class="flex align-center justify-between margin-top-2 color-muted text-caption text-1"
+                >
+                  <span>Est. Reading Time: 4 min 12 sec</span>
+                  <span>Target: Broadsheet Frontpage</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+        <script>
+          // Simple micro-interactions for editorial workflow feedback
+          document
+            .getElementById("btn-approve")
+            ?.addEventListener("click", () => {
+              if (
+                confirm(
+                  "Are you certain you wish to sign off and push ART-8924 (v2.3) directly to live syndication feeds?",
+                )
+              ) {
+                alert(
+                  "Action Logged: Article ART-8924 approved and scheduled for immediate CDN propagation.",
+                );
+              }
+            });
 
-  document.getElementById('btn-request-revisions')?.addEventListener('click', () => {
-    alert('Draft returned to Eleanor Vance with current feedback annotations.');
-  });
+          document
+            .getElementById("btn-request-revisions")
+            ?.addEventListener("click", () => {
+              alert(
+                "Draft returned to Eleanor Vance with current feedback annotations.",
+              );
+            });
 
-  document.getElementById('btn-preview')?.addEventListener('click', () => {
-    alert('Generating real-time multi-viewport responsive preview container...');
-  });
-</script></main></div></body></html>
+          document
+            .getElementById("btn-preview")
+            ?.addEventListener("click", () => {
+              alert(
+                "Generating real-time multi-viewport responsive preview container...",
+              );
+            });
+        </script>
+      </main>
+    </div>
+  </body>
+</html>

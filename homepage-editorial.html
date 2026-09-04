@@ -1,885 +1,1456 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        "colors": {
-          "surface-tint": "#565e74",
-          "on-tertiary-container": "#f63a35",
-          "tertiary-fixed": "#ffdad6",
-          "on-primary-fixed": "#131b2e",
-          "on-primary": "#ffffff",
-          "on-primary-container": "#7c839b",
-          "surface-container-low": "#f2f4f6",
-          "inverse-surface": "#2d3133",
-          "primary": "#000000",
-          "surface-container": "#eceef0",
-          "primary-fixed-dim": "#bec6e0",
-          "error-container": "#ffdad6",
-          "background": "#f7f9fb",
-          "error": "#ba1a1a",
-          "surface-dim": "#d8dadc",
-          "inverse-on-surface": "#eff1f3",
-          "on-surface-variant": "#45464d",
-          "secondary-fixed": "#d5e3fc",
-          "on-tertiary": "#ffffff",
-          "on-secondary-fixed-variant": "#3a485b",
-          "secondary-container": "#d5e3fc",
-          "tertiary": "#000000",
-          "secondary": "#515f74",
-          "primary-container": "#131b2e",
-          "secondary-fixed-dim": "#b9c7df",
-          "inverse-primary": "#bec6e0",
-          "on-secondary": "#ffffff",
-          "outline-variant": "#c6c6cd",
-          "on-secondary-fixed": "#0d1c2e",
-          "on-background": "#191c1e",
-          "surface-bright": "#f7f9fb",
-          "surface-container-high": "#e6e8ea",
-          "surface-variant": "#e0e3e5",
-          "on-tertiary-fixed": "#410002",
-          "on-secondary-container": "#57657a",
-          "on-error": "#ffffff",
-          "on-tertiary-fixed-variant": "#93000b",
-          "on-error-container": "#93000a",
-          "primary-fixed": "#dae2fd",
-          "outline": "#76777d",
-          "surface": "#f7f9fb",
-          "on-primary-fixed-variant": "#3f465c",
-          "tertiary-container": "#410002",
-          "surface-container-highest": "#e0e3e5",
-          "surface-container-lowest": "#ffffff",
-          "on-surface": "#191c1e",
-          "tertiary-fixed-dim": "#ffb4ab"
-        },
-        "borderRadius": {
-          "DEFAULT": "0.125rem",
-          "lg": "0.25rem",
-          "xl": "0.5rem",
-          "full": "0.75rem"
-        },
-        "spacing": {
-          "space-3xl": "4rem",
-          "reading-column-width": "680px",
-          "column-gap": "2rem",
-          "space-lg": "1.5rem",
-          "space-xs": "0.5rem",
-          "max-content-width": "1280px",
-          "space-md": "1rem",
-          "gutter-desktop": "1.5rem",
-          "gutter-mobile": "1rem",
-          "space-2xl": "3rem",
-          "space-xl": "2rem",
-          "space-sm": "0.75rem",
-          "space-xxs": "0.25rem"
-        },
-        "fontFamily": {
-          "headline-sm": [
-            "Newsreader"
-          ],
-          "body-sm": [
-            "Inter"
-          ],
-          "body-md": [
-            "Inter"
-          ],
-          "body-lead": [
-            "Newsreader"
-          ],
-          "display-hero": [
-            "Newsreader"
-          ],
-          "label-caps": [
-            "Inter"
-          ],
-          "headline-md": [
-            "Newsreader"
-          ],
-          "caption": [
-            "Inter"
-          ],
-          "headline-xl": [
-            "Newsreader"
-          ],
-          "body-lg": [
-            "Inter"
-          ],
-          "headline-xl-mobile": [
-            "Newsreader"
-          ],
-          "display-hero-mobile": [
-            "Newsreader"
-          ],
-          "label-md": [
-            "Inter"
-          ],
-          "label-lg": [
-            "Inter"
-          ],
-          "headline-lg": [
-            "Newsreader"
-          ]
-        },
-        "fontSize": {
-          "headline-sm": [
-            "18px",
-            {
-              "lineHeight": "24px",
-              "letterSpacing": "-0.005em",
-              "fontWeight": "600"
-            }
-          ],
-          "body-sm": [
-            "13px",
-            {
-              "lineHeight": "20px",
-              "fontWeight": "400"
-            }
-          ],
-          "body-md": [
-            "15px",
-            {
-              "lineHeight": "24px",
-              "fontWeight": "400"
-            }
-          ],
-          "body-lead": [
-            "20px",
-            {
-              "lineHeight": "32px",
-              "letterSpacing": "-0.005em",
-              "fontWeight": "400"
-            }
-          ],
-          "display-hero": [
-            "56px",
-            {
-              "lineHeight": "64px",
-              "letterSpacing": "-0.025em",
-              "fontWeight": "600"
-            }
-          ],
-          "label-caps": [
-            "11px",
-            {
-              "lineHeight": "14px",
-              "letterSpacing": "0.08em",
-              "fontWeight": "700"
-            }
-          ],
-          "headline-md": [
-            "22px",
-            {
-              "lineHeight": "28px",
-              "letterSpacing": "-0.01em",
-              "fontWeight": "600"
-            }
-          ],
-          "caption": [
-            "12px",
-            {
-              "lineHeight": "18px",
-              "fontWeight": "400"
-            }
-          ],
-          "headline-xl": [
-            "40px",
-            {
-              "lineHeight": "48px",
-              "letterSpacing": "-0.02em",
-              "fontWeight": "600"
-            }
-          ],
-          "body-lg": [
-            "17px",
-            {
-              "lineHeight": "28px",
-              "fontWeight": "400"
-            }
-          ],
-          "headline-xl-mobile": [
-            "30px",
-            {
-              "lineHeight": "36px",
-              "letterSpacing": "-0.015em",
-              "fontWeight": "600"
-            }
-          ],
-          "display-hero-mobile": [
-            "38px",
-            {
-              "lineHeight": "44px",
-              "letterSpacing": "-0.02em",
-              "fontWeight": "600"
-            }
-          ],
-          "label-md": [
-            "12px",
-            {
-              "lineHeight": "16px",
-              "letterSpacing": "0.04em",
-              "fontWeight": "600"
-            }
-          ],
-          "label-lg": [
-            "14px",
-            {
-              "lineHeight": "18px",
-              "letterSpacing": "0.01em",
-              "fontWeight": "600"
-            }
-          ],
-          "headline-lg": [
-            "28px",
-            {
-              "lineHeight": "36px",
-              "letterSpacing": "-0.015em",
-              "fontWeight": "500"
-            }
-          ]
-        }
-      },
-    },
-  }</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-28 max-w-max-content-width mx-auto px-gutter-mobile lg:px-gutter-desktop flex flex-col justify-between pt-space-xs pb-space-xxs"><div class="flex items-center justify-between pb-space-xxs"><div class="flex items-center gap-space-md"><img alt="The Daily Web Logo (English)" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"/><div class="hidden sm:flex flex-col"><span class="font-label-caps text-label-caps uppercase text-on-surface tracking-wider font-bold">The Daily Web</span><span class="font-caption text-caption text-secondary">Independent Global Dispatch</span></div></div><div class="hidden md:flex items-center gap-space-lg text-secondary"><div class="flex items-center gap-space-xs font-caption text-caption"><span class="material-symbols-outlined text-[16px]">calendar_today</span><span>Tuesday, October 28, 2025</span></div><div class="flex items-center gap-space-xs font-caption text-caption"><span class="material-symbols-outlined text-[16px]">partly_cloudy_day</span><span>London 14°C Light Rain</span></div></div><div class="flex items-center gap-space-sm"><button aria-label="Search Archive" class="p-space-xs rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">search</span></button><a class="hidden sm:inline-flex items-center gap-space-xxs px-space-sm py-space-xxs rounded bg-primary-container text-on-primary font-label-md text-label-md hover:bg-secondary transition-colors" data-path="staff-cms" href="#"><span>Staff CMS</span><span class="material-symbols-outlined text-[16px]">shield_person</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><nav class="flex items-center gap-space-lg overflow-x-auto no-scrollbar py-space-xxs border-t border-surface-container-high" data-active-classes="text-primary font-bold border-b-2 border-primary"><a aria-current="page" class="uppercase tracking-wider whitespace-nowrap transition-colors text-primary font-bold border-b-2 border-primary" data-path="home" href="#">Home</a><a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-on-surface whitespace-nowrap transition-colors" data-path="world" href="#">World</a><a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-on-surface whitespace-nowrap transition-colors" data-path="tech" href="#">Tech</a><a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-on-surface whitespace-nowrap transition-colors" data-path="business" href="#">Business</a><a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-on-surface whitespace-nowrap transition-colors" data-path="science" href="#">Science</a><a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-on-surface whitespace-nowrap transition-colors" data-path="culture" href="#">Culture</a><a class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant hover:text-on-surface whitespace-nowrap transition-colors" data-path="opinion" href="#">Opinion</a></nav></div><div class="w-full bg-surface-container-low border-y border-surface-container-high"><div class="max-w-max-content-width mx-auto px-gutter-mobile lg:px-gutter-desktop py-space-xxs flex items-center gap-space-sm overflow-hidden"><div class="flex items-center gap-space-xxs shrink-0 bg-error text-on-error px-space-xs py-[2px] rounded font-label-caps text-label-caps uppercase"><span class="w-2 h-2 rounded-full bg-surface-container-lowest animate-pulse"></span><span>Live Wire</span></div><div class="truncate font-body-sm text-body-sm text-on-surface flex items-center gap-space-sm"><span class="font-medium">LIVE TICKER:</span><span class="truncate text-secondary">Global semiconductor summit reaches landmark open-compute accord • Central banks signal steady interest trajectory • Breakthrough in quantum entanglement storage</span></div></div></div></header><main class="w-full pt-28 bg-background"><div class="flex flex-col w-full">
-<!-- Top Global Briefing & Ticker Banner -->
-<div class="w-full bg-surface-container-lowest shadow-sm mb-space-lg">
-<div class="max-w-max-content-width mx-auto px-gutter-mobile lg:px-gutter-desktop py-space-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
-<div class="flex items-center gap-space-sm w-full md:w-auto">
-<span class="bg-error text-on-error px-space-xs py-[2px] rounded font-label-caps text-label-caps uppercase flex items-center gap-1 shadow-sm shrink-0">
-<span class="w-1.5 h-1.5 rounded-full bg-surface-container-lowest animate-pulse"></span>
-          WIRE PRIORITY
-        </span>
-<div class="relative overflow-hidden w-full md:w-[620px] h-5">
-<div class="font-body-sm text-body-sm text-secondary truncate flex items-center gap-space-xs">
-<span class="font-medium text-on-surface">14:02 GMT:</span>
-<span>G7 finance deputies draft unified framework on algorithmic bond market circuits. Sovereign bond spreads tighten 4.2 bps across European desks.</span>
-</div>
-</div>
-</div>
-<div class="flex items-center gap-space-md shrink-0 text-secondary font-caption text-caption self-end md:self-center">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-error">trending_up</span> S&amp;P +0.48%</span>
-<span class="hidden sm:inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-surface-tint">trending_down</span> Brent $78.14</span>
-<span class="hidden sm:inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
-<span class="flex items-center gap-1 text-on-surface font-medium"><span class="material-symbols-outlined text-[15px]">verified_user</span> Verified Wire Edition 41,892</span>
-</div>
-</div>
-</div>
-<!-- Primary Broadsheet Grid Shell -->
-<div class="max-w-max-content-width mx-auto px-gutter-mobile lg:px-gutter-desktop w-full space-y-space-2xl">
-<!-- Hero Row: 8-Column Dominant Lead + 4-Column Secondary / Realtime Sidebar -->
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-column-gap">
-<!-- Dominant Lead Story (8 Cols) -->
-<article class="lg:col-span-8 flex flex-col bg-surface-container-lowest p-space-md lg:p-space-xl rounded shadow-sm">
-<div class="flex flex-wrap items-center justify-between gap-space-xs pb-space-sm mb-space-sm">
-<div class="flex items-center gap-space-xs">
-<span class="bg-error text-on-error font-label-caps text-label-caps uppercase px-space-xs py-[2px] rounded tracking-wider flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-surface-container-lowest animate-ping"></span>
-              LIVE REPORT
-            </span>
-<span class="bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase px-space-xs py-[2px] rounded">Sovereign Compute • Deep Tech</span>
-</div>
-<div class="flex items-center gap-space-sm text-secondary font-caption text-caption">
-<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">schedule</span> 28 mins ago</span>
-<span>•</span>
-<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">auto_stories</span> 7 min read</span>
-<span>•</span>
-<span class="flex items-center gap-0.5 text-on-surface font-medium"><span class="material-symbols-outlined text-[14px]">visibility</span> 24.2k views</span>
-</div>
-</div>
-<h1 class="font-display-hero text-headline-xl lg:text-display-hero text-primary leading-tight font-semibold tracking-tight hover:text-secondary transition-colors cursor-pointer mb-space-sm">
-          Autonomous Frontier: Inside the Race to Standardize Sovereign Neural Infrastructure
-        </h1>
-<p class="font-body-lead text-body-lead text-on-surface-variant italic mb-space-md leading-relaxed">
-          As nation-states erect digital customs checkpoints around silicon corridors and training superclusters, a clandestine treaty in Geneva aims to define the constitutional grammar of autonomous intelligence before borders solidify.
-        </p>
-<!-- Media Container -->
-<div class="relative w-full h-[360px] lg:h-[460px] rounded overflow-hidden shadow-sm mb-space-md group bg-surface-container">
-<img class="w-full h-full object-cover group-hover:scale-[1.015] transition-transform duration-700 ease-out" data-alt="Editorial photography of a monolithic high-security data center hall illuminated by architectural cyan and warm tungsten light strips, technicians in minimalist uniforms inspecting fiber optic server racks, cinematic composition, documentary broadsheet style, clean high-contrast realism, ultra sharp depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAebF55LfFbC2MA-JokiWwp8-4zB_qA8k-uHA_ZS6nROhdoYuMBgdlquHprJe25L4qQXKsY0ZBhvphjzxw-bPmWlZDmiR-4shQsxq9cD5SIl4HuBbDwhxCoswc0NpkVTNwsY2Ilt2pqNxz2sWX8UEMEczCtWbhrvGwx6nz7v4h6jiPfQF7UQvRDfARQsh1A6f798HlHJHdjl5mtMzQDE7xazpJAgf2VP3kp6vStMkaQdXCfcOfY5Ad7Dg"/>
-<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent"></div>
-<div class="absolute bottom-space-md left-space-md right-space-md flex items-end justify-between text-on-primary">
-<p class="font-caption text-caption text-surface-variant/90 max-w-lg hidden sm:block">
-              Figure 1.1: The St. Gotthard Deep Compute Vault, Switzerland. High-density neural fabric conduits undergoing cross-border attestation testing. (Photograph: Marcus Vance / The Daily Web)
-            </p>
-<span class="bg-primary/70 backdrop-blur-md text-on-primary px-space-xs py-1 rounded font-label-caps text-label-caps uppercase shrink-0">BUREAU DISPATCH</span>
-</div>
-</div>
-<!-- Byline & Action Matrix -->
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pt-space-xs bg-surface-container-low px-space-md py-space-sm rounded">
-<div class="flex items-center gap-space-sm">
-<div class="w-10 h-10 rounded-full bg-primary text-on-primary font-headline-md text-headline-md flex items-center justify-center font-bold">
-              AS
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body class="surface-page text-body color-body">
+    <header class="fixed width-full surface-glass shadow-subtle">
+      <div
+        class="width-content page-shell pad-inline-5 flex flex-column justify-between pad-block-2"
+      >
+        <div class="flex align-center justify-between pad-block-2">
+          <div class="flex align-center gap-4">
+            <img
+              alt="The Daily Web Logo (English)"
+              class="image-logo"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+            />
+            <div class="flex flex-column">
+              <span
+                class="text-kicker text-1 text-uppercase color-body text-bold"
+                >The Daily Web</span
+              ><span class="text-caption text-1 color-muted"
+                >Independent Global Dispatch</span
+              >
             </div>
-<div>
-<div class="font-label-lg text-label-lg text-on-surface font-semibold">Arthur Sterling</div>
-<div class="font-caption text-caption text-secondary">Chief Technology Editor • Reporting from Geneva &amp; Zurich</div>
-</div>
-</div>
-<div class="flex items-center gap-space-xs">
-<button class="p-space-xs rounded bg-surface-container hover:bg-surface-container-highest text-on-surface transition-colors" title="Bookmark Report">
-<span class="material-symbols-outlined text-[18px]">bookmark</span>
-</button>
-<button class="p-space-xs rounded bg-surface-container hover:bg-surface-container-highest text-on-surface transition-colors" title="Share Dispatch">
-<span class="material-symbols-outlined text-[18px]">share</span>
-</button>
-<button class="px-space-md py-space-xs rounded bg-primary text-on-primary font-label-md text-label-md hover:bg-secondary transition-colors flex items-center gap-1 shadow-sm">
-<span>Read Full Investigation</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</button>
-</div>
-</div>
-</article>
-<!-- Sidebar: Live Dispatches & Market Weather (4 Cols) -->
-<aside class="lg:col-span-4 flex flex-col gap-space-lg">
-<!-- Cached Micro-Weather Card -->
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm">
-<div class="flex items-center justify-between mb-space-sm">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-secondary text-[18px]">routine</span>
-<span class="font-label-caps text-label-caps uppercase text-secondary font-bold">Desk Atmospheric Monitor</span>
-</div>
-<span class="font-caption text-caption text-surface-tint">Station: City HQ</span>
-</div>
-<div class="flex items-center justify-between pb-space-sm bg-surface-container-low p-space-sm rounded mb-space-sm">
-<div>
-<div class="font-display-hero text-headline-xl text-primary font-bold leading-none">14°C</div>
-<div class="font-caption text-caption text-secondary mt-1">London • Overcast with mist</div>
-</div>
-<span class="material-symbols-outlined text-[36px] text-secondary">partly_cloudy_day</span>
-</div>
-<div class="grid grid-cols-3 gap-space-xs text-center">
-<div class="bg-surface p-space-xs rounded">
-<span class="font-label-caps text-label-caps text-secondary block">WED</span>
-<span class="material-symbols-outlined text-[18px] text-secondary my-1">rainy</span>
-<span class="font-label-md text-label-md text-on-surface font-semibold block">12° / 8°</span>
-</div>
-<div class="bg-surface p-space-xs rounded">
-<span class="font-label-caps text-label-caps text-secondary block">THU</span>
-<span class="material-symbols-outlined text-[18px] text-secondary my-1">cloud</span>
-<span class="font-label-md text-label-md text-on-surface font-semibold block">15° / 9°</span>
-</div>
-<div class="bg-surface p-space-xs rounded">
-<span class="font-label-caps text-label-caps text-secondary block">FRI</span>
-<span class="material-symbols-outlined text-[18px] text-secondary my-1">sunny</span>
-<span class="font-label-md text-label-md text-on-surface font-semibold block">17° / 11°</span>
-</div>
-</div>
-</div>
-<!-- Latest Dispatch Chronological Stream -->
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex-1 flex flex-col">
-<div class="flex items-center justify-between mb-space-md">
-<div class="flex items-center gap-space-xs">
-<span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
-<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Chronological Stream</h2>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary bg-surface-container px-space-xs py-0.5 rounded">UTC SYNCED</span>
-</div>
-<div class="space-y-space-md overflow-y-auto pr-1 max-h-[580px]">
-<!-- Dispatch Item 1 -->
-<div class="p-space-sm bg-surface-container-low rounded hover:bg-surface-container transition-colors group cursor-pointer">
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-1">
-<span class="font-mono text-error font-bold flex items-center gap-1">
-<span class="material-symbols-outlined text-[12px]">sensors</span> 13:58
-                </span>
-<span class="font-label-caps text-label-caps uppercase text-secondary">Semiconductors</span>
-</div>
-<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary leading-snug font-semibold">
-                ASML dispatches first experimental sub-0.55 NA extreme ultraviolet lithography chassis to Ohio foundry
-              </h3>
-<div class="font-caption text-caption text-secondary mt-space-xs flex items-center justify-between">
-<span>By Evelyn Hart</span>
-<span>1 min ago</span>
-</div>
-</div>
-<!-- Dispatch Item 2 -->
-<div class="p-space-sm bg-surface rounded hover:bg-surface-container transition-colors group cursor-pointer">
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-1">
-<span class="font-mono text-surface-tint font-semibold">13:41</span>
-<span class="font-label-caps text-label-caps uppercase text-secondary">Central Banking</span>
-</div>
-<h3 class="font-headline-sm text-body-lg text-on-surface group-hover:text-primary leading-snug font-semibold">
-                Bank of England minutes indicate majority consensus toward pausing quantitative tightening run-off rate
-              </h3>
-<div class="font-caption text-caption text-secondary mt-space-xs flex items-center justify-between">
-<span>By Julian Thorne</span>
-<span>18 mins ago</span>
-</div>
-</div>
-<!-- Dispatch Item 3 -->
-<div class="p-space-sm bg-surface rounded hover:bg-surface-container transition-colors group cursor-pointer">
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-1">
-<span class="font-mono text-surface-tint font-semibold">13:19</span>
-<span class="font-label-caps text-label-caps uppercase text-secondary">Aviation &amp; Defense</span>
-</div>
-<h3 class="font-headline-sm text-body-lg text-on-surface group-hover:text-primary leading-snug font-semibold">
-                Civil Aviation Authority issues airworthiness directive on composite winglet fatigue sensors
-              </h3>
-<div class="font-caption text-caption text-secondary mt-space-xs flex items-center justify-between">
-<span>By Clara Dufresne</span>
-<span>40 mins ago</span>
-</div>
-</div>
-<!-- Dispatch Item 4 -->
-<div class="p-space-sm bg-surface rounded hover:bg-surface-container transition-colors group cursor-pointer">
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-1">
-<span class="font-mono text-surface-tint font-semibold">12:54</span>
-<span class="font-label-caps text-label-caps uppercase text-secondary">Geopolitics</span>
-</div>
-<h3 class="font-headline-sm text-body-lg text-on-surface group-hover:text-primary leading-snug font-semibold">
-                Nordic Defense Council approves joint maritime sub-surface acoustic monitoring cordon in Kattegat
-              </h3>
-<div class="font-caption text-caption text-secondary mt-space-xs flex items-center justify-between">
-<span>By Henrik Lindqvist</span>
-<span>1h 05m ago</span>
-</div>
-</div>
-<!-- Dispatch Item 5 -->
-<div class="p-space-sm bg-surface rounded hover:bg-surface-container transition-colors group cursor-pointer">
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-1">
-<span class="font-mono text-surface-tint font-semibold">12:20</span>
-<span class="font-label-caps text-label-caps uppercase text-secondary">Energy</span>
-</div>
-<h3 class="font-headline-sm text-body-lg text-on-surface group-hover:text-primary leading-snug font-semibold">
-                North Sea offshore transmission link secures $2.4B private debt tranche with sovereign green guarantee
-              </h3>
-<div class="font-caption text-caption text-secondary mt-space-xs flex items-center justify-between">
-<span>By Sarah Al-Mansoor</span>
-<span>1h 42m ago</span>
-</div>
-</div>
-</div>
-<button class="mt-space-md w-full py-space-xs bg-surface-container text-on-surface font-label-md text-label-md rounded hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1">
-<span>Access All Wire Dispatches</span>
-<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
-</button>
-</div>
-</aside>
-</section>
-<!-- Secondary Lead Stories Grid (3 Columns Balanced) -->
-<section class="space-y-space-md">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-space-xs">
-<span class="font-label-caps text-label-caps uppercase bg-primary text-on-primary px-space-xs py-0.5 rounded font-bold">Curated Briefs</span>
-<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Essential Global Analysis</h2>
-</div>
-<span class="font-caption text-caption text-secondary hidden sm:inline-block">Updated every 15 minutes by Senior Desk Editors</span>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-column-gap">
-<!-- Story 1: Business -->
-<article class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
-<div>
-<div class="w-full h-48 rounded overflow-hidden mb-space-sm bg-surface-container">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Monochrome cinematic photo of modern glass financial exchange floor in Frankfurt with analog ticker numbers blurred in motion, traders analyzing sovereign debt curves on multimonitor terminals, crisp lighting, high contrast broadsheet style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA8K4lkkKB4qhL_AymY0dFQWrTPTX-Gd-76Nyz-tx5J89hR1PJ2vj0Iq37z0W6W6QCmUTYYAbv7tsC2nJ04K5a9Y9pZj4zfbOT_FWHtlzV5TB25EITzKYvEaAnQP-kRziHYObYQsEu0JTtvXgEcHncBQVVGjbSwlggxgf84thr9Ra0q5lDe7W56Zk70KpEGoFwdrTe04Ikr4WcXaZ0vWm3LeaKsFDcuM803GG_vqGteLJ15E9jfZgWSQ"/>
-</div>
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-space-xs">
-<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps uppercase px-space-xs py-0.5 rounded">Business • Monetary</span>
-<span>4 min read</span>
-</div>
-<h3 class="font-headline-md text-headline-md text-primary group-hover:text-secondary transition-colors font-bold leading-snug mb-space-xs">
-              Central Banks Coordinate Liquidity Swap Lines Ahead of Global Yield Summit
-            </h3>
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">
-              Emergency currency facilities between Washington, Tokyo, Frankfurt, and London have been expanded by 40% to stave off potential collateral friction in offshore repo markets.
-            </p>
-</div>
-<div class="pt-space-md mt-space-sm flex items-center justify-between text-secondary font-caption text-caption">
-<span class="font-medium text-on-surface">By Beatrice Vance</span>
-<span>2 hours ago</span>
-</div>
-</article>
-<!-- Story 2: World Affairs -->
-<article class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
-<div>
-<div class="w-full h-48 rounded overflow-hidden mb-space-sm bg-surface-container">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Dramatic high angle photo of a specialized deep sea cable laying ship navigating choppy deep blue Atlantic waters during twilight, heavy crane winches lowering fiber optic trunk lines into the ocean, editorial documentary photography, photorealistic, brooding ambiance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKt6m_BO29HCX4gXnxm-gLMrYqSqA7_k5BkhS3Bn9EaouPeUvpXXevBrGuPGlhTveMXRmWrapZkj0HfdpZbkyQoR0qEnS0CiW0yHIwnoXHFh9lKwFvmMvrrzTlOTqOwWJO2S280bzmnNe_J3TZc9mohr6uSVPeZNWDS1uteME-ytxm1KS_1HFOTrO28lyFqgLSSg98KHGG20jvM8iDkvlxtYvqJFUj507uxgVu-rtMJ92XeMapaTUHgw"/>
-</div>
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-space-xs">
-<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps uppercase px-space-xs py-0.5 rounded">World Affairs • Maritime</span>
-<span>6 min read</span>
-</div>
-<h3 class="font-headline-md text-headline-md text-primary group-hover:text-secondary transition-colors font-bold leading-snug mb-space-xs">
-              Deep Sea Optical Cables: The Hidden Geopolitical Chessboard of Oceanic Data
-            </h3>
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">
-              Ninety-seven percent of intercontinental traffic relies on 600 unarmored seafloor conduits. Exclusive naval intelligence reveals unprecedented submarine mapping operations along the Luzon Strait.
-            </p>
-</div>
-<div class="pt-space-md mt-space-sm flex items-center justify-between text-secondary font-caption text-caption">
-<span class="font-medium text-on-surface">By Dr. Kieran O'Connor</span>
-<span>3 hours ago</span>
-</div>
-</article>
-<!-- Story 3: Science -->
-<article class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between group hover:shadow-md transition-shadow">
-<div>
-<div class="w-full h-48 rounded overflow-hidden mb-space-sm bg-surface-container">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Architectural photo of an industrial direct air carbon capture facility nestled against volcanic basalt rock formations and steaming geothermal vents in Hellisheidi Iceland, steel hexagonal collector fans against a dramatic overcast sky, clean modernist documentary style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmikKm9FQIn-CnSDCsyfmD9DzAuf_0-3pbN-z4M8jjHAOHgstgOcbXl3mc5dbpoQFgfL8pBGOIpfL31EkxYo32yehYn-0hMfrEYR7PrWE1ZHOvsZbwe9OENyzsIAnqEe2_anzxvNs3bl8H8JPSikIl8xwMV-doxYPzyEr00ReZmvInebPkrOMfUNtFypkMw8O3m_9VW59x2R5ewNhAV1U8Zyd6x4uoWpL2VQtlCC9smbmAUENZlSmKlg"/>
-</div>
-<div class="flex items-center justify-between text-secondary font-caption text-caption mb-space-xs">
-<span class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps uppercase px-space-xs py-0.5 rounded">Science • Climate Eng</span>
-<span>5 min read</span>
-</div>
-<h3 class="font-headline-md text-headline-md text-primary group-hover:text-secondary transition-colors font-bold leading-snug mb-space-xs">
-              Atmospheric Carbon Extraction Pilot Achieves Net-Negative Milestone in Iceland
-            </h3>
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">
-              The Mammoth Geothermal extraction array completed 365 consecutive operational cycles mineralizing 36,000 tons of CO2 directly into sub-surface basalt basaltic aquifers with verified permanence.
-            </p>
-</div>
-<div class="pt-space-md mt-space-sm flex items-center justify-between text-secondary font-caption text-caption">
-<span class="font-medium text-on-surface">By Linnea Söderberg</span>
-<span>4 hours ago</span>
-</div>
-</article>
-</div>
-</section>
-<!-- Mid-Page Inset: Data Visualization / Global Yield & Compute Ingestion -->
-<section class="bg-primary text-on-primary rounded p-space-lg lg:p-space-xl shadow-md">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
-<div class="lg:col-span-5 space-y-space-sm">
-<span class="bg-error text-on-error font-label-caps text-label-caps uppercase px-space-xs py-0.5 rounded font-bold">Interactive Telemetry</span>
-<h2 class="font-headline-lg text-headline-lg text-on-primary font-bold">Real-Time Global Silicon &amp; Liquidity Flow</h2>
-<p class="font-body-md text-body-md text-surface-variant">
-            Cross-referencing high-frequency capital swaps against sovereign compute load. Observe the structural convergence between energy grid capacity and neural network training spikes across 14 geographic zones.
-          </p>
-<div class="flex items-center gap-space-md pt-space-xs">
-<div>
-<div class="font-headline-md text-headline-md font-bold text-on-primary">18.42 EFLOPS</div>
-<div class="font-caption text-caption text-outline-variant">Total Online Capacity</div>
-</div>
-<div class="h-8 w-px bg-on-surface-variant"></div>
-<div>
-<div class="font-headline-md text-headline-md font-bold text-on-primary">$4.82T</div>
-<div class="font-caption text-caption text-outline-variant">Daily Cross-Currency Vol</div>
-</div>
-</div>
-</div>
-<!-- Inline SVG Sparkline / Architectural Telemetry Chart -->
-<div class="lg:col-span-7 bg-surface-container-highest/10 p-space-md rounded backdrop-blur-sm">
-<div class="flex items-center justify-between text-caption font-caption text-surface-variant mb-space-sm">
-<span>Aggregated Node Latency vs. Capital Settlement (24-Hour Rolling Index)</span>
-<span class="flex items-center gap-1 text-on-primary"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span> Active Stream</span>
-</div>
-<svg class="w-full h-44 text-on-primary" fill="none" preserveaspectratio="none" viewbox="0 0 600 160">
-<!-- Grid Lines -->
-<line stroke="currentColor" stroke-dasharray="3 3" stroke-opacity="0.1" x1="0" x2="600" y1="40" y2="40"></line>
-<line stroke="currentColor" stroke-dasharray="3 3" stroke-opacity="0.1" x1="0" x2="600" y1="80" y2="80"></line>
-<line stroke="currentColor" stroke-dasharray="3 3" stroke-opacity="0.1" x1="0" x2="600" y1="120" y2="120"></line>
-<!-- Secondary Area Path -->
-<path d="M0,130 Q75,120 150,135 T300,100 T450,115 T600,70 L600,160 L0,160 Z" fill="currentColor" fill-opacity="0.08"></path>
-<!-- Primary Curve (Capital Vol) -->
-<path d="M0,110 C80,95 120,140 200,85 C280,30 330,120 420,60 C480,20 540,45 600,30" fill="none" stroke="#f63a35" stroke-width="2.5"></path>
-<!-- Latency Wave -->
-<path d="M0,130 Q75,120 150,135 T300,100 T450,115 T600,70" fill="none" stroke="currentColor" stroke-dasharray="4 2" stroke-width="1.75"></path>
-<!-- Highlight Markers -->
-<circle cx="200" cy="85" fill="#f63a35" r="4"></circle>
-<circle cx="420" cy="60" fill="#f63a35" r="4"></circle>
-<circle cx="600" cy="30" fill="#f63a35" r="5"></circle>
-</svg>
-<div class="flex items-center justify-between text-caption font-caption text-outline-variant mt-space-xs">
-<span>00:00 UTC (Tokyo Open)</span>
-<span>08:00 UTC (London Open)</span>
-<span>14:30 UTC (NYSE Open)</span>
-<span>Current (Sync Peak)</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Editorial Modules Row: Editor's Picks (Quote Callout) + Most Read Leaderboard -->
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-column-gap items-start">
-<!-- Editor's Picks & Quotation Callout (7 Cols) -->
-<div class="lg:col-span-7 space-y-space-md">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-secondary text-[20px]">recommend</span>
-<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Curator’s Selection</h2>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary">Vol. 108 • No. 42</span>
-</div>
-<!-- High-Contrast Quote Module -->
-<div class="bg-surface-container-low p-space-lg rounded shadow-sm relative overflow-hidden">
-<span class="absolute -right-4 -bottom-6 font-headline-xl text-[120px] text-surface-container-highest/40 select-none pointer-events-none">“</span>
-<div class="relative z-10 space-y-space-sm">
-<span class="font-label-caps text-label-caps uppercase bg-primary-container text-on-primary px-space-xs py-0.5 rounded inline-block">Longform Commentary</span>
-<blockquote class="font-headline-md text-headline-md text-on-surface italic leading-relaxed">
-              “We made the foundational mistake of treating synthetic computation as an ordinary trade utility like natural gas. In reality, it is a territorial expansion of the state without physical soil.”
-            </blockquote>
-<div class="flex items-center gap-space-sm pt-space-xs">
-<div class="w-9 h-9 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-caption">
-                HG
-              </div>
-<div>
-<cite class="not-italic font-label-md text-label-md text-on-surface font-semibold block">Dame Helena Gyllenhaal</cite>
-<span class="font-caption text-caption text-secondary">Chair of Comparative Geopolitics, Oxford Internet Institute</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Curated Articles Duo -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between group cursor-pointer hover:shadow-md transition-shadow">
-<div>
-<span class="font-label-caps text-label-caps uppercase text-secondary block mb-space-xxs">Architecture • Urban Planning</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary font-bold leading-snug mb-space-xs">
-                The Vertical Forest Paradox: Why Milan’s Eco-Towers Resist Easy Replication
-              </h3>
-<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-                Behind the lush exterior facade lies structural steel reinforcement that doubles upfront embedded carbon costs.
-              </p>
-</div>
-<div class="pt-space-sm mt-space-sm flex items-center justify-between text-secondary font-caption text-caption">
-<span>Marco Bellini</span>
-<span>5 min read</span>
-</div>
-</div>
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between group cursor-pointer hover:shadow-md transition-shadow">
-<div>
-<span class="font-label-caps text-label-caps uppercase text-secondary block mb-space-xxs">Cultural Studies</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary font-bold leading-snug mb-space-xs">
-                The Death of the Ephemeral: Archiving the Fleeting Subcultures of the Early Web
-              </h3>
-<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-                How volunteer web archaeologists are recovering millions of lost bulletin boards before magnetic media degrades forever.
-              </p>
-</div>
-<div class="pt-space-sm mt-space-sm flex items-center justify-between text-secondary font-caption text-caption">
-<span>Nadia El-Tayeb</span>
-<span>8 min read</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Most Read Leaderboard (#1 to #5) (5 Cols) -->
-<div class="lg:col-span-5 bg-surface-container-lowest p-space-md lg:p-space-lg rounded shadow-sm flex flex-col justify-between">
-<div>
-<div class="flex items-center justify-between pb-space-sm mb-space-md bg-surface-container-low p-space-sm rounded">
-<div class="flex items-center gap-space-xs">
-<span class="material-symbols-outlined text-primary text-[20px]">leaderboard</span>
-<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Most Read Today</h2>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary">REAL-TIME RANK</span>
-</div>
-<div class="space-y-space-md">
-<!-- Rank 1 -->
-<div class="flex items-start gap-space-md group cursor-pointer">
-<span class="font-display-hero text-headline-lg font-bold text-surface-tint leading-none shrink-0 w-8">01</span>
-<div class="flex-1 min-w-0">
-<span class="font-label-caps text-label-caps uppercase text-error font-bold block mb-0.5">Energy Markets</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary leading-snug font-bold">
-                  Thorium Breeder Reactors: The Quiet Indian Renaissance That Changes Nuclear Economics
-                </h3>
-<div class="flex items-center gap-space-sm text-secondary font-caption text-caption mt-1">
-<span>9 min read</span>
-<span>•</span>
-<span class="text-on-surface font-medium">84.1k reads</span>
-</div>
-</div>
-</div>
-<!-- Rank 2 -->
-<div class="flex items-start gap-space-md group cursor-pointer">
-<span class="font-display-hero text-headline-lg font-bold text-surface-tint leading-none shrink-0 w-8">02</span>
-<div class="flex-1 min-w-0">
-<span class="font-label-caps text-label-caps uppercase text-secondary block mb-0.5">Cryptographic Standards</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary leading-snug font-bold">
-                  NIST Finalizes Post-Quantum Encryption Ciphers: The Migration Nightmare Ahead
-                </h3>
-<div class="flex items-center gap-space-sm text-secondary font-caption text-caption mt-1">
-<span>6 min read</span>
-<span>•</span>
-<span class="text-on-surface font-medium">62.8k reads</span>
-</div>
-</div>
-</div>
-<!-- Rank 3 -->
-<div class="flex items-start gap-space-md group cursor-pointer">
-<span class="font-display-hero text-headline-lg font-bold text-surface-tint leading-none shrink-0 w-8">03</span>
-<div class="flex-1 min-w-0">
-<span class="font-label-caps text-label-caps uppercase text-secondary block mb-0.5">Biotech &amp; Ethics</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary leading-snug font-bold">
-                  Synthetic Mitochondrial Replacement Approved for Human Trials in the UK
-                </h3>
-<div class="flex items-center gap-space-sm text-secondary font-caption text-caption mt-1">
-<span>5 min read</span>
-<span>•</span>
-<span class="text-on-surface font-medium">51.2k reads</span>
-</div>
-</div>
-</div>
-<!-- Rank 4 -->
-<div class="flex items-start gap-space-md group cursor-pointer">
-<span class="font-display-hero text-headline-lg font-bold text-surface-tint leading-none shrink-0 w-8">04</span>
-<div class="flex-1 min-w-0">
-<span class="font-label-caps text-label-caps uppercase text-secondary block mb-0.5">Venture Capital</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary leading-snug font-bold">
-                  Secondary Tech Valuations Plunge 28% as LP Capital Calls Strain Sovereign Funds
-                </h3>
-<div class="flex items-center gap-space-sm text-secondary font-caption text-caption mt-1">
-<span>4 min read</span>
-<span>•</span>
-<span class="text-on-surface font-medium">43.9k reads</span>
-</div>
-</div>
-</div>
-<!-- Rank 5 -->
-<div class="flex items-start gap-space-md group cursor-pointer">
-<span class="font-display-hero text-headline-lg font-bold text-surface-tint leading-none shrink-0 w-8">05</span>
-<div class="flex-1 min-w-0">
-<span class="font-label-caps text-label-caps uppercase text-secondary block mb-0.5">Space Systems</span>
-<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary leading-snug font-bold">
-                  Lunar South Pole Water Ice Assays Reveal 3x Higher Concentration Than Estimated
-                </h3>
-<div class="flex items-center gap-space-sm text-secondary font-caption text-caption mt-1">
-<span>7 min read</span>
-<span>•</span>
-<span class="text-on-surface font-medium">39.4k reads</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="pt-space-md mt-space-md bg-surface p-space-sm rounded flex items-center justify-between">
-<span class="font-caption text-caption text-secondary">Rankings recalculated every 300 seconds</span>
-<a class="font-label-md text-label-md text-primary font-bold hover:underline flex items-center gap-1" href="#">
-<span>Historical Archives</span>
-<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-</a>
-</div>
-</div>
-</section>
-<!-- Section Spotlights: 4 Thematic Columns (Tech, Business, Science, Opinion) -->
-<section class="space-y-space-md">
-<div class="flex items-center justify-between">
-<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Desk Dossiers &amp; Focus Sectors</h2>
-<div class="flex items-center gap-space-xs">
-<button class="px-space-sm py-space-xxs rounded bg-surface-container-high text-on-surface font-label-md text-label-md">All Sections</button>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-column-gap">
-<!-- Tech Spotlight -->
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
-<div>
-<div class="flex items-center justify-between pb-space-xs mb-space-sm">
-<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-wider">Technology Desk</span>
-<span class="material-symbols-outlined text-secondary text-[16px]">memory</span>
-</div>
-<div class="w-full h-32 rounded overflow-hidden mb-space-sm bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="Macro close-up photograph of a silicon interposer chip illuminated with ultraviolet inspection lasers revealing intricate bus pathways, cleanroom aesthetic, technical editorial journalism" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1pBYV-GstJMUKTS6JOJxD24OjRxLJLLCV2JKEa4-TodS6QdayBTc4Gnq9hil-s-JbreUi8cscsb3RSk2SWc2sdZYNBxZlrhkuLxcNPPj595blOcFr_R6rGASHs0FY3S0ns8DFj-gSxvlHts2I5WrP_8KBzB46az3L0DfAXq6Eg8MSw2wkvgsXVKivSFisZ9l_oXf_Gabtq8btQI_7Q3iVglSxEuLzKwZrZfVm52JmHpz4E1xjfqIURg"/>
-</div>
-<h3 class="font-headline-sm text-headline-sm text-primary font-bold leading-snug mb-space-xs">
-              Open-Weights Under Siege: The Legislative Maneuver to License AI Models
-            </h3>
-<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
-              Proposed statutory thresholds based on floating-point operations would force independent academic teams to apply for state security exemptions.
-            </p>
-</div>
-<div class="pt-space-md mt-space-sm">
-<a class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1 hover:underline" href="#">
-<span>Follow Desk</span>
-<span class="material-symbols-outlined text-[15px]">chevron_right</span>
-</a>
-</div>
-</div>
-<!-- Business Spotlight -->
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
-<div>
-<div class="flex items-center justify-between pb-space-xs mb-space-sm">
-<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-wider">Markets Desk</span>
-<span class="material-symbols-outlined text-secondary text-[16px]">query_stats</span>
-</div>
-<div class="w-full h-32 rounded overflow-hidden mb-space-sm bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="Editorial photograph of an expansive automated logistics container port terminal at night, massive orange gantry cranes moving shipping containers against a dark reflective harbor water, broadsheet realism" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrF9-vavGu9FZ6AlAQbX2AoajUfN4-WRQ5G-w5Q0pvZInCH4EemHyMuZZocyddJpSMu4vOV4nB2nlAxPVr1tNLJD-XhAdP_fDn-esMRreR-xGE5eg7TR0gQidEbbq7m5nHpssh-cvpEqOXL5AlDTk4xSTuWuvgqBvBrQqqfMRWetwTv48mVpxD_fitY0O4oWt7__rl15uqxzuLVubkGxbZHaNFWIyTPQ3qf6qq0B_VSUbUivoJuDFTJQ"/>
-</div>
-<h3 class="font-headline-sm text-headline-sm text-primary font-bold leading-snug mb-space-xs">
-              Sovereign Wealth Divergence: Singapore and Abu Dhabi Carve Separate Bets
-            </h3>
-<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
-              While GIC accelerates divestments from private equity real estate, ADIA commits $35B directly to semiconductor fabrication plants.
-            </p>
-</div>
-<div class="pt-space-md mt-space-sm">
-<a class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1 hover:underline" href="#">
-<span>Follow Desk</span>
-<span class="material-symbols-outlined text-[15px]">chevron_right</span>
-</a>
-</div>
-</div>
-<!-- Science Spotlight -->
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
-<div>
-<div class="flex items-center justify-between pb-space-xs mb-space-sm">
-<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-wider">Science &amp; Systems</span>
-<span class="material-symbols-outlined text-secondary text-[16px]">science</span>
-</div>
-<div class="w-full h-32 rounded overflow-hidden mb-space-sm bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="Photograph of a suspended dilution refrigerator cryostat used in quantum computing experiments, polished copper and gold plates with braided microwave cables in an ultra-clean laboratory, crisp editorial lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmGmvi5he9mzHqbOQzOdrSlaWAeyec5RliRrL-VlyV0i1dpvm5PyRD14VV1_Up_9RhLlTLP8luA7Ugrw5JO2V-obwSPxQAb_yCHuOAir_AIPBQXJNRZ0xEhY-SPeJ8B5sLNdhhxrqOOW4eiHfodWRb7tQeOmrn8baJYq8WngkcreaYqzR9TSj_JqhdFfgpyBGC5EedPbvtui92S9Rc-w1hUuDLKTeDfjFj4KoA4s9r3WNNz_vnnvlnyA"/>
-</div>
-<h3 class="font-headline-sm text-headline-sm text-primary font-bold leading-snug mb-space-xs">
-              Coherence Times Quadruple Using Synthetic Topological Bismuth Nanowires
-            </h3>
-<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
-              Delft researchers shatter error mitigation plateaus, demonstrating logical qubits resilient against environmental acoustic decoherence.
-            </p>
-</div>
-<div class="pt-space-md mt-space-sm">
-<a class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1 hover:underline" href="#">
-<span>Follow Desk</span>
-<span class="material-symbols-outlined text-[15px]">chevron_right</span>
-</a>
-</div>
-</div>
-<!-- Opinion Spotlight -->
-<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
-<div>
-<div class="flex items-center justify-between pb-space-xs mb-space-sm">
-<span class="font-label-caps text-label-caps uppercase text-primary font-bold tracking-wider">Opinion &amp; Essays</span>
-<span class="material-symbols-outlined text-secondary text-[16px]">draw</span>
-</div>
-<div class="p-space-sm bg-surface rounded mb-space-sm">
-<div class="flex items-center gap-space-xs mb-space-xs">
-<div class="w-8 h-8 rounded-full bg-surface-tint text-on-primary flex items-center justify-center font-bold text-caption">
-                  CR
+          </div>
+          <div class="flex align-center gap-5 color-muted">
+            <div class="flex align-center gap-2 text-caption text-1">
+              <span class="icon text-2">calendar_today</span
+              ><span>Tuesday, October 28, 2025</span>
+            </div>
+            <div class="flex align-center gap-2 text-caption text-1">
+              <span class="icon text-2">partly_cloudy_day</span
+              ><span>London 14°C Light Rain</span>
+            </div>
+          </div>
+          <div class="flex align-center gap-3">
+            <button
+              aria-label="Search Archive"
+              class="pad-2 radius-standard color-muted motion-colors flex align-center justify-center"
+            >
+              <span class="icon text-5">search</span></button
+            ><a
+              class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors"
+              data-path="staff-cms"
+              href="#"
+              ><span>Staff CMS</span
+              ><span class="icon text-2">shield_person</span></a
+            >
+            <div
+              class="avatar-small radius-pill surface-ink flex align-center justify-center"
+            >
+              <span class="icon color-inverse text-4">person</span>
+            </div>
+          </div>
+        </div>
+        <nav
+          class="flex align-center gap-5 overflow-scroll pad-block-2 rule-top rule"
+          data-active-classes="color-primary text-bold rule-bottom rule"
+        >
+          <a
+            aria-current="page"
+            class="text-uppercase no-wrap motion-colors color-primary text-bold rule-bottom rule"
+            data-path="home"
+            href="#"
+            >Home</a
+          ><a
+            class="text-label text-1 text-uppercase color-muted no-wrap motion-colors"
+            data-path="world"
+            href="#"
+            >World</a
+          ><a
+            class="text-label text-1 text-uppercase color-muted no-wrap motion-colors"
+            data-path="tech"
+            href="#"
+            >Tech</a
+          ><a
+            class="text-label text-1 text-uppercase color-muted no-wrap motion-colors"
+            data-path="business"
+            href="#"
+            >Business</a
+          ><a
+            class="text-label text-1 text-uppercase color-muted no-wrap motion-colors"
+            data-path="science"
+            href="#"
+            >Science</a
+          ><a
+            class="text-label text-1 text-uppercase color-muted no-wrap motion-colors"
+            data-path="culture"
+            href="#"
+            >Culture</a
+          ><a
+            class="text-label text-1 text-uppercase color-muted no-wrap motion-colors"
+            data-path="opinion"
+            href="#"
+            >Opinion</a
+          >
+        </nav>
+      </div>
+      <div class="width-full surface-muted rule">
+        <div
+          class="width-content page-shell pad-inline-5 pad-block-2 flex align-center gap-3 overflow-hidden"
+        >
+          <div
+            class="flex align-center gap-1 flex-no-shrink surface-alert color-inverse pad-inline-3 pad-block-2 radius-standard text-kicker text-1 text-uppercase"
+          >
+            <span class="radius-pill surface-paper state-loading"></span
+            ><span>Live Wire</span>
+          </div>
+          <div
+            class="truncate text-body text-1 color-body flex align-center gap-3"
+          >
+            <span class="text-medium">LIVE TICKER:</span
+            ><span class="truncate color-muted"
+              >Global semiconductor summit reaches landmark open-compute accord
+              • Central banks signal steady interest trajectory • Breakthrough
+              in quantum entanglement storage</span
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="width-full pad-6 surface-page">
+      <div class="flex flex-column width-full">
+        <!-- Top Global Briefing & Ticker Banner -->
+        <div class="width-full surface-paper shadow-subtle margin-bottom-5">
+          <div
+            class="width-content page-shell pad-inline-5 pad-block-3 flex flex-column md-row align-center justify-between gap-4"
+          >
+            <div class="flex align-center gap-3 width-full">
+              <span
+                class="surface-alert color-inverse pad-inline-3 pad-block-2 radius-standard text-kicker text-1 text-uppercase flex align-center gap-1 shadow-subtle flex-no-shrink"
+              >
+                <span class="radius-pill surface-paper state-loading"></span>
+                WIRE PRIORITY
+              </span>
+              <div class="relative overflow-hidden width-full">
+                <div
+                  class="text-body text-1 color-muted truncate flex align-center gap-2"
+                >
+                  <span class="text-medium color-body">14:02 GMT:</span>
+                  <span
+                    >G7 finance deputies draft unified framework on algorithmic
+                    bond market circuits. Sovereign bond spreads tighten 4.2 bps
+                    across European desks.</span
+                  >
                 </div>
-<div>
-<div class="font-label-md text-label-md text-on-surface font-semibold">Caleb Rowe</div>
-<div class="font-caption text-caption text-secondary">Contributing Columnist</div>
-</div>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-error">The Sunday Monologue</span>
-</div>
-<h3 class="font-headline-sm text-headline-sm text-primary font-bold leading-snug mb-space-xs">
-              The Illusion of Algorithmic Objectivity in Judicial Bail Algorithms
-            </h3>
-<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
-              Why replacing flawed magistrates with statistical recurrence models merely codifies historical municipal biases into untouchable mathematical dogma.
+              </div>
+            </div>
+            <div
+              class="flex align-center gap-4 flex-no-shrink color-muted text-caption text-1"
+            >
+              <span class="flex align-center gap-1"
+                ><span class="icon text-2 color-alert">trending_up</span>
+                S&amp;P +0.48%</span
+              >
+              <span class="inline radius-pill surface-panel"></span>
+              <span class="flex align-center gap-1"
+                ><span class="icon text-2 color-muted">trending_down</span>
+                Brent $78.14</span
+              >
+              <span class="inline radius-pill surface-panel"></span>
+              <span class="flex align-center gap-1 color-body text-medium"
+                ><span class="icon text-2">verified_user</span> Verified Wire
+                Edition 41,892</span
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Primary Broadsheet Grid Shell -->
+        <div class="width-content page-shell pad-inline-5 width-full stack-5">
+          <!-- Hero Row: 8-Column Dominant Lead + 4-Column Secondary / Realtime Sidebar -->
+          <section class="grid grid-single lg-editorial-grid gap-6">
+            <!-- Dominant Lead Story (8 Cols) -->
+            <article
+              class="lg-content-span flex flex-column surface-paper pad-4 pad-6 radius-standard shadow-subtle"
+            >
+              <div
+                class="flex flex-wrap align-center justify-between gap-2 pad-block-3 margin-bottom-2"
+              >
+                <div class="flex align-center gap-2">
+                  <span
+                    class="surface-alert color-inverse text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard flex align-center gap-1"
+                  >
+                    <span
+                      class="radius-pill surface-paper state-loading"
+                    ></span>
+                    LIVE REPORT
+                  </span>
+                  <span
+                    class="surface-raised color-muted text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard"
+                    >Sovereign Compute • Deep Tech</span
+                  >
+                </div>
+                <div
+                  class="flex align-center gap-3 color-muted text-caption text-1"
+                >
+                  <span class="flex align-center gap-1"
+                    ><span class="icon text-1">schedule</span> 28 mins ago</span
+                  >
+                  <span>•</span>
+                  <span class="flex align-center gap-1"
+                    ><span class="icon text-1">auto_stories</span> 7 min
+                    read</span
+                  >
+                  <span>•</span>
+                  <span class="flex align-center gap-1 color-body text-medium"
+                    ><span class="icon text-1">visibility</span> 24.2k
+                    views</span
+                  >
+                </div>
+              </div>
+              <h1
+                class="text-display text-7 text-heading-hero color-primary text-tight text-semibold motion-colors control-pointer margin-bottom-2"
+              >
+                Autonomous Frontier: Inside the Race to Standardize Sovereign
+                Neural Infrastructure
+              </h1>
+              <p
+                class="text-deck color-muted text-italic margin-bottom-4 text-relaxed"
+              >
+                As nation-states erect digital customs checkpoints around
+                silicon corridors and training superclusters, a clandestine
+                treaty in Geneva aims to define the constitutional grammar of
+                autonomous intelligence before borders solidify.
+              </p>
+              <!-- Media Container -->
+              <div
+                class="relative width-full media-hero radius-standard overflow-hidden shadow-subtle margin-bottom-4 surface-panel"
+              >
+                <img
+                  class="width-full height-full media-image interaction-zoom motion-transform"
+                  data-alt="Editorial photography of a monolithic high-security data center hall illuminated by architectural cyan and warm tungsten light strips, technicians in minimalist uniforms inspecting fiber optic server racks, cinematic composition, documentary broadsheet style, clean high-contrast realism, ultra sharp depth of field"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAebF55LfFbC2MA-JokiWwp8-4zB_qA8k-uHA_ZS6nROhdoYuMBgdlquHprJe25L4qQXKsY0ZBhvphjzxw-bPmWlZDmiR-4shQsxq9cD5SIl4HuBbDwhxCoswc0NpkVTNwsY2Ilt2pqNxz2sWX8UEMEczCtWbhrvGwx6nz7v4h6jiPfQF7UQvRDfARQsh1A6f798HlHJHdjl5mtMzQDE7xazpJAgf2VP3kp6vStMkaQdXCfcOfY5Ad7Dg"
+                />
+                <div class="absolute media-overlay surface-hero-fade"></div>
+                <div
+                  class="absolute flex align-end justify-between color-inverse"
+                >
+                  <p class="text-caption text-1 color-muted block">
+                    Figure 1.1: The St. Gotthard Deep Compute Vault,
+                    Switzerland. High-density neural fabric conduits undergoing
+                    cross-border attestation testing. (Photograph: Marcus Vance
+                    / The Daily Web)
+                  </p>
+                  <span
+                    class="surface-scrim surface-glass color-inverse pad-inline-3 pad-block-2 radius-standard text-kicker text-1 text-uppercase flex-no-shrink"
+                    >BUREAU DISPATCH</span
+                  >
+                </div>
+              </div>
+              <!-- Byline & Action Matrix -->
+              <div
+                class="flex flex-column sm-row sm-align-center justify-between gap-3 pad-block-2 surface-muted pad-inline-4 pad-block-3 radius-standard"
+              >
+                <div class="flex align-center gap-3">
+                  <div
+                    class="avatar-medium radius-pill surface-ink color-inverse text-headline text-5 flex align-center justify-center text-bold"
+                  >
+                    AS
+                  </div>
+                  <div>
+                    <div class="text-label text-2 color-body text-semibold">
+                      Arthur Sterling
+                    </div>
+                    <div class="text-caption text-1 color-muted">
+                      Chief Technology Editor • Reporting from Geneva &amp;
+                      Zurich
+                    </div>
+                  </div>
+                </div>
+                <div class="flex align-center gap-2">
+                  <button
+                    class="pad-2 radius-standard surface-panel color-body motion-colors"
+                    title="Bookmark Report"
+                  >
+                    <span class="icon text-4">bookmark</span>
+                  </button>
+                  <button
+                    class="pad-2 radius-standard surface-panel color-body motion-colors"
+                    title="Share Dispatch"
+                  >
+                    <span class="icon text-4">share</span>
+                  </button>
+                  <button
+                    class="pad-inline-4 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors flex align-center gap-1 shadow-subtle"
+                  >
+                    <span>Read Full Investigation</span>
+                    <span class="icon text-2">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+            </article>
+            <!-- Sidebar: Live Dispatches & Market Weather (4 Cols) -->
+            <aside class="lg-sidebar-span flex flex-column gap-5">
+              <!-- Cached Micro-Weather Card -->
+              <div class="surface-paper pad-4 radius-standard shadow-subtle">
+                <div class="flex align-center justify-between margin-bottom-2">
+                  <div class="flex align-center gap-2">
+                    <span class="icon color-muted text-4">routine</span>
+                    <span
+                      class="text-kicker text-1 text-uppercase color-muted text-bold"
+                      >Desk Atmospheric Monitor</span
+                    >
+                  </div>
+                  <span class="text-caption text-1 color-muted"
+                    >Station: City HQ</span
+                  >
+                </div>
+                <div
+                  class="flex align-center justify-between pad-block-3 surface-muted pad-3 radius-standard margin-bottom-2"
+                >
+                  <div>
+                    <div class="text-display text-7 color-primary text-bold">
+                      14°C
+                    </div>
+                    <div class="text-caption text-1 color-muted">
+                      London • Overcast with mist
+                    </div>
+                  </div>
+                  <span class="icon text-7 color-muted">partly_cloudy_day</span>
+                </div>
+                <div class="grid grid-triple gap-2 text-center">
+                  <div class="surface-page pad-2 radius-standard">
+                    <span class="text-kicker text-1 color-muted block"
+                      >WED</span
+                    >
+                    <span class="icon text-4 color-muted">rainy</span>
+                    <span
+                      class="text-label text-1 color-body text-semibold block"
+                      >12° / 8°</span
+                    >
+                  </div>
+                  <div class="surface-page pad-2 radius-standard">
+                    <span class="text-kicker text-1 color-muted block"
+                      >THU</span
+                    >
+                    <span class="icon text-4 color-muted">cloud</span>
+                    <span
+                      class="text-label text-1 color-body text-semibold block"
+                      >15° / 9°</span
+                    >
+                  </div>
+                  <div class="surface-page pad-2 radius-standard">
+                    <span class="text-kicker text-1 color-muted block"
+                      >FRI</span
+                    >
+                    <span class="icon text-4 color-muted">sunny</span>
+                    <span
+                      class="text-label text-1 color-body text-semibold block"
+                      >17° / 11°</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <!-- Latest Dispatch Chronological Stream -->
+              <div
+                class="surface-paper pad-4 radius-standard shadow-subtle flex-grow flex flex-column"
+              >
+                <div class="flex align-center justify-between margin-bottom-4">
+                  <div class="flex align-center gap-2">
+                    <span
+                      class="radius-pill surface-alert state-loading"
+                    ></span>
+                    <h2 class="text-headline text-4 color-primary text-bold">
+                      Chronological Stream
+                    </h2>
+                  </div>
+                  <span
+                    class="text-kicker text-1 text-uppercase color-muted surface-panel pad-inline-3 pad-block-2 radius-standard"
+                    >UTC SYNCED</span
+                  >
+                </div>
+                <div class="stack-4 overflow-scroll">
+                  <!-- Dispatch Item 1 -->
+                  <div
+                    class="pad-3 surface-muted radius-standard motion-colors control-pointer"
+                  >
+                    <div
+                      class="flex align-center justify-between color-muted text-caption text-1"
+                    >
+                      <span
+                        class="color-alert text-bold flex align-center gap-1"
+                      >
+                        <span class="icon text-1">sensors</span> 13:58
+                      </span>
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted"
+                        >Semiconductors</span
+                      >
+                    </div>
+                    <h3
+                      class="text-headline text-4 color-body text-tight text-semibold"
+                    >
+                      ASML dispatches first experimental sub-0.55 NA extreme
+                      ultraviolet lithography chassis to Ohio foundry
+                    </h3>
+                    <div
+                      class="text-caption text-1 color-muted margin-top-2 flex align-center justify-between"
+                    >
+                      <span>By Evelyn Hart</span>
+                      <span>1 min ago</span>
+                    </div>
+                  </div>
+                  <!-- Dispatch Item 2 -->
+                  <div
+                    class="pad-3 surface-page radius-standard motion-colors control-pointer"
+                  >
+                    <div
+                      class="flex align-center justify-between color-muted text-caption text-1"
+                    >
+                      <span class="color-muted text-semibold">13:41</span>
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted"
+                        >Central Banking</span
+                      >
+                    </div>
+                    <h3
+                      class="text-headline text-3 color-body text-tight text-semibold"
+                    >
+                      Bank of England minutes indicate majority consensus toward
+                      pausing quantitative tightening run-off rate
+                    </h3>
+                    <div
+                      class="text-caption text-1 color-muted margin-top-2 flex align-center justify-between"
+                    >
+                      <span>By Julian Thorne</span>
+                      <span>18 mins ago</span>
+                    </div>
+                  </div>
+                  <!-- Dispatch Item 3 -->
+                  <div
+                    class="pad-3 surface-page radius-standard motion-colors control-pointer"
+                  >
+                    <div
+                      class="flex align-center justify-between color-muted text-caption text-1"
+                    >
+                      <span class="color-muted text-semibold">13:19</span>
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted"
+                        >Aviation &amp; Defense</span
+                      >
+                    </div>
+                    <h3
+                      class="text-headline text-3 color-body text-tight text-semibold"
+                    >
+                      Civil Aviation Authority issues airworthiness directive on
+                      composite winglet fatigue sensors
+                    </h3>
+                    <div
+                      class="text-caption text-1 color-muted margin-top-2 flex align-center justify-between"
+                    >
+                      <span>By Clara Dufresne</span>
+                      <span>40 mins ago</span>
+                    </div>
+                  </div>
+                  <!-- Dispatch Item 4 -->
+                  <div
+                    class="pad-3 surface-page radius-standard motion-colors control-pointer"
+                  >
+                    <div
+                      class="flex align-center justify-between color-muted text-caption text-1"
+                    >
+                      <span class="color-muted text-semibold">12:54</span>
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted"
+                        >Geopolitics</span
+                      >
+                    </div>
+                    <h3
+                      class="text-headline text-3 color-body text-tight text-semibold"
+                    >
+                      Nordic Defense Council approves joint maritime sub-surface
+                      acoustic monitoring cordon in Kattegat
+                    </h3>
+                    <div
+                      class="text-caption text-1 color-muted margin-top-2 flex align-center justify-between"
+                    >
+                      <span>By Henrik Lindqvist</span>
+                      <span>1h 05m ago</span>
+                    </div>
+                  </div>
+                  <!-- Dispatch Item 5 -->
+                  <div
+                    class="pad-3 surface-page radius-standard motion-colors control-pointer"
+                  >
+                    <div
+                      class="flex align-center justify-between color-muted text-caption text-1"
+                    >
+                      <span class="color-muted text-semibold">12:20</span>
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted"
+                        >Energy</span
+                      >
+                    </div>
+                    <h3
+                      class="text-headline text-3 color-body text-tight text-semibold"
+                    >
+                      North Sea offshore transmission link secures $2.4B private
+                      debt tranche with sovereign green guarantee
+                    </h3>
+                    <div
+                      class="text-caption text-1 color-muted margin-top-2 flex align-center justify-between"
+                    >
+                      <span>By Sarah Al-Mansoor</span>
+                      <span>1h 42m ago</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="margin-top-4 width-full pad-block-2 surface-panel color-body text-label text-1 radius-standard motion-colors flex align-center justify-center gap-1"
+                >
+                  <span>Access All Wire Dispatches</span>
+                  <span class="icon text-2">arrow_downward</span>
+                </button>
+              </div>
+            </aside>
+          </section>
+          <!-- Secondary Lead Stories Grid (3 Columns Balanced) -->
+          <section class="stack-4">
+            <div class="flex align-center justify-between">
+              <div class="flex align-center gap-2">
+                <span
+                  class="text-kicker text-1 text-uppercase surface-ink color-inverse pad-inline-3 pad-block-2 radius-standard text-bold"
+                  >Curated Briefs</span
+                >
+                <h2 class="text-headline text-6 color-primary text-bold">
+                  Essential Global Analysis
+                </h2>
+              </div>
+              <span class="text-caption text-1 color-muted inline"
+                >Updated every 15 minutes by Senior Desk Editors</span
+              >
+            </div>
+            <div class="grid grid-single md-grid-triple gap-6">
+              <!-- Story 1: Business -->
+              <article
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between motion-shadow"
+              >
+                <div>
+                  <div
+                    class="width-full media-card radius-standard overflow-hidden margin-bottom-2 surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-image interaction-zoom motion-transform"
+                      data-alt="Monochrome cinematic photo of modern glass financial exchange floor in Frankfurt with analog ticker numbers blurred in motion, traders analyzing sovereign debt curves on multimonitor terminals, crisp lighting, high contrast broadsheet style"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA8K4lkkKB4qhL_AymY0dFQWrTPTX-Gd-76Nyz-tx5J89hR1PJ2vj0Iq37z0W6W6QCmUTYYAbv7tsC2nJ04K5a9Y9pZj4zfbOT_FWHtlzV5TB25EITzKYvEaAnQP-kRziHYObYQsEu0JTtvXgEcHncBQVVGjbSwlggxgf84thr9Ra0q5lDe7W56Zk70KpEGoFwdrTe04Ikr4WcXaZ0vWm3LeaKsFDcuM803GG_vqGteLJ15E9jfZgWSQ"
+                    />
+                  </div>
+                  <div
+                    class="flex align-center justify-between color-muted text-caption text-1 margin-bottom-2"
+                  >
+                    <span
+                      class="surface-panel color-muted text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard"
+                      >Business • Monetary</span
+                    >
+                    <span>4 min read</span>
+                  </div>
+                  <h3
+                    class="text-headline text-5 color-primary motion-colors text-bold text-tight margin-bottom-2"
+                  >
+                    Central Banks Coordinate Liquidity Swap Lines Ahead of
+                    Global Yield Summit
+                  </h3>
+                  <p class="text-body text-2 color-muted title-clamp">
+                    Emergency currency facilities between Washington, Tokyo,
+                    Frankfurt, and London have been expanded by 40% to stave off
+                    potential collateral friction in offshore repo markets.
+                  </p>
+                </div>
+                <div
+                  class="pad-4 margin-top-2 flex align-center justify-between color-muted text-caption text-1"
+                >
+                  <span class="text-medium color-body">By Beatrice Vance</span>
+                  <span>2 hours ago</span>
+                </div>
+              </article>
+              <!-- Story 2: World Affairs -->
+              <article
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between motion-shadow"
+              >
+                <div>
+                  <div
+                    class="width-full media-card radius-standard overflow-hidden margin-bottom-2 surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-image interaction-zoom motion-transform"
+                      data-alt="Dramatic high angle photo of a specialized deep sea cable laying ship navigating choppy deep blue Atlantic waters during twilight, heavy crane winches lowering fiber optic trunk lines into the ocean, editorial documentary photography, photorealistic, brooding ambiance"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKt6m_BO29HCX4gXnxm-gLMrYqSqA7_k5BkhS3Bn9EaouPeUvpXXevBrGuPGlhTveMXRmWrapZkj0HfdpZbkyQoR0qEnS0CiW0yHIwnoXHFh9lKwFvmMvrrzTlOTqOwWJO2S280bzmnNe_J3TZc9mohr6uSVPeZNWDS1uteME-ytxm1KS_1HFOTrO28lyFqgLSSg98KHGG20jvM8iDkvlxtYvqJFUj507uxgVu-rtMJ92XeMapaTUHgw"
+                    />
+                  </div>
+                  <div
+                    class="flex align-center justify-between color-muted text-caption text-1 margin-bottom-2"
+                  >
+                    <span
+                      class="surface-panel color-muted text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard"
+                      >World Affairs • Maritime</span
+                    >
+                    <span>6 min read</span>
+                  </div>
+                  <h3
+                    class="text-headline text-5 color-primary motion-colors text-bold text-tight margin-bottom-2"
+                  >
+                    Deep Sea Optical Cables: The Hidden Geopolitical Chessboard
+                    of Oceanic Data
+                  </h3>
+                  <p class="text-body text-2 color-muted title-clamp">
+                    Ninety-seven percent of intercontinental traffic relies on
+                    600 unarmored seafloor conduits. Exclusive naval
+                    intelligence reveals unprecedented submarine mapping
+                    operations along the Luzon Strait.
+                  </p>
+                </div>
+                <div
+                  class="pad-4 margin-top-2 flex align-center justify-between color-muted text-caption text-1"
+                >
+                  <span class="text-medium color-body"
+                    >By Dr. Kieran O'Connor</span
+                  >
+                  <span>3 hours ago</span>
+                </div>
+              </article>
+              <!-- Story 3: Science -->
+              <article
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between motion-shadow"
+              >
+                <div>
+                  <div
+                    class="width-full media-card radius-standard overflow-hidden margin-bottom-2 surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-image interaction-zoom motion-transform"
+                      data-alt="Architectural photo of an industrial direct air carbon capture facility nestled against volcanic basalt rock formations and steaming geothermal vents in Hellisheidi Iceland, steel hexagonal collector fans against a dramatic overcast sky, clean modernist documentary style"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmikKm9FQIn-CnSDCsyfmD9DzAuf_0-3pbN-z4M8jjHAOHgstgOcbXl3mc5dbpoQFgfL8pBGOIpfL31EkxYo32yehYn-0hMfrEYR7PrWE1ZHOvsZbwe9OENyzsIAnqEe2_anzxvNs3bl8H8JPSikIl8xwMV-doxYPzyEr00ReZmvInebPkrOMfUNtFypkMw8O3m_9VW59x2R5ewNhAV1U8Zyd6x4uoWpL2VQtlCC9smbmAUENZlSmKlg"
+                    />
+                  </div>
+                  <div
+                    class="flex align-center justify-between color-muted text-caption text-1 margin-bottom-2"
+                  >
+                    <span
+                      class="surface-panel color-muted text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard"
+                      >Science • Climate Eng</span
+                    >
+                    <span>5 min read</span>
+                  </div>
+                  <h3
+                    class="text-headline text-5 color-primary motion-colors text-bold text-tight margin-bottom-2"
+                  >
+                    Atmospheric Carbon Extraction Pilot Achieves Net-Negative
+                    Milestone in Iceland
+                  </h3>
+                  <p class="text-body text-2 color-muted title-clamp">
+                    The Mammoth Geothermal extraction array completed 365
+                    consecutive operational cycles mineralizing 36,000 tons of
+                    CO2 directly into sub-surface basalt basaltic aquifers with
+                    verified permanence.
+                  </p>
+                </div>
+                <div
+                  class="pad-4 margin-top-2 flex align-center justify-between color-muted text-caption text-1"
+                >
+                  <span class="text-medium color-body"
+                    >By Linnea Söderberg</span
+                  >
+                  <span>4 hours ago</span>
+                </div>
+              </article>
+            </div>
+          </section>
+          <!-- Mid-Page Inset: Data Visualization / Global Yield & Compute Ingestion -->
+          <section
+            class="surface-ink color-inverse radius-standard pad-5 pad-6 shadow-raised"
+          >
+            <div class="grid grid-single lg-editorial-grid gap-5 align-center">
+              <div class="lg-sidebar-span stack-3">
+                <span
+                  class="surface-alert color-inverse text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold"
+                  >Interactive Telemetry</span
+                >
+                <h2 class="text-headline text-6 color-inverse text-bold">
+                  Real-Time Global Silicon &amp; Liquidity Flow
+                </h2>
+                <p class="text-body text-2 color-muted">
+                  Cross-referencing high-frequency capital swaps against
+                  sovereign compute load. Observe the structural convergence
+                  between energy grid capacity and neural network training
+                  spikes across 14 geographic zones.
+                </p>
+                <div class="flex align-center gap-4 pad-block-2">
+                  <div>
+                    <div class="text-headline text-5 text-bold color-inverse">
+                      18.42 EFLOPS
+                    </div>
+                    <div class="text-caption text-1 color-subtle">
+                      Total Online Capacity
+                    </div>
+                  </div>
+                  <div class="image-logo surface-muted"></div>
+                  <div>
+                    <div class="text-headline text-5 text-bold color-inverse">
+                      $4.82T
+                    </div>
+                    <div class="text-caption text-1 color-subtle">
+                      Daily Cross-Currency Vol
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Inline SVG Sparkline / Architectural Telemetry Chart -->
+              <div
+                class="lg-content-span surface-raised pad-4 radius-standard surface-glass"
+              >
+                <div
+                  class="flex align-center justify-between text-1 text-caption color-muted margin-bottom-2"
+                >
+                  <span
+                    >Aggregated Node Latency vs. Capital Settlement (24-Hour
+                    Rolling Index)</span
+                  >
+                  <span class="flex align-center gap-1 color-inverse"
+                    ><span
+                      class="radius-pill surface-alert state-loading"
+                    ></span>
+                    Active Stream</span
+                  >
+                </div>
+                <svg
+                  class="width-full media-card color-inverse"
+                  fill="none"
+                  preserveaspectratio="none"
+                  viewbox="0 0 600 160"
+                >
+                  <!-- Grid Lines -->
+                  <line
+                    stroke="currentColor"
+                    stroke-dasharray="3 3"
+                    stroke-opacity="0.1"
+                    x1="0"
+                    x2="600"
+                    y1="40"
+                    y2="40"
+                  ></line>
+                  <line
+                    stroke="currentColor"
+                    stroke-dasharray="3 3"
+                    stroke-opacity="0.1"
+                    x1="0"
+                    x2="600"
+                    y1="80"
+                    y2="80"
+                  ></line>
+                  <line
+                    stroke="currentColor"
+                    stroke-dasharray="3 3"
+                    stroke-opacity="0.1"
+                    x1="0"
+                    x2="600"
+                    y1="120"
+                    y2="120"
+                  ></line>
+                  <!-- Secondary Area Path -->
+                  <path
+                    d="M0,130 Q75,120 150,135 T300,100 T450,115 T600,70 L600,160 L0,160 Z"
+                    fill="currentColor"
+                    fill-opacity="0.08"
+                  ></path>
+                  <!-- Primary Curve (Capital Vol) -->
+                  <path
+                    d="M0,110 C80,95 120,140 200,85 C280,30 330,120 420,60 C480,20 540,45 600,30"
+                    fill="none"
+                    stroke="#f63a35"
+                    stroke-width="2.5"
+                  ></path>
+                  <!-- Latency Wave -->
+                  <path
+                    d="M0,130 Q75,120 150,135 T300,100 T450,115 T600,70"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-dasharray="4 2"
+                    stroke-width="1.75"
+                  ></path>
+                  <!-- Highlight Markers -->
+                  <circle cx="200" cy="85" fill="#f63a35" r="4"></circle>
+                  <circle cx="420" cy="60" fill="#f63a35" r="4"></circle>
+                  <circle cx="600" cy="30" fill="#f63a35" r="5"></circle>
+                </svg>
+                <div
+                  class="flex align-center justify-between text-1 text-caption color-subtle margin-top-2"
+                >
+                  <span>00:00 UTC (Tokyo Open)</span>
+                  <span>08:00 UTC (London Open)</span>
+                  <span>14:30 UTC (NYSE Open)</span>
+                  <span>Current (Sync Peak)</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Editorial Modules Row: Editor's Picks (Quote Callout) + Most Read Leaderboard -->
+          <section class="grid grid-single lg-editorial-grid gap-6 align-start">
+            <!-- Editor's Picks & Quotation Callout (7 Cols) -->
+            <div class="lg-content-span stack-4">
+              <div class="flex align-center justify-between">
+                <div class="flex align-center gap-2">
+                  <span class="icon color-muted text-5">recommend</span>
+                  <h2 class="text-headline text-6 color-primary text-bold">
+                    Curator’s Selection
+                  </h2>
+                </div>
+                <span class="text-kicker text-1 text-uppercase color-muted"
+                  >Vol. 108 • No. 42</span
+                >
+              </div>
+              <!-- High-Contrast Quote Module -->
+              <div
+                class="surface-muted pad-5 radius-standard shadow-subtle relative overflow-hidden"
+              >
+                <span
+                  class="absolute text-headline text-8 color-subtle control-no-select"
+                  >“</span
+                >
+                <div class="relative stack-3">
+                  <span
+                    class="text-kicker text-1 text-uppercase surface-ink color-inverse pad-inline-3 pad-block-2 radius-standard"
+                    >Longform Commentary</span
+                  >
+                  <blockquote
+                    class="text-headline text-5 color-body text-italic text-relaxed"
+                  >
+                    “We made the foundational mistake of treating synthetic
+                    computation as an ordinary trade utility like natural gas.
+                    In reality, it is a territorial expansion of the state
+                    without physical soil.”
+                  </blockquote>
+                  <div class="flex align-center gap-3 pad-block-2">
+                    <div
+                      class="avatar-medium radius-pill surface-info color-inverse flex align-center justify-center text-bold text-1"
+                    >
+                      HG
+                    </div>
+                    <div>
+                      <cite
+                        class="text-label text-1 color-body text-semibold block"
+                        >Dame Helena Gyllenhaal</cite
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Chair of Comparative Geopolitics, Oxford Internet
+                        Institute</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Curated Articles Duo -->
+              <div class="grid grid-single sm-grid-split gap-4">
+                <div
+                  class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between control-pointer motion-shadow"
+                >
+                  <div>
+                    <span
+                      class="text-kicker text-1 text-uppercase color-muted block margin-bottom-2"
+                      >Architecture • Urban Planning</span
+                    >
+                    <h3
+                      class="text-headline text-4 color-primary text-bold text-tight margin-bottom-2"
+                    >
+                      The Vertical Forest Paradox: Why Milan’s Eco-Towers Resist
+                      Easy Replication
+                    </h3>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Behind the lush exterior facade lies structural steel
+                      reinforcement that doubles upfront embedded carbon costs.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-block-3 margin-top-2 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <span>Marco Bellini</span>
+                    <span>5 min read</span>
+                  </div>
+                </div>
+                <div
+                  class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between control-pointer motion-shadow"
+                >
+                  <div>
+                    <span
+                      class="text-kicker text-1 text-uppercase color-muted block margin-bottom-2"
+                      >Cultural Studies</span
+                    >
+                    <h3
+                      class="text-headline text-4 color-primary text-bold text-tight margin-bottom-2"
+                    >
+                      The Death of the Ephemeral: Archiving the Fleeting
+                      Subcultures of the Early Web
+                    </h3>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      How volunteer web archaeologists are recovering millions
+                      of lost bulletin boards before magnetic media degrades
+                      forever.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-block-3 margin-top-2 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <span>Nadia El-Tayeb</span>
+                    <span>8 min read</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Most Read Leaderboard (#1 to #5) (5 Cols) -->
+            <div
+              class="lg-sidebar-span surface-paper pad-4 pad-5 radius-standard shadow-subtle flex flex-column justify-between"
+            >
+              <div>
+                <div
+                  class="flex align-center justify-between pad-block-3 margin-bottom-4 surface-muted pad-3 radius-standard"
+                >
+                  <div class="flex align-center gap-2">
+                    <span class="icon color-primary text-5">leaderboard</span>
+                    <h2 class="text-headline text-4 color-primary text-bold">
+                      Most Read Today
+                    </h2>
+                  </div>
+                  <span class="text-kicker text-1 text-uppercase color-muted"
+                    >REAL-TIME RANK</span
+                  >
+                </div>
+                <div class="stack-4">
+                  <!-- Rank 1 -->
+                  <div class="flex align-start gap-4 control-pointer">
+                    <span
+                      class="text-display text-6 text-bold color-muted flex-no-shrink avatar-small"
+                      >01</span
+                    >
+                    <div class="flex-grow">
+                      <span
+                        class="text-kicker text-1 text-uppercase color-alert text-bold block"
+                        >Energy Markets</span
+                      >
+                      <h3
+                        class="text-headline text-4 color-primary text-tight text-bold"
+                      >
+                        Thorium Breeder Reactors: The Quiet Indian Renaissance
+                        That Changes Nuclear Economics
+                      </h3>
+                      <div
+                        class="flex align-center gap-3 color-muted text-caption text-1"
+                      >
+                        <span>9 min read</span>
+                        <span>•</span>
+                        <span class="color-body text-medium">84.1k reads</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Rank 2 -->
+                  <div class="flex align-start gap-4 control-pointer">
+                    <span
+                      class="text-display text-6 text-bold color-muted flex-no-shrink avatar-small"
+                      >02</span
+                    >
+                    <div class="flex-grow">
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted block"
+                        >Cryptographic Standards</span
+                      >
+                      <h3
+                        class="text-headline text-4 color-primary text-tight text-bold"
+                      >
+                        NIST Finalizes Post-Quantum Encryption Ciphers: The
+                        Migration Nightmare Ahead
+                      </h3>
+                      <div
+                        class="flex align-center gap-3 color-muted text-caption text-1"
+                      >
+                        <span>6 min read</span>
+                        <span>•</span>
+                        <span class="color-body text-medium">62.8k reads</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Rank 3 -->
+                  <div class="flex align-start gap-4 control-pointer">
+                    <span
+                      class="text-display text-6 text-bold color-muted flex-no-shrink avatar-small"
+                      >03</span
+                    >
+                    <div class="flex-grow">
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted block"
+                        >Biotech &amp; Ethics</span
+                      >
+                      <h3
+                        class="text-headline text-4 color-primary text-tight text-bold"
+                      >
+                        Synthetic Mitochondrial Replacement Approved for Human
+                        Trials in the UK
+                      </h3>
+                      <div
+                        class="flex align-center gap-3 color-muted text-caption text-1"
+                      >
+                        <span>5 min read</span>
+                        <span>•</span>
+                        <span class="color-body text-medium">51.2k reads</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Rank 4 -->
+                  <div class="flex align-start gap-4 control-pointer">
+                    <span
+                      class="text-display text-6 text-bold color-muted flex-no-shrink avatar-small"
+                      >04</span
+                    >
+                    <div class="flex-grow">
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted block"
+                        >Venture Capital</span
+                      >
+                      <h3
+                        class="text-headline text-4 color-primary text-tight text-bold"
+                      >
+                        Secondary Tech Valuations Plunge 28% as LP Capital Calls
+                        Strain Sovereign Funds
+                      </h3>
+                      <div
+                        class="flex align-center gap-3 color-muted text-caption text-1"
+                      >
+                        <span>4 min read</span>
+                        <span>•</span>
+                        <span class="color-body text-medium">43.9k reads</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Rank 5 -->
+                  <div class="flex align-start gap-4 control-pointer">
+                    <span
+                      class="text-display text-6 text-bold color-muted flex-no-shrink avatar-small"
+                      >05</span
+                    >
+                    <div class="flex-grow">
+                      <span
+                        class="text-kicker text-1 text-uppercase color-muted block"
+                        >Space Systems</span
+                      >
+                      <h3
+                        class="text-headline text-4 color-primary text-tight text-bold"
+                      >
+                        Lunar South Pole Water Ice Assays Reveal 3x Higher
+                        Concentration Than Estimated
+                      </h3>
+                      <div
+                        class="flex align-center gap-3 color-muted text-caption text-1"
+                      >
+                        <span>7 min read</span>
+                        <span>•</span>
+                        <span class="color-body text-medium">39.4k reads</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="pad-4 margin-top-4 surface-page pad-3 radius-standard flex align-center justify-between"
+              >
+                <span class="text-caption text-1 color-muted"
+                  >Rankings recalculated every 300 seconds</span
+                >
+                <a
+                  class="text-label text-1 color-primary text-bold interaction-underline flex align-center gap-1"
+                  href="#"
+                >
+                  <span>Historical Archives</span>
+                  <span class="icon text-1">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </section>
+          <!-- Section Spotlights: 4 Thematic Columns (Tech, Business, Science, Opinion) -->
+          <section class="stack-4">
+            <div class="flex align-center justify-between">
+              <h2 class="text-headline text-6 color-primary text-bold">
+                Desk Dossiers &amp; Focus Sectors
+              </h2>
+              <div class="flex align-center gap-2">
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1"
+                >
+                  All Sections
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-single sm-grid-split md-grid-triple gap-6">
+              <!-- Tech Spotlight -->
+              <div
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between"
+              >
+                <div>
+                  <div
+                    class="flex align-center justify-between pad-block-2 margin-bottom-2"
+                  >
+                    <span
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                      >Technology Desk</span
+                    >
+                    <span class="icon color-muted text-2">memory</span>
+                  </div>
+                  <div
+                    class="width-full media-card radius-standard overflow-hidden margin-bottom-2 surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-image"
+                      data-alt="Macro close-up photograph of a silicon interposer chip illuminated with ultraviolet inspection lasers revealing intricate bus pathways, cleanroom aesthetic, technical editorial journalism"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1pBYV-GstJMUKTS6JOJxD24OjRxLJLLCV2JKEa4-TodS6QdayBTc4Gnq9hil-s-JbreUi8cscsb3RSk2SWc2sdZYNBxZlrhkuLxcNPPj595blOcFr_R6rGASHs0FY3S0ns8DFj-gSxvlHts2I5WrP_8KBzB46az3L0DfAXq6Eg8MSw2wkvgsXVKivSFisZ9l_oXf_Gabtq8btQI_7Q3iVglSxEuLzKwZrZfVm52JmHpz4E1xjfqIURg"
+                    />
+                  </div>
+                  <h3
+                    class="text-headline text-4 color-primary text-bold text-tight margin-bottom-2"
+                  >
+                    Open-Weights Under Siege: The Legislative Maneuver to
+                    License AI Models
+                  </h3>
+                  <p class="text-body text-1 color-muted title-clamp">
+                    Proposed statutory thresholds based on floating-point
+                    operations would force independent academic teams to apply
+                    for state security exemptions.
+                  </p>
+                </div>
+                <div class="pad-4 margin-top-2">
+                  <a
+                    class="text-label text-1 color-primary text-semibold flex align-center gap-1 interaction-underline"
+                    href="#"
+                  >
+                    <span>Follow Desk</span>
+                    <span class="icon text-2">chevron_right</span>
+                  </a>
+                </div>
+              </div>
+              <!-- Business Spotlight -->
+              <div
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between"
+              >
+                <div>
+                  <div
+                    class="flex align-center justify-between pad-block-2 margin-bottom-2"
+                  >
+                    <span
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                      >Markets Desk</span
+                    >
+                    <span class="icon color-muted text-2">query_stats</span>
+                  </div>
+                  <div
+                    class="width-full media-card radius-standard overflow-hidden margin-bottom-2 surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-image"
+                      data-alt="Editorial photograph of an expansive automated logistics container port terminal at night, massive orange gantry cranes moving shipping containers against a dark reflective harbor water, broadsheet realism"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrF9-vavGu9FZ6AlAQbX2AoajUfN4-WRQ5G-w5Q0pvZInCH4EemHyMuZZocyddJpSMu4vOV4nB2nlAxPVr1tNLJD-XhAdP_fDn-esMRreR-xGE5eg7TR0gQidEbbq7m5nHpssh-cvpEqOXL5AlDTk4xSTuWuvgqBvBrQqqfMRWetwTv48mVpxD_fitY0O4oWt7__rl15uqxzuLVubkGxbZHaNFWIyTPQ3qf6qq0B_VSUbUivoJuDFTJQ"
+                    />
+                  </div>
+                  <h3
+                    class="text-headline text-4 color-primary text-bold text-tight margin-bottom-2"
+                  >
+                    Sovereign Wealth Divergence: Singapore and Abu Dhabi Carve
+                    Separate Bets
+                  </h3>
+                  <p class="text-body text-1 color-muted title-clamp">
+                    While GIC accelerates divestments from private equity real
+                    estate, ADIA commits $35B directly to semiconductor
+                    fabrication plants.
+                  </p>
+                </div>
+                <div class="pad-4 margin-top-2">
+                  <a
+                    class="text-label text-1 color-primary text-semibold flex align-center gap-1 interaction-underline"
+                    href="#"
+                  >
+                    <span>Follow Desk</span>
+                    <span class="icon text-2">chevron_right</span>
+                  </a>
+                </div>
+              </div>
+              <!-- Science Spotlight -->
+              <div
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between"
+              >
+                <div>
+                  <div
+                    class="flex align-center justify-between pad-block-2 margin-bottom-2"
+                  >
+                    <span
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                      >Science &amp; Systems</span
+                    >
+                    <span class="icon color-muted text-2">science</span>
+                  </div>
+                  <div
+                    class="width-full media-card radius-standard overflow-hidden margin-bottom-2 surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-image"
+                      data-alt="Photograph of a suspended dilution refrigerator cryostat used in quantum computing experiments, polished copper and gold plates with braided microwave cables in an ultra-clean laboratory, crisp editorial lighting"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmGmvi5he9mzHqbOQzOdrSlaWAeyec5RliRrL-VlyV0i1dpvm5PyRD14VV1_Up_9RhLlTLP8luA7Ugrw5JO2V-obwSPxQAb_yCHuOAir_AIPBQXJNRZ0xEhY-SPeJ8B5sLNdhhxrqOOW4eiHfodWRb7tQeOmrn8baJYq8WngkcreaYqzR9TSj_JqhdFfgpyBGC5EedPbvtui92S9Rc-w1hUuDLKTeDfjFj4KoA4s9r3WNNz_vnnvlnyA"
+                    />
+                  </div>
+                  <h3
+                    class="text-headline text-4 color-primary text-bold text-tight margin-bottom-2"
+                  >
+                    Coherence Times Quadruple Using Synthetic Topological
+                    Bismuth Nanowires
+                  </h3>
+                  <p class="text-body text-1 color-muted title-clamp">
+                    Delft researchers shatter error mitigation plateaus,
+                    demonstrating logical qubits resilient against environmental
+                    acoustic decoherence.
+                  </p>
+                </div>
+                <div class="pad-4 margin-top-2">
+                  <a
+                    class="text-label text-1 color-primary text-semibold flex align-center gap-1 interaction-underline"
+                    href="#"
+                  >
+                    <span>Follow Desk</span>
+                    <span class="icon text-2">chevron_right</span>
+                  </a>
+                </div>
+              </div>
+              <!-- Opinion Spotlight -->
+              <div
+                class="surface-paper pad-4 radius-standard shadow-subtle flex flex-column justify-between"
+              >
+                <div>
+                  <div
+                    class="flex align-center justify-between pad-block-2 margin-bottom-2"
+                  >
+                    <span
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                      >Opinion &amp; Essays</span
+                    >
+                    <span class="icon color-muted text-2">draw</span>
+                  </div>
+                  <div
+                    class="pad-3 surface-page radius-standard margin-bottom-2"
+                  >
+                    <div class="flex align-center gap-2 margin-bottom-2">
+                      <div
+                        class="avatar-small radius-pill surface-info color-inverse flex align-center justify-center text-bold text-1"
+                      >
+                        CR
+                      </div>
+                      <div>
+                        <div class="text-label text-1 color-body text-semibold">
+                          Caleb Rowe
+                        </div>
+                        <div class="text-caption text-1 color-muted">
+                          Contributing Columnist
+                        </div>
+                      </div>
+                    </div>
+                    <span class="text-kicker text-1 text-uppercase color-alert"
+                      >The Sunday Monologue</span
+                    >
+                  </div>
+                  <h3
+                    class="text-headline text-4 color-primary text-bold text-tight margin-bottom-2"
+                  >
+                    The Illusion of Algorithmic Objectivity in Judicial Bail
+                    Algorithms
+                  </h3>
+                  <p class="text-body text-1 color-muted title-clamp">
+                    Why replacing flawed magistrates with statistical recurrence
+                    models merely codifies historical municipal biases into
+                    untouchable mathematical dogma.
+                  </p>
+                </div>
+                <div class="pad-4 margin-top-2">
+                  <a
+                    class="text-label text-1 color-primary text-semibold flex align-center gap-1 interaction-underline"
+                    href="#"
+                  >
+                    <span>Read Essay</span>
+                    <span class="icon text-2">chevron_right</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Infinite Scroll Sentinel & Live Polling Status Indicator -->
+          <section
+            class="pad-6 flex flex-column align-center justify-center gap-3 surface-paper radius-standard shadow-subtle text-center"
+          >
+            <div class="flex align-center gap-3">
+              <div class="rule radius-pill state-spinning"></div>
+              <span class="text-headline text-4 color-primary text-bold"
+                >Synchronizing Live Feed from 12 Regional Bureaus</span
+              >
+            </div>
+            <p class="text-body text-1 color-muted">
+              Infinite broadsheet stream active. Additional investigative
+              dispatches from Tokyo, Singapore, Brussels, and São Paulo will
+              load automatically as you scroll.
             </p>
-</div>
-<div class="pt-space-md mt-space-sm">
-<a class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1 hover:underline" href="#">
-<span>Read Essay</span>
-<span class="material-symbols-outlined text-[15px]">chevron_right</span>
-</a>
-</div>
-</div>
-</div>
-</section>
-<!-- Infinite Scroll Sentinel & Live Polling Status Indicator -->
-<section class="py-space-xl flex flex-col items-center justify-center gap-space-sm bg-surface-container-lowest rounded shadow-sm text-center">
-<div class="flex items-center gap-space-sm">
-<div class="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-<span class="font-headline-sm text-headline-sm text-primary font-bold">Synchronizing Live Feed from 12 Regional Bureaus</span>
-</div>
-<p class="font-body-sm text-body-sm text-secondary max-w-md">
-        Infinite broadsheet stream active. Additional investigative dispatches from Tokyo, Singapore, Brussels, and São Paulo will load automatically as you scroll.
-      </p>
-<div class="flex items-center gap-space-md font-label-caps text-label-caps uppercase text-surface-tint mt-space-xs">
-<span>Latency: 42ms</span>
-<span>•</span>
-<span>Secure Stream TLS 1.3</span>
-<span>•</span>
-<span>Audit Ref #DW-2025-10-28</span>
-</div>
-</section>
-</div>
-</div></main><footer class="w-full bg-surface-container-lowest border-t border-surface-container-high mt-space-3xl"><div class="max-w-max-content-width mx-auto px-gutter-mobile lg:px-gutter-desktop py-space-2xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-column-gap pb-space-xl"><div class="lg:col-span-2 space-y-space-sm"><div class="flex items-center gap-space-xs"><img alt="The Daily Web Logo (English)" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"/><span class="font-headline-md text-headline-md text-primary font-bold">The Daily Web</span></div><p class="font-body-md text-body-md text-secondary max-w-reading-column-width">Independent international journalism committed to verifiable evidence, unyielding context, and analytical integrity across global reporting bureaus.</p><div class="pt-space-xs"><span class="font-label-caps text-label-caps uppercase text-on-surface-variant block mb-space-xs">Dispatch Briefing Newsletter</span><div class="flex max-w-sm"><input class="w-full px-space-sm py-space-xs font-body-sm text-body-sm bg-surface-container-low border border-outline-variant text-on-surface rounded-l focus:outline-none focus:border-primary" placeholder="Enter your business email" type="email"/><button class="px-space-md py-space-xs bg-primary text-on-primary font-label-md text-label-md rounded-r hover:bg-secondary transition-colors shrink-0">Join</button></div></div></div><div><h4 class="font-label-caps text-label-caps uppercase tracking-wider text-primary mb-space-sm font-bold">News Desks</h4><ul class="space-y-space-xs font-body-sm text-body-sm text-secondary"><li class="hover:text-primary transition-colors"><a data-path="world" href="#">World Dispatch</a></li><li class="hover:text-primary transition-colors"><a data-path="tech" href="#">Technology &amp; Systems</a></li><li class="hover:text-primary transition-colors"><a data-path="business" href="#">Global Markets &amp; Economy</a></li><li class="hover:text-primary transition-colors"><a data-path="science" href="#">Science &amp; Quantum</a></li><li class="hover:text-primary transition-colors"><a data-path="culture" href="#">Arts &amp; Culture</a></li><li class="hover:text-primary transition-colors"><a data-path="opinion" href="#">Editorial &amp; Commentary</a></li></ul></div><div><h4 class="font-label-caps text-label-caps uppercase tracking-wider text-primary mb-space-sm font-bold">Governance &amp; Standards</h4><ul class="space-y-space-xs font-body-sm text-body-sm text-secondary"><li class="hover:text-primary transition-colors"><a data-path="editorial-guidelines" href="#">Editorial Code &amp; Ethics</a></li><li class="hover:text-primary transition-colors"><a data-path="corrections-policy" href="#">Corrections Policy</a></li><li class="hover:text-primary transition-colors"><a data-path="fact-checking" href="#">Verification Protocols</a></li><li class="hover:text-primary transition-colors"><a data-path="press-freedom" href="#">Newsroom Independence</a></li><li class="hover:text-primary transition-colors"><a data-path="syndication" href="#">Syndication &amp; Wires</a></li></ul></div><div><h4 class="font-label-caps text-label-caps uppercase tracking-wider text-primary mb-space-sm font-bold">Digital Infrastructure</h4><ul class="space-y-space-xs font-body-sm text-body-sm text-secondary"><li class="hover:text-primary transition-colors"><a data-path="rss-feeds" href="#">Real-Time RSS Feeds</a></li><li class="hover:text-primary transition-colors"><a data-path="api-access" href="#">Press API Documentation</a></li><li class="hover:text-primary transition-colors"><a data-path="staff-cms" href="#">Newsroom Desk CMS</a></li><li class="hover:text-primary transition-colors"><a data-path="privacy-notice" href="#">Privacy &amp; Consent</a></li><li class="hover:text-primary transition-colors"><a data-path="contact" href="#">Bureaus &amp; Inquiries</a></li></ul></div></div><div class="pt-space-lg border-t border-surface-container-high flex flex-col sm:flex-row items-center justify-between gap-space-sm"><div class="font-caption text-caption text-secondary">© 2025 The Daily Web Publishing Group Ltd. All global rights reserved. Registered with International Press Transparency Index.</div><div class="flex items-center gap-space-md font-label-md text-label-md text-secondary"><a class="hover:text-primary transition-colors" data-path="privacy-notice" href="#">Privacy Policy</a><a class="hover:text-primary transition-colors" data-path="editorial-guidelines" href="#">Terms of Service</a><a class="hover:text-primary transition-colors" data-path="rss-feeds" href="#">Feeds &amp; Syndication</a></div></div></div></footer></body></html>
+            <div
+              class="flex align-center gap-4 text-kicker text-1 text-uppercase color-muted margin-top-2"
+            >
+              <span>Latency: 42ms</span>
+              <span>•</span>
+              <span>Secure Stream TLS 1.3</span>
+              <span>•</span>
+              <span>Audit Ref #DW-2025-10-28</span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="width-full surface-paper rule-top rule margin-top-6">
+      <div class="width-content page-shell pad-inline-5 pad-6">
+        <div class="grid grid-single sm-grid-split md-grid-triple gap-6 pad-6">
+          <div class="lg-sidebar-span stack-3">
+            <div class="flex align-center gap-2">
+              <img
+                alt="The Daily Web Logo (English)"
+                class="image-logo"
+                src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+              /><span class="text-headline text-5 color-primary text-bold"
+                >The Daily Web</span
+              >
+            </div>
+            <p class="text-body text-2 color-muted width-reading">
+              Independent international journalism committed to verifiable
+              evidence, unyielding context, and analytical integrity across
+              global reporting bureaus.
+            </p>
+            <div class="pad-block-2">
+              <span
+                class="text-kicker text-1 text-uppercase color-muted block margin-bottom-2"
+                >Dispatch Briefing Newsletter</span
+              >
+              <div class="flex">
+                <input
+                  class="width-full pad-inline-3 pad-block-2 text-body text-1 surface-muted rule color-body radius-standard"
+                  placeholder="Enter your business email"
+                  type="email"
+                /><button
+                  class="pad-inline-4 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard motion-colors flex-no-shrink"
+                >
+                  Join
+                </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 text-uppercase color-primary margin-bottom-2 text-bold"
+            >
+              News Desks
+            </h4>
+            <ul class="stack-2 text-body text-1 color-muted">
+              <li class="motion-colors">
+                <a data-path="world" href="#">World Dispatch</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="tech" href="#">Technology &amp; Systems</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="business" href="#"
+                  >Global Markets &amp; Economy</a
+                >
+              </li>
+              <li class="motion-colors">
+                <a data-path="science" href="#">Science &amp; Quantum</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="culture" href="#">Arts &amp; Culture</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="opinion" href="#">Editorial &amp; Commentary</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 text-uppercase color-primary margin-bottom-2 text-bold"
+            >
+              Governance &amp; Standards
+            </h4>
+            <ul class="stack-2 text-body text-1 color-muted">
+              <li class="motion-colors">
+                <a data-path="editorial-guidelines" href="#"
+                  >Editorial Code &amp; Ethics</a
+                >
+              </li>
+              <li class="motion-colors">
+                <a data-path="corrections-policy" href="#"
+                  >Corrections Policy</a
+                >
+              </li>
+              <li class="motion-colors">
+                <a data-path="fact-checking" href="#">Verification Protocols</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="press-freedom" href="#">Newsroom Independence</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="syndication" href="#">Syndication &amp; Wires</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 text-uppercase color-primary margin-bottom-2 text-bold"
+            >
+              Digital Infrastructure
+            </h4>
+            <ul class="stack-2 text-body text-1 color-muted">
+              <li class="motion-colors">
+                <a data-path="rss-feeds" href="#">Real-Time RSS Feeds</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="api-access" href="#">Press API Documentation</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="staff-cms" href="#">Newsroom Desk CMS</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="privacy-notice" href="#">Privacy &amp; Consent</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="contact" href="#">Bureaus &amp; Inquiries</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="pad-5 rule-top rule flex flex-column sm-row align-center justify-between gap-3"
+        >
+          <div class="text-caption text-1 color-muted">
+            © 2025 The Daily Web Publishing Group Ltd. All global rights
+            reserved. Registered with International Press Transparency Index.
+          </div>
+          <div class="flex align-center gap-4 text-label text-1 color-muted">
+            <a class="motion-colors" data-path="privacy-notice" href="#"
+              >Privacy Policy</a
+            ><a class="motion-colors" data-path="editorial-guidelines" href="#"
+              >Terms of Service</a
+            ><a class="motion-colors" data-path="rss-feeds" href="#"
+              >Feeds &amp; Syndication</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

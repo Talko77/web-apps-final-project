@@ -1,376 +1,799 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>The Daily Web - Editorial Workspace</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-fixed":"#dae2fd","surface-dim":"#d8dadc","surface":"#f7f9fb","on-secondary-fixed-variant":"#3a485b","inverse-primary":"#bec6e0","on-background":"#191c1e","secondary-fixed-dim":"#b9c7df","primary-container":"#131b2e","on-primary-fixed-variant":"#3f465c","on-secondary-container":"#57657a","tertiary-fixed-dim":"#ffb4ab","on-primary":"#ffffff","on-tertiary-fixed":"#410002","secondary":"#515f74","tertiary":"#000000","on-primary-container":"#7c839b","error-container":"#ffdad6","outline":"#76777d","surface-container":"#eceef0","background":"#f7f9fb","error":"#ba1a1a","on-tertiary-fixed-variant":"#93000b","surface-bright":"#f7f9fb","primary-fixed-dim":"#bec6e0","surface-container-high":"#e6e8ea","on-primary-fixed":"#131b2e","outline-variant":"#c6c6cd","secondary-container":"#d5e3fc","surface-container-low":"#f2f4f6","inverse-on-surface":"#eff1f3","on-secondary":"#ffffff","surface-variant":"#e0e3e5","on-secondary-fixed":"#0d1c2e","surface-container-lowest":"#ffffff","tertiary-container":"#410002","on-surface":"#191c1e","inverse-surface":"#2d3133","on-error-container":"#93000a","surface-tint":"#565e74","tertiary-fixed":"#ffdad6","surface-container-highest":"#e0e3e5","on-tertiary-container":"#f63a35","on-error":"#ffffff","on-surface-variant":"#45464d","on-tertiary":"#ffffff","primary":"#000000","secondary-fixed":"#d5e3fc"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"space-2xl":"3rem","space-xs":"0.5rem","reading-column-width":"680px","space-md":"1rem","space-lg":"1.5rem","column-gap":"2rem","gutter-mobile":"1rem","gutter-desktop":"1.5rem","space-sm":"0.75rem","space-xxs":"0.25rem","space-3xl":"4rem","space-xl":"2rem","max-content-width":"1280px"},fontFamily:{"display-hero":["Newsreader"],"caption":["Inter"],"body-lg":["Inter"],"display-hero-mobile":["Newsreader"],"body-md":["Inter"],"label-lg":["Inter"],"body-lead":["Newsreader"],"body-sm":["Inter"],"headline-sm":["Newsreader"],"headline-lg":["Newsreader"],"headline-xl-mobile":["Newsreader"],"label-caps":["Inter"],"label-md":["Inter"],"headline-md":["Newsreader"],"headline-xl":["Newsreader"]},fontSize:{"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.025em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"18px","fontWeight":"400"}],"body-lg":["17px",{"lineHeight":"28px","fontWeight":"400"}],"display-hero-mobile":["38px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"600"}],"body-lead":["20px",{"lineHeight":"32px","letterSpacing":"-0.005em","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"500"}],"headline-xl-mobile":["30px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-caps":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-max-content-width mx-auto px-gutter-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><a class="flex items-center gap-space-xs" data-path="articles" href="#"><img alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"/><span class="font-headline-md text-headline-md text-primary">The Daily Web</span></a><span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-caps text-label-caps uppercase tracking-wider font-semibold">Editor</span></div><nav class="hidden sm:flex items-center gap-space-lg" data-active-classes="text-primary font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="articles" href="#">Articles</a><a aria-current="page" class="transition-colors text-primary font-bold" data-path="review-queue" href="#">Review Queue</a></nav><div class="flex items-center gap-space-md"><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface flex items-center gap-1 transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[16px]">open_in_new</span>View Public Site</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-error transition-colors" data-path="login" href="#">Logout</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface flex-1"><div class="max-w-max-content-width mx-auto px-gutter-desktop py-space-md"><div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant mb-space-md"><a class="hover:text-on-surface" data-path="articles" href="#">Newsroom CMS</a><span class="text-outline-variant">/</span><span class="text-on-surface font-semibold">Desk Console</span></div><div class="flex flex-col w-full">
-<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-lg">
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-md mb-space-md bg-surface-container-low/50 -mx-space-lg -mt-space-lg p-space-lg rounded-t-xl">
-<div class="flex items-center gap-space-sm">
-<span class="material-symbols-outlined text-primary text-[28px]">assignment_turned_in</span>
-<div>
-<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">Editorial Desk Portal</span>
-<h2 class="font-headline-sm text-headline-sm text-on-surface">The Daily Web | Editor Desk</h2>
-</div>
-</div>
-<div class="flex flex-wrap items-center gap-space-md">
-<nav class="flex items-center gap-space-xs font-label-md text-label-md">
-<span class="px-space-sm py-space-xxs rounded bg-primary text-on-primary font-semibold">Review Queue</span>
-<a class="px-space-sm py-space-xxs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="articles" href="#">All Articles</a>
-<a class="px-space-sm py-space-xxs rounded text-error hover:bg-error-container hover:text-on-error-container transition-colors" data-path="login" href="#">Log Out</a>
-</nav>
-<div class="flex items-center gap-2 pl-space-sm bg-surface-container-highest/40 py-1 px-3 rounded-full">
-<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary text-[12px] font-bold">MK</div>
-<div class="text-left leading-tight">
-<p class="font-label-md text-label-md text-on-surface font-medium">Marcus Keller</p>
-<p class="font-caption text-caption text-secondary">Senior Editor</p>
-</div>
-</div>
-</div>
-</div>
-<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md pt-space-xs">
-<div>
-<div class="flex items-center gap-2 mb-1">
-<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
-<span class="font-label-caps text-label-caps uppercase text-error tracking-widest font-bold">Dispatch Workflow</span>
-</div>
-<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Editor Review Queue</h1>
-<p class="font-body-md text-body-md text-on-surface-variant mt-1">Articles submitted by reporters awaiting review, revision check, or publication.</p>
-</div>
-<div class="flex flex-wrap items-center gap-2">
-<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md">
-<span class="w-2 h-2 rounded-full bg-amber-500"></span>
-<span class="font-semibold">3</span> Pending Review
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web - Editorial Workspace</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+  <body
+    class="surface-page text-body text-2 color-body height-screen flex flex-column"
+  >
+    <header class="fixed width-full surface-paper shadow-subtle">
+      <div
+        class="width-content pad-inline-5 flex align-center justify-between gap-4"
+      >
+        <div class="flex align-center gap-4">
+          <a class="flex align-center gap-2" data-path="articles" href="#"
+            ><img
+              alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
+              class=""
+              src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+            /><span class="text-headline text-5 color-primary"
+              >The Daily Web</span
+            ></a
+          ><span
+            class="pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-uppercase text-semibold"
+            >Editor</span
+          >
         </div>
-<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md">
-<span class="w-2 h-2 rounded-full bg-orange-600"></span>
-<span class="font-semibold">2</span> Changes Requested
+        <nav
+          class="state-hidden flex align-center gap-5"
+          data-active-classes="color-primary text-bold"
+        >
+          <a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="articles"
+            href="#"
+            >Articles</a
+          ><a
+            aria-current="page"
+            class="motion-colors color-primary text-bold"
+            data-path="review-queue"
+            href="#"
+            >Review Queue</a
+          >
+        </nav>
+        <div class="flex align-center gap-4">
+          <a
+            class="text-label text-1 color-muted flex align-center gap-1 motion-colors"
+            data-path="home"
+            href="#"
+            ><span class="material-symbols-outlined text-2">open_in_new</span
+            >View Public Site</a
+          ><a
+            class="text-label text-1 color-muted motion-colors"
+            data-path="login"
+            href="#"
+            >Logout</a
+          >
+          <div
+            class="avatar-small radius-pill surface-ink flex align-center justify-center"
+          >
+            <span class="material-symbols-outlined color-inverse text-4"
+              >person</span
+            >
+          </div>
         </div>
-<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container text-secondary font-label-md text-label-md">
-<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-<span class="font-semibold">8</span> Published Today
-        </div>
-</div>
-</div>
-</section>
-<section class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm mb-space-md">
-<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-space-sm">
-<div class="relative flex-1 max-w-xl">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
-<input class="w-full pl-10 pr-4 py-2 text-body-sm font-body-sm bg-surface-container-lowest text-on-surface placeholder:text-outline rounded-lg focus:outline-none focus:bg-surface-container-lowest transition-all shadow-inner" id="queueSearch" placeholder="Search by article title or reporter name..." type="text"/>
-</div>
-<div class="flex items-center gap-space-xs">
-<div class="relative">
-<select class="appearance-none bg-surface-container-lowest font-label-md text-label-md text-on-surface pl-3 pr-8 py-2 rounded-lg cursor-pointer focus:outline-none shadow-sm" id="categoryFilter">
-<option value="ALL">All Categories</option>
-<option value="CAMPUS">Campus &amp; Life</option>
-<option value="INVESTIGATION">Investigation</option>
-<option value="TECH">Technology</option>
-<option value="CULTURE">Arts &amp; Culture</option>
-<option value="OPINION">Opinion Desk</option>
-</select>
-<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">expand_more</span>
-</div>
-<button class="px-3 py-2 text-label-md font-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg transition-colors flex items-center gap-1" id="resetFilters">
-<span class="material-symbols-outlined text-[16px]">refresh</span>
-          Reset
-        </button>
-</div>
-</div>
-</section>
-<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden mb-space-lg">
-<div class="overflow-x-auto">
-<table class="w-full text-left border-collapse" id="queueTable">
-<thead>
-<tr class="bg-surface-container-high/60 text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">
-<th class="py-space-sm px-space-md">Article Title</th>
-<th class="py-space-sm px-space-md">Reporter Name</th>
-<th class="py-space-sm px-space-md">Submission Date</th>
-<th class="py-space-sm px-space-md">Version</th>
-<th class="py-space-sm px-space-md">Status</th>
-<th class="py-space-sm px-space-md text-right">Action</th>
-</tr>
-</thead>
-<tbody class="divide-none font-body-sm text-body-sm text-on-surface">
-<tr class="hover:bg-surface-container-low transition-colors group" data-category="CAMPUS" data-status="PENDING">
-<td class="py-space-md px-space-md max-w-sm">
-<div class="flex items-center gap-2 mb-1">
-<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps tracking-widest uppercase">Campus &amp; Life</span>
-<span class="font-caption text-caption text-secondary">8 min read</span>
-</div>
-<a class="font-headline-sm text-headline-sm text-on-surface group-hover:text-secondary transition-colors font-bold block truncate" data-path="review-detail" href="#">
-                Tuition Allocation Audit Reveals Discrepancies in STEM Equipment Reserve
-              </a>
-<p class="text-secondary line-clamp-1 mt-0.5 font-caption text-caption">Financial records from 2023-2024 academic year show unspent research surplus.</p>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="flex items-center gap-2">
-<div class="w-7 h-7 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-[11px]">EV</div>
-<div>
-<span class="font-semibold text-on-surface block">Eleanor Vance</span>
-<span class="font-caption text-caption text-secondary">Student Senate Beat</span>
-</div>
-</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="text-on-surface font-medium">Oct 28, 09:42 AM</div>
-<div class="font-caption text-caption text-secondary">2 hours ago</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-md text-label-md">v1.0 Initial</span>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-label-md text-label-md font-semibold">
-<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-                Pending Review
-              </span>
-</td>
-<td class="py-space-md px-space-md text-right whitespace-nowrap">
-<a class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary hover:bg-surface-tint font-label-md text-label-md rounded shadow-sm transition-all transform active:scale-95" data-path="review-detail" href="#">
-<span>Review Article</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</a>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors group bg-surface-container-lowest/50" data-category="INVESTIGATION" data-status="CHANGES">
-<td class="py-space-md px-space-md max-w-sm">
-<div class="flex items-center gap-2 mb-1">
-<span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-label-caps tracking-widest uppercase">Investigation</span>
-<span class="font-caption text-caption text-error font-semibold">Urgent Corrections</span>
-</div>
-<a class="font-headline-sm text-headline-sm text-on-surface group-hover:text-secondary transition-colors font-bold block truncate" data-path="review-detail" href="#">
-                Residence Hall Mold Reports Tripled Over Fall Semester: Maintenance Records
-              </a>
-<p class="text-secondary line-clamp-1 mt-0.5 font-caption text-caption">Cross-referencing work order completions against independent dormitory inspections.</p>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="flex items-center gap-2">
-<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-[11px]">JB</div>
-<div>
-<span class="font-semibold text-on-surface block">Jonathan Ben-Simon</span>
-<span class="font-caption text-caption text-secondary">Lead Investigative</span>
-</div>
-</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="text-on-surface font-medium">Oct 27, 04:15 PM</div>
-<div class="font-caption text-caption text-secondary">Yesterday</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-md text-label-md font-semibold">v2.1 Draft (Update)</span>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100 text-orange-900 font-label-md text-label-md font-semibold">
-<span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
-                Changes Requested
-              </span>
-</td>
-<td class="py-space-md px-space-md text-right whitespace-nowrap">
-<a class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary hover:bg-surface-tint font-label-md text-label-md rounded shadow-sm transition-all transform active:scale-95" data-path="review-detail" href="#">
-<span>Review Article</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</a>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors group" data-category="TECH" data-status="PENDING">
-<td class="py-space-md px-space-md max-w-sm">
-<div class="flex items-center gap-2 mb-1">
-<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps tracking-widest uppercase">Technology</span>
-<span class="font-caption text-caption text-secondary">5 min read</span>
-</div>
-<a class="font-headline-sm text-headline-sm text-on-surface group-hover:text-secondary transition-colors font-bold block truncate" data-path="review-detail" href="#">
-                University Deploys Automated AI Plagiarism Detection Across All Final Theses
-              </a>
-<p class="text-secondary line-clamp-1 mt-0.5 font-caption text-caption">Faculty Senate passes mandatory syllabus inclusion following departmental testing.</p>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="flex items-center gap-2">
-<div class="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface flex items-center justify-center font-bold text-[11px]">AL</div>
-<div>
-<span class="font-semibold text-on-surface block">Aria Lin</span>
-<span class="font-caption text-caption text-secondary">Tech &amp; Labs</span>
-</div>
-</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="text-on-surface font-medium">Oct 28, 08:12 AM</div>
-<div class="font-caption text-caption text-secondary">3 hours ago</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-md text-label-md">v1.2 Draft</span>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-label-md text-label-md font-semibold">
-<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-                Pending Review
-              </span>
-</td>
-<td class="py-space-md px-space-md text-right whitespace-nowrap">
-<a class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary hover:bg-surface-tint font-label-md text-label-md rounded shadow-sm transition-all transform active:scale-95" data-path="review-detail" href="#">
-<span>Review Article</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</a>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors group bg-surface-container-lowest/50" data-category="CULTURE" data-status="PENDING">
-<td class="py-space-md px-space-md max-w-sm">
-<div class="flex items-center gap-2 mb-1">
-<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps tracking-widest uppercase">Arts &amp; Culture</span>
-<span class="font-caption text-caption text-secondary">4 min read</span>
-</div>
-<a class="font-headline-sm text-headline-sm text-on-surface group-hover:text-secondary transition-colors font-bold block truncate" data-path="review-detail" href="#">
-                Annual Student Film Festival Premieres 24 Shorts in Restored Historic Theater
-              </a>
-<p class="text-secondary line-clamp-1 mt-0.5 font-caption text-caption">A review of opening night highlights and juror selections for documentary honors.</p>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="flex items-center gap-2">
-<div class="w-7 h-7 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-[11px]">MP</div>
-<div>
-<span class="font-semibold text-on-surface block">Mateo Patel</span>
-<span class="font-caption text-caption text-secondary">Culture Reporter</span>
-</div>
-</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="text-on-surface font-medium">Oct 28, 07:30 AM</div>
-<div class="font-caption text-caption text-secondary">4 hours ago</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-md text-label-md">v1.0 Initial</span>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 font-label-md text-label-md font-semibold">
-<span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-                Pending Review
-              </span>
-</td>
-<td class="py-space-md px-space-md text-right whitespace-nowrap">
-<a class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary hover:bg-surface-tint font-label-md text-label-md rounded shadow-sm transition-all transform active:scale-95" data-path="review-detail" href="#">
-<span>Review Article</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</a>
-</td>
-</tr>
-<tr class="hover:bg-surface-container-low transition-colors group" data-category="OPINION" data-status="CHANGES">
-<td class="py-space-md px-space-md max-w-sm">
-<div class="flex items-center gap-2 mb-1">
-<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-label-caps tracking-widest uppercase">Opinion Desk</span>
-<span class="font-caption text-caption text-secondary">6 min read</span>
-</div>
-<a class="font-headline-sm text-headline-sm text-on-surface group-hover:text-secondary transition-colors font-bold block truncate" data-path="review-detail" href="#">
-                Op-Ed: Why Campus Transit Reductions Disproportionately Harm Night-Shift Staff
-              </a>
-<p class="text-secondary line-clamp-1 mt-0.5 font-caption text-caption">Proposed weekend cutbacks ignore the essential workers keeping library and labs operational.</p>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="flex items-center gap-2">
-<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-[11px]">SC</div>
-<div>
-<span class="font-semibold text-on-surface block">Samantha Chen</span>
-<span class="font-caption text-caption text-secondary">Contributing Columnist</span>
-</div>
-</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<div class="text-on-surface font-medium">Oct 27, 02:20 PM</div>
-<div class="font-caption text-caption text-secondary">Yesterday</div>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-md text-label-md font-semibold">v3.0 Revision</span>
-</td>
-<td class="py-space-md px-space-md whitespace-nowrap">
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-100 text-orange-900 font-label-md text-label-md font-semibold">
-<span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
-                Changes Requested
-              </span>
-</td>
-<td class="py-space-md px-space-md text-right whitespace-nowrap">
-<a class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary hover:bg-surface-tint font-label-md text-label-md rounded shadow-sm transition-all transform active:scale-95" data-path="review-detail" href="#">
-<span>Review Article</span>
-<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-</a>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="p-space-md bg-surface-container-low/50 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
-<div class="font-caption text-caption text-on-surface-variant">
-        Showing <span class="font-semibold text-on-surface">1-5</span> of <span class="font-semibold text-on-surface">5</span> pending submissions
       </div>
-<div class="flex items-center gap-1">
-<button class="px-2 py-1 rounded bg-surface-container text-outline-variant font-label-md text-label-md cursor-not-allowed" disabled="">
-          Previous
-        </button>
-<button class="px-3 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-semibold">
-          1
-        </button>
-<button class="px-2 py-1 rounded bg-surface-container text-outline-variant font-label-md text-label-md cursor-not-allowed" disabled="">
-          Next
-        </button>
-</div>
-</div>
-</div>
-<section class="grid grid-cols-1 md:grid-cols-3 gap-space-md mb-space-xl">
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex items-center justify-between mb-2">
-<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">Dispatch Cadence</span>
-<span class="material-symbols-outlined text-secondary text-[18px]">speed</span>
-</div>
-<div class="font-headline-md text-headline-md text-on-surface font-semibold">1h 42m</div>
-<p class="font-caption text-caption text-secondary mt-1">Average editor turnaround time for incoming draft submissions.</p>
-</div>
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex items-center justify-between mb-2">
-<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">Live Reporters</span>
-<span class="material-symbols-outlined text-secondary text-[18px]">group</span>
-</div>
-<div class="font-headline-md text-headline-md text-on-surface font-semibold">14 Active</div>
-<p class="font-caption text-caption text-secondary mt-1">Reporters currently working on filed and assigned stories.</p>
-</div>
-<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-<div class="flex items-center justify-between mb-2">
-<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary">Evening Print Lock</span>
-<span class="material-symbols-outlined text-error text-[18px]">lock_clock</span>
-</div>
-<div class="font-headline-md text-headline-md text-on-surface font-semibold">05:30 PM</div>
-<p class="font-caption text-caption text-secondary mt-1">Hard deadline for final digital layout sync and print press dispatch.</p>
-</div>
-</section>
-<script>
-    (function() {
-      const searchInput = document.getElementById('queueSearch');
-      const categoryFilter = document.getElementById('categoryFilter');
-      const resetBtn = document.getElementById('resetFilters');
-      const tableRows = document.querySelectorAll('#queueTable tbody tr');
+    </header>
+    <main class="width-full surface-page flex-grow">
+      <div class="width-content pad-inline-5 pad-block-3">
+        <div
+          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
+        >
+          <a class="" data-path="articles" href="#">Newsroom CMS</a
+          ><span class="color-subtle">/</span
+          ><span class="color-body text-semibold">Desk Console</span>
+        </div>
+        <div class="flex flex-column width-full">
+          <section
+            class="surface-paper radius-panel pad-5 shadow-subtle margin-bottom-5"
+          >
+            <div
+              class="flex flex-column md-row sm-align-center justify-between gap-4 margin-bottom-4 surface-muted pad-5 radius-panel"
+            >
+              <div class="flex align-center gap-3">
+                <span class="material-symbols-outlined color-primary text-6"
+                  >assignment_turned_in</span
+                >
+                <div>
+                  <span class="text-label text-1 text-uppercase color-muted"
+                    >Editorial Desk Portal</span
+                  >
+                  <h2 class="text-headline text-4 color-body">
+                    The Daily Web | Editor Desk
+                  </h2>
+                </div>
+              </div>
+              <div class="flex flex-wrap align-center gap-4">
+                <nav class="flex align-center gap-2 text-label text-1">
+                  <span
+                    class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-semibold"
+                    >Review Queue</span
+                  >
+                  <a
+                    class="pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
+                    data-path="articles"
+                    href="#"
+                    >All Articles</a
+                  >
+                  <a
+                    class="pad-inline-3 pad-block-2 radius-standard color-alert motion-colors"
+                    data-path="login"
+                    href="#"
+                    >Log Out</a
+                  >
+                </nav>
+                <div
+                  class="flex align-center gap-2 pad-inline-3 surface-raised pad-block-2 radius-pill"
+                >
+                  <div
+                    class="avatar-small radius-pill surface-ink flex align-center justify-center color-inverse text-1 text-bold"
+                  >
+                    MK
+                  </div>
+                  <div class="text-left text-tight">
+                    <p class="text-label text-1 color-body text-medium">
+                      Marcus Keller
+                    </p>
+                    <p class="text-caption text-1 color-muted">Senior Editor</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex flex-column flex-row align-end justify-between gap-4 margin-top-2"
+            >
+              <div>
+                <div class="flex align-center gap-2 margin-bottom-2">
+                  <span
+                    class="avatar-small radius-pill surface-alert state-loading"
+                  ></span>
+                  <span
+                    class="text-label text-1 text-uppercase color-alert text-bold"
+                    >Dispatch Workflow</span
+                  >
+                </div>
+                <h1 class="text-headline text-6 color-body">
+                  Editor Review Queue
+                </h1>
+                <p class="text-body text-2 color-muted margin-top-2">
+                  Articles submitted by reporters awaiting review, revision
+                  check, or publication.
+                </p>
+              </div>
+              <div class="flex flex-wrap align-center gap-2">
+                <div
+                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-raised color-body text-label text-1"
+                >
+                  <span class="avatar-small radius-pill surface-warning"></span>
+                  <span class="text-semibold">3</span> Pending Review
+                </div>
+                <div
+                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-info color-info text-label text-1"
+                >
+                  <span class="avatar-small radius-pill surface-warning"></span>
+                  <span class="text-semibold">2</span> Changes Requested
+                </div>
+                <div
+                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-label text-1"
+                >
+                  <span class="avatar-small radius-pill surface-success"></span>
+                  <span class="text-semibold">8</span> Published Today
+                </div>
+              </div>
+            </div>
+          </section>
+          <section
+            class="surface-paper radius-panel pad-4 shadow-subtle margin-bottom-4"
+          >
+            <div
+              class="flex flex-column sm-row align-start sm-align-center justify-between gap-3"
+            >
+              <div class="relative flex-grow width-reading">
+                <span
+                  class="material-symbols-outlined absolute color-subtle text-4"
+                  >search</span
+                >
+                <input
+                  class="width-full pad-inline-5 pad-inline-4 pad-block-2 text-1 text-body surface-paper color-body radius-card control-input motion-all"
+                  id="queueSearch"
+                  placeholder="Search by article title or reporter name..."
+                  type="text"
+                />
+              </div>
+              <div class="flex align-center gap-2">
+                <div class="relative">
+                  <select
+                    class="surface-paper text-label text-1 color-body pad-inline-3 pad-inline-5 pad-block-2 radius-card control-pointer control-input shadow-subtle"
+                    id="categoryFilter"
+                  >
+                    <option value="ALL">All Categories</option>
+                    <option value="CAMPUS">Campus &amp; Life</option>
+                    <option value="INVESTIGATION">Investigation</option>
+                    <option value="TECH">Technology</option>
+                    <option value="CULTURE">Arts &amp; Culture</option>
+                    <option value="OPINION">Opinion Desk</option>
+                  </select>
+                  <span
+                    class="material-symbols-outlined absolute color-subtle text-4"
+                    >expand_more</span
+                  >
+                </div>
+                <button
+                  class="pad-inline-3 pad-block-2 text-1 text-label color-muted radius-card motion-colors flex align-center gap-1"
+                  id="resetFilters"
+                >
+                  <span class="material-symbols-outlined text-2">refresh</span>
+                  Reset
+                </button>
+              </div>
+            </div>
+          </section>
+          <div
+            class="surface-paper radius-panel shadow-subtle overflow-hidden margin-bottom-5"
+          >
+            <div class="overflow-scroll">
+              <table class="width-full text-left" id="queueTable">
+                <thead>
+                  <tr
+                    class="surface-raised color-muted text-label text-1 text-uppercase"
+                  >
+                    <th class="pad-block-3 pad-inline-4">Article Title</th>
+                    <th class="pad-block-3 pad-inline-4">Reporter Name</th>
+                    <th class="pad-block-3 pad-inline-4">Submission Date</th>
+                    <th class="pad-block-3 pad-inline-4">Version</th>
+                    <th class="pad-block-3 pad-inline-4">Status</th>
+                    <th class="pad-block-3 pad-inline-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="text-body text-1 color-body">
+                  <tr
+                    class="motion-colors"
+                    data-category="CAMPUS"
+                    data-status="PENDING"
+                  >
+                    <td class="pad-block-3 pad-inline-4 width-reading">
+                      <div class="flex align-center gap-2 margin-bottom-2">
+                        <span
+                          class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 text-uppercase"
+                          >Campus &amp; Life</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >8 min read</span
+                        >
+                      </div>
+                      <a
+                        class="text-headline text-4 color-body motion-colors text-bold block truncate"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        Tuition Allocation Audit Reveals Discrepancies in STEM
+                        Equipment Reserve
+                      </a>
+                      <p
+                        class="color-muted truncate margin-top-2 text-caption text-1"
+                      >
+                        Financial records from 2023-2024 academic year show
+                        unspent research surplus.
+                      </p>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="flex align-center gap-2">
+                        <div
+                          class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-bold text-1"
+                        >
+                          EV
+                        </div>
+                        <div>
+                          <span class="text-semibold color-body block"
+                            >Eleanor Vance</span
+                          >
+                          <span class="text-caption text-1 color-muted"
+                            >Student Senate Beat</span
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="color-body text-medium">Oct 28, 09:42 AM</div>
+                      <div class="text-caption text-1 color-muted">
+                        2 hours ago
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="pad-inline-3 pad-block-2 radius-standard surface-raised color-muted text-label text-1"
+                        >v1.0 Initial</span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-warning color-warning text-label text-1 text-semibold"
+                      >
+                        <span
+                          class="avatar-small radius-pill surface-warning"
+                        ></span>
+                        Pending Review
+                      </span>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 text-right no-wrap">
+                      <a
+                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        <span>Review Article</span>
+                        <span class="material-symbols-outlined text-2"
+                          >arrow_forward</span
+                        >
+                      </a>
+                    </td>
+                  </tr>
+                  <tr
+                    class="motion-colors surface-paper"
+                    data-category="INVESTIGATION"
+                    data-status="CHANGES"
+                  >
+                    <td class="pad-block-3 pad-inline-4 width-reading">
+                      <div class="flex align-center gap-2 margin-bottom-2">
+                        <span
+                          class="pad-inline-3 pad-block-2 radius-standard surface-alert color-alert text-label text-1 text-uppercase"
+                          >Investigation</span
+                        >
+                        <span
+                          class="text-caption text-1 color-alert text-semibold"
+                          >Urgent Corrections</span
+                        >
+                      </div>
+                      <a
+                        class="text-headline text-4 color-body motion-colors text-bold block truncate"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        Residence Hall Mold Reports Tripled Over Fall Semester:
+                        Maintenance Records
+                      </a>
+                      <p
+                        class="color-muted truncate margin-top-2 text-caption text-1"
+                      >
+                        Cross-referencing work order completions against
+                        independent dormitory inspections.
+                      </p>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="flex align-center gap-2">
+                        <div
+                          class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-bold text-1"
+                        >
+                          JB
+                        </div>
+                        <div>
+                          <span class="text-semibold color-body block"
+                            >Jonathan Ben-Simon</span
+                          >
+                          <span class="text-caption text-1 color-muted"
+                            >Lead Investigative</span
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="color-body text-medium">Oct 27, 04:15 PM</div>
+                      <div class="text-caption text-1 color-muted">
+                        Yesterday
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-semibold"
+                        >v2.1 Draft (Update)</span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-warning color-warning text-label text-1 text-semibold"
+                      >
+                        <span
+                          class="avatar-small radius-pill surface-warning"
+                        ></span>
+                        Changes Requested
+                      </span>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 text-right no-wrap">
+                      <a
+                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        <span>Review Article</span>
+                        <span class="material-symbols-outlined text-2"
+                          >arrow_forward</span
+                        >
+                      </a>
+                    </td>
+                  </tr>
+                  <tr
+                    class="motion-colors"
+                    data-category="TECH"
+                    data-status="PENDING"
+                  >
+                    <td class="pad-block-3 pad-inline-4 width-reading">
+                      <div class="flex align-center gap-2 margin-bottom-2">
+                        <span
+                          class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 text-uppercase"
+                          >Technology</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >5 min read</span
+                        >
+                      </div>
+                      <a
+                        class="text-headline text-4 color-body motion-colors text-bold block truncate"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        University Deploys Automated AI Plagiarism Detection
+                        Across All Final Theses
+                      </a>
+                      <p
+                        class="color-muted truncate margin-top-2 text-caption text-1"
+                      >
+                        Faculty Senate passes mandatory syllabus inclusion
+                        following departmental testing.
+                      </p>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="flex align-center gap-2">
+                        <div
+                          class="avatar-small radius-pill surface-raised color-body flex align-center justify-center text-bold text-1"
+                        >
+                          AL
+                        </div>
+                        <div>
+                          <span class="text-semibold color-body block"
+                            >Aria Lin</span
+                          >
+                          <span class="text-caption text-1 color-muted"
+                            >Tech &amp; Labs</span
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="color-body text-medium">Oct 28, 08:12 AM</div>
+                      <div class="text-caption text-1 color-muted">
+                        3 hours ago
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="pad-inline-3 pad-block-2 radius-standard surface-raised color-muted text-label text-1"
+                        >v1.2 Draft</span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-warning color-warning text-label text-1 text-semibold"
+                      >
+                        <span
+                          class="avatar-small radius-pill surface-warning"
+                        ></span>
+                        Pending Review
+                      </span>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 text-right no-wrap">
+                      <a
+                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        <span>Review Article</span>
+                        <span class="material-symbols-outlined text-2"
+                          >arrow_forward</span
+                        >
+                      </a>
+                    </td>
+                  </tr>
+                  <tr
+                    class="motion-colors surface-paper"
+                    data-category="CULTURE"
+                    data-status="PENDING"
+                  >
+                    <td class="pad-block-3 pad-inline-4 width-reading">
+                      <div class="flex align-center gap-2 margin-bottom-2">
+                        <span
+                          class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 text-uppercase"
+                          >Arts &amp; Culture</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >4 min read</span
+                        >
+                      </div>
+                      <a
+                        class="text-headline text-4 color-body motion-colors text-bold block truncate"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        Annual Student Film Festival Premieres 24 Shorts in
+                        Restored Historic Theater
+                      </a>
+                      <p
+                        class="color-muted truncate margin-top-2 text-caption text-1"
+                      >
+                        A review of opening night highlights and juror
+                        selections for documentary honors.
+                      </p>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="flex align-center gap-2">
+                        <div
+                          class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-bold text-1"
+                        >
+                          MP
+                        </div>
+                        <div>
+                          <span class="text-semibold color-body block"
+                            >Mateo Patel</span
+                          >
+                          <span class="text-caption text-1 color-muted"
+                            >Culture Reporter</span
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="color-body text-medium">Oct 28, 07:30 AM</div>
+                      <div class="text-caption text-1 color-muted">
+                        4 hours ago
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="pad-inline-3 pad-block-2 radius-standard surface-raised color-muted text-label text-1"
+                        >v1.0 Initial</span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-warning color-warning text-label text-1 text-semibold"
+                      >
+                        <span
+                          class="avatar-small radius-pill surface-warning"
+                        ></span>
+                        Pending Review
+                      </span>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 text-right no-wrap">
+                      <a
+                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        <span>Review Article</span>
+                        <span class="material-symbols-outlined text-2"
+                          >arrow_forward</span
+                        >
+                      </a>
+                    </td>
+                  </tr>
+                  <tr
+                    class="motion-colors"
+                    data-category="OPINION"
+                    data-status="CHANGES"
+                  >
+                    <td class="pad-block-3 pad-inline-4 width-reading">
+                      <div class="flex align-center gap-2 margin-bottom-2">
+                        <span
+                          class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 text-uppercase"
+                          >Opinion Desk</span
+                        >
+                        <span class="text-caption text-1 color-muted"
+                          >6 min read</span
+                        >
+                      </div>
+                      <a
+                        class="text-headline text-4 color-body motion-colors text-bold block truncate"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        Op-Ed: Why Campus Transit Reductions Disproportionately
+                        Harm Night-Shift Staff
+                      </a>
+                      <p
+                        class="color-muted truncate margin-top-2 text-caption text-1"
+                      >
+                        Proposed weekend cutbacks ignore the essential workers
+                        keeping library and labs operational.
+                      </p>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="flex align-center gap-2">
+                        <div
+                          class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-bold text-1"
+                        >
+                          SC
+                        </div>
+                        <div>
+                          <span class="text-semibold color-body block"
+                            >Samantha Chen</span
+                          >
+                          <span class="text-caption text-1 color-muted"
+                            >Contributing Columnist</span
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <div class="color-body text-medium">Oct 27, 02:20 PM</div>
+                      <div class="text-caption text-1 color-muted">
+                        Yesterday
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-semibold"
+                        >v3.0 Revision</span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 no-wrap">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-warning color-warning text-label text-1 text-semibold"
+                      >
+                        <span
+                          class="avatar-small radius-pill surface-warning"
+                        ></span>
+                        Changes Requested
+                      </span>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 text-right no-wrap">
+                      <a
+                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
+                        data-path="review-detail"
+                        href="#"
+                      >
+                        <span>Review Article</span>
+                        <span class="material-symbols-outlined text-2"
+                          >arrow_forward</span
+                        >
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div
+              class="pad-4 surface-muted flex flex-column sm-row sm-align-center justify-between gap-3"
+            >
+              <div class="text-caption text-1 color-muted">
+                Showing <span class="text-semibold color-body">1-5</span> of
+                <span class="text-semibold color-body">5</span> pending
+                submissions
+              </div>
+              <div class="flex align-center gap-1">
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled"
+                  disabled=""
+                >
+                  Previous
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 text-semibold"
+                >
+                  1
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled"
+                  disabled=""
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+          <section
+            class="grid grid-single md-grid-triple gap-4 margin-bottom-6"
+          >
+            <div class="surface-paper pad-4 radius-panel shadow-subtle">
+              <div class="flex align-center justify-between margin-bottom-2">
+                <span class="text-label text-1 text-uppercase color-muted"
+                  >Dispatch Cadence</span
+                >
+                <span class="material-symbols-outlined color-muted text-4"
+                  >speed</span
+                >
+              </div>
+              <div class="text-headline text-5 color-body text-semibold">
+                1h 42m
+              </div>
+              <p class="text-caption text-1 color-muted margin-top-2">
+                Average editor turnaround time for incoming draft submissions.
+              </p>
+            </div>
+            <div class="surface-paper pad-4 radius-panel shadow-subtle">
+              <div class="flex align-center justify-between margin-bottom-2">
+                <span class="text-label text-1 text-uppercase color-muted"
+                  >Live Reporters</span
+                >
+                <span class="material-symbols-outlined color-muted text-4"
+                  >group</span
+                >
+              </div>
+              <div class="text-headline text-5 color-body text-semibold">
+                14 Active
+              </div>
+              <p class="text-caption text-1 color-muted margin-top-2">
+                Reporters currently working on filed and assigned stories.
+              </p>
+            </div>
+            <div class="surface-paper pad-4 radius-panel shadow-subtle">
+              <div class="flex align-center justify-between margin-bottom-2">
+                <span class="text-label text-1 text-uppercase color-muted"
+                  >Evening Print Lock</span
+                >
+                <span class="material-symbols-outlined color-alert text-4"
+                  >lock_clock</span
+                >
+              </div>
+              <div class="text-headline text-5 color-body text-semibold">
+                05:30 PM
+              </div>
+              <p class="text-caption text-1 color-muted margin-top-2">
+                Hard deadline for final digital layout sync and print press
+                dispatch.
+              </p>
+            </div>
+          </section>
+          <script>
+            (function () {
+              const searchInput = document.getElementById("queueSearch");
+              const categoryFilter = document.getElementById("categoryFilter");
+              const resetBtn = document.getElementById("resetFilters");
+              const tableRows = document.querySelectorAll(
+                "#queueTable tbody tr",
+              );
 
-      function filterTable() {
-        const query = (searchInput?.value || '').toLowerCase().trim();
-        const category = categoryFilter?.value || 'ALL';
+              function filterTable() {
+                const query = (searchInput?.value || "").toLowerCase().trim();
+                const category = categoryFilter?.value || "ALL";
 
-        tableRows.forEach(row => {
-          const text = row.innerText.toLowerCase();
-          const rowCategory = row.getAttribute('data-category');
+                tableRows.forEach((row) => {
+                  const text = row.innerText.toLowerCase();
+                  const rowCategory = row.getAttribute("data-category");
 
-          const matchesQuery = !query || text.includes(query);
-          const matchesCategory = category === 'ALL' || rowCategory === category;
+                  const matchesQuery = !query || text.includes(query);
+                  const matchesCategory =
+                    category === "ALL" || rowCategory === category;
 
-          if (matchesQuery && matchesCategory) {
-            row.style.display = '';
-          } else {
-            row.style.display = 'none';
-          }
-        });
-      }
+                  if (matchesQuery && matchesCategory) {
+                    row.style.display = "";
+                  } else {
+                    row.style.display = "none";
+                  }
+                });
+              }
 
-      if (searchInput) searchInput.addEventListener('input', filterTable);
-      if (categoryFilter) categoryFilter.addEventListener('change', filterTable);
-      if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-          if (searchInput) searchInput.value = '';
-          if (categoryFilter) categoryFilter.value = 'ALL';
-          filterTable();
-        });
-      }
-    })();
-  </script>
-</div></div></main><footer class="w-full bg-surface-container-low py-space-sm"><div class="max-w-max-content-width mx-auto px-gutter-desktop text-center font-caption text-caption text-on-surface-variant">The Daily Web Student Newsroom CMS • Internal Editorial Dispatch • v1.2.0</div></footer></body></html>
+              if (searchInput)
+                searchInput.addEventListener("input", filterTable);
+              if (categoryFilter)
+                categoryFilter.addEventListener("change", filterTable);
+              if (resetBtn) {
+                resetBtn.addEventListener("click", () => {
+                  if (searchInput) searchInput.value = "";
+                  if (categoryFilter) categoryFilter.value = "ALL";
+                  filterTable();
+                });
+              }
+            })();
+          </script>
+        </div>
+      </div>
+    </main>
+    <footer class="width-full surface-muted pad-block-3">
+      <div
+        class="width-content pad-inline-5 text-center text-caption text-1 color-muted"
+      >
+        The Daily Web Student Newsroom CMS • Internal Editorial Dispatch •
+        v1.2.0
+      </div>
+    </footer>
+  </body>
+</html>

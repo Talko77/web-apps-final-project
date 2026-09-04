@@ -1,361 +1,797 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>The Daily Web</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-fixed":"#dae2fd","surface-dim":"#d8dadc","surface":"#f7f9fb","on-secondary-fixed-variant":"#3a485b","inverse-primary":"#bec6e0","on-background":"#191c1e","secondary-fixed-dim":"#b9c7df","primary-container":"#131b2e","on-primary-fixed-variant":"#3f465c","on-secondary-container":"#57657a","tertiary-fixed-dim":"#ffb4ab","on-primary":"#ffffff","on-tertiary-fixed":"#410002","secondary":"#515f74","tertiary":"#000000","on-primary-container":"#7c839b","error-container":"#ffdad6","outline":"#76777d","surface-container":"#eceef0","background":"#f7f9fb","error":"#ba1a1a","on-tertiary-fixed-variant":"#93000b","surface-bright":"#f7f9fb","primary-fixed-dim":"#bec6e0","surface-container-high":"#e6e8ea","on-primary-fixed":"#131b2e","outline-variant":"#c6c6cd","secondary-container":"#d5e3fc","surface-container-low":"#f2f4f6","inverse-on-surface":"#eff1f3","on-secondary":"#ffffff","surface-variant":"#e0e3e5","on-secondary-fixed":"#0d1c2e","surface-container-lowest":"#ffffff","tertiary-container":"#410002","on-surface":"#191c1e","inverse-surface":"#2d3133","on-error-container":"#93000a","surface-tint":"#565e74","tertiary-fixed":"#ffdad6","surface-container-highest":"#e0e3e5","on-tertiary-container":"#f63a35","on-error":"#ffffff","on-surface-variant":"#45464d","on-tertiary":"#ffffff","primary":"#000000","secondary-fixed":"#d5e3fc"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"space-2xl":"3rem","space-xs":"0.5rem","reading-column-width":"680px","space-md":"1rem","space-lg":"1.5rem","column-gap":"2rem","gutter-mobile":"1rem","gutter-desktop":"1.5rem","space-sm":"0.75rem","space-xxs":"0.25rem","space-3xl":"4rem","space-xl":"2rem","max-content-width":"1280px"},fontFamily:{"display-hero":["Newsreader"],"caption":["Inter"],"body-lg":["Inter"],"display-hero-mobile":["Newsreader"],"body-md":["Inter"],"label-lg":["Inter"],"body-lead":["Newsreader"],"body-sm":["Inter"],"headline-sm":["Newsreader"],"headline-lg":["Newsreader"],"headline-xl-mobile":["Newsreader"],"label-caps":["Inter"],"label-md":["Inter"],"headline-md":["Newsreader"],"headline-xl":["Newsreader"]},fontSize:{"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.025em","fontWeight":"600"}],"caption":["12px",{"lineHeight":"18px","fontWeight":"400"}],"body-lg":["17px",{"lineHeight":"28px","fontWeight":"400"}],"display-hero-mobile":["38px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"18px","letterSpacing":"0.01em","fontWeight":"600"}],"body-lead":["20px",{"lineHeight":"32px","letterSpacing":"-0.005em","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"500"}],"headline-xl-mobile":["30px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-caps":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-max-content-width mx-auto px-gutter-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><a class="flex items-center gap-space-xs" data-path="home" href="#"><img alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"/><span class="font-headline-md text-headline-md tracking-tight text-primary hidden sm:inline-block">The Daily Web</span></a><span class="hidden md:inline-block text-outline-variant">|</span><span class="hidden md:inline-block font-label-md text-label-md text-secondary uppercase tracking-widest">Campus Edition</span></div><nav class="hidden lg:flex items-center gap-space-lg" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors text-primary font-bold" data-path="home" href="#">Home</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="technology" href="#">Technology</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="business" href="#">Business</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="science" href="#">Science</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="opinion" href="#">Opinion</a></nav><div class="flex items-center gap-space-sm"><div class="relative hidden md:block w-48"><span class="material-symbols-outlined absolute left-space-xs top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full pl-8 pr-space-xs py-space-xxs bg-surface-container-low rounded font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest" placeholder="Search articles..." type="text"/></div><a class="inline-flex items-center px-space-sm py-space-xs rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors" data-path="login" href="#">Reporter Portal</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div><div class="bg-error-container text-on-error-container px-gutter-desktop py-space-xxs"><div class="max-w-max-content-width mx-auto flex items-center gap-space-xs font-label-md text-label-md"><span class="bg-error text-on-error font-label-caps text-label-caps px-1.5 py-0.5 rounded uppercase tracking-wider font-bold">Breaking</span><span class="truncate font-body-sm text-body-sm">University Senate approves new student publication funding charter for upcoming term.</span></div></div></header><main class="w-full pt-24 bg-surface flex-1"><div class="max-w-max-content-width mx-auto px-gutter-desktop py-space-lg"><div class="flex flex-col w-full">
-<!-- Article Main Container -->
-<article class="max-w-[820px] mx-auto w-full">
-<!-- Editorial Navigation / Breadcrumb -->
-<nav aria-label="Breadcrumb" class="flex items-center gap-space-xs font-label-md text-label-md text-secondary mb-space-lg">
-<a class="hover:text-primary transition-colors" href="#">Home</a>
-<span class="material-symbols-outlined text-outline text-[14px]">chevron_right</span>
-<a class="hover:text-primary transition-colors" href="#">Technology</a>
-<span class="material-symbols-outlined text-outline text-[14px]">chevron_right</span>
-<span class="text-on-surface font-semibold">Artificial Intelligence</span>
-</nav>
-<!-- Header Block -->
-<header class="mb-space-xl">
-<div class="flex items-center gap-space-sm mb-space-sm">
-<span class="bg-surface-container-high text-primary font-label-caps text-label-caps px-2 py-1 rounded uppercase tracking-widest font-bold">
-          Technology
-        </span>
-<span class="text-secondary font-caption text-caption flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-          Last updated 1 hour ago
-        </span>
-</div>
-<h1 class="font-display-hero text-headline-xl sm:text-display-hero text-primary tracking-tight mb-space-md leading-tight">
-        Breakthrough In Open Silicon: Next-Generation Computing Architecture Unveiled
-      </h1>
-<p class="font-body-lead text-body-lead text-secondary leading-relaxed mb-space-lg">
-        Researchers deploy open-weights tensor architecture designed to run high-throughput models on standard consumer hardware, bypassing proprietary silicon moats.
-      </p>
-<!-- Byline Row -->
-<div class="flex flex-wrap items-center justify-between gap-space-md pt-space-sm pb-space-sm bg-surface-container-low px-space-md rounded-lg">
-<div class="flex items-center gap-space-sm">
-<img class="w-11 h-11 rounded-full object-cover shadow-sm" data-alt="Editorial headshot of Dr. Jonathan Ben-Simon, clean minimalist broadsheet portrait, soft natural office lighting, wearing dark glasses and navy sweater, neutral grey studio background, photorealistic 85mm lens portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHe8cVoYsBrfMtTuerMz6IRtI4epv3VnfBN_Dd0FW-LX_hOvVOzfwQWFyvv3u7p4iVaE_eJqxcj-v4hrf4qLlfuvDHvXJXUXmLJD7a1-9-RvIHYurukYTeV4SCE9F188EoEyADKeBHPpTEqe7aVY3HWMOJUtonrZ7mB3j5v05hhfnU6qWV34IVLxrvbMjsLQWOIT2hJ2s4jXRB54O2Cj37jbNhynwUdHI3eV26o-PopT74twRNM3yfDQ"/>
-<div>
-<div class="font-label-lg text-label-lg text-primary">Dr. Jonathan Ben-Simon</div>
-<div class="font-caption text-caption text-secondary">October 28, 2025 • 5 min read</div>
-</div>
-</div>
-<div class="flex items-center gap-space-lg text-secondary font-caption text-caption">
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">visibility</span>
-            14.2k views
-          </span>
-<span class="flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">bookmark_border</span>
-            Save
-          </span>
-<span class="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[16px]">share</span>
-            Share
-          </span>
-</div>
-</div>
-</header>
-<!-- Featured Visual -->
-<figure class="mb-space-2xl">
-<div class="w-full h-[440px] rounded-lg overflow-hidden bg-surface-container shadow-md">
-<img class="w-full h-full object-cover" data-alt="Macro close-up photograph of an advanced open-source microchip die packaging, delicate copper microscopic traces, geometric silicon crystalline surface, high key laboratory illumination, ultra-sharp detail, crisp clean editorial scientific aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQFbUOroMCRMcqBNDXhfqS_fdnfqRg1KOmUiM3GzaFqxxzBCHcJu7r-oFCSO4ut2XKv_ckUjzgnC_klTbbm896ek13SRIeaWPsofNa0o58dEvsawkqwF_td7bYjQAwHgpBK-eV-G9f7QEf6QoyodOgp9Wah8Pne4JFoRu0LQPYJW4Ln4nmSQYg_DmvDE-xWvuLDIbLWIKl3gtxPeFa99l3wsmC2xPTnvryqqgjdbPn17wK8jX99-y1AA"/>
-</div>
-<figcaption class="mt-space-xs px-space-xxs flex justify-between items-start gap-space-md text-secondary font-caption text-caption">
-<span>The prototype 7nm matrix processing engine assembled at the Zurich Open Compute Laboratory.</span>
-<span class="shrink-0 text-outline">Photo: Elena Rostova / The Daily Web Archive</span>
-</figcaption>
-</figure>
-<!-- Editorial Narrative (Single Column Well) -->
-<div class="space-y-space-lg font-headline-sm text-body-lg text-on-surface leading-relaxed tracking-normal font-normal">
-<p class="first-letter:font-display-hero first-letter:text-5xl first-letter:float-left first-letter:mr-space-sm first-letter:text-primary first-letter:leading-none">
-        In an unexpected coordination between independent universities and European fabrication consortia, an engineering working group announced the complete public release of the Helios-V architectural specification today. The platform marks the first fully open-weights tensor pipeline capable of executing frontier large language transformations without reliance on closed, vendor-locked accelerator modules.
-      </p>
-<p>
-        The initiative, spearheaded by computer scientists across three continents, directly addresses the growing fabrication choke-point that has centralized neural research inside a handful of cloud conglomerates. By re-imagining how sparse-matrix calculations map to conventional lithography, Helios-V delivers an estimated 3.8-fold efficiency gain on mid-tier silicon substrates.
-      </p>
-<!-- Section Subheading -->
-<h2 class="font-headline-lg text-headline-lg text-primary pt-space-md tracking-tight font-semibold">
-        Circumventing the Proprietary Memory Bottleneck
-      </h2>
-<p>
-        For nearly a decade, the primary barrier to training and serving high-dimension models has rested not purely within compute core speed, but inside memory access latency. Proprietary high-bandwidth memory (HBM) packages currently command six-month manufacturing backlogs.
-      </p>
-<!-- Integrated Broadsheet Pull-Quote -->
-<div class="my-space-xl p-space-xl bg-surface-container rounded-lg shadow-sm">
-<div class="flex items-start gap-space-sm">
-<span class="material-symbols-outlined text-primary text-4xl opacity-30 select-none">format_quote</span>
-<div>
-<blockquote class="font-headline-md text-headline-md text-primary italic leading-snug">
-              "We have demonstrated that the architecture itself, rather than exorbitant manufacturing budgets, is where true efficiency remains to be claimed. Open silicon is no longer an academic novelty."
-            </blockquote>
-<cite class="block mt-space-sm font-label-md text-label-md text-secondary not-italic uppercase tracking-wider">
-              — Dr. Alistair Chen, Lead Architect, Open Silicon Initiative
-            </cite>
-</div>
-</div>
-</div>
-<p>
-        By moving from monolithic systolic arrays to dynamically distributed ring buffers, the architecture allows ordinary DDR5 channel banks to operate synchronously across lower-cost edge cards. Initial benchmarks released this morning indicate that a four-node cluster constructed entirely from off-the-shelf components matched the inference throughput of specialized commercial boards costing eight times as much.
-      </p>
-<!-- Section Subheading -->
-<h2 class="font-headline-lg text-headline-lg text-primary pt-space-md tracking-tight font-semibold">
-        Immediate Academic and Institutional Deployment
-      </h2>
-<p>
-        The immediate beneficiaries are expected to be public universities and independent laboratories whose experimental budgets have been squeezed by surging commercial API costs. The entire specification—including Verilog gate definitions, compiled toolchains, and mathematical verification suites—was deposited into public public git repositories under an Apache 2.0 dual license earlier this morning.
-      </p>
-<p class="text-secondary font-body-md text-body-md">
-        Field verification runs will continue throughout November at the National Supercomputing Centre in Lugano, with developer evaluation boards scheduled to ship to research partners early next spring.
-      </p>
-</div>
-<!-- Article Tag Footer -->
-<div class="mt-space-xl pt-space-lg flex flex-wrap items-center gap-space-xs">
-<span class="font-label-caps text-label-caps text-secondary uppercase mr-space-xs">Filed Under:</span>
-<span class="px-space-sm py-1 bg-surface-container rounded font-label-md text-label-md text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Semiconductors</span>
-<span class="px-space-sm py-1 bg-surface-container rounded font-label-md text-label-md text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Open Source</span>
-<span class="px-space-sm py-1 bg-surface-container rounded font-label-md text-label-md text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Neural Hardware</span>
-<span class="px-space-sm py-1 bg-surface-container rounded font-label-md text-label-md text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Academic Computing</span>
-</div>
-<!-- Related Stories (Clean Cards) -->
-<section aria-labelledby="related-heading" class="mt-space-3xl mb-space-3xl">
-<div class="flex items-center justify-between mb-space-lg">
-<h3 class="font-headline-md text-headline-md text-primary tracking-tight" id="related-heading">Related Dispatches</h3>
-<span class="font-label-md text-label-md text-secondary">From Technology Desk</span>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-<!-- Card 1 -->
-<a class="group bg-surface-container-lowest p-space-md rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between" href="#">
-<div>
-<div class="w-full h-36 rounded bg-surface-container overflow-hidden mb-space-sm">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Clean minimal engineering blueprint render of photonic integrated circuit paths on dark wafer, subtle cyan highlighting, high tech editorial aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP0CaP6aF0uc7ptBKZm0opho0TWS7-fBI0E-zHZwQhivmexhbKsJNtv1KUPBJfodvoSp9VAStjMs4sNUhwJ_C_KnCieCUptx8tukmM4jPjICsmi6T2FoKV9RAb3Luob5HZZIwfoIYpsecZbtuVcE0evHAJWdhvAAHP-xpNrQnv9dNzepeeI8SDbkPZEnZdtkVSUQ_Nlo_Vg7CT9iM2OMnzI4Y4iOdk76RJO-AobCdixda7qUmQfi4Sxg"/>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary font-bold">Research</span>
-<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-fixed-variant transition-colors line-clamp-2 mt-space-xxs">
-              Photonic Interconnects Pass Critical Heat Threshold in Cleanroom Trials
-            </h4>
-</div>
-<span class="mt-space-md font-caption text-caption text-outline">Oct 26 • 4 min read</span>
-</a>
-<!-- Card 2 -->
-<a class="group bg-surface-container-lowest p-space-md rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between" href="#">
-<div>
-<div class="w-full h-36 rounded bg-surface-container overflow-hidden mb-space-sm">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Server rack banks illuminated by calm white and muted amber LED indicators in clean minimal modern datacenter hall, quiet institutional vibe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz8q_lgr3tp9twOQIjGUGd3cK7UF3FxBsjUjhfyHEKUtNysulOCunfiNVcGEz_ku5D6tfDbe2m0fyH3RZ-QqcoYoDU4C4me9HsW_SZF6Zr9kHyqFkVW_owyyvMlFoLDuUUxSA24YQRHdtmbgNnBV7Hhh_VFYcZ1YHOQUNr2pIkGylsVztGzJo070aY8AfKw6XoYQYmhX8vcw7fB14isMjJjTGUeT6tM6xR7JcGpuG4hDv3GBWzXYH-5Q"/>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary font-bold">Infrastructure</span>
-<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-fixed-variant transition-colors line-clamp-2 mt-space-xxs">
-              State Grid Announces Dedicated Power Corridor for Public Supercluster
-            </h4>
-</div>
-<span class="mt-space-md font-caption text-caption text-outline">Oct 24 • 3 min read</span>
-</a>
-<!-- Card 3 -->
-<a class="group bg-surface-container-lowest p-space-md rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between" href="#">
-<div>
-<div class="w-full h-36 rounded bg-surface-container overflow-hidden mb-space-sm">
-<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern lecture hall with graduate students collaborating over schematic drawings on tablets and paper, warm indirect lighting, academic collegial mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq2RGjBhWhTT0INRNrN2OCOq4o8iNQzBIhxp-ssdutw0sAbd9A0C74P5KgdAeUC1g93f0_ka8xk34gVRwSdfKN63XGPHpjhOPUGNttwgBAoZef5vkgJdfLmeTKqQ0Z_lVkOymUozQitRRDIPeKrGvAUx_kMvNDwEU7joDCN2hOo59NhJv5BAHX3VyB_fYyj6YKEIRk0RL9Bed6dBIY4byf9KhLEUJM_vXXe1QIuGgIx2kjq9joF3ilRw"/>
-</div>
-<span class="font-label-caps text-label-caps uppercase text-secondary font-bold">Academic Policy</span>
-<h4 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary-fixed-variant transition-colors line-clamp-2 mt-space-xxs">
-              Open Weights Curriculum Adopted Across Nine European Engineering Schools
-            </h4>
-</div>
-<span class="mt-space-md font-caption text-caption text-outline">Oct 21 • 6 min read</span>
-</a>
-</div>
-</section>
-<!-- Comments Section (Simple, Guest-Friendly) -->
-<section aria-labelledby="comments-title" class="mt-space-2xl bg-surface-container-lowest p-space-xl rounded-xl shadow-sm">
-<!-- Section Header -->
-<div class="flex items-center justify-between pb-space-md mb-space-lg">
-<div class="flex items-center gap-space-xs">
-<h3 class="font-headline-md text-headline-md text-primary" id="comments-title">Comments</h3>
-<span class="bg-surface-container-high text-primary font-label-caps text-label-caps px-2 py-0.5 rounded-full font-bold" id="comments-count">8</span>
-</div>
-<div class="flex items-center gap-1 font-caption text-caption text-secondary">
-<span class="material-symbols-outlined text-[16px]">public</span>
-          Open for community discussion
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web</title>
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body
+    class="surface-page text-body color-body height-screen flex flex-column"
+  >
+    <header class="fixed width-full surface-paper shadow-subtle">
+      <div
+        class="width-content page-shell pad-inline-5 flex align-center justify-between gap-4"
+      >
+        <div class="flex align-center gap-4">
+          <a class="flex align-center gap-2" data-path="home" href="#"
+            ><img
+              alt="English brand logo for 'The Daily Web' digital news publication. Modern folded newspaper icon with red live pulse dot, clean typography in English.. Brand logo"
+              class="image-logo"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+            /><span class="text-headline text-5 color-primary"
+              >The Daily Web</span
+            ></a
+          ><span class="color-subtle">|</span
+          ><span class="text-label text-1 color-muted text-uppercase"
+            >Campus Edition</span
+          >
         </div>
-</div>
-<!-- Guest Comment Submission Form -->
-<form class="bg-surface-container-low p-space-lg rounded-lg mb-space-2xl space-y-space-md" id="comment-form">
-<div class="flex items-center justify-between">
-<span class="font-label-lg text-label-lg text-primary">Leave a Public Thought</span>
-<span class="font-caption text-caption text-secondary">No registration required</span>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-<div>
-<label class="block font-label-md text-label-md text-secondary mb-space-xxs" for="guest-name">Your Name or Alias</label>
-<input class="w-full px-space-sm py-space-xs bg-surface-container-lowest rounded font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="guest-name" placeholder="e.g. Marcella / VLSI Fellow" required="" type="text"/>
-</div>
-<div>
-<label class="block font-label-md text-label-md text-secondary mb-space-xxs" for="guest-affil">Affiliation / Institution (Optional)</label>
-<input class="w-full px-space-sm py-space-xs bg-surface-container-lowest rounded font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="guest-affil" placeholder="e.g. Stanford Dept of EE" type="text"/>
-</div>
-</div>
-<div>
-<div class="flex justify-between items-center mb-space-xxs">
-<label class="font-label-md text-label-md text-secondary" for="comment-text">Comment</label>
-<span class="font-caption text-caption text-outline" id="char-counter">380 characters remaining</span>
-</div>
-<textarea class="w-full p-space-sm bg-surface-container-lowest rounded font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-sm resize-none" id="comment-text" maxlength="380" placeholder="Share your technical observations, questions, or perspectives on this dispatch..." required="" rows="3"></textarea>
-</div>
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pt-space-xs">
-<p class="font-caption text-caption text-secondary">
-            Guests may submit comments without registration. Submissions adhere to our newsroom code of conduct.
-          </p>
-<button class="inline-flex items-center justify-center gap-space-xs px-space-lg py-space-xs rounded bg-primary hover:bg-surface-container-highest hover:text-primary text-on-primary font-label-md text-label-md transition-colors shadow-sm self-end sm:self-auto shrink-0" type="submit">
-<span class="material-symbols-outlined text-[16px]">send</span>
-            Post Comment
-          </button>
-</div>
-</form>
-<!-- Comments Stream List -->
-<div class="space-y-space-md" id="comments-list">
-<!-- Comment 1 -->
-<div class="p-space-md bg-surface-container-low rounded-lg">
-<div class="flex items-center justify-between mb-space-xs">
-<div class="flex items-center gap-space-xs">
-<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary-fixed flex items-center justify-center font-label-caps text-label-caps font-bold">
-                TC
+        <nav
+          class="flex align-center gap-5"
+          data-active-classes="color-primary text-bold"
+        >
+          <a
+            aria-current="page"
+            class="motion-colors color-primary text-bold"
+            data-path="home"
+            href="#"
+            >Home</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="technology"
+            href="#"
+            >Technology</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="business"
+            href="#"
+            >Business</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="science"
+            href="#"
+            >Science</a
+          ><a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="opinion"
+            href="#"
+            >Opinion</a
+          >
+        </nav>
+        <div class="flex align-center gap-3">
+          <div class="relative">
+            <span class="icon absolute color-muted text-4">search</span
+            ><input
+              class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1"
+              placeholder="Search articles..."
+              type="text"
+            />
+          </div>
+          <a
+            class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-raised text-label text-1 motion-colors"
+            data-path="login"
+            href="#"
+            >Reporter Portal</a
+          >
+          <div
+            class="avatar-small surface-ink flex align-center justify-center"
+          >
+            <span class="icon color-inverse text-4">person</span>
+          </div>
+        </div>
+      </div>
+      <div class="surface-alert color-alert pad-inline-5 pad-block-2">
+        <div
+          class="width-content page-shell flex align-center gap-2 text-label text-1"
+        >
+          <span
+            class="color-inverse text-kicker text-1 pad-inline-3 pad-block-2 radius-standard text-uppercase text-bold"
+            >Breaking</span
+          ><span class="truncate text-body text-1"
+            >University Senate approves new student publication funding charter
+            for upcoming term.</span
+          >
+        </div>
+      </div>
+    </header>
+    <main class="width-full pad-6 surface-page flex-grow">
+      <div class="width-content page-shell pad-inline-5 pad-block-3">
+        <div class="flex flex-column width-full">
+          <!-- Article Main Container -->
+          <article class="width-content page-shell width-full">
+            <!-- Editorial Navigation / Breadcrumb -->
+            <nav
+              aria-label="Breadcrumb"
+              class="flex align-center gap-2 text-label text-1 color-muted margin-bottom-5"
+            >
+              <a class="motion-colors" href="#">Home</a>
+              <span class="icon color-subtle text-1">chevron_right</span>
+              <a class="motion-colors" href="#">Technology</a>
+              <span class="icon color-subtle text-1">chevron_right</span>
+              <span class="text-semibold">Artificial Intelligence</span>
+            </nav>
+            <!-- Header Block -->
+            <header class="margin-bottom-6">
+              <div class="flex align-center gap-3 margin-bottom-2">
+                <span
+                  class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"
+                >
+                  Technology
+                </span>
+                <span
+                  class="color-muted text-caption text-1 flex align-center gap-1"
+                >
+                  <span class="radius-pill"></span>
+                  Last updated 1 hour ago
+                </span>
               </div>
-<span class="font-label-lg text-label-lg text-primary">T. Constantinescu</span>
-<span class="font-caption text-caption text-secondary bg-surface-container px-1.5 py-0.5 rounded">TUM Microelectronics</span>
-</div>
-<span class="font-caption text-caption text-secondary">35 minutes ago</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface">
-            The DDR5 synchronization trick is the real story here. Everyone has been obsessing over raw HBM3 pin density, but routing wide channels across standard consumer traces eliminates over 60% of the board assembly bill of materials. Looking forward to cloning the Verilog suite.
-          </p>
-<div class="mt-space-sm flex items-center gap-space-md text-secondary font-caption text-caption">
-<button class="flex items-center gap-1 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[16px]">thumb_up</span>
-<span>19</span>
-</button>
-<button class="hover:text-primary transition-colors">Reply</button>
-</div>
-</div>
-<!-- Comment 2 -->
-<div class="p-space-md bg-surface-container-low rounded-lg">
-<div class="flex items-center justify-between mb-space-xs">
-<div class="flex items-center gap-space-xs">
-<div class="w-7 h-7 rounded-full bg-surface-container-highest text-primary flex items-center justify-center font-label-caps text-label-caps font-bold">
-                ML
-              </div>
-<span class="font-label-lg text-label-lg text-primary">Marcus Lindqvist</span>
-</div>
-<span class="font-caption text-caption text-secondary">1 hour ago</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface">
-            Are there any published thermal dissipation estimates for a 4-card bench rack under continuous 70B parameter inference? If ambient dissipation remains manageable in standard 4U chassis without liquid loops, university departments will flock to this immediately.
-          </p>
-<div class="mt-space-sm flex items-center gap-space-md text-secondary font-caption text-caption">
-<button class="flex items-center gap-1 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[16px]">thumb_up</span>
-<span>8</span>
-</button>
-<button class="hover:text-primary transition-colors">Reply</button>
-</div>
-</div>
-<!-- Comment 3 -->
-<div class="p-space-md bg-surface-container-low rounded-lg">
-<div class="flex items-center justify-between mb-space-xs">
-<div class="flex items-center gap-space-xs">
-<div class="w-7 h-7 rounded-full bg-secondary-container text-on-secondary-fixed flex items-center justify-center font-label-caps text-label-caps font-bold">
-                SA
-              </div>
-<span class="font-label-lg text-label-lg text-primary">Sara Al-Mansoor</span>
-<span class="font-caption text-caption text-secondary bg-surface-container px-1.5 py-0.5 rounded">Compiler Architect</span>
-</div>
-<span class="font-caption text-caption text-secondary">2 hours ago</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface">
-            Excited to see the Apache 2.0 designation. Proprietary compiler stacks have suffocated academic experimentation for far too long. If anyone is assembling an LLVM backend working group, please drop a note in the public repository tracker.
-          </p>
-<div class="mt-space-sm flex items-center gap-space-md text-secondary font-caption text-caption">
-<button class="flex items-center gap-1 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[16px]">thumb_up</span>
-<span>24</span>
-</button>
-<button class="hover:text-primary transition-colors">Reply</button>
-</div>
-</div>
-</div>
-<!-- Load Earlier Comments -->
-<div class="mt-space-lg text-center">
-<button class="font-label-md text-label-md text-secondary hover:text-primary transition-colors py-space-xs px-space-md bg-surface-container rounded inline-flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">expand_more</span>
-          Load 5 older comments
-        </button>
-</div>
-</section>
-</article>
-<!-- Client-side script for lightweight form feedback and counter -->
-<script>
-    (function() {
-      const textarea = document.getElementById('comment-text');
-      const counter = document.getElementById('char-counter');
-      const form = document.getElementById('comment-form');
-      const list = document.getElementById('comments-list');
-      const totalCount = document.getElementById('comments-count');
-
-      if (textarea && counter) {
-        textarea.addEventListener('input', function() {
-          const remaining = 380 - this.value.length;
-          counter.textContent = remaining + ' characters remaining';
-        });
-      }
-
-      if (form && list) {
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          const nameInput = document.getElementById('guest-name');
-          const affilInput = document.getElementById('guest-affil');
-          const textInput = document.getElementById('comment-text');
-
-          const name = nameInput.value.trim() || 'Guest Reader';
-          const affil = affilInput.value.trim();
-          const comment = textInput.value.trim();
-
-          if (!comment) return;
-
-          // Compute initials
-          const initials = name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase() || 'G';
-
-          const card = document.createElement('div');
-          card.className = 'p-space-md bg-surface-container rounded-lg shadow-sm';
-          card.innerHTML = `
-            <div class="flex items-center justify-between mb-space-xs">
-              <div class="flex items-center gap-space-xs">
-                <div class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-caps text-label-caps font-bold">
-                  \${initials}
+              <h1
+                class="text-display text-heading-xl color-primary margin-bottom-4 text-tight"
+              >
+                Breakthrough In Open Silicon: Next-Generation Computing
+                Architecture Unveiled
+              </h1>
+              <p class="text-deck color-muted text-relaxed margin-bottom-5">
+                Researchers deploy open-weights tensor architecture designed to
+                run high-throughput models on standard consumer hardware,
+                bypassing proprietary silicon moats.
+              </p>
+              <!-- Byline Row -->
+              <div
+                class="flex flex-wrap align-center justify-between gap-4 pad-block-3 surface-muted pad-inline-4 radius-card"
+              >
+                <div class="flex align-center gap-3">
+                  <img
+                    class="avatar-medium radius-pill media-cover shadow-subtle"
+                    data-alt="Editorial headshot of Dr. Jonathan Ben-Simon, clean minimalist broadsheet portrait, soft natural office lighting, wearing dark glasses and navy sweater, neutral grey studio background, photorealistic 85mm lens portrait"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHe8cVoYsBrfMtTuerMz6IRtI4epv3VnfBN_Dd0FW-LX_hOvVOzfwQWFyvv3u7p4iVaE_eJqxcj-v4hrf4qLlfuvDHvXJXUXmLJD7a1-9-RvIHYurukYTeV4SCE9F188EoEyADKeBHPpTEqe7aVY3HWMOJUtonrZ7mB3j5v05hhfnU6qWV34IVLxrvbMjsLQWOIT2hJ2s4jXRB54O2Cj37jbNhynwUdHI3eV26o-PopT74twRNM3yfDQ"
+                  />
+                  <div>
+                    <div class="text-label text-2 color-primary">
+                      Dr. Jonathan Ben-Simon
+                    </div>
+                    <div class="text-caption text-1 color-muted">
+                      October 28, 2025 • 5 min read
+                    </div>
+                  </div>
                 </div>
-                <span class="font-label-lg text-label-lg text-primary">\${name}</span>
-                \${affil ? `<span class="font-caption text-caption text-secondary bg-surface-container-high px-1.5 py-0.5 rounded">\${affil}</span>` : ''}
+                <div
+                  class="flex align-center gap-5 color-muted text-caption text-1"
+                >
+                  <span class="flex align-center gap-1">
+                    <span class="icon text-2">visibility</span>
+                    14.2k views
+                  </span>
+                  <span class="flex align-center gap-1">
+                    <span class="icon text-2">bookmark_border</span>
+                    Save
+                  </span>
+                  <span
+                    class="flex align-center gap-1 control-pointer motion-colors"
+                  >
+                    <span class="icon text-2">share</span>
+                    Share
+                  </span>
+                </div>
               </div>
-              <span class="font-caption text-caption text-secondary">Just now</span>
+            </header>
+            <!-- Featured Visual -->
+            <figure class="margin-bottom-6">
+              <div
+                class="width-full height-feature radius-card overflow-hidden surface-panel shadow-raised"
+              >
+                <img
+                  class="media-image"
+                  data-alt="Macro close-up photograph of an advanced open-source microchip die packaging, delicate copper microscopic traces, geometric silicon crystalline surface, high key laboratory illumination, ultra-sharp detail, crisp clean editorial scientific aesthetic"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQFbUOroMCRMcqBNDXhfqS_fdnfqRg1KOmUiM3GzaFqxxzBCHcJu7r-oFCSO4ut2XKv_ckUjzgnC_klTbbm896ek13SRIeaWPsofNa0o58dEvsawkqwF_td7bYjQAwHgpBK-eV-G9f7QEf6QoyodOgp9Wah8Pne4JFoRu0LQPYJW4Ln4nmSQYg_DmvDE-xWvuLDIbLWIKl3gtxPeFa99l3wsmC2xPTnvryqqgjdbPn17wK8jX99-y1AA"
+                />
+              </div>
+              <figcaption
+                class="margin-top-2 pad-inline-3 flex justify-between align-start gap-4 color-muted text-caption text-1"
+              >
+                <span
+                  >The prototype 7nm matrix processing engine assembled at the
+                  Zurich Open Compute Laboratory.</span
+                >
+                <span class="flex-no-shrink color-subtle"
+                  >Photo: Elena Rostova / The Daily Web Archive</span
+                >
+              </figcaption>
+            </figure>
+            <!-- Editorial Narrative (Single Column Well) -->
+            <div
+              class="article-copy stack-5 text-article color-body text-relaxed text-normal"
+            >
+              <p>
+                In an unexpected coordination between independent universities
+                and European fabrication consortia, an engineering working group
+                announced the complete public release of the Helios-V
+                architectural specification today. The platform marks the first
+                fully open-weights tensor pipeline capable of executing frontier
+                large language transformations without reliance on closed,
+                vendor-locked accelerator modules.
+              </p>
+              <p>
+                The initiative, spearheaded by computer scientists across three
+                continents, directly addresses the growing fabrication
+                choke-point that has centralized neural research inside a
+                handful of cloud conglomerates. By re-imagining how
+                sparse-matrix calculations map to conventional lithography,
+                Helios-V delivers an estimated 3.8-fold efficiency gain on
+                mid-tier silicon substrates.
+              </p>
+              <!-- Section Subheading -->
+              <h2
+                class="text-headline text-6 color-primary pad-4 text-semibold"
+              >
+                Circumventing the Proprietary Memory Bottleneck
+              </h2>
+              <p>
+                For nearly a decade, the primary barrier to training and serving
+                high-dimension models has rested not purely within compute core
+                speed, but inside memory access latency. Proprietary
+                high-bandwidth memory (HBM) packages currently command six-month
+                manufacturing backlogs.
+              </p>
+              <!-- Integrated Broadsheet Pull-Quote -->
+              <div
+                class="margin-top-6 pad-6 surface-panel radius-card shadow-subtle"
+              >
+                <div class="flex align-start gap-3">
+                  <span
+                    class="icon color-primary text-7 state-muted control-no-select"
+                    >format_quote</span
+                  >
+                  <div>
+                    <blockquote
+                      class="text-headline text-5 color-primary text-italic text-tight"
+                    >
+                      "We have demonstrated that the architecture itself, rather
+                      than exorbitant manufacturing budgets, is where true
+                      efficiency remains to be claimed. Open silicon is no
+                      longer an academic novelty."
+                    </blockquote>
+                    <cite
+                      class="block margin-top-2 text-label text-1 color-muted text-uppercase"
+                    >
+                      — Dr. Alistair Chen, Lead Architect, Open Silicon
+                      Initiative
+                    </cite>
+                  </div>
+                </div>
+              </div>
+              <p>
+                By moving from monolithic systolic arrays to dynamically
+                distributed ring buffers, the architecture allows ordinary DDR5
+                channel banks to operate synchronously across lower-cost edge
+                cards. Initial benchmarks released this morning indicate that a
+                four-node cluster constructed entirely from off-the-shelf
+                components matched the inference throughput of specialized
+                commercial boards costing eight times as much.
+              </p>
+              <!-- Section Subheading -->
+              <h2
+                class="text-headline text-6 color-primary pad-4 text-semibold"
+              >
+                Immediate Academic and Institutional Deployment
+              </h2>
+              <p>
+                The immediate beneficiaries are expected to be public
+                universities and independent laboratories whose experimental
+                budgets have been squeezed by surging commercial API costs. The
+                entire specification—including Verilog gate definitions,
+                compiled toolchains, and mathematical verification suites—was
+                deposited into public public git repositories under an Apache
+                2.0 dual license earlier this morning.
+              </p>
+              <p class="color-muted">
+                Field verification runs will continue throughout November at the
+                National Supercomputing Centre in Lugano, with developer
+                evaluation boards scheduled to ship to research partners early
+                next spring.
+              </p>
             </div>
-            <p class="font-body-md text-body-md text-on-surface">\${comment}</p>
-            <div class="mt-space-sm flex items-center gap-space-md text-secondary font-caption text-caption">
-              <button class="flex items-center gap-1 hover:text-primary transition-colors">
-                <span class="material-symbols-outlined text-[16px]">thumb_up</span>
+            <!-- Article Tag Footer -->
+            <div class="margin-top-6 pad-5 flex flex-wrap align-center gap-2">
+              <span class="text-kicker text-1 color-muted text-uppercase"
+                >Filed Under:</span
+              >
+              <span
+                class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1 control-pointer motion-colors"
+                >Semiconductors</span
+              >
+              <span
+                class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1 control-pointer motion-colors"
+                >Open Source</span
+              >
+              <span
+                class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1 control-pointer motion-colors"
+                >Neural Hardware</span
+              >
+              <span
+                class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1 control-pointer motion-colors"
+                >Academic Computing</span
+              >
+            </div>
+            <!-- Related Stories (Clean Cards) -->
+            <section
+              aria-labelledby="related-heading"
+              class="margin-top-6 margin-bottom-6"
+            >
+              <div class="flex align-center justify-between margin-bottom-5">
+                <h3
+                  class="text-headline text-5 color-primary"
+                  id="related-heading"
+                >
+                  Related Dispatches
+                </h3>
+                <span class="text-label text-1 color-muted"
+                  >From Technology Desk</span
+                >
+              </div>
+              <div class="grid grid-single md-grid-triple gap-4">
+                <!-- Card 1 -->
+                <a
+                  class="surface-paper pad-4 radius-card shadow-subtle motion-shadow flex flex-column justify-between"
+                  href="#"
+                >
+                  <div>
+                    <div
+                      class="width-full media-card radius-standard surface-panel overflow-hidden margin-bottom-2"
+                    >
+                      <img
+                        class="width-full media-cover interaction-zoom motion-transform"
+                        data-alt="Clean minimal engineering blueprint render of photonic integrated circuit paths on dark wafer, subtle cyan highlighting, high tech editorial aesthetic"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP0CaP6aF0uc7ptBKZm0opho0TWS7-fBI0E-zHZwQhivmexhbKsJNtv1KUPBJfodvoSp9VAStjMs4sNUhwJ_C_KnCieCUptx8tukmM4jPjICsmi6T2FoKV9RAb3Luob5HZZIwfoIYpsecZbtuVcE0evHAJWdhvAAHP-xpNrQnv9dNzepeeI8SDbkPZEnZdtkVSUQ_Nlo_Vg7CT9iM2OMnzI4Y4iOdk76RJO-AobCdixda7qUmQfi4Sxg"
+                      />
+                    </div>
+                    <span
+                      class="text-kicker text-1 text-uppercase color-muted text-bold"
+                      >Research</span
+                    >
+                    <h4
+                      class="text-headline color-primary motion-colors title-clamp margin-top-2"
+                    >
+                      Photonic Interconnects Pass Critical Heat Threshold in
+                      Cleanroom Trials
+                    </h4>
+                  </div>
+                  <span class="text-caption text-1 color-subtle"
+                    >Oct 26 • 4 min read</span
+                  >
+                </a>
+                <!-- Card 2 -->
+                <a
+                  class="surface-paper pad-4 radius-card shadow-subtle motion-shadow flex flex-column justify-between"
+                  href="#"
+                >
+                  <div>
+                    <div
+                      class="width-full media-card radius-standard surface-panel overflow-hidden margin-bottom-2"
+                    >
+                      <img
+                        class="width-full media-cover interaction-zoom motion-transform"
+                        data-alt="Server rack banks illuminated by calm white and muted amber LED indicators in clean minimal modern datacenter hall, quiet institutional vibe"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz8q_lgr3tp9twOQIjGUGd3cK7UF3FxBsjUjhfyHEKUtNysulOCunfiNVcGEz_ku5D6tfDbe2m0fyH3RZ-QqcoYoDU4C4me9HsW_SZF6Zr9kHyqFkVW_owyyvMlFoLDuUUxSA24YQRHdtmbgNnBV7Hhh_VFYcZ1YHOQUNr2pIkGylsVztGzJo070aY8AfKw6XoYQYmhX8vcw7fB14isMjJjTGUeT6tM6xR7JcGpuG4hDv3GBWzXYH-5Q"
+                      />
+                    </div>
+                    <span
+                      class="text-kicker text-1 text-uppercase color-muted text-bold"
+                      >Infrastructure</span
+                    >
+                    <h4
+                      class="text-headline color-primary motion-colors title-clamp margin-top-2"
+                    >
+                      State Grid Announces Dedicated Power Corridor for Public
+                      Supercluster
+                    </h4>
+                  </div>
+                  <span class="text-caption text-1 color-subtle"
+                    >Oct 24 • 3 min read</span
+                  >
+                </a>
+                <!-- Card 3 -->
+                <a
+                  class="surface-paper pad-4 radius-card shadow-subtle motion-shadow flex flex-column justify-between"
+                  href="#"
+                >
+                  <div>
+                    <div
+                      class="width-full media-card radius-standard surface-panel overflow-hidden margin-bottom-2"
+                    >
+                      <img
+                        class="width-full media-cover interaction-zoom motion-transform"
+                        data-alt="Modern lecture hall with graduate students collaborating over schematic drawings on tablets and paper, warm indirect lighting, academic collegial mood"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq2RGjBhWhTT0INRNrN2OCOq4o8iNQzBIhxp-ssdutw0sAbd9A0C74P5KgdAeUC1g93f0_ka8xk34gVRwSdfKN63XGPHpjhOPUGNttwgBAoZef5vkgJdfLmeTKqQ0Z_lVkOymUozQitRRDIPeKrGvAUx_kMvNDwEU7joDCN2hOo59NhJv5BAHX3VyB_fYyj6YKEIRk0RL9Bed6dBIY4byf9KhLEUJM_vXXe1QIuGgIx2kjq9joF3ilRw"
+                      />
+                    </div>
+                    <span
+                      class="text-kicker text-1 text-uppercase color-muted text-bold"
+                      >Academic Policy</span
+                    >
+                    <h4
+                      class="text-headline color-primary motion-colors title-clamp margin-top-2"
+                    >
+                      Open Weights Curriculum Adopted Across Nine European
+                      Engineering Schools
+                    </h4>
+                  </div>
+                  <span class="text-caption text-1 color-subtle"
+                    >Oct 21 • 6 min read</span
+                  >
+                </a>
+              </div>
+            </section>
+            <!-- Comments Section (Simple, Guest-Friendly) -->
+            <section
+              aria-labelledby="comments-title"
+              class="surface-paper pad-6 radius-panel shadow-subtle"
+            >
+              <!-- Section Header -->
+              <div
+                class="flex align-center justify-between pad-block-3 margin-bottom-5"
+              >
+                <div class="flex align-center gap-2">
+                  <h3
+                    class="text-headline text-5 color-primary"
+                    id="comments-title"
+                  >
+                    Comments
+                  </h3>
+                  <span
+                    class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-pill text-bold"
+                    id="comments-count"
+                    >8</span
+                  >
+                </div>
+                <div
+                  class="flex align-center gap-1 text-caption text-1 color-muted"
+                >
+                  <span class="icon text-2">public</span>
+                  Open for community discussion
+                </div>
+              </div>
+              <!-- Guest Comment Submission Form -->
+              <form
+                class="surface-muted pad-5 radius-card margin-bottom-6 stack-4"
+                id="comment-form"
+              >
+                <div class="flex align-center justify-between">
+                  <span class="text-label text-2 color-primary"
+                    >Leave a Public Thought</span
+                  >
+                  <span class="text-caption text-1 color-muted"
+                    >No registration required</span
+                  >
+                </div>
+                <div class="grid grid-single sm-grid-split gap-4">
+                  <div>
+                    <label
+                      class="block text-label text-1 color-muted"
+                      for="guest-name"
+                      >Your Name or Alias</label
+                    >
+                    <input
+                      class="width-full pad-inline-3 pad-block-2 surface-paper radius-standard text-body text-1 shadow-subtle"
+                      id="guest-name"
+                      placeholder="e.g. Marcella / VLSI Fellow"
+                      required=""
+                      type="text"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-label text-1 color-muted"
+                      for="guest-affil"
+                      >Affiliation / Institution (Optional)</label
+                    >
+                    <input
+                      class="width-full pad-inline-3 pad-block-2 surface-paper radius-standard text-body text-1 shadow-subtle"
+                      id="guest-affil"
+                      placeholder="e.g. Stanford Dept of EE"
+                      type="text"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between align-center">
+                    <label
+                      class="text-label text-1 color-muted"
+                      for="comment-text"
+                      >Comment</label
+                    >
+                    <span
+                      class="text-caption text-1 color-subtle"
+                      id="char-counter"
+                      >380 characters remaining</span
+                    >
+                  </div>
+                  <textarea
+                    class="width-full pad-3 surface-paper radius-standard text-body text-1 shadow-subtle control-no-resize"
+                    id="comment-text"
+                    maxlength="380"
+                    placeholder="Share your technical observations, questions, or perspectives on this dispatch..."
+                    required=""
+                    rows="3"
+                  ></textarea>
+                </div>
+                <div
+                  class="flex flex-column sm-row sm-align-center justify-between gap-4 pad-block-2"
+                >
+                  <p class="text-caption text-1 color-muted">
+                    Guests may submit comments without registration. Submissions
+                    adhere to our newsroom code of conduct.
+                  </p>
+                  <button
+                    class="inline-flex align-center justify-center gap-2 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 motion-colors shadow-subtle flex-no-shrink"
+                    type="submit"
+                  >
+                    <span class="icon text-2">send</span>
+                    Post Comment
+                  </button>
+                </div>
+              </form>
+              <!-- Comments Stream List -->
+              <div class="stack-4" id="comments-list">
+                <!-- Comment 1 -->
+                <div class="pad-4 surface-muted radius-card">
+                  <div class="flex align-center justify-between">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-kicker text-1 text-bold"
+                      >
+                        TC
+                      </div>
+                      <span class="text-label text-2 color-primary"
+                        >T. Constantinescu</span
+                      >
+                      <span
+                        class="text-caption text-1 color-muted surface-panel pad-inline-3 pad-block-2 radius-standard"
+                        >TUM Microelectronics</span
+                      >
+                    </div>
+                    <span class="text-caption text-1 color-muted"
+                      >35 minutes ago</span
+                    >
+                  </div>
+                  <p>
+                    The DDR5 synchronization trick is the real story here.
+                    Everyone has been obsessing over raw HBM3 pin density, but
+                    routing wide channels across standard consumer traces
+                    eliminates over 60% of the board assembly bill of materials.
+                    Looking forward to cloning the Verilog suite.
+                  </p>
+                  <div
+                    class="margin-top-2 flex align-center gap-4 color-muted text-caption text-1"
+                  >
+                    <button class="flex align-center gap-1 motion-colors">
+                      <span class="icon text-2">thumb_up</span>
+                      <span>19</span>
+                    </button>
+                    <button class="motion-colors">Reply</button>
+                  </div>
+                </div>
+                <!-- Comment 2 -->
+                <div class="pad-4 surface-muted radius-card">
+                  <div class="flex align-center justify-between">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-raised color-primary flex align-center justify-center text-kicker text-1 text-bold"
+                      >
+                        ML
+                      </div>
+                      <span class="text-label text-2 color-primary"
+                        >Marcus Lindqvist</span
+                      >
+                    </div>
+                    <span class="text-caption text-1 color-muted"
+                      >1 hour ago</span
+                    >
+                  </div>
+                  <p>
+                    Are there any published thermal dissipation estimates for a
+                    4-card bench rack under continuous 70B parameter inference?
+                    If ambient dissipation remains manageable in standard 4U
+                    chassis without liquid loops, university departments will
+                    flock to this immediately.
+                  </p>
+                  <div
+                    class="margin-top-2 flex align-center gap-4 color-muted text-caption text-1"
+                  >
+                    <button class="flex align-center gap-1 motion-colors">
+                      <span class="icon text-2">thumb_up</span>
+                      <span>8</span>
+                    </button>
+                    <button class="motion-colors">Reply</button>
+                  </div>
+                </div>
+                <!-- Comment 3 -->
+                <div class="pad-4 surface-muted radius-card">
+                  <div class="flex align-center justify-between">
+                    <div class="flex align-center gap-2">
+                      <div
+                        class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-kicker text-1 text-bold"
+                      >
+                        SA
+                      </div>
+                      <span class="text-label text-2 color-primary"
+                        >Sara Al-Mansoor</span
+                      >
+                      <span
+                        class="text-caption text-1 color-muted surface-panel pad-inline-3 pad-block-2 radius-standard"
+                        >Compiler Architect</span
+                      >
+                    </div>
+                    <span class="text-caption text-1 color-muted"
+                      >2 hours ago</span
+                    >
+                  </div>
+                  <p>
+                    Excited to see the Apache 2.0 designation. Proprietary
+                    compiler stacks have suffocated academic experimentation for
+                    far too long. If anyone is assembling an LLVM backend
+                    working group, please drop a note in the public repository
+                    tracker.
+                  </p>
+                  <div
+                    class="margin-top-2 flex align-center gap-4 color-muted text-caption text-1"
+                  >
+                    <button class="flex align-center gap-1 motion-colors">
+                      <span class="icon text-2">thumb_up</span>
+                      <span>24</span>
+                    </button>
+                    <button class="motion-colors">Reply</button>
+                  </div>
+                </div>
+              </div>
+              <!-- Load Earlier Comments -->
+              <div class="margin-top-5 text-center">
+                <button
+                  class="text-label text-1 color-muted motion-colors pad-block-2 pad-inline-4 surface-panel radius-standard inline-flex align-center gap-1"
+                >
+                  <span class="icon text-2">expand_more</span>
+                  Load 5 older comments
+                </button>
+              </div>
+            </section>
+          </article>
+          <!-- Client-side script for lightweight form feedback and counter -->
+          <script>
+            (function () {
+              const textarea = document.getElementById("comment-text");
+              const counter = document.getElementById("char-counter");
+              const form = document.getElementById("comment-form");
+              const list = document.getElementById("comments-list");
+              const totalCount = document.getElementById("comments-count");
+
+              if (textarea && counter) {
+                textarea.addEventListener("input", function () {
+                  const remaining = 380 - this.value.length;
+                  counter.textContent = remaining + " characters remaining";
+                });
+              }
+
+              if (form && list) {
+                form.addEventListener("submit", function (e) {
+                  e.preventDefault();
+                  const nameInput = document.getElementById("guest-name");
+                  const affilInput = document.getElementById("guest-affil");
+                  const textInput = document.getElementById("comment-text");
+
+                  const name = nameInput.value.trim() || "Guest Reader";
+                  const affil = affilInput.value.trim();
+                  const comment = textInput.value.trim();
+
+                  if (!comment) return;
+
+                  // Compute initials
+                  const initials =
+                    name
+                      .split(" ")
+                      .map((p) => p[0])
+                      .slice(0, 2)
+                      .join("")
+                      .toUpperCase() || "G";
+
+                  const card = document.createElement("div");
+                  card.className =
+                    "pad-4 surface-panel radius-card shadow-subtle";
+                  card.innerHTML = `
+            <div class="flex align-center justify-between">
+              <div class="flex align-center gap-2">
+                <div class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-kicker text-1 text-bold">
+                  ${initials}
+                </div>
+                <span class="text-label text-2 color-primary">${name}</span>
+                ${affil ? `<span class="text-caption text-1 color-muted surface-raised pad-inline-3 pad-block-2 radius-standard">${affil}</span>` : ""}
+              </div>
+              <span class="text-caption text-1 color-muted">Just now</span>
+            </div>
+            <p >${comment}</p>
+            <div class="margin-top-2 flex align-center gap-4 color-muted text-caption text-1">
+              <button class="flex align-center gap-1 motion-colors">
+                <span class="icon text-2">thumb_up</span>
                 <span>1</span>
               </button>
-              <button class="hover:text-primary transition-colors">Reply</button>
+              <button class="motion-colors">Reply</button>
             </div>
           `;
 
-          list.insertBefore(card, list.firstChild);
+                  list.insertBefore(card, list.firstChild);
 
-          // Update count
-          if (totalCount) {
-            const currentNum = parseInt(totalCount.textContent, 10) || 8;
-            totalCount.textContent = (currentNum + 1).toString();
-          }
+                  // Update count
+                  if (totalCount) {
+                    const currentNum =
+                      parseInt(totalCount.textContent, 10) || 8;
+                    totalCount.textContent = (currentNum + 1).toString();
+                  }
 
-          form.reset();
-          if (counter) counter.textContent = '380 characters remaining';
-        });
-      }
-    })();
-  </script>
-</div></div></main><footer class="w-full bg-surface-container-low mt-auto"><div class="max-w-max-content-width mx-auto px-gutter-desktop py-space-2xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-xl"><div class="md:col-span-1"><div class="flex items-center gap-space-xs mb-space-sm"><img alt="The Daily Web logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"/><span class="font-headline-sm text-headline-sm text-primary">The Daily Web</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">The independent digital news publication edited and maintained by collegiate journalists.</p></div><div><h4 class="font-label-caps text-label-caps text-on-surface uppercase mb-space-sm">Sections</h4><ul class="space-y-space-xxs font-body-sm text-body-sm"><li class="text-on-surface-variant">Technology</li><li class="text-on-surface-variant">Business &amp; Campus Finance</li><li class="text-on-surface-variant">Science &amp; Research</li><li class="text-on-surface-variant">Editorial &amp; Opinion</li></ul></div><div><h4 class="font-label-caps text-label-caps text-on-surface uppercase mb-space-sm">About Publication</h4><ul class="space-y-space-xxs font-body-sm text-body-sm"><li class="text-on-surface-variant">Editorial Board</li><li class="text-on-surface-variant">Ethics Policy</li><li class="text-on-surface-variant">Archive Index</li><li class="text-on-surface-variant">Academic Masthead</li></ul></div><div><h4 class="font-label-caps text-label-caps text-on-surface uppercase mb-space-sm">Newsroom Contact</h4><p class="font-body-sm text-body-sm text-on-surface-variant mb-space-xs">Newsroom Lab 304, Student Memorial Hall</p><p class="font-body-sm text-body-sm text-on-surface-variant">tips@dailyweb.edu</p></div></div><div class="mt-space-xl pt-space-lg text-center font-caption text-caption text-outline">© 2024 The Daily Web Student Newsroom. Built with clean semantic modular templates.</div></div></footer></body></html>
+                  form.reset();
+                  if (counter) counter.textContent = "380 characters remaining";
+                });
+              }
+            })();
+          </script>
+        </div>
+      </div>
+    </main>
+    <footer class="width-full surface-muted">
+      <div class="width-content page-shell pad-inline-5 pad-6">
+        <div class="grid grid-single md-grid-triple gap-6">
+          <div>
+            <div class="flex align-center gap-2 margin-bottom-2">
+              <img
+                alt="The Daily Web logo"
+                class="image-logo"
+                src="https://lh3.googleusercontent.com/aida/AEtjO1Xq-TfzTvaz8iwXoa4pPlpaSH3HMgs03iq6LB2W5K2nGSknby3P4VyuwDkSb65u-mFjsh0NDXNzUJNjfZTTODbRRvfqNoyJMADexPerVulOc2P5jQiLGWHflcx13JZkALpHdc7O58_MaE9f6S-DbRN7ruh97uvhc5ZNjj5eIq7oGdHf1hjuhCzJyMdQcNDUQ8hdEjLEM9rC5f3QkylMMMggO5bVYfX2bYBx2qarWvppU-Pfe9MGms8h-q2o"
+              /><span class="text-headline color-primary">The Daily Web</span>
+            </div>
+            <p class="text-body text-1 color-muted">
+              The independent digital news publication edited and maintained by
+              collegiate journalists.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-kicker text-1 text-uppercase margin-bottom-2">
+              Sections
+            </h4>
+            <ul class="stack-2 text-body text-1">
+              <li class="color-muted">Technology</li>
+              <li class="color-muted">Business &amp; Campus Finance</li>
+              <li class="color-muted">Science &amp; Research</li>
+              <li class="color-muted">Editorial &amp; Opinion</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-kicker text-1 text-uppercase margin-bottom-2">
+              About Publication
+            </h4>
+            <ul class="stack-2 text-body text-1">
+              <li class="color-muted">Editorial Board</li>
+              <li class="color-muted">Ethics Policy</li>
+              <li class="color-muted">Archive Index</li>
+              <li class="color-muted">Academic Masthead</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-kicker text-1 text-uppercase margin-bottom-2">
+              Newsroom Contact
+            </h4>
+            <p class="text-body text-1 color-muted">
+              Newsroom Lab 304, Student Memorial Hall
+            </p>
+            <p class="text-body text-1 color-muted">tips@dailyweb.edu</p>
+          </div>
+        </div>
+        <div
+          class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle"
+        >
+          © 2024 The Daily Web Student Newsroom. Built with clean semantic
+          modular templates.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
