@@ -1,0 +1,83 @@
+/*
+ * Shared interface components
+ *
+ * These selectors describe recurring visual patterns. Utility classes remain
+ * the primary contract, so component rules avoid unnecessary specificity.
+ */
+/* Links and action controls */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+.button {
+  border: 0;
+  border-radius: var(--radius-default);
+}
+
+/* Editorial surfaces */
+figure,
+blockquote,
+cite {
+  margin: 0;
+}
+
+article p {
+  max-width: var(--reading-column-width);
+}
+
+/* Form controls */
+input,
+select,
+textarea {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+}
+
+/* Status surfaces keep their text color explicit; utility text classes can
+ * still override these defaults when a page needs a different contrast tone.
+ */
+.bg-error-container {
+  color: var(--color-on-error-container);
+}
+
+.bg-error {
+  color: var(--color-on-error);
+}
+
+/* Material Symbols are loaded by the pages and should align like inline icons. */
+.material-symbols-outlined {
+  display: inline-block;
+  font-family: "Material Symbols Outlined";
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* Keep table geometry predictable; existing overflow wrappers own scrolling. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Script-controlled status visibility remains class-driven. */
+[hidden],
+.hidden {
+  display: none !important;
+}

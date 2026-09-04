@@ -1,0 +1,63 @@
+/*
+ * Shared page layouts
+ *
+ * Use these rules for page composition that recurs across public reading pages
+ * and newsroom tools. Content-specific styling belongs in pages.css.
+ */
+.page-shell,
+.content-shell {
+  width: min(100% - (2 * var(--gutter-mobile)), var(--max-content-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.reading-column {
+  width: min(100%, var(--reading-column-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--column-gap);
+}
+
+.workspace-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 256px;
+}
+
+.workspace-main {
+  min-width: 0;
+  margin-left: 256px;
+}
+
+@media (min-width: 768px) {
+  .editorial-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-shell,
+  .content-shell {
+    width: min(100% - (2 * var(--gutter-desktop)), var(--max-content-width));
+  }
+
+  .editorial-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .workspace-sidebar {
+    position: static;
+    width: 100%;
+  }
+
+  .workspace-main {
+    margin-left: 0;
+  }
+}

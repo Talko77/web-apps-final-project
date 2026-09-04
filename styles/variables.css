@@ -1,0 +1,113 @@
+/*
+ * Design variables
+ *
+ * These values define the shared editorial visual language. Keep page rules
+ * dependent on these variables so color, rhythm, and typography stay aligned.
+ */
+:root {
+  /* Paper surfaces and ink */
+  --color-surface: #f7f9fb;
+  --color-surface-dim: #d8dadc;
+  --color-surface-bright: #f7f9fb;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+  --color-surface-variant: #e0e3e5;
+  --color-background: #f7f9fb;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #45464d;
+  --color-inverse-surface: #2d3133;
+  --color-inverse-on-surface: #eff1f3;
+  --color-outline: #76777d;
+  --color-outline-variant: #c6c6cd;
+  --color-surface-tint: #565e74;
+
+  /* Editorial actions and workflow states */
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #131b2e;
+  --color-on-primary-container: #7c839b;
+  --color-inverse-primary: #bec6e0;
+  --color-secondary: #515f74;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d5e3fc;
+  --color-on-secondary-container: #57657a;
+  --color-tertiary: #000000;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #410002;
+  --color-on-tertiary-container: #f63a35;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #dae2fd;
+  --color-primary-fixed-dim: #bec6e0;
+  --color-on-primary-fixed: #131b2e;
+  --color-on-primary-fixed-variant: #3f465c;
+  --color-secondary-fixed: #d5e3fc;
+  --color-secondary-fixed-dim: #b9c7df;
+  --color-on-secondary-fixed: #0d1c2e;
+  --color-on-secondary-fixed-variant: #3a485b;
+  --color-tertiary-fixed: #ffdad6;
+  --color-tertiary-fixed-dim: #ffb4ab;
+  --color-on-tertiary-fixed: #410002;
+  --color-on-tertiary-fixed-variant: #93000b;
+
+  /* Typography */
+  --font-display: "Newsreader", Georgia, serif;
+  --font-interface: "Inter", Arial, sans-serif;
+  --text-display-hero: 56px;
+  --text-display-hero-line: 64px;
+  --text-headline-xl: 40px;
+  --text-headline-xl-line: 48px;
+  --text-headline-lg: 28px;
+  --text-headline-lg-line: 36px;
+  --text-headline-md: 22px;
+  --text-headline-md-line: 28px;
+  --text-headline-sm: 18px;
+  --text-headline-sm-line: 24px;
+  --text-body-lead: 20px;
+  --text-body-lead-line: 32px;
+  --text-body-lg: 17px;
+  --text-body-lg-line: 28px;
+  --text-body-md: 15px;
+  --text-body-md-line: 24px;
+  --text-body-sm: 13px;
+  --text-body-sm-line: 20px;
+  --text-label-lg: 14px;
+  --text-label-lg-line: 18px;
+  --text-label-md: 12px;
+  --text-label-md-line: 16px;
+  --text-label-caps: 11px;
+  --text-label-caps-line: 14px;
+  --text-caption: 12px;
+  --text-caption-line: 18px;
+
+  /* Spacing and geometry */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --gutter-mobile: 16px;
+  --gutter-desktop: 24px;
+  --column-gap: 32px;
+  --max-content-width: 1280px;
+  --reading-column-width: 680px;
+  --radius-sm: 2px;
+  --radius-default: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+  --border-hairline: 1px solid var(--color-outline-variant);
+  --shadow-sm: 0 1px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-menu: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-modal: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+}

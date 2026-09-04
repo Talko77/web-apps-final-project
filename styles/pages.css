@@ -1,0 +1,41 @@
+/*
+ * Page-family details
+ *
+ * The prototypes do not expose one universal page identifier, so these rules
+ * use stable structural hooks and stay intentionally modest. Existing utility
+ * classes remain responsible for exact local composition.
+ */
+/* Public reading pages */
+article[aria-labelledby],
+main > article {
+  width: min(100%, var(--max-content-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Forms and newsroom data views */
+form {
+  max-width: 100%;
+}
+
+[role="status"] {
+  min-height: 1.5rem;
+}
+
+/* Keep long tables usable without changing their markup. */
+main table {
+  min-width: 640px;
+}
+
+/* Narrow screens use the same readable rhythm while allowing cards to stack. */
+@media (max-width: 639px) {
+  main table {
+    min-width: 560px;
+  }
+
+  .text-display-hero,
+  .sm\:text-display-hero {
+    font-size: 38px;
+    line-height: 44px;
+  }
+}
