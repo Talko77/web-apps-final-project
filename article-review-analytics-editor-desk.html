@@ -1,0 +1,835 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web - Editorial Workspace</title>
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+  <body
+    class="editor-analytics-page surface-page text-body text-2 color-body height-screen flex flex-column"
+  >
+    <header class="site-header fixed width-full surface-paper shadow-subtle">
+      <div
+        class="site-header-inner width-content pad-inline-5 flex align-center justify-between gap-4"
+      >
+        <div class="flex align-center gap-4">
+          <a class="flex align-center gap-2" data-path="articles" href="#"
+            ><span class="text-headline text-5 color-primary"
+              >The Daily Web</span
+            ></a
+          ><span
+            class="pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-uppercase text-semibold"
+            >Editor</span
+          >
+        </div>
+        <nav
+          class="site-primary-nav state-hidden flex align-center gap-5"
+          data-active-classes="color-primary text-bold"
+        >
+          <a
+            class="text-label text-2 color-muted motion-colors"
+            data-path="articles"
+            href="#"
+            >Articles</a
+          ><a
+            aria-current="page"
+            class="motion-colors color-primary text-bold"
+            data-path="review-queue"
+            href="#"
+            >Review Queue</a
+          >
+        </nav>
+        <div class="flex align-center gap-4">
+          <a
+            class="text-label text-1 color-muted flex align-center gap-1 motion-colors"
+            data-path="home"
+            href="#"
+            ><span class="icon text-1">open_in_new</span
+            >View Public Site</a
+          ><a
+            class="text-label text-1 color-muted motion-colors"
+            data-path="login"
+            href="#"
+            >Logout</a
+          >
+          <div
+            class="avatar-small radius-pill surface-ink flex align-center justify-center"
+          >
+            <span class="icon color-inverse text-4"
+              >person</span
+            >
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="site-header-offset width-full surface-page flex-grow">
+      <div class="editor-page-content width-content pad-inline-5 pad-block-3">
+        <div
+          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
+        >
+          <a class="" data-path="articles" href="#">Newsroom CMS</a
+          ><span class="color-subtle">/</span
+          ><span class="color-body text-semibold">Desk Console</span>
+        </div>
+        <div class="flex flex-column width-full gap-5">
+          <!-- Notice Banner: Revision Awareness -->
+          <div
+            class="revision-notice width-full surface-info color-info radius-panel pad-4 shadow-subtle flex flex-column md-row justify-between gap-3"
+          >
+            <div class="flex align-start gap-3">
+              <div
+                class="avatar-medium radius-pill surface-ink color-inverse flex align-center justify-center flex-no-shrink"
+              >
+                <span class="icon text-4">info</span>
+              </div>
+              <div>
+                <div class="text-label text-2 color-info">
+                  Published Version Notice: v1.0 is currently live to the public
+                </div>
+                <div class="text-body text-1 color-muted margin-top-2">
+                  You are reviewing revision draft
+                  <span class="text-semibold color-info">v2.1</span> submitted
+                  by reporter
+                  <span class="text-semibold color-info">Eleanor Vance</span>.
+                </div>
+              </div>
+            </div>
+            <div class="flex align-center gap-2 flex-no-shrink align-end">
+              <a
+                class="pad-inline-3 pad-block-2 radius-card surface-paper color-body text-label text-1 motion-colors shadow-subtle flex align-center gap-1"
+                data-path="articles"
+                href="#"
+              >
+                <span class="icon text-1">visibility</span>
+                View Live Article (v1.0)
+              </a>
+            </div>
+          </div>
+          <!-- Main Split Layout (8 Cols preview / 4 Cols decision desk) -->
+          <div class="grid grid-single lg-editorial-grid gap-5 align-start">
+            <!-- Left Column (8 Cols): Article Preview, Versions, Analytics -->
+            <div class="lg-content-span flex flex-column gap-5">
+              <!-- Draft Article Header & Body Card -->
+              <article
+                class="review-article-card surface-paper radius-panel pad-6 shadow-subtle flex flex-column gap-4"
+              >
+                <!-- Metadata Header -->
+                <div
+                  class="flex flex-wrap align-center justify-between gap-2 margin-bottom-4"
+                >
+                  <div class="flex align-center gap-2">
+                    <span
+                      class="pad-inline-3 pad-block-2 radius-pill surface-ink color-inverse text-label text-1 text-uppercase"
+                    >
+                      Technology
+                    </span>
+                    <span
+                      class="pad-inline-3 pad-block-2 radius-pill surface-info color-muted text-label text-1 text-semibold flex align-center gap-1"
+                    >
+                      <span
+                        class="avatar-small radius-pill surface-alert state-loading"
+                      ></span>
+                      Pending Review
+                    </span>
+                  </div>
+                  <span
+                    class="text-caption text-1 color-muted flex align-center gap-1"
+                  >
+                    <span class="icon text-1"
+                      >schedule</span
+                    >
+                    Submitted Today at 09:42 AM
+                  </span>
+                </div>
+                <h1 class="text-headline text-7 color-body">
+                  Breakthrough in Open Silicon: University Lab Fabricates 2nm
+                  Academic Core
+                </h1>
+                <!-- Reporter Metadata Pill -->
+                <div
+                  class="reporter-strip flex align-center gap-3 pad-block-2 surface-muted pad-inline-4 radius-card"
+                >
+                  <div
+                    class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-label text-1"
+                  >
+                    EV
+                  </div>
+                  <div class="flex flex-column">
+                    <span class="text-label text-2 color-body"
+                      >Eleanor Vance</span
+                    >
+                    <span class="text-caption text-1 color-muted"
+                      >Lead Hardware Reporter • Science Desk</span
+                    >
+                  </div>
+                  <div class="text-right state-hidden block">
+                    <span class="text-caption text-1 color-muted block"
+                      >Revision</span
+                    >
+                    <span class="text-label text-1 color-body text-semibold"
+                      >Draft v2.1</span
+                    >
+                  </div>
+                </div>
+                <!-- Article Lead Photo -->
+                <figure
+                  class="width-full margin-top-2 margin-bottom-2 radius-card overflow-hidden media-frame"
+                >
+                  <img
+                    class="width-full height-feature media-cover"
+                    data-alt="Editorial close-up photography of a pristine circular silicon semiconductor wafer held in precision robotic tongs within a cleanroom facility. Moody cool blue and deep charcoal shadows highlight microscopic computational architecture etchings with subtle warm amber inspection beams reflecting off the wafer surface."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQRkhBnEueeRy14oTVd7YfZ_EsqU5CWb4764IFP4uXVHhB15771o6hMxTw06ucM0yu0YjEpDtcTqgQSyZfqNUpezHQtHyWQcmeD5925rIndKxPi0GNeZWNsNYgR5N23n3EP1Fo_eF9DIlImNZMRIQxTDGsW82hGDRQv7VXEsPTmOBmzZUe7gdFbT0d5Hu0IMkb1CH6HbpwwLhVv2cZow2wFIDSwDYTrf0SS0WR5U748cTo5f6wNhRb1Q"
+                  />
+                  <figcaption
+                    class="pad-2 surface-panel color-muted text-caption text-1 text-italic"
+                  >
+                    A silicon researcher calibrates the open-architecture test
+                    die inside the campus nanofabrication suite. Photo: E.
+                    Vance.
+                  </figcaption>
+                </figure>
+                <!-- Draft Article Text Body -->
+                <div
+                  class="flex flex-column gap-4 text-body text-3 color-body text-relaxed margin-top-2"
+                >
+                  <p class="text-headline text-deck color-muted text-italic">
+                    In a decisive victory for academic computing autonomy, the
+                    university's Advanced Microelectronics Initiative
+                    successfully powered on a fully open-source silicon
+                    microarchitecture this morning, achieving operational clock
+                    stability at sub-ambient temperatures.
+                  </p>
+                  <p>
+                    The project, code-named "Veritas-Core," bypasses proprietary
+                    ISA licenses and commercial fabrication paywalls. Leveraging
+                    custom open-source lithography toolchains and public
+                    research grant consortiums, the student-led engineering team
+                    demonstrated that critical hardware design no longer
+                    requires closed multi-million-dollar foundry partnerships.
+                  </p>
+                  <p>
+                    "For two decades, state-of-the-art semiconductor innovation
+                    was locked behind proprietary silicon monopolies," explained
+                    Dr. Mateo Chen, who supervised the microcode validation
+                    suite. "With v2.1 of our verification methodology, we proved
+                    academic clusters can synthesize, route, and physically
+                    package industrial-spec microchips independently."
+                  </p>
+                  <blockquote
+                    class="surface-muted pad-4 radius-card text-headline text-4 color-body margin-top-2 margin-bottom-2"
+                  >
+                    "This isn't just a prototype die; it is a blueprint for
+                    transparent sovereign computing across student universities
+                    nationwide."
+                  </blockquote>
+                  <p>
+                    The draft updates introduced in this revision incorporate
+                    verified post-launch benchmark figures recorded during
+                    yesterday's stress runs, including a 31% reduction in
+                    thermal dissipation compared to standard reference designs.
+                  </p>
+                </div>
+              </article>
+              <!-- Revision History List Card -->
+              <section
+                class="surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-3"
+              >
+                <div class="flex align-center justify-between">
+                  <h2
+                    class="text-headline text-4 color-body flex align-center gap-2"
+                  >
+                    <span class="icon text-4 color-muted"
+                      >history</span
+                    >
+                    Version History
+                  </h2>
+                  <span class="text-caption text-1 color-muted"
+                    >2 Recorded Iterations</span
+                  >
+                </div>
+                <div class="flex flex-column gap-2 margin-top-2">
+                  <!-- v2.1 Draft item -->
+                  <div
+                    class="pad-4 radius-card surface-info flex flex-column sm-row sm-align-center justify-between gap-2"
+                  >
+                    <div class="flex align-start gap-3">
+                      <span
+                        class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-label text-1 flex-no-shrink"
+                      >
+                        2.1
+                      </span>
+                      <div>
+                        <div class="flex align-center gap-2">
+                          <span class="text-label text-2 color-body"
+                            >v2.1 (Current Draft • Under Review)</span
+                          >
+                          <span
+                            class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1"
+                            >Latest</span
+                          >
+                        </div>
+                        <div
+                          class="text-caption text-1 color-muted margin-top-2"
+                        >
+                          Submitted today 09:42 AM by Eleanor Vance • Added
+                          bench validation data
+                        </div>
+                      </div>
+                    </div>
+                    <span
+                      class="text-label text-1 color-body text-medium align-end pad-inline-3 pad-block-2 surface-panel radius-standard"
+                    >
+                      Active Context
+                    </span>
+                  </div>
+                  <!-- v1.0 Live Published item -->
+                  <div
+                    class="pad-4 radius-card surface-muted flex flex-column sm-row sm-align-center justify-between gap-2"
+                  >
+                    <div class="flex align-start gap-3">
+                      <span
+                        class="avatar-small radius-pill surface-panel color-body flex align-center justify-center text-label text-1 flex-no-shrink"
+                      >
+                        1.0
+                      </span>
+                      <div>
+                        <div class="flex align-center gap-2">
+                          <span class="text-label text-2 color-body"
+                            >v1.0 (Live Published)</span
+                          >
+                          <span
+                            class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
+                            >Public Live</span
+                          >
+                        </div>
+                        <div
+                          class="text-caption text-1 color-muted margin-top-2"
+                        >
+                          Published yesterday 18:20 by Eleanor Vance
+                        </div>
+                      </div>
+                    </div>
+                    <a
+                      class="text-label text-1 color-primary text-semibold interaction-underline flex align-center gap-1 align-end"
+                      data-path="articles"
+                      href="#"
+                    >
+                      <span>View Live</span>
+                      <span class="icon text-1"
+                        >open_in_new</span
+                      >
+                    </a>
+                  </div>
+                </div>
+              </section>
+              <!-- Simple Views Over Time Chart Card -->
+              <section
+                class="analytics-card surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
+              >
+                <div
+                  class="flex flex-column sm-row sm-align-center justify-between gap-2"
+                >
+                  <div>
+                    <h2
+                      class="text-headline text-4 color-body flex align-center gap-2"
+                    >
+                      <span class="icon text-4 color-muted"
+                        >trending_up</span
+                      >
+                      Audience Traction: Daily Page Views
+                    </h2>
+                    <p class="text-caption text-1 color-muted margin-top-2">
+                      Cumulative readership metrics since dispatch deployment
+                    </p>
+                  </div>
+                  <div class="flex align-center gap-3">
+                    <div class="flex align-center gap-2">
+                      <span class="avatar-small radius-pill surface-ink"></span>
+                      <span class="text-caption text-1 color-muted"
+                        >Views Curve</span
+                      >
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span
+                        class="avatar-small radius-pill surface-alert"
+                      ></span>
+                      <span class="text-caption text-1 color-muted"
+                        >v1.0 Go-Live</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- Clean SVG Chart (Mon: 2.1k, Tue: 4.8k, Wed: 8.2k, Thu: 14.2k) -->
+                <div class="width-full surface-muted radius-card pad-4">
+                  <div class="analytics-plot relative width-full height-feature">
+                    <svg
+                      class="width-full height-full"
+                      preserveaspectratio="none"
+                      viewbox="0 0 600 220"
+                    >
+                      <defs>
+                        <lineargradient
+                          id="chartGradient"
+                          x1="0%"
+                          x2="0%"
+                          y1="0%"
+                          y2="100%"
+                        >
+                          <stop
+                            offset="0%"
+                            stop-color="#131b2e"
+                            stop-opacity="0.25"
+                          ></stop>
+                          <stop
+                            offset="100%"
+                            stop-color="#131b2e"
+                            stop-opacity="0.0"
+                          ></stop>
+                        </lineargradient>
+                      </defs>
+                      <!-- Grid Horizontal Guide Lines -->
+                      <line
+                        stroke="#d8dadc"
+                        stroke-dasharray="3,3"
+                        stroke-width="1"
+                        x1="40"
+                        x2="570"
+                        y1="180"
+                        y2="180"
+                      ></line>
+                      <line
+                        stroke="#d8dadc"
+                        stroke-dasharray="3,3"
+                        stroke-width="1"
+                        x1="40"
+                        x2="570"
+                        y1="130"
+                        y2="130"
+                      ></line>
+                      <line
+                        stroke="#d8dadc"
+                        stroke-dasharray="3,3"
+                        stroke-width="1"
+                        x1="40"
+                        x2="570"
+                        y1="80"
+                        y2="80"
+                      ></line>
+                      <line
+                        stroke="#d8dadc"
+                        stroke-dasharray="3,3"
+                        stroke-width="1"
+                        x1="40"
+                        x2="570"
+                        y1="30"
+                        y2="30"
+                      ></line>
+                      <!-- Y-Axis Value Labels -->
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="11"
+                        text-anchor="end"
+                        x="32"
+                        y="184"
+                      >
+                        0
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="11"
+                        text-anchor="end"
+                        x="32"
+                        y="134"
+                      >
+                        5k
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="11"
+                        text-anchor="end"
+                        x="32"
+                        y="84"
+                      >
+                        10k
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="11"
+                        text-anchor="end"
+                        x="32"
+                        y="34"
+                      >
+                        15k
+                      </text>
+                      <polygon
+                        fill="url(#chartGradient)"
+                        points="90,157 240,128 390,92 530,30 530,180 90,180"
+                      ></polygon>
+                      <polyline
+                        fill="none"
+                        points="90,157 240,128 390,92 530,30"
+                        stroke="#131b2e"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="3"
+                      ></polyline>
+                      <circle cx="90" cy="157" fill="#131b2e" r="5"></circle>
+                      <text
+                        fill="#191c1e"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="600"
+                        text-anchor="middle"
+                        x="90"
+                        y="147"
+                      >
+                        2.1k
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="500"
+                        text-anchor="middle"
+                        x="90"
+                        y="200"
+                      >
+                        Mon
+                      </text>
+                      <circle cx="240" cy="128" fill="#131b2e" r="5"></circle>
+                      <text
+                        fill="#191c1e"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="600"
+                        text-anchor="middle"
+                        x="240"
+                        y="118"
+                      >
+                        4.8k
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="500"
+                        text-anchor="middle"
+                        x="240"
+                        y="200"
+                      >
+                        Tue
+                      </text>
+                      <line
+                        stroke="#ba1a1a"
+                        stroke-dasharray="4,3"
+                        stroke-width="1.5"
+                        x1="390"
+                        x2="390"
+                        y1="20"
+                        y2="180"
+                      ></line>
+                      <circle
+                        cx="390"
+                        cy="92"
+                        fill="#ba1a1a"
+                        r="7"
+                        stroke="#ffffff"
+                        stroke-width="2"
+                      ></circle>
+                      <text
+                        fill="#ba1a1a"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="700"
+                        text-anchor="middle"
+                        x="390"
+                        y="80"
+                      >
+                        8.2k
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="600"
+                        text-anchor="middle"
+                        x="390"
+                        y="200"
+                      >
+                        Wed
+                      </text>
+                      <rect
+                        fill="#ba1a1a"
+                        height="22"
+                        rx="4"
+                        width="120"
+                        x="330"
+                        y="10"
+                      ></rect>
+                      <text
+                        fill="#ffffff"
+                        font-family="Inter"
+                        font-size="10"
+                        font-weight="700"
+                        text-anchor="middle"
+                        x="390"
+                        y="25"
+                      >
+                        v1.0 PUBLISHED
+                      </text>
+                      <circle cx="530" cy="30" fill="#131b2e" r="5"></circle>
+                      <text
+                        fill="#191c1e"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="600"
+                        text-anchor="middle"
+                        x="530"
+                        y="22"
+                      >
+                        14.2k
+                      </text>
+                      <text
+                        fill="#515f74"
+                        font-family="Inter"
+                        font-size="12"
+                        font-weight="500"
+                        text-anchor="middle"
+                        x="530"
+                        y="200"
+                      >
+                        Thu (Today)
+                      </text>
+                    </svg>
+                  </div>
+                  <!-- Bottom Summary Stat Grid -->
+                  <div
+                    class="analytics-summary grid grid-split gap-3 margin-top-4 margin-top-2 surface-paper radius-card pad-3 text-center"
+                  >
+                    <div>
+                      <span class="text-caption text-1 color-muted block"
+                        >Weekly Total</span
+                      >
+                      <span
+                        class="text-headline text-4 color-body text-semibold"
+                        >29.3k</span
+                      >
+                    </div>
+                    <div>
+                      <span class="text-caption text-1 color-muted block"
+                        >Velocity Rate</span
+                      >
+                      <span
+                        class="text-headline text-4 color-body text-semibold"
+                        >+73%</span
+                      >
+                    </div>
+                    <div>
+                      <span class="text-caption text-1 color-muted block"
+                        >Est. Read Time</span
+                      >
+                      <span
+                        class="text-headline text-4 color-body text-semibold"
+                        >4.2 min</span
+                      >
+                    </div>
+                    <div>
+                      <span class="text-caption text-1 color-muted block"
+                        >Active Readers</span
+                      >
+                      <span
+                        class="text-headline text-4 color-body text-semibold color-alert"
+                        >148 live</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <!-- Right Column (4 Cols): Review Actions Desk Sticky Sidebar -->
+            <aside class="decision-sidebar span-sidebar flex flex-column gap-5 lg-sticky">
+              <!-- Editorial Decision & Actions Card -->
+              <div
+                class="decision-card surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
+              >
+                <div class="margin-bottom-2">
+                  <h2 class="text-headline text-5 color-body">
+                    Editorial Decision &amp; Actions
+                  </h2>
+                  <p class="text-body text-1 color-muted margin-top-2">
+                    Validate accuracy, author tone, and source citations before
+                    authorizing deployment.
+                  </p>
+                </div>
+                <!-- Feedback Form -->
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-2 color-body flex align-center justify-between"
+                    for="editorNotes"
+                  >
+                    <span>Editor Feedback / Revision Notes</span>
+                    <span class="text-caption text-1 color-muted text-normal"
+                      >Optional for approval</span
+                    >
+                  </label>
+                  <textarea
+                    class="width-full pad-3 surface-muted color-body text-body text-2 radius-card control-no-resize control-input motion-colors"
+                    id="editorNotes"
+                    placeholder="Enter specific instructions or feedback for the reporter..."
+                    rows="5"
+                  ></textarea>
+                </div>
+                <!-- Notification Dispatch Toggle -->
+                <div
+                  class="pad-3 surface-muted radius-card flex align-center justify-between"
+                >
+                  <div class="flex align-center gap-2">
+                    <span class="icon text-4 color-muted"
+                      >mail</span
+                    >
+                    <span class="text-body text-1 color-body"
+                      >Notify Eleanor via email</span
+                    >
+                  </div>
+                  <input
+                    checked=""
+                    class="radius-standard control-pointer"
+                    type="checkbox"
+                  />
+                </div>
+                <!-- Action Buttons (Clearly Separated) -->
+                <div class="flex flex-column gap-2 margin-top-2">
+                  <!-- Primary Action: Approve & Publish Live -->
+                  <button
+                    class="editor-action editor-action-approve width-full pad-block-3 pad-inline-4 surface-ink color-inverse radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all shadow-subtle"
+                    onclick="handleEditorialAction('approve')"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >check_circle</span
+                    >
+                    <span>✓ Approve &amp; Publish Live</span>
+                  </button>
+                  <!-- Secondary Action: Request Changes -->
+                  <button
+                    class="editor-action editor-action-revise width-full pad-block-3 pad-inline-4 surface-info color-info radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all"
+                    onclick="handleEditorialAction('request-changes')"
+                    type="button"
+                  >
+                    <span class="icon text-4">reply</span>
+                    <span>↩ Request Changes</span>
+                  </button>
+                  <!-- Danger Action: Reject Draft -->
+                  <button
+                    class="editor-action editor-action-reject width-full pad-block-3 pad-inline-4 surface-alert color-alert radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all margin-top-2"
+                    onclick="handleEditorialAction('reject')"
+                    type="button"
+                  >
+                    <span class="icon text-4">cancel</span>
+                    <span>✕ Reject Draft</span>
+                  </button>
+                </div>
+                <!-- Action Status Toast Placeholder -->
+                <div
+                  class="state-hidden pad-3 radius-card text-body text-1 text-center"
+                  id="statusAlert"
+                  role="status"
+                  aria-live="polite"
+                ></div>
+              </div>
+              <!-- Editorial Verification Quick Reference Card -->
+              <div
+                class="surface-paper radius-panel pad-4 shadow-subtle flex flex-column gap-2"
+              >
+                <span
+                  class="text-label text-1 text-uppercase color-muted text-bold"
+                >
+                  Desk Checklist (Student Standard)
+                </span>
+                <ul
+                  class="flex flex-column gap-2 text-body text-1 color-muted margin-top-2"
+                >
+                  <li class="flex align-center gap-2">
+                    <span class="icon text-1 color-muted"
+                      >check</span
+                    >
+                    Source quotes attributed to lab director
+                  </li>
+                  <li class="flex align-center gap-2">
+                    <span class="icon text-1 color-muted"
+                      >check</span
+                    >
+                    Open silicon GitHub repo linked correctly
+                  </li>
+                  <li class="flex align-center gap-2">
+                    <span class="icon text-1 color-muted"
+                      >check</span
+                    >
+                    Lead photography photo credit included
+                  </li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+          <script>
+            function handleEditorialAction(action) {
+              const alertBox = document.getElementById("statusAlert");
+              const textarea = document.getElementById("editorNotes");
+              if (!alertBox) return;
+
+              alertBox.classList.remove(
+                "state-hidden",
+                "surface-success",
+                "surface-alert",
+                "surface-info",
+                "surface-ink",
+                "color-inverse",
+              );
+
+              if (action === "approve") {
+                alertBox.className =
+                  "pad-3 radius-card text-body text-1 text-center surface-success shadow-subtle";
+                alertBox.innerHTML =
+                  "<strong>Success:</strong> Revision v2.1 approved! Deploying to the live public portal...";
+              } else if (action === "request-changes") {
+                if (!textarea.value.trim()) {
+                  alertBox.className =
+                    "pad-3 radius-card text-body text-1 text-center surface-info";
+                  alertBox.innerHTML =
+                    "<strong>Note:</strong> Please type specific instructions in the feedback box above.";
+                  textarea.focus();
+                  return;
+                }
+                alertBox.className =
+                  "pad-3 radius-card text-body text-1 text-center surface-info";
+                alertBox.innerHTML =
+                  "<strong>Changes Requested:</strong> Notes dispatched to Eleanor Vance.";
+              } else if (action === "reject") {
+                alertBox.className =
+                  "pad-3 radius-card text-body text-1 text-center surface-alert";
+                alertBox.innerHTML =
+                  "<strong>Draft Rejected:</strong> Draft v2.1 archived. v1.0 remains active.";
+              }
+
+              alertBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+          </script>
+        </div>
+      </div>
+    </main>
+    <footer class="width-full surface-panel pad-block-3">
+      <div
+        class="width-content page-shell pad-inline-5 text-center text-caption text-1 color-muted"
+      >
+        The Daily Web Student Newsroom CMS • Internal Editorial Dispatch •
+        v1.2.0
+      </div>
+    </footer>
+  </body>
+</html>

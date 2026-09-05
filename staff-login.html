@@ -1,0 +1,197 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Daily Web - Authentication</title>
+    <link href="styles/style.css" rel="stylesheet" />
+  </head>
+  <body
+    class="staff-login-page surface-page text-body text-2 color-body height-screen flex align-center justify-center pad-5"
+  >
+    <main class="login-shell width-full width-reading">
+      <div class="flex flex-column width-full">
+        <div
+          class="login-panel surface-paper radius-panel shadow-raised pad-6 flex flex-column align-center"
+        >
+          <!-- Masthead / Brand Emblem -->
+          <div class="width-full flex flex-column align-center margin-bottom-5">
+            <div class="login-logo-wrap width-full flex align-center justify-center">
+            </div>
+            <div class="flex align-center gap-2 margin-top-2">
+              <span
+                class="login-network-dot radius-pill surface-alert state-loading"
+              ></span>
+              <span class="text-label text-1 text-uppercase color-muted"
+                >Broadsheet CMS Network</span
+              >
+            </div>
+          </div>
+          <!-- Editorial Auth Header -->
+          <div class="width-full text-center margin-bottom-5">
+            <h1 class="text-headline text-5 color-body">
+              Staff &amp; Reporter Login
+            </h1>
+            <p class="text-body text-1 color-muted margin-top-2">
+              Enter your credentials to access the editorial portal
+            </p>
+          </div>
+          <!-- Academic Evaluation Notice -->
+          <div
+            class="login-demo-notice width-full surface-info radius-card pad-3 margin-bottom-5"
+          >
+            <div class="flex align-start gap-2">
+              <span class="text-label text-1 color-info text-uppercase"
+                >Demo Accounts</span
+              >
+            </div>
+            <div class="margin-top-2 text-body text-1 color-info text-relaxed">
+              <div>
+                <strong class="text-label text-1 color-info">Reporter:</strong>
+                reporter@dailyweb.org / pass123
+              </div>
+              <div>
+                <strong class="text-label text-1 color-info">Editor:</strong>
+                editor@dailyweb.org / pass123
+              </div>
+            </div>
+          </div>
+          <!-- Authentication Form -->
+          <form
+            class="width-full flex flex-column gap-4"
+            id="loginForm"
+            onsubmit="handleLogin(event)"
+          >
+            <!-- Email Input -->
+            <div class="flex flex-column gap-1">
+              <label class="text-label text-1 color-body" for="staffEmail"
+                >Editorial Email</label
+              >
+              <div class="relative">
+                <input
+                  class="width-full surface-muted color-body text-body text-2 pad-inline-4 pad-block-3 radius-card control-input motion-colors"
+                  id="staffEmail"
+                  name="email"
+                  placeholder="e.g. reporter@dailyweb.org"
+                  required=""
+                  type="email"
+                />
+              </div>
+            </div>
+            <!-- Password Input with Recovery Link -->
+            <div class="flex flex-column gap-1">
+              <div class="flex justify-between align-center">
+                <label class="text-label text-1 color-body" for="staffPassword"
+                  >Security Password</label
+                >
+                <a class="text-body text-1 color-muted motion-colors" href="#"
+                  >Forgot password?</a
+                >
+              </div>
+              <div class="relative">
+                <input
+                  class="width-full surface-muted color-body text-body text-2 pad-inline-4 pad-block-3 radius-card control-input motion-colors"
+                  id="staffPassword"
+                  name="password"
+                  placeholder="••••••••••••"
+                  required=""
+                  type="password"
+                />
+              </div>
+            </div>
+            <!-- Persistence Checkbox -->
+            <div class="flex align-center gap-2 margin-top-2">
+              <input
+                class="login-remember-checkbox radius-standard control-pointer"
+                id="rememberMe"
+                name="remember"
+                type="checkbox"
+              />
+              <label
+                class="text-body text-1 color-muted control-pointer control-no-select"
+                for="rememberMe"
+              >
+                Remember me on this workstation
+              </label>
+            </div>
+            <!-- Submission Button -->
+            <button
+              class="login-submit width-full margin-top-2 pad-block-3 pad-inline-4 surface-ink color-inverse text-label text-2 radius-card shadow-subtle motion-all flex align-center justify-center gap-2"
+              id="signInBtn"
+              type="submit"
+            >
+              <span>Sign In to Terminal</span>
+              <span class="text-body text-1">→</span>
+            </button>
+            <!-- Feedback Banner -->
+            <div
+              class="login-feedback state-hidden text-center pad-block-2 pad-inline-3 radius-card text-body text-1 margin-top-2"
+              id="statusMessage"
+              aria-live="polite"
+              role="status"
+            ></div>
+          </form>
+          <!-- Navigation Escape Link -->
+          <div class="margin-top-6 margin-top-4 width-full flex justify-center">
+            <a
+              class="text-body text-1 color-muted motion-colors flex align-center gap-2"
+              href="#"
+            >
+              <span>←</span>
+              <span>Return to public website</span>
+            </a>
+          </div>
+        </div>
+        <!-- Terminal Telemetry Footer -->
+        <div
+          class="login-telemetry margin-top-4 flex justify-between align-center pad-inline-3 color-muted text-caption text-1"
+        >
+          <span>Broadsheet CMS Engine 4.19</span>
+          <span class="flex align-center gap-1">
+            <span
+              class="login-security-dot radius-pill surface-info state-muted"
+            ></span>
+            SSL Encrypted Gateway
+          </span>
+        </div>
+        <script>
+          function handleLogin(e) {
+            e.preventDefault();
+            const emailInput = document
+              .getElementById("staffEmail")
+              .value.trim();
+            const passInput = document.getElementById("staffPassword").value;
+            const statusBox = document.getElementById("statusMessage");
+            const submitBtn = document.getElementById("signInBtn");
+
+            submitBtn.classList.add("is-authenticating");
+            submitBtn.innerText = "Authenticating...";
+
+            setTimeout(() => {
+              submitBtn.classList.remove("is-authenticating");
+              submitBtn.innerHTML =
+                '<span>Sign In to Terminal</span> <span class="text-body text-1">→</span>';
+
+              if (
+                (emailInput === "reporter@dailyweb.org" ||
+                  emailInput === "editor@dailyweb.org") &&
+                passInput === "pass123"
+              ) {
+                statusBox.className =
+                  "login-feedback login-feedback-success width-full text-center pad-block-2 pad-inline-3 radius-card text-body text-1 margin-top-2";
+                statusBox.textContent =
+                  "Verification successful. Launching workspace desk...";
+              } else {
+                statusBox.className =
+                  "login-feedback login-feedback-error width-full text-center pad-block-2 pad-inline-3 radius-card text-body text-1 margin-top-2";
+                statusBox.textContent =
+                  "Invalid credentials. Please refer to student demo accounts.";
+              }
+            }, 550);
+          }
+        </script>
+      </div>
+    </main>
+  </body>
+</html>
