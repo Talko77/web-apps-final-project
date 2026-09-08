@@ -1,8 +1,0 @@
-<!-- Used in: staff-login.html -->
-<form class="width-full flex flex-column gap-4" id="loginForm" onsubmit="handleLogin(event)">
-  <div class="flex flex-column gap-1"><label class="text-label text-1 color-body" for="staffEmail">Editorial Email</label><input class="width-full surface-muted color-body text-body text-2 pad-inline-4 pad-block-3 radius-card control-input" id="staffEmail" name="email" placeholder="e.g. reporter@dailyweb.org" required="" type="email" /></div>
-  <div class="flex flex-column gap-1"><div class="flex justify-between align-center"><label class="text-label text-1 color-body" for="staffPassword">Security Password</label><a class="text-body text-1 color-muted" href="#">Forgot password?</a></div><input class="width-full surface-muted color-body text-body text-2 pad-inline-4 pad-block-3 radius-card control-input" id="staffPassword" name="password" required="" type="password" /></div>
-  <label class="flex align-center gap-2 margin-top-2 text-body text-1 color-muted"><input class="login-remember-checkbox radius-standard control-pointer" id="rememberMe" name="remember" type="checkbox" />Remember me on this workstation</label>
-  <button class="login-submit width-full margin-top-2 pad-block-3 pad-inline-4 surface-ink color-inverse text-label text-2 radius-card flex align-center justify-center gap-2" id="signInBtn" type="submit"><span>Sign In to Terminal</span><span class="text-body text-1">-&gt;</span></button>
-  <div class="login-feedback state-hidden text-center pad-block-2 pad-inline-3 radius-card text-body text-1" id="statusMessage" aria-live="polite" role="status"></div>
-</form>

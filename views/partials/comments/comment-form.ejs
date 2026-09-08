@@ -1,0 +1,9 @@
+<form class="comment-form surface-muted pad-5 radius-card margin-bottom-6 stack-4" id="comment-form">
+  <div class="flex align-center justify-between"><span class="text-label text-2 color-primary">Leave a Public Thought</span><span class="text-caption text-1 color-muted">No registration required</span></div>
+  <div class="grid grid-single sm-grid-split gap-4">
+    <div><label class="block text-label text-1 color-muted" for="guest-name">Your Name or Alias</label><input class="width-full pad-inline-3 pad-block-2 surface-paper radius-standard text-body text-1 shadow-subtle" id="guest-name" name="name" placeholder="e.g. Marcella / VLSI Fellow" required type="text"></div>
+    <div><label class="block text-label text-1 color-muted" for="guest-affil">Affiliation / Institution (Optional)</label><input class="width-full pad-inline-3 pad-block-2 surface-paper radius-standard text-body text-1 shadow-subtle" id="guest-affil" name="affiliation" placeholder="e.g. Stanford Dept of EE" type="text"></div>
+  </div>
+  <div><div class="flex justify-between align-center"><label class="text-label text-1 color-muted" for="comment-text">Comment</label><span class="text-caption text-1 color-subtle" id="char-counter">380 characters remaining</span></div><textarea class="width-full pad-3 surface-paper radius-standard text-body text-1 shadow-subtle control-no-resize" id="comment-text" name="comment" maxlength="380" placeholder="Share your technical observations, questions, or perspectives on this dispatch..." required rows="3"></textarea></div>
+  <div class="flex flex-column sm-row sm-align-center justify-between gap-4 pad-block-2"><p class="text-caption text-1 color-muted">Guests may submit comments without registration. Submissions adhere to our newsroom code of conduct.</p><button class="control-button color-inverse text-label text-1" type="submit">Post Comment</button></div>
+</form>

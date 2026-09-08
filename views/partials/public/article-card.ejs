@@ -1,0 +1,7 @@
+<% const card = typeof article !== 'undefined' && article ? article : {}; %>
+<article class="article-card surface-paper radius-card overflow-hidden shadow-subtle">
+  <a class="block" href="<%= card.url || '#' %>">
+    <% if (card.imageUrl) { %><div class="media-frame media-thumbnail surface-panel"><img class="width-full height-full media-cover" src="<%= card.imageUrl %>" alt="<%= card.imageAlt || '' %>"></div><% } %>
+    <div class="pad-4"><div class="flex align-center justify-between gap-2"><span class="text-label text-1 text-uppercase color-primary"><%= card.category || 'News' %></span><span class="text-caption text-1 color-muted"><%= card.dateLabel || '' %></span></div><h2 class="text-headline text-4 color-body margin-top-2"><%= card.title || 'Article headline' %></h2><% if (card.summary) { %><p class="text-body text-1 color-muted margin-top-2"><%= card.summary %></p><% } %></div>
+  </a>
+</article>
