@@ -1,0 +1,128 @@
+{
+  "editor": {
+    "initials": "MK",
+    "name": "Marcus Keller",
+    "title": "Senior Editor"
+  },
+  "counts": [
+    {
+      "value": "3",
+      "label": "Pending Review"
+    },
+    {
+      "value": "2",
+      "label": "Changes Requested"
+    },
+    {
+      "value": "8",
+      "label": "Published Today"
+    }
+  ],
+  "articles": [
+    {
+      "id": "ART-8924",
+      "category": "Campus & Life",
+      "title": "Tuition Allocation Audit Reveals Discrepancies in STEM Equipment Reserve",
+      "reporterName": "Eleanor Vance",
+      "submittedLabel": "Oct 28, 09:42 AM",
+      "statusLabel": "Pending Review",
+      "url": "/editor/review/ART-8924",
+      "readLabel": "8 min read",
+      "summary": "Financial records from 2023-2024 academic year show unspent research surplus.",
+      "initials": "EV",
+      "beat": "Student Senate Beat",
+      "relativeDate": "2 hours ago",
+      "version": "v1.0 Initial",
+      "categoryCode": "CAMPUS",
+      "statusCode": "PENDING"
+    },
+    {
+      "id": "ART-8919",
+      "category": "Investigation",
+      "title": "Residence Hall Mold Reports Tripled Over Fall Semester: Maintenance Records",
+      "reporterName": "Jonathan Ben-Simon",
+      "submittedLabel": "Oct 27, 04:15 PM",
+      "statusLabel": "Changes Requested",
+      "url": "/editor/review/ART-8919",
+      "readLabel": "Urgent Corrections",
+      "summary": "Cross-referencing work order completions against independent dormitory inspections.",
+      "initials": "JB",
+      "beat": "Lead Investigative",
+      "relativeDate": "Yesterday",
+      "version": "v2.1 Draft (Update)",
+      "categoryCode": "INVESTIGATION",
+      "statusCode": "CHANGES"
+    },
+    {
+      "id": "ART-8915",
+      "category": "Technology",
+      "title": "University Deploys Automated AI Plagiarism Detection Across All Final Theses",
+      "reporterName": "Aria Lin",
+      "submittedLabel": "Oct 28, 08:12 AM",
+      "statusLabel": "Pending Review",
+      "url": "/editor/review/ART-8915",
+      "readLabel": "5 min read",
+      "summary": "Faculty Senate passes mandatory syllabus inclusion following departmental testing.",
+      "initials": "AL",
+      "beat": "Tech & Labs",
+      "relativeDate": "3 hours ago",
+      "version": "v1.2 Draft",
+      "categoryCode": "TECH",
+      "statusCode": "PENDING"
+    },
+    {
+      "id": "ART-8911",
+      "category": "Arts & Culture",
+      "title": "Annual Student Film Festival Premieres 24 Shorts in Restored Historic Theater",
+      "reporterName": "Mateo Patel",
+      "submittedLabel": "Oct 28, 07:30 AM",
+      "statusLabel": "Pending Review",
+      "url": "/editor/review/ART-8911",
+      "readLabel": "4 min read",
+      "summary": "A review of opening night highlights and juror selections for documentary honors.",
+      "initials": "MP",
+      "beat": "Culture Reporter",
+      "relativeDate": "4 hours ago",
+      "version": "v1.0 Initial",
+      "categoryCode": "CULTURE",
+      "statusCode": "PENDING"
+    },
+    {
+      "id": "ART-8904",
+      "category": "Opinion Desk",
+      "title": "Op-Ed: Why Campus Transit Reductions Disproportionately Harm Night-Shift Staff",
+      "reporterName": "Samantha Chen",
+      "submittedLabel": "Oct 27, 02:20 PM",
+      "statusLabel": "Changes Requested",
+      "url": "/editor/review/ART-8904",
+      "readLabel": "6 min read",
+      "summary": "Proposed weekend cutbacks ignore the essential workers keeping library and labs operational.",
+      "initials": "SC",
+      "beat": "Contributing Columnist",
+      "relativeDate": "Yesterday",
+      "version": "v3.0 Revision",
+      "categoryCode": "OPINION",
+      "statusCode": "CHANGES"
+    }
+  ],
+  "metrics": [
+    {
+      "label": "Dispatch Cadence",
+      "value": "1h 42m",
+      "icon": "speed",
+      "comparison": "Average editor turnaround time for incoming drafts."
+    },
+    {
+      "label": "Live Reporters",
+      "value": "14 Active",
+      "icon": "group",
+      "comparison": "Reporters currently working on filed stories."
+    },
+    {
+      "label": "Evening Print Lock",
+      "value": "05:30 PM",
+      "icon": "lock_clock",
+      "comparison": "Final digital layout and print deadline."
+    }
+  ]
+}

@@ -1,0 +1,617 @@
+/*
+ * Shared interface components
+ *
+ * These selectors describe recurring visual patterns. Utility classes remain
+ * the primary contract, so component rules avoid unnecessary specificity.
+ */
+/* Shared link defaults keep navigation and inline actions visually consistent. */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Base button geometry gives every action control the same editorial shape. */
+button {
+  border: 0;
+  border-radius: var(--radius-default);
+}
+
+/* Editorial content elements remove browser margins before local composition. */
+figure,
+blockquote,
+cite {
+  margin: 0;
+}
+
+/* Article copy stays within the long-form reading measure. */
+.article-copy p {
+  max-width: var(--reading-column-width);
+}
+
+/* Media frames keep image ratios stable while content and images load. */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-primary-container);
+}
+
+.media-hero {
+  min-height: var(--feature-media-height);
+  aspect-ratio: var(--hero-media-ratio);
+}
+
+.media-card {
+  aspect-ratio: var(--card-media-ratio);
+}
+
+.media-thumbnail {
+  aspect-ratio: var(--thumbnail-media-ratio);
+}
+
+.media-frame > img,
+.media-frame > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Media overlays create a predictable positioning layer for labels and fades. */
+.media-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Overlay content remains above the image treatment with readable inverse ink. */
+.media-overlay-content {
+  position: relative;
+  z-index: 1;
+  color: var(--color-on-primary);
+}
+
+/* The hero fade protects overlaid text without obscuring the source image. */
+.media-overlay-fade {
+  background: linear-gradient(to top, rgb(var(--scrim-color) / var(--scrim-strong-opacity)), transparent 70%);
+}
+
+/* Media captions provide consistent supporting metadata below an image. */
+.media-caption {
+  margin-top: var(--space-1);
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-line);
+}
+
+/* Form controls share borders, radius, focus treatment, and action sizing. */
+input,
+select,
+textarea {
+  min-width: 0;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  outline: 0;
+}
+
+/* Primary buttons provide the default high-emphasis newsroom action. */
+.control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-interface);
+  font-size: var(--text-label-lg);
+  font-weight: 600;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.control-button:hover {
+  background: var(--color-primary-container);
+}
+
+/* Secondary buttons provide a quieter alternative to the primary action. */
+.control-button-secondary {
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+}
+
+.control-button-secondary:hover {
+  background: var(--color-surface-container-high);
+}
+
+/* Focus treatment makes keyboard interaction visible without changing layout. */
+.control-input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgb(0 0 0 / var(--focus-ring-opacity));
+}
+
+@media (max-width: 639px) {
+  /* Smaller screens reduce hero media height to preserve the reading rhythm. */
+  .media-hero {
+    min-height: var(--hero-media-height-mobile);
+  }
+}
+
+input::placeholder,
+textarea::placeholder {
+  /* Placeholder text stays visible but subordinate to entered content. */
+  opacity: 1;
+}
+
+/* Icons align symbol-font glyphs consistently with surrounding interface text. */
+.icon {
+  display: inline-block;
+  font-family: var(--font-icons);
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* Tables keep predictable geometry while existing wrappers own horizontal scrolling. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Hidden content remains available to scripts without affecting layout. */
+[hidden] {
+  display: none !important;
+}
+
+/* REPORTER PARITY: shared newsroom controls and compact editorial states. */
+.newsroom-site-header {
+  top: 0;
+  left: 0;
+  z-index: var(--layer-site-header);
+  height: var(--site-header-height);
+}
+
+.newsroom-header-shell {
+  height: var(--site-header-height);
+}
+
+.newsroom-primary-nav {
+  display: none;
+}
+
+.select-control select,
+.category-control select {
+  appearance: none;
+  padding-right: 40px;
+}
+
+.select-control > .icon,
+.category-control > .icon {
+  top: 50%;
+  right: var(--space-3);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.autosave-indicator {
+  width: var(--reporter-presence-dot-size);
+  height: var(--reporter-presence-dot-size);
+}
+
+.autosave-indicator > span {
+  width: var(--reporter-presence-dot-size);
+  height: var(--reporter-presence-dot-size);
+  background: var(--color-secondary);
+}
+
+.autosave-indicator > :first-child {
+  opacity: 0.75;
+  animation: reporter-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.icon-filled {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.toolbar-control {
+  width: var(--reporter-control-compact-height);
+  height: var(--reporter-control-compact-height);
+  padding: 0;
+  background: transparent;
+}
+
+.toolbar-control:hover {
+  background: var(--color-surface-container);
+}
+
+.toolbar-text-control {
+  width: auto;
+  min-width: var(--reporter-control-compact-height);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 16px;
+  margin-inline: var(--space-1);
+  background: var(--color-outline-variant);
+}
+
+.toolbar-clear-control {
+  margin-left: auto;
+}
+
+.status-dot {
+  width: var(--reporter-status-dot-size);
+  height: var(--reporter-status-dot-size);
+  flex: 0 0 var(--reporter-status-dot-size);
+}
+
+.filter-btn.active {
+  font-weight: 600;
+}
+
+.login-feedback {
+  min-height: 36px;
+}
+
+@keyframes reporter-ping {
+  75%, 100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+@media (min-width: 640px) {
+  .newsroom-primary-nav {
+    display: flex;
+  }
+}
+
+/* EDITOR PARITY: reusable newsroom controls, statuses, and comparison details. */
+.brand-logo {
+  width: auto;
+  height: 32px;
+  object-fit: contain;
+}
+
+.site-primary-nav a:hover,
+.site-header a:hover {
+  color: var(--color-on-surface);
+}
+
+.site-header a[data-path="login"]:hover {
+  color: var(--color-error);
+}
+
+.editor-action:hover,
+.queue-table-card tbody a[data-path="review-detail"]:hover {
+  transform: scale(0.99);
+}
+
+.editor-action-approve:hover {
+  background: var(--color-primary-container);
+}
+
+.editor-action-revise:hover {
+  background: var(--color-secondary-fixed);
+}
+
+.editor-action-reject:hover {
+  background: var(--color-error);
+  color: var(--color-on-error);
+}
+
+.queue-search > .icon,
+.queue-select > .icon {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.queue-search > .icon {
+  left: var(--space-3);
+  font-size: 20px;
+}
+
+.queue-search input {
+  padding-right: var(--space-4);
+  padding-left: 40px;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 5%);
+}
+
+.queue-select select {
+  min-height: var(--control-height);
+  padding-right: var(--space-6);
+  padding-left: var(--space-3);
+  appearance: none;
+}
+
+.queue-select > .icon {
+  right: var(--space-2);
+  font-size: 18px;
+}
+
+.queue-table-card tbody tr:hover {
+  background: var(--color-surface-container-low);
+}
+
+.queue-table-card tbody tr[data-status] > td:first-child > a:hover {
+  color: var(--color-secondary);
+}
+
+.queue-table-card tbody tr[data-status="PENDING"] > td:nth-child(5) > span {
+  background: var(--color-warning-container);
+  color: var(--color-on-warning-container);
+}
+
+.queue-table-card tbody tr[data-status="PENDING"] > td:nth-child(5) > span > span {
+  width: 6px;
+  height: 6px;
+  background: var(--color-pending-dot);
+}
+
+.queue-table-card tbody tr[data-status="CHANGES"] > td:nth-child(5) > span {
+  background: var(--color-returned-container);
+  color: var(--color-returned-ink);
+}
+
+.queue-table-card tbody tr[data-status="CHANGES"] > td:nth-child(5) > span > span {
+  width: 6px;
+  height: 6px;
+  background: var(--color-returned-dot);
+}
+
+.comparison-pane article {
+  max-height: var(--workspace-review-max-height);
+  overflow-y: auto;
+}
+
+.comparison-pane-live {
+  background: var(--color-surface-container-lowest);
+}
+
+.comparison-pane-draft {
+  border-color: rgb(81 95 116 / 20%);
+  box-shadow: var(--shadow-sm), 0 0 0 1px rgb(81 95 116 / 20%);
+}
+
+.comparison-media {
+  height: var(--comparison-media-height);
+}
+
+.comparison-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review-audit-sidebar > div:first-child > div:nth-child(2) {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.review-audit-sidebar > div:first-child > div:nth-child(2)::before {
+  position: absolute;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  left: 10px;
+  width: 2px;
+  content: "";
+  background: var(--color-surface-container-high);
+}
+
+.review-audit-sidebar > div:first-child > div:nth-child(2) > .relative > .absolute {
+  top: 6px;
+  left: -27px;
+  width: 12px;
+  height: 12px;
+  border: 0;
+  box-shadow: 0 0 0 4px var(--color-background);
+}
+
+.review-audit-sidebar > div:first-child > div:nth-child(2) > .relative:nth-child(2) > .absolute {
+  background: var(--color-secondary);
+}
+
+.review-audit-sidebar > div:first-child > div:nth-child(2) > .relative:nth-child(n + 3) > .absolute {
+  background: var(--color-outline);
+}
+
+.telemetry-progress-value {
+  width: 78%;
+}
+
+/* PUBLIC PARITY: public mastheads, search controls, and shared feedback states. */
+.site-header {
+  right: 0;
+  isolation: isolate;
+}
+
+.site-header-standard {
+  height: auto;
+  min-height: var(--public-standard-offset);
+}
+
+.site-header-bar {
+  height: var(--public-standard-header-height);
+}
+
+.site-header-standard .site-brand-name,
+.site-header-standard .site-edition-separator,
+.site-header-standard .site-edition-label,
+.site-header-standard .site-primary-nav,
+.site-header-standard .site-search {
+  display: none !important;
+}
+
+.site-search {
+  width: 192px;
+}
+
+.site-search-icon {
+  top: 50%;
+  left: var(--space-2);
+  z-index: 1;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.site-search input {
+  height: 32px;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-6);
+  border-color: transparent;
+}
+
+.site-breaking-bar {
+  min-height: var(--public-breaking-bar-height);
+  padding-top: var(--space-1);
+  padding-bottom: var(--space-1);
+}
+
+.site-breaking-bar > div {
+  min-width: 0;
+}
+
+.site-breaking-bar > div > :first-child {
+  padding: 2px 6px;
+  background: var(--color-error);
+  color: var(--color-on-error);
+  line-height: var(--text-label-caps-line);
+}
+
+.site-header-desk {
+  height: auto;
+  min-height: var(--public-standard-offset);
+}
+
+.desk-header-shell {
+  height: var(--public-desk-header-height);
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-1);
+}
+
+.desk-header-shell nav {
+  flex-shrink: 0;
+  padding-top: var(--space-1);
+  padding-bottom: var(--space-1);
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.desk-header-shell nav a[aria-current="page"] {
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.desk-live-wire {
+  height: 24px;
+  border-right: 0;
+  border-left: 0;
+}
+
+.desk-live-wire > div {
+  height: 100%;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.desk-live-wire > div > :first-child,
+.breaking-card > div:first-child > div:first-child {
+  background: var(--color-error);
+  color: var(--color-on-error);
+}
+
+.desk-live-wire .radius-pill,
+.breaking-card .radius-pill,
+.article-heading .radius-pill,
+.search-console .radius-pill,
+.technology-articles .radius-pill,
+.editorial-live-sidebar .radius-pill {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+}
+
+.public-page button:hover,
+.public-page .motion-colors:hover {
+  color: var(--color-on-surface);
+}
+
+.public-page .motion-shadow:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.public-page input[type="checkbox"],
+.public-page input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+
+.public-page select {
+  appearance: none;
+}
+
+@media (min-width: 640px) {
+  .site-header-standard .site-brand-name {
+    display: inline !important;
+  }
+
+  .site-header-desk .desk-brand-copy,
+  .site-header-desk .desk-staff-link {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .site-header-standard .site-edition-separator,
+  .site-header-standard .site-edition-label {
+    display: inline !important;
+  }
+
+  .site-header-standard .site-search {
+    display: block !important;
+  }
+
+  .site-header-desk .desk-header-context {
+    display: flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header-standard .site-primary-nav {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-header-desk .desk-header-context {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .site-header-bar {
+    padding-right: var(--gutter-mobile);
+    padding-left: var(--gutter-mobile);
+  }
+
+  .site-header-desk .desk-brand-copy,
+  .site-header-desk .desk-staff-link {
+    display: none;
+  }
+}

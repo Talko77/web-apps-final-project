@@ -1,0 +1,1267 @@
+<% const pageData = typeof page !== "undefined" && page ? page : {}; %>
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <%- include("../../partials/shared/head", { pageTitle: pageData.pageTitle || "The Daily Web | Technology Intelligence Desk" }) %>
+  </head>
+  <body class="public-page technology-page surface-page text-body color-body">
+    <%- include("../../partials/public/header-desk", { showBreaking: true, breakingText: pageData.breakingText, searchQuery: "" }) %>
+    <main class="technology-main width-full surface-page">
+      <div class="flex flex-column width-full">
+        <!-- Channel Hero Masthead -->
+        <section class="technology-channel-hero relative width-full surface-muted overflow-hidden">
+          <div class="absolute media-overlay state-muted">
+            <svg
+              class="width-full height-full color-muted"
+              height="100%"
+              width="100%"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <pattern
+                  height="48"
+                  id="tech-grid"
+                  patternunits="userSpaceOnUse"
+                  width="48"
+                >
+                  <path
+                    d="M 48 0 L 0 0 0 48"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-dasharray="2 4"
+                    stroke-width="0.75"
+                  ></path>
+                </pattern>
+              </defs>
+              <rect fill="url(#tech-grid)" height="100%" width="100%"></rect>
+            </svg>
+          </div>
+          <div
+            class="relative width-content page-shell pad-inline-5 pad-6 flex flex-column gap-4"
+          >
+            <div
+              class="flex flex-wrap align-center gap-2 text-kicker text-1 color-muted text-uppercase"
+            >
+              <a class="motion-colors" data-path="home" href="#">Dispatches</a>
+              <span>/</span>
+              <span class="color-body text-bold">Desk III</span>
+              <span>/</span>
+              <span
+                class="pad-inline-3 pad-block-2 surface-info color-info radius-standard text-semibold"
+                >Specialty Beat</span
+              >
+            </div>
+            <div
+              class="flex flex-column md-row align-end justify-between gap-5"
+            >
+              <div class="stack-2">
+                <h1 class="text-headline text-7 color-body">
+                  Technology &amp; Computing
+                </h1>
+                <p class="text-headline text-6 color-muted text-relaxed">
+                  In-depth reporting on artificial intelligence, semiconductors,
+                  cybersecurity, and digital policy.
+                </p>
+              </div>
+              <!-- Real-time Desk Telemetry Bar -->
+              <div
+                class="flex align-center gap-5 surface-paper pad-3 radius-panel shadow-subtle flex-no-shrink"
+              >
+                <div class="flex flex-column">
+                  <span class="text-kicker text-1 color-muted text-uppercase"
+                    >Silicon Index (DW-SI)</span
+                  >
+                  <div class="flex align-center gap-2">
+                    <span class="text-label text-2 color-body text-bold"
+                      >4,892.40</span
+                    >
+                    <span
+                      class="text-label text-1 color-alert flex align-center text-bold"
+                    >
+                      <span class="icon text-1">arrow_drop_up</span>+1.84%
+                    </span>
+                  </div>
+                </div>
+                <div class="image-logo surface-raised"></div>
+                <div class="flex flex-column">
+                  <span class="text-kicker text-1 color-muted text-uppercase"
+                    >Active Dispatches</span
+                  >
+                  <div class="flex align-center gap-2">
+                    <span class="text-label text-2 color-body text-bold"
+                      >142</span
+                    >
+                    <span
+                      class="radius-pill surface-alert state-loading"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Interactive Filter, Search & Sorting Bar -->
+        <section class="technology-filter-bar sticky surface-glass shadow-subtle">
+          <div
+            class="width-content page-shell pad-inline-5 pad-block-3 flex flex-column gap-3"
+          >
+            <div
+              class="flex flex-column md-row align-start align-center justify-between gap-3"
+            >
+              <!-- Subcategories Ribbon -->
+              <div
+                class="flex align-center gap-2 overflow-scroll pad-block-2"
+                id="categoryFilterGroup"
+              >
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-ink color-inverse motion-colors no-wrap"
+                  data-filter="all"
+                  type="button"
+                >
+                  All Field Reports
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-body motion-colors no-wrap"
+                  data-filter="ai"
+                  type="button"
+                >
+                  AI &amp; Robotics
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-body motion-colors no-wrap"
+                  data-filter="chips"
+                  type="button"
+                >
+                  Hardware &amp; Chips
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-body motion-colors no-wrap"
+                  data-filter="cyber"
+                  type="button"
+                >
+                  Cybersecurity
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-body motion-colors no-wrap"
+                  data-filter="cloud"
+                  type="button"
+                >
+                  Cloud Infrastructure
+                </button>
+                <button
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-body motion-colors no-wrap"
+                  data-filter="policy"
+                  type="button"
+                >
+                  Policy &amp; Ethics
+                </button>
+              </div>
+              <!-- Desk Controls: Search, Date, Sort -->
+              <div
+                class="flex flex-wrap no-wrap align-center gap-2 flex-no-shrink"
+              >
+                <div class="relative flex-grow">
+                  <span class="icon absolute color-muted text-4">search</span>
+                  <input
+                    class="width-full pad-block-2 surface-paper color-body text-body text-1 radius-standard shadow-subtle"
+                    id="beatSearchInput"
+                    placeholder="Filter wire..."
+                    type="text"
+                  />
+                </div>
+                <div class="relative">
+                  <select
+                    class="surface-paper color-body text-label text-1 pad-block-2 radius-standard shadow-subtle control-pointer"
+                    id="dateFilterSelect"
+                  >
+                    <option value="all">Time: All Archive</option>
+                    <option value="today">Past 24 Hours</option>
+                    <option value="week">This Week</option>
+                    <option value="month">Past 30 Days</option>
+                    <option value="quarter">Q4 2025</option>
+                  </select>
+                  <span class="icon absolute color-muted text-2"
+                    >expand_more</span
+                  >
+                </div>
+                <div class="relative">
+                  <select
+                    class="surface-paper color-body text-label text-1 pad-block-2 radius-standard shadow-subtle control-pointer"
+                    id="sortBySelect"
+                  >
+                    <option value="latest">Sort: Latest Dispatches</option>
+                    <option value="read">Sort: Most Read</option>
+                    <option value="choice">Sort: Editorial Choice</option>
+                    <option value="longform">Sort: Longform Deep Dives</option>
+                  </select>
+                  <span class="icon absolute color-muted text-2">sort</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Main Narrative Area & Structural Grid -->
+        <main class="technology-content width-content page-shell pad-inline-5 pad-6 width-full">
+          <!-- Hero Feature Package -->
+          <article
+            class="technology-feature relative surface-paper radius-panel shadow-raised overflow-hidden margin-bottom-6 motion-shadow"
+          >
+            <div class="grid grid-single lg-editorial-grid">
+              <!-- Feature Visual -->
+              <div
+                class="technology-feature-media lg-content-span relative media-hero overflow-hidden surface-ink"
+              >
+                <img
+                  class="width-full height-full media-image interaction-zoom motion-transform"
+                  data-alt="Photonic microchip glowing with dense micro-optical laser waveguides in a cleanroom laboratory. Coherent blue and amber laser beams guide data across silicon crystal channels with crystalline refractions and precision optical mirrors."
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBs54jUdZgBJdro5pDRMdcwABZBnKp753AbC2yQl6EdOtQSA38DAxaSB_WlBNBO10VKxsbN55SiiS81QeGQYxkJ7LauUbehujlz68qRWcff9ZAgF1sOZYsEabWx6Wbc9RGGhxA_JBSfn1CLj95vZnDIQ3K6FzUCaVxAvjFSMnC8xRQTATz0O2wCxtItcQ3AaNPxwCV9bUzM7URZIT4RJILD4rP1zHpyrwxP6VWy18ookOpl9OT5ESIiA"
+                />
+                <div
+                  class="absolute media-overlay surface-hero-fade state-hidden"
+                ></div>
+                <div class="technology-feature-labels absolute flex flex-wrap align-center gap-2">
+                  <span
+                    class="surface-ink color-inverse text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard shadow-subtle text-bold"
+                  >
+                    Analysis
+                  </span>
+                  <span
+                    class="surface-glass color-body text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-medium"
+                  >
+                    Hardware Architecture
+                  </span>
+                </div>
+              </div>
+              <!-- Feature Content Block -->
+              <div
+                class="lg-sidebar-span pad-5 pad-6 flex flex-column justify-between surface-paper"
+              >
+                <div class="stack-4">
+                  <div
+                    class="flex align-center gap-3 color-muted text-caption text-1"
+                  >
+                    <span
+                      class="flex align-center gap-1 text-semibold color-body"
+                    >
+                      <span class="icon text-1">bolt</span> Frontier Tech
+                    </span>
+                    <span>•</span>
+                    <time datetime="2025-10-28T09:30:00Z">34 mins ago</time>
+                    <span>•</span>
+                    <span>18 min read</span>
+                  </div>
+                  <h2
+                    class="text-headline text-7 color-body motion-colors text-tight"
+                  >
+                    <a data-path="article-photonic-silicon" href="#">
+                      Next-Gen Photonic Silicon: How Light Is Replacing Copper
+                      in Frontier Data Centers
+                    </a>
+                  </h2>
+                  <p class="text-deck color-muted title-clamp">
+                    As artificial intelligence models scale into the tens of
+                    trillions of parameters, electrical resistance in copper
+                    interconnects has become the fundamental physical choke
+                    point. Inside the race to build all-optical compute nodes
+                    that route exabytes on laser light with fractional heat
+                    expenditure.
+                  </p>
+                  <div class="flex align-center gap-3 pad-block-2">
+                    <div
+                      class="avatar-medium radius-pill surface-raised flex align-center justify-center text-kicker text-bold color-body flex-no-shrink"
+                    >
+                      DR
+                    </div>
+                    <div class="flex flex-column">
+                      <span class="text-label text-1 color-body text-bold"
+                        >Dr. Evelyn Vance</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Chief Hardware Correspondent, Zurich Bureau</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- Bottom Telemetry & Quick Action -->
+                <div class="pad-5 flex align-center justify-between">
+                  <div
+                    class="flex align-center gap-4 color-muted text-caption text-1"
+                  >
+                    <span class="flex align-center gap-1">
+                      <span class="icon text-2">visibility</span> 42.8k
+                    </span>
+                    <span class="flex align-center gap-1">
+                      <span class="icon text-2">chat_bubble_outline</span> 184
+                    </span>
+                    <span class="flex align-center gap-1">
+                      <span class="icon text-2">share</span> 1.2k
+                    </span>
+                  </div>
+                  <button
+                    aria-label="Bookmark Story"
+                    class="pad-2 radius-standard color-muted motion-colors"
+                    data-active="false"
+                    type="button"
+                  >
+                    <span class="icon text-5">bookmark_border</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+          <!-- 12-Column Editorial Spread: 8 Cols Content Ribbon + 4 Cols Strategic Sidebar -->
+          <div class="technology-spread grid grid-single lg-editorial-grid gap-6">
+            <!-- Primary 8-Column Articles Track -->
+            <section class="technology-articles lg-content-span flex flex-column gap-6">
+              <div class="flex align-center justify-between pad-block-2">
+                <div class="flex align-center gap-2">
+                  <span class="surface-ink radius-pill"></span>
+                  <h3
+                    class="text-kicker text-1 text-uppercase color-primary text-bold"
+                  >
+                    Dispatches &amp; Investigative Reports
+                  </h3>
+                </div>
+                <span class="text-caption text-1 color-muted"
+                  >Showing 9 of 142 reports</span
+                >
+              </div>
+              <!-- Dynamic 3-Column Subgrid (Responsive) -->
+              <div
+                class="technology-card-grid grid grid-single sm-grid-split md-grid-triple gap-4"
+                id="articleGrid"
+              >
+                <!-- Card 1: Breaking / AI -->
+                <article
+                  class="surface-paper radius-panel shadow-subtle pad-4 flex flex-column justify-between motion-shadow"
+                >
+                  <div class="stack-2">
+                    <div
+                      class="relative width-full media-card radius-card overflow-hidden surface-raised margin-bottom-2"
+                    >
+                      <img
+                        class="width-full height-full media-image interaction-zoom motion-transform"
+                        data-alt="Massive neural network hypercluster in a liquid-submerged server vault. Cool teal lighting illuminates crystalline tubes of fluorocarbon fluid cooling high-bandwidth memory stacks."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIbGteNcomazrGftQ_p-D0MHfgrsdQ4tS34dXMLSiDf1L_VgUK1FgYRID0eVWljf9KleXzKS61Jbr6UkXZqkss19QlwGaGdj7-5AH768lnkK7RM5Ki9CxHOffxElIoZtpSNxH0pNkuEQ9XiwbZNVUCBDzcDuWU_NieW-YUeYg0qljioS9L7bi0VyE5SOQe7ZJZmk3N09VtkXV_PN7MpZ8Z6Mi0KumZeCRPw_pxCFZ9MoqU8tLDvjcTqw"
+                      />
+                      <span
+                        class="absolute surface-alert color-inverse text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold flex align-center gap-1"
+                      >
+                        <span
+                          class="radius-pill surface-paper state-loading"
+                        ></span>
+                        BREAKING
+                      </span>
+                    </div>
+                    <span
+                      class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                      >AI &amp; Robotics</span
+                    >
+                    <h4 class="text-headline text-4 color-body motion-colors">
+                      <a href="#"
+                        >Autonomous Agent Cluster Achieves Zero-Shot Compilation
+                        of OS Kernels</a
+                      >
+                    </h4>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Research labs demonstrate recursive formal verification
+                      running continuously without human code interception,
+                      triggering immediate auditing scrutiny.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-4 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <div>
+                      <span class="text-medium color-body block"
+                        >Julian H. Thorne</span
+                      >
+                      <time datetime="2025-10-28T09:12:00Z">18m ago</time>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span class="flex align-center text-1"
+                        ><span class="icon text-1">visibility</span> 14.1k</span
+                      >
+                      <button
+                        aria-label="Save report"
+                        class="radius-standard"
+                        data-active="false"
+                        type="button"
+                      >
+                        <span class="icon text-4">bookmark_border</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+                <!-- Card 2: Exclusive / Cybersecurity -->
+                <article
+                  class="surface-paper radius-panel shadow-subtle pad-4 flex flex-column justify-between motion-shadow"
+                >
+                  <div class="stack-2">
+                    <div
+                      class="relative width-full media-card radius-card overflow-hidden surface-raised margin-bottom-2"
+                    >
+                      <img
+                        class="width-full height-full media-image interaction-zoom motion-transform"
+                        data-alt="Digital forensic investigative lab screen displaying disassembled firmware binary code with red cryptographic alert markers and vulnerability callouts in a darkened security operations room."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdxpc-dt1HbB3JajMFzGXxcnmnnqrYshfIFqDOJoKHYWDXOlK7BdkVuIckVkS4wr9oZrI4wDcyxlirnqFsMCS3XJf6NZ_fy1ZxuFX4C1alrS4Om0CxxhfUmeJrUvJ0pU56ipR7uX5ZlHSiyK3VR_Txxon5I_tCSX16PBzEb5olqSDbH7Ghz2t6x4T6QaCzjA984exCCcJF4AAcmcRcm4glC3ebcLo8kEvkGWO4LQsvLog9880B3ggp-Q"
+                      />
+                      <span
+                        class="absolute surface-ink color-inverse text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold"
+                      >
+                        EXCLUSIVE
+                      </span>
+                    </div>
+                    <span
+                      class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                      >Cybersecurity</span
+                    >
+                    <h4 class="text-headline text-4 color-body motion-colors">
+                      <a href="#"
+                        >Baseband Firmware Exploit Uncovered Across
+                        Dual-Continental Satellite Mesh</a
+                      >
+                    </h4>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Declassified disclosures reveal critical telemetry
+                      interceptors planted inside low-earth orbit commercial
+                      transceivers since late 2024.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-4 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <div>
+                      <span class="text-medium color-body block"
+                        >Mara Lindqvist</span
+                      >
+                      <time datetime="2025-10-28T08:45:00Z">45m ago</time>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span class="flex align-center text-1"
+                        ><span class="icon text-1">visibility</span> 29.4k</span
+                      >
+                      <button
+                        aria-label="Save report"
+                        class="radius-standard"
+                        data-active="false"
+                        type="button"
+                      >
+                        <span class="icon text-4">bookmark_border</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+                <!-- Card 3: Deep Dive / Policy & Ethics -->
+                <article
+                  class="surface-paper radius-panel shadow-subtle pad-4 flex flex-column justify-between motion-shadow"
+                >
+                  <div class="stack-2">
+                    <div
+                      class="relative width-full media-card radius-card overflow-hidden surface-raised margin-bottom-2"
+                    >
+                      <img
+                        class="width-full height-full media-image interaction-zoom motion-transform"
+                        data-alt="Symmetric minimalist architectural perspective of an international legislative council hall with digital voting monitors and formal oak panels under diffused neutral daylight."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKkoGwvt7IkJA1CAjyQhoqK7iso7kkk67zFbKCGe6uUayqqLmfs1Rl6WFjkKp4BQOS5xqZ2EURabx0EWZMHJplQrwCnVz8lUoBaIxZVDxattgHJEKAMwqadEvSxt279jH503igONjDYhZvNsFZy54tnTYDrPfNCLA4VMKo8Kak9LW4nDnmRcz2fx6chNA-6m1pRWJPg_uX5ptqwGCzH0n6DCcwXYsSSJqr1yrLdAzq9d8wwjYNj58-5A"
+                      />
+                      <span
+                        class="absolute surface-info color-info text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold"
+                      >
+                        DEEP DIVE
+                      </span>
+                    </div>
+                    <span
+                      class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                      >Policy &amp; Ethics</span
+                    >
+                    <h4 class="text-headline text-4 color-body motion-colors">
+                      <a href="#"
+                        >The Sovereign Compute Treaty: Inside the Secret Geneva
+                        Mandate</a
+                      >
+                    </h4>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Forty-two nations prepare to ratify binding restrictions
+                      on uncurated synthetic training sets exceeding 10^27 FLOP
+                      processing thresholds.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-4 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <div>
+                      <span class="text-medium color-body block"
+                        >Kaveh Soltani</span
+                      >
+                      <time datetime="2025-10-28T07:10:00Z">2h ago</time>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span class="flex align-center text-1"
+                        ><span class="icon text-1">visibility</span> 9.2k</span
+                      >
+                      <button
+                        aria-label="Save report"
+                        class="radius-standard"
+                        data-active="false"
+                        type="button"
+                      >
+                        <span class="icon text-4">bookmark_border</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+                <!-- Card 4: Hardware & Chips -->
+                <article
+                  class="surface-paper radius-panel shadow-subtle pad-4 flex flex-column justify-between motion-shadow"
+                >
+                  <div class="stack-2">
+                    <div
+                      class="relative width-full media-card radius-card overflow-hidden surface-raised margin-bottom-2"
+                    >
+                      <img
+                        class="width-full height-full media-image interaction-zoom motion-transform"
+                        data-alt="Extreme macro shot of high-numerical-aperture extreme ultraviolet EUV lithography optics reflecting chromatic spectrum in ultra-clean nitrogen chamber."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjMV0RolSOnkg8IQ6cs4-c3Wds4Tnzy64UIY-Vx2a90XR-lc3rRSAAnoMwXRtLMGliOD2Kmk0Dbr9HVGxIAqWtikgbA9yHnSHPJG-ZjH1WWQccHszSzk-zYWYdKavYWCPsO2TauVQZyC4EP3HJ1Ns4lH3_2Ty-L5R8yLFbq9hrvRNlJ1ldVivDws-oW1OMMCRaRmGYQ3Ebq4FofuJ3AfOimZm3b7GQwfKFDTl57UdiGVsJdgK2y-P7dw"
+                      />
+                      <span
+                        class="absolute surface-raised color-body text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold"
+                      >
+                        REPORT
+                      </span>
+                    </div>
+                    <span
+                      class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                      >Hardware &amp; Chips</span
+                    >
+                    <h4 class="text-headline text-4 color-body motion-colors">
+                      <a href="#"
+                        >Sub-Angstrom EUV Lithography Reaches Commercial Yield
+                        Milestones</a
+                      >
+                    </h4>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Fabrication plants in Dresden and Tainan breach
+                      single-nanometer transistor gates utilizing polarized
+                      high-power vacuum mirrors.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-4 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <div>
+                      <span class="text-medium color-body block"
+                        >Dr. Evelyn Vance</span
+                      >
+                      <time datetime="2025-10-28T06:30:00Z">3h ago</time>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span class="flex align-center text-1"
+                        ><span class="icon text-1">visibility</span> 18.7k</span
+                      >
+                      <button
+                        aria-label="Save report"
+                        class="radius-standard"
+                        data-active="false"
+                        type="button"
+                      >
+                        <span class="icon text-4">bookmark_border</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+                <!-- Card 5: Cloud Infrastructure -->
+                <article
+                  class="surface-paper radius-panel shadow-subtle pad-4 flex flex-column justify-between motion-shadow"
+                >
+                  <div class="stack-2">
+                    <div
+                      class="relative width-full media-card radius-card overflow-hidden surface-raised margin-bottom-2"
+                    >
+                      <img
+                        class="width-full height-full media-image interaction-zoom motion-transform"
+                        data-alt="Geothermal energy power turbine station connected to underground data center conduits amid Icelandic basalt volcanic terrain under dramatic overcast skies."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTDphQ2WFwURT0_pVMO-tJCZ13QRpkOptwP94aGThclKZxkR0MVwBYcyw9ksQz2rSZVkbOMQSq4ICvHo66K-aWyyP6COISRAbmtdLz4EMBJqXnyUcRNQSZRLQByHMfVZbY1v-Gzt6cbgAmEXc5eltabvF5n6PwEKLY_FYmc5m2MFv9ODsDKDW1_j_GF62tM32pJ3roCKbhGvSVLHzV9Xoy86ioVrEuwKYC6uikYmswgiTVerbiOKqTEQ"
+                      />
+                      <span
+                        class="absolute surface-info color-info text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold"
+                      >
+                        DEEP DIVE
+                      </span>
+                    </div>
+                    <span
+                      class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                      >Cloud Infrastructure</span
+                    >
+                    <h4 class="text-headline text-4 color-body motion-colors">
+                      <a href="#"
+                        >Small Modular Reactors at Server Racks: The Decoupling
+                        of Grid Reliance</a
+                      >
+                    </h4>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Hyperscalers invest $38B into dedicated micro-nuclear
+                      installations directly colocated alongside edge
+                      transformer hubs.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-4 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <div>
+                      <span class="text-medium color-body block"
+                        >Harrison Grey</span
+                      >
+                      <time datetime="2025-10-28T05:00:00Z">4h ago</time>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span class="flex align-center text-1"
+                        ><span class="icon text-1">visibility</span> 31.0k</span
+                      >
+                      <button
+                        aria-label="Save report"
+                        class="radius-standard"
+                        data-active="false"
+                        type="button"
+                      >
+                        <span class="icon text-4">bookmark_border</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+                <!-- Card 6: AI & Robotics -->
+                <article
+                  class="surface-paper radius-panel shadow-subtle pad-4 flex flex-column justify-between motion-shadow"
+                >
+                  <div class="stack-2">
+                    <div
+                      class="relative width-full media-card radius-card overflow-hidden surface-raised margin-bottom-2"
+                    >
+                      <img
+                        class="width-full height-full media-image interaction-zoom motion-transform"
+                        data-alt="Bipedal humanoid robot executing tactile precision assembly on delicate circuit boards in a silent robotic research lab with white minimalist industrial tables."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgtbkojTzDhAHUYjW5zYFW8AnqYgZ9pG8qc0NYBhJS3tCOXTfTfskqL7GcxeEG8L7932IgQfV2s-ilUgAwwkViyKcEljc7J8TgWktPB5Dg41qaMflRbt-byStFEPk9jjJHqtRZuprLI80wK7j1cJs-99s_9_2qtHJlcKY1HwpM5R2X7vKHVm0JPnhLIBAaHLrLCSnpUJzKOp1g3CyyBgxY3D95skX3apjN8HDA6RODXPhCwfw09EDwWw"
+                      />
+                      <span
+                        class="absolute surface-ink color-inverse text-kicker text-1 text-uppercase pad-inline-3 pad-block-2 radius-standard text-bold"
+                      >
+                        EXCLUSIVE
+                      </span>
+                    </div>
+                    <span
+                      class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                      >AI &amp; Robotics</span
+                    >
+                    <h4 class="text-headline text-4 color-body motion-colors">
+                      <a href="#"
+                        >Tactile Feedback Sensors Bring Dexterity Parity to
+                        Industrial Humanoids</a
+                      >
+                    </h4>
+                    <p class="text-body text-1 color-muted title-clamp">
+                      Micro-piezoelectric fingertips permit machine handling of
+                      delicate carbon fibers and live organic tissues without
+                      shear distortion.
+                    </p>
+                  </div>
+                  <div
+                    class="pad-4 flex align-center justify-between color-muted text-caption text-1"
+                  >
+                    <div>
+                      <span class="text-medium color-body block"
+                        >Amina Sato</span
+                      >
+                      <time datetime="2025-10-28T04:15:00Z">5h ago</time>
+                    </div>
+                    <div class="flex align-center gap-2">
+                      <span class="flex align-center text-1"
+                        ><span class="icon text-1">visibility</span> 22.9k</span
+                      >
+                      <button
+                        aria-label="Save report"
+                        class="radius-standard"
+                        data-active="false"
+                        type="button"
+                      >
+                        <span class="icon text-4">bookmark_border</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              </div>
+              <!-- Progressive Loading Skeleton Container (Toggled via JS or infinite scroll) -->
+              <div
+                class="state-hidden grid grid-single sm-grid-split md-grid-triple gap-4"
+                id="loadingSkeleton"
+              >
+                <div
+                  class="surface-paper radius-panel pad-4 stack-3 state-loading"
+                >
+                  <div
+                    class="width-full media-card surface-panel radius-card"
+                  ></div>
+                  <div class="surface-panel radius-standard"></div>
+                  <div class="width-full surface-panel radius-standard"></div>
+                  <div class="surface-panel radius-standard"></div>
+                  <div class="width-full surface-muted radius-standard"></div>
+                </div>
+                <div
+                  class="surface-paper radius-panel pad-4 stack-3 state-loading"
+                >
+                  <div
+                    class="width-full media-card surface-panel radius-card"
+                  ></div>
+                  <div class="surface-panel radius-standard"></div>
+                  <div class="width-full surface-panel radius-standard"></div>
+                  <div class="surface-panel radius-standard"></div>
+                  <div class="width-full surface-muted radius-standard"></div>
+                </div>
+                <div
+                  class="surface-paper radius-panel pad-4 stack-3 state-loading"
+                >
+                  <div
+                    class="width-full media-card surface-panel radius-card"
+                  ></div>
+                  <div class="surface-panel radius-standard"></div>
+                  <div class="width-full surface-panel radius-standard"></div>
+                  <div class="surface-panel radius-standard"></div>
+                  <div class="width-full surface-muted radius-standard"></div>
+                </div>
+              </div>
+              <!-- Pagination Bar -->
+              <div
+                class="flex flex-column sm-row align-center justify-between gap-4 pad-5"
+              >
+                <span class="text-body text-1 color-muted">
+                  Page <span class="text-bold color-body">1</span> of 16 •
+                  Archival Records Indexed
+                </span>
+                <div class="flex align-center gap-2" id="paginationControls">
+                  <button
+                    class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-muted control-disabled state-muted"
+                    disabled=""
+                  >
+                    Previous
+                  </button>
+                  <button
+                    class="avatar-small radius-standard text-label text-1 surface-ink color-inverse text-bold"
+                  >
+                    1
+                  </button>
+                  <button
+                    class="avatar-small radius-standard text-label text-1 surface-paper color-body"
+                  >
+                    2
+                  </button>
+                  <button
+                    class="avatar-small radius-standard text-label text-1 surface-paper color-body"
+                  >
+                    3
+                  </button>
+                  <span class="pad-inline-3 color-muted">...</span>
+                  <button
+                    class="avatar-small radius-standard text-label text-1 surface-paper color-body"
+                  >
+                    16
+                  </button>
+                  <button
+                    class="pad-inline-3 pad-block-2 radius-standard text-label text-1 surface-panel color-body text-medium motion-colors"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </section>
+            <!-- Sidebar: 4 Columns Editorial Dossier & Intelligence Panels -->
+            <aside class="technology-sidebar lg-sidebar-span flex flex-column gap-6">
+              <!-- Widget 1: Most Read in Tech Leaderboard -->
+              <div
+                class="surface-paper radius-panel shadow-subtle pad-5 flex flex-column gap-4"
+              >
+                <div class="flex align-center justify-between">
+                  <div class="flex align-center gap-2">
+                    <span class="icon text-5 color-primary">trending_up</span>
+                    <h3
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                    >
+                      Most Read in Tech
+                    </h3>
+                  </div>
+                  <span class="text-caption text-1 color-muted text-semibold"
+                    >24-Hr Cycle</span
+                  >
+                </div>
+                <ol class="stack-4">
+                  <li class="flex align-start gap-3 control-pointer">
+                    <span
+                      class="text-headline text-5 color-subtle text-bold flex-no-shrink"
+                      >01</span
+                    >
+                    <div class="stack-2">
+                      <span
+                        class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                        >Semiconductors</span
+                      >
+                      <a
+                        class="text-headline text-4 color-body block text-tight"
+                        href="#"
+                      >
+                        ASML Announces High-NA 0.75 NA Optics Delivery Ahead of
+                        Fiscal Forecast
+                      </a>
+                      <div
+                        class="flex align-center gap-2 color-muted text-caption text-1"
+                      >
+                        <span>92.4k readers</span>
+                        <span>•</span>
+                        <span>Desk Memo</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="flex align-start gap-3 control-pointer">
+                    <span
+                      class="text-headline text-5 color-subtle text-bold flex-no-shrink"
+                      >02</span
+                    >
+                    <div class="stack-2">
+                      <span
+                        class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                        >AI Models</span
+                      >
+                      <a
+                        class="text-headline text-4 color-body block text-tight"
+                        href="#"
+                      >
+                        The End of Transformer Pre-eminence: State Space
+                        Machines Gain Benchmark Parity
+                      </a>
+                      <div
+                        class="flex align-center gap-2 color-muted text-caption text-1"
+                      >
+                        <span>78.1k readers</span>
+                        <span>•</span>
+                        <span>14m read</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="flex align-start gap-3 control-pointer">
+                    <span
+                      class="text-headline text-5 color-subtle text-bold flex-no-shrink"
+                      >03</span
+                    >
+                    <div class="stack-2">
+                      <span
+                        class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                        >Cybersecurity</span
+                      >
+                      <a
+                        class="text-headline text-4 color-body block text-tight"
+                        href="#"
+                      >
+                        Quantum Shor-Algorithm Simulation Threatens Legacy
+                        2048-Bit RSA Keys
+                      </a>
+                      <div
+                        class="flex align-center gap-2 color-muted text-caption text-1"
+                      >
+                        <span>61.9k readers</span>
+                        <span>•</span>
+                        <span>Investigative</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="flex align-start gap-3 control-pointer">
+                    <span
+                      class="text-headline text-5 color-subtle text-bold flex-no-shrink"
+                      >04</span
+                    >
+                    <div class="stack-2">
+                      <span
+                        class="text-kicker text-1 color-muted text-uppercase text-semibold"
+                        >Infrastructure</span
+                      >
+                      <a
+                        class="text-headline text-4 color-body block text-tight"
+                        href="#"
+                      >
+                        Subsea Fiber Corridors Under the Arctic: Project Aurora
+                        Completes Mapping
+                      </a>
+                      <div
+                        class="flex align-center gap-2 color-muted text-caption text-1"
+                      >
+                        <span>45.0k readers</span>
+                        <span>•</span>
+                        <span>Exclusive</span>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+              <!-- Widget 2: Tech Market Indices & Semiconductor Tracker -->
+              <div
+                class="surface-paper radius-panel shadow-subtle pad-5 flex flex-column gap-4"
+              >
+                <div class="flex align-center justify-between">
+                  <div class="flex align-center gap-2">
+                    <span class="icon text-5 color-primary">ssid_chart</span>
+                    <h3
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                    >
+                      Semiconductor Tracker
+                    </h3>
+                  </div>
+                  <span
+                    class="radius-pill surface-alert state-loading"
+                    title="Real-time wire"
+                  ></span>
+                </div>
+                <!-- Market Ticker Micro-items -->
+                <div class="stack-3">
+                  <div
+                    class="pad-3 surface-muted radius-standard flex align-center justify-between"
+                  >
+                    <div>
+                      <span class="text-label text-1 color-body text-bold block"
+                        >SOX Semiconductor</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >PHLX Semiconductor Index</span
+                      >
+                    </div>
+                    <div class="text-right">
+                      <span class="text-label text-2 text-bold color-body block"
+                        >5,142.18</span
+                      >
+                      <span
+                        class="text-caption text-1 color-alert text-semibold"
+                        >+2.41%</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="pad-3 surface-muted radius-standard flex align-center justify-between"
+                  >
+                    <div>
+                      <span class="text-label text-1 color-body text-bold block"
+                        >EUV Capital Gear</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Global Lithography Basket</span
+                      >
+                    </div>
+                    <div class="text-right">
+                      <span class="text-label text-2 text-bold color-body block"
+                        >1,894.60</span
+                      >
+                      <span
+                        class="text-caption text-1 color-alert text-semibold"
+                        >+0.88%</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="pad-3 surface-muted radius-standard flex align-center justify-between"
+                  >
+                    <div>
+                      <span class="text-label text-1 color-body text-bold block"
+                        >AI Cloud Compute FLOP</span
+                      >
+                      <span class="text-caption text-1 color-muted"
+                        >Spot Cost / MegaFLOP-Hr</span
+                      >
+                    </div>
+                    <div class="text-right">
+                      <span class="text-label text-2 text-bold color-body block"
+                        >$0.0019</span
+                      >
+                      <span
+                        class="text-caption text-1 color-alert text-semibold"
+                        >-4.12%</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- Inline SVG Sparkline Micro Visualization -->
+                <div class="pad-block-2">
+                  <div
+                    class="flex align-center justify-between margin-bottom-2 color-muted text-caption text-1"
+                  >
+                    <span>7-Day Volatility Band</span>
+                    <span class="text-semibold color-body">Peak: 5,210.00</span>
+                  </div>
+                  <svg
+                    class="width-full color-primary"
+                    fill="none"
+                    viewbox="0 0 300 64"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M 0 54 Q 25 48 50 50 T 100 35 T 150 42 T 200 18 T 250 24 T 300 8"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-width="2.5"
+                    ></path>
+                    <path
+                      d="M 0 54 Q 25 48 50 50 T 100 35 T 150 42 T 200 18 T 250 24 T 300 8 L 300 64 L 0 64 Z"
+                      fill="currentColor"
+                      opacity="0.06"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+              <!-- Widget 3: Upcoming Global Tech Hearings & Antitrust Filings -->
+              <div
+                class="surface-paper radius-panel shadow-subtle pad-5 flex flex-column gap-4"
+              >
+                <div class="flex align-center justify-between">
+                  <div class="flex align-center gap-2">
+                    <span class="icon text-5 color-primary">gavel</span>
+                    <h3
+                      class="text-kicker text-1 text-uppercase color-primary text-bold"
+                    >
+                      Upcoming Regulatory Hearings
+                    </h3>
+                  </div>
+                  <a
+                    class="text-caption text-1 color-muted motion-colors"
+                    href="#"
+                    >Calendar</a
+                  >
+                </div>
+                <div class="stack-4">
+                  <div class="flex gap-3 align-start">
+                    <div
+                      class="surface-panel color-body pad-inline-3 pad-block-2 radius-standard text-center flex-no-shrink"
+                    >
+                      <span
+                        class="text-kicker text-1 text-uppercase block color-muted"
+                        >Nov</span
+                      >
+                      <span class="text-label text-2 text-bold block">04</span>
+                    </div>
+                    <div class="stack-2">
+                      <span
+                        class="text-label text-1 color-body text-bold block text-tight"
+                      >
+                        EU Digital Markets Review: Interoperability Mandates
+                      </span>
+                      <span class="text-caption text-1 color-muted block"
+                        >Brussels • Directorate-General for Competition</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex gap-3 align-start">
+                    <div
+                      class="surface-panel color-body pad-inline-3 pad-block-2 radius-standard text-center flex-no-shrink"
+                    >
+                      <span
+                        class="text-kicker text-1 text-uppercase block color-muted"
+                        >Nov</span
+                      >
+                      <span class="text-label text-2 text-bold block">11</span>
+                    </div>
+                    <div class="stack-2">
+                      <span
+                        class="text-label text-1 color-body text-bold block text-tight"
+                      >
+                        US Senate Antitrust Panel: Sovereign Foundation LLMs
+                      </span>
+                      <span class="text-caption text-1 color-muted block"
+                        >Washington, D.C. • Russell Senate Bldg</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex gap-3 align-start">
+                    <div
+                      class="surface-panel color-body pad-inline-3 pad-block-2 radius-standard text-center flex-no-shrink"
+                    >
+                      <span
+                        class="text-kicker text-1 text-uppercase block color-muted"
+                        >Nov</span
+                      >
+                      <span class="text-label text-2 text-bold block">19</span>
+                    </div>
+                    <div class="stack-2">
+                      <span
+                        class="text-label text-1 color-body text-bold block text-tight"
+                      >
+                        Tokyo Microelectronics &amp; Rare Earth Logistics Summit
+                      </span>
+                      <span class="text-caption text-1 color-muted block"
+                        >Tokyo • Ministry of Economy, Trade and Industry</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Newsletter Dossier Card -->
+              <div
+                class="surface-ink color-inverse radius-panel pad-5 stack-4 shadow-raised"
+              >
+                <div class="stack-2">
+                  <span class="text-kicker text-1 text-uppercase color-muted"
+                    >Confidential Wire</span
+                  >
+                  <h4 class="text-headline text-5 color-inverse">
+                    The Silicon Memorandum
+                  </h4>
+                  <p class="text-body text-1 color-muted text-relaxed">
+                    Curated daily intelligence memo distributed directly to
+                    CTOs, chip architects, and regulatory commissioners every
+                    weekday at 06:00 UTC.
+                  </p>
+                </div>
+                <form class="stack-2">
+                  <input
+                    class="width-full pad-inline-3 pad-block-2 radius-standard text-body text-1 surface-paper color-body"
+                    placeholder="name@institution.org"
+                    required=""
+                    type="email"
+                  />
+                  <button
+                    class="width-full pad-block-2 surface-panel color-body text-label text-1 text-bold radius-standard motion-colors"
+                    type="submit"
+                  >
+                    Dispatch Every Dawn
+                  </button>
+                </form>
+              </div>
+            </aside>
+          </div>
+        </main>
+</div>
+    </main>
+    <footer class="public-footer technology-footer width-full surface-paper rule-top rule margin-top-6">
+      <div class="width-content page-shell pad-inline-5 pad-6">
+        <div class="grid grid-single sm-grid-split md-grid-triple gap-6 pad-6">
+          <div class="lg-sidebar-span stack-3">
+            <div class="flex align-center gap-2">
+              <span class="text-headline text-5 color-primary text-bold"
+                >The Daily Web</span
+              >
+            </div>
+            <p class="text-body text-2 color-muted width-reading">
+              Independent international journalism committed to verifiable
+              evidence, unyielding context, and analytical integrity across
+              global reporting bureaus.
+            </p>
+            <div class="pad-block-2">
+              <span
+                class="text-kicker text-1 text-uppercase color-muted block margin-bottom-2"
+                >Dispatch Briefing Newsletter</span
+              >
+              <div class="flex">
+                <input
+                  class="width-full pad-inline-3 pad-block-2 text-body text-1 surface-muted rule color-body radius-standard"
+                  placeholder="Enter your business email"
+                  type="email"
+                /><button
+                  class="pad-inline-4 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard motion-colors flex-no-shrink"
+                >
+                  Join
+                </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 text-uppercase color-primary margin-bottom-2 text-bold"
+            >
+              News Desks
+            </h4>
+            <ul class="stack-2 text-body text-1 color-muted">
+              <li class="motion-colors">
+                <a data-path="world" href="#">World Dispatch</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="tech" href="#">Technology &amp; Systems</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="business" href="#"
+                  >Global Markets &amp; Economy</a
+                >
+              </li>
+              <li class="motion-colors">
+                <a data-path="science" href="#">Science &amp; Quantum</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="culture" href="#">Arts &amp; Culture</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="opinion" href="#">Editorial &amp; Commentary</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 text-uppercase color-primary margin-bottom-2 text-bold"
+            >
+              Governance &amp; Standards
+            </h4>
+            <ul class="stack-2 text-body text-1 color-muted">
+              <li class="motion-colors">
+                <a data-path="editorial-guidelines" href="#"
+                  >Editorial Code &amp; Ethics</a
+                >
+              </li>
+              <li class="motion-colors">
+                <a data-path="corrections-policy" href="#"
+                  >Corrections Policy</a
+                >
+              </li>
+              <li class="motion-colors">
+                <a data-path="fact-checking" href="#">Verification Protocols</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="press-freedom" href="#">Newsroom Independence</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="syndication" href="#">Syndication &amp; Wires</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-kicker text-1 text-uppercase color-primary margin-bottom-2 text-bold"
+            >
+              Digital Infrastructure
+            </h4>
+            <ul class="stack-2 text-body text-1 color-muted">
+              <li class="motion-colors">
+                <a data-path="rss-feeds" href="#">Real-Time RSS Feeds</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="api-access" href="#">Press API Documentation</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="staff-cms" href="#">Newsroom Desk CMS</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="privacy-notice" href="#">Privacy &amp; Consent</a>
+              </li>
+              <li class="motion-colors">
+                <a data-path="contact" href="#">Bureaus &amp; Inquiries</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="pad-5 rule-top rule flex flex-column sm-row align-center justify-between gap-3"
+        >
+          <div class="text-caption text-1 color-muted">
+            © 2025 The Daily Web Publishing Group Ltd. All global rights
+            reserved. Registered with International Press Transparency Index.
+          </div>
+          <div class="flex align-center gap-4 text-label text-1 color-muted">
+            <% (pageData.footerPolicyLinks || []).forEach((link) => { %>
+              <a class="motion-colors" data-path="<%= link.path %>" href="<%= link.href %>"><%= link.label %></a>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

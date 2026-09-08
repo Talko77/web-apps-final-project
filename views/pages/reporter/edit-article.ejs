@@ -1,0 +1,511 @@
+<%# Source: edit-article-reporter-portal.html | Mock: data/mock/pages/reporter-edit-article.json %>
+<!doctype html>
+<html lang="en">
+  <head>
+    <%- include('../../partials/shared/head', { pageTitle: pageTitle }) %>
+  </head>
+  <body
+    class="reporter-edit-page surface-page text-body color-body height-screen flex flex-column"
+  >
+    <%- include('../../partials/newsroom/header', { newsroomRole: newsroomRole }) %>
+    <main class="newsroom-main width-full surface-page flex-grow">
+      <div class="reporter-workspace page-shell pad-block-3">
+        <div
+          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
+        >
+          <a class="interaction-underline" data-path="articles" href="#"
+            >Newsroom CMS</a
+          ><span class="color-subtle">/</span
+          ><span class="color-body text-semibold">Desk Console</span>
+        </div>
+        <div class="flex flex-column width-full">
+          <!-- Top Command Ribbon / Autosave Status -->
+          <div
+            class="command-ribbon surface-paper radius-panel shadow-subtle pad-inline-5 pad-block-3 margin-bottom-5 flex flex-column md-row align-center justify-between gap-4"
+          >
+            <div class="flex flex-column sm-row sm-align-center gap-3 gap-4">
+              <div class="flex align-center gap-2 text-body text-1 color-muted">
+                <span class="text-semibold color-primary">Articles</span>
+                <span class="color-subtle">/</span>
+                <span class="color-body text-medium"
+                  >Edit Article
+                  <span class="color-muted text-label text-1"
+                    >(<%= article.id %>)</span
+                  ></span
+                >
+              </div>
+              <div
+                class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-caption text-1"
+              >
+                <span class="autosave-indicator relative flex">
+                  <span
+                    class="state-loading absolute inline-flex height-full width-full radius-pill surface-panel"
+                  ></span>
+                  <span
+                    class="relative inline-flex radius-pill surface-panel"
+                  ></span>
+                </span>
+                <span class="text-medium color-body"
+                  >✓ All changes saved to cloud (<%= article.savedAt %>)</span
+                >
+              </div>
+            </div>
+            <div class="flex align-center gap-2 gap-3 flex-wrap">
+              <button
+                class="control-button control-button-secondary color-body text-label text-2 motion-colors flex align-center gap-2 shadow-subtle"
+                type="button"
+              >
+                <span class="icon text-4">save</span>
+                <span class="">Save Draft</span>
+              </button>
+              <button
+                class="control-button control-button-secondary color-body text-label text-2 motion-colors flex align-center gap-2 shadow-subtle"
+                type="button"
+              >
+                <span class="icon text-4">visibility</span>
+                <span class="">Preview</span>
+              </button>
+              <button
+                class="control-button color-inverse text-label text-2 motion-all shadow-subtle flex align-center gap-2"
+                id="topSubmitBtn"
+                type="button"
+              >
+                <span class="icon text-4">send</span>
+                <span class="">Submit for Review</span>
+              </button>
+            </div>
+          </div>
+          <!-- Notice Alert Banner -->
+          <div
+            class="notice-banner surface-info color-info radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+          >
+            <span
+              class="icon icon-filled color-muted text-5 flex-no-shrink margin-top-2"
+              >info</span
+            >
+            <div class="flex-grow text-left text-body text-2">
+              <span class="text-semibold">Notice:</span> <%= article.liveVersion %> is currently
+              published on the live site. You are editing a draft update (<span
+                class="text-semibold color-primary"
+                ><%= article.draftVersion %></span
+              >). The live version will remain active until an editor approves
+              your revisions.
+            </div>
+          </div>
+          <!-- Main Editorial Grid -->
+          <form
+            class="article-editor-grid grid grid-single lg-editorial-grid gap-5"
+            id="articleForm"
+          >
+            <!-- Center Editorial Body Flow (8 Cols) -->
+            <div class="article-editor-column lg-content-span flex flex-column gap-5">
+              <!-- Article Title Card -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <label
+                  class="text-label text-1 text-uppercase color-muted text-bold"
+                  for="articleTitle"
+                  >Headline / Article Title</label
+                >
+                <input
+                  class="control-input width-full text-headline text-6 surface-muted pad-inline-4 pad-block-3 radius-card color-body motion-all"
+                  id="articleTitle"
+                  name="articleTitle"
+                  placeholder="e.g. Breakthrough In Open Silicon: Next-Generation Architecture"
+                  type="text"
+                  value="<%= article.title %>"
+                />
+                <span class="text-caption text-1 color-muted"
+                  >Craft clear, descriptive headlines for newsstand indexing
+                  &amp; student syndication.</span
+                >
+              </div>
+              <!-- Standfirst / Subtitle -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <div class="flex align-center justify-between">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    for="articleSubtitle"
+                    >Subtitle &amp; Social Summary</label
+                  >
+                  <span
+                    class="text-label text-1 color-muted text-medium"
+                    id="charCounter"
+                    ><%= article.subtitle.length %> / 250 characters</span
+                  >
+                </div>
+                <textarea
+                  class="control-input width-full text-body text-2 surface-muted pad-4 radius-card color-body motion-all control-no-resize"
+                  id="articleSubtitle"
+                  maxlength="250"
+                  name="articleSubtitle"
+                  placeholder="Summarize the core impact in two sentences for the lead feed..."
+                  rows="2"
+                ><%= article.subtitle %></textarea>
+              </div>
+              <!-- Lead Graphic Attachment Box -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+              >
+                <div class="flex align-center justify-between">
+                  <div>
+                    <h3
+                      class="text-label text-1 text-uppercase color-muted text-bold"
+                    >
+                      Lead Imagery
+                    </h3>
+                    <p class="text-caption text-1 color-muted">
+                      Clean single asset upload with newsroom attribution.
+                    </p>
+                  </div>
+                  <span
+                    class="pad-inline-3 pad-block-2 radius-standard surface-panel color-body text-caption text-1"
+                    >16:9 Landscape Preferred</span
+                  >
+                </div>
+                <!-- Drag & Drop Container -->
+                <div
+                  class="surface-muted radius-panel pad-4 flex flex-column sm-row align-center gap-4"
+                >
+                  <div
+                    class="lead-image-preview width-full media-frame media-thumbnail radius-card flex-no-shrink shadow-subtle"
+                  >
+                    <img
+                      class="width-full height-full media-cover interaction-zoom motion-transform"
+                      alt="<%= article.imageAlt %>"
+                      data-alt="<%= article.imageAlt %>"
+                      src="<%= article.image %>"
+                    />
+                    <div
+                      class="media-overlay surface-scrim-soft state-muted motion-all flex align-center justify-center"
+                    >
+                      <span class="color-inverse text-label text-1"
+                        >Replace File</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="lead-image-copy flex-grow flex flex-column justify-center text-center gap-1"
+                  >
+                    <div
+                      class="flex align-center justify-center justify-start gap-2 color-body text-label text-2"
+                    >
+                      <span class="icon text-5 color-muted"
+                        >cloud_upload</span
+                      >
+                      <span class="">Drag &amp; drop or browse image</span>
+                    </div>
+                    <p class="text-caption text-1 color-muted">
+                      Supported formats: JPEG, PNG, WebP (Max 8MB compressed)
+                    </p>
+                    <div
+                      class="margin-top-2 flex align-center justify-center justify-start gap-2"
+                    >
+                      <button
+                        class="pad-inline-3 pad-block-2 radius-card surface-raised color-body text-label text-1 motion-colors"
+                        type="button"
+                      >
+                        Choose Local File
+                      </button>
+                      <button
+                        class="pad-inline-3 pad-block-2 radius-card color-alert text-label text-1 motion-colors"
+                        type="button"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Caption and Credit Fields -->
+                <div class="lead-image-fields grid grid-single gap-4">
+                  <div class="flex flex-column gap-1">
+                    <label
+                      class="text-caption text-1 color-muted text-medium"
+                      for="imgCaption"
+                      >Image Caption</label
+                    >
+                    <input
+                      class="control-input width-full surface-muted pad-inline-3 pad-block-2 radius-card text-body text-1 color-body motion-all"
+                      id="imgCaption"
+                      type="text"
+                      value="<%= article.caption %>"
+                    />
+                  </div>
+                  <div class="flex flex-column gap-1">
+                    <label
+                      class="text-caption text-1 color-muted text-medium"
+                      for="imgCredit"
+                      >Photo Credit / Agency</label
+                    >
+                    <input
+                      class="control-input width-full surface-muted pad-inline-3 pad-block-2 radius-card text-body text-1 color-body motion-all"
+                      id="imgCredit"
+                      type="text"
+                      value="<%= article.credit %>"
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- Rich Article WYSIWYG Editor Canvas -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-3"
+              >
+                <div class="flex align-center justify-between margin-bottom-2">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    >Article Body &amp; Narrative</label
+                  >
+                  <span class="text-caption text-1 color-muted"
+                    >Format: Rich HTML Block</span
+                  >
+                </div>
+                <!-- Familiar Standard Editorial Toolbar -->
+                <div
+                  class="editor-toolbar surface-muted radius-card pad-2 flex align-center flex-wrap gap-1 shadow-subtle"
+                >
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Bold"
+                    type="button"
+                  >
+                    <span class="text-bold text-2">B</span>
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Italic"
+                    type="button"
+                  >
+                    <span class="text-italic text-display text-4 text-tight"
+                      >I</span
+                    >
+                  </button>
+                  <div class="toolbar-divider surface-panel"></div>
+                  <button
+                    class="toolbar-control toolbar-text-control pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
+                    title="Subheading 2"
+                    type="button"
+                  >
+                    H2
+                  </button>
+                  <button
+                    class="toolbar-control toolbar-text-control pad-inline-3 radius-standard color-body text-label text-1 flex align-center justify-center motion-colors"
+                    title="Subheading 3"
+                    type="button"
+                  >
+                    H3
+                  </button>
+                  <div class="toolbar-divider surface-panel"></div>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Blockquote"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_quote</span
+                    >
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Hyperlink"
+                    type="button"
+                  >
+                    <span class="icon text-4">link</span>
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Bulleted List"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_list_bulleted</span
+                    >
+                  </button>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Numbered List"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_list_numbered</span
+                    >
+                  </button>
+                  <div class="toolbar-divider surface-panel"></div>
+                  <button
+                    class="toolbar-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Insert Horizontal Rule"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >horizontal_rule</span
+                    >
+                  </button>
+                  <button
+                    class="toolbar-control toolbar-clear-control radius-standard color-body flex align-center justify-center motion-colors"
+                    title="Clear Formatting"
+                    type="button"
+                  >
+                    <span class="icon text-4"
+                      >format_clear</span
+                    >
+                  </button>
+                </div>
+                <!-- Broad Editorial Textarea -->
+                <textarea
+                  class="article-body-input control-input width-full surface-paper pad-4 radius-card text-deck color-body motion-colors text-relaxed shadow-subtle"
+                  id="articleBody"
+                  placeholder="Draft your story here using broadsheet narrative conventions..."
+                  rows="16"
+                ><%= article.body %></textarea
+                >
+              </div>
+            </div>
+            <!-- Right Column Sidebar / Meta Settings (4 Cols) -->
+            <div class="article-settings-column span-sidebar flex flex-column gap-5">
+              <!-- Taxonomy & Classification Card -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+              >
+                <div class="flex align-center gap-2">
+                  <span class="icon color-muted text-5"
+                    >category</span
+                  >
+                  <h3 class="text-headline text-4 color-primary">
+                    Desk &amp; Classification
+                  </h3>
+                </div>
+                <!-- Category Dropdown -->
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    for="articleCategory"
+                    >Editorial Desk</label
+                  >
+                  <div class="select-control relative">
+                    <select
+                      class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-colors"
+                      id="articleCategory"
+                      name="articleCategory"
+                    >
+                      <% article.categories.forEach(function(category) { %>
+                      <option value="<%= category.value %>" <%= category.value === article.category ? 'selected' : '' %>><%= category.label %></option>
+                      <% }) %>
+                    </select>
+                    <span
+                      class="icon color-muted text-5 absolute"
+                      >expand_more</span
+                    >
+                  </div>
+                </div>
+                <!-- Tags Input Field -->
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-1 text-uppercase color-muted text-bold"
+                    for="articleTags"
+                    >Tags &amp; Keywords</label
+                  >
+                  <input
+                    class="control-input width-full surface-muted pad-inline-4 pad-block-2 radius-card text-body text-1 color-body motion-colors"
+                    id="articleTags"
+                    name="articleTags"
+                    placeholder="Separate with commas"
+                    type="text"
+                    value="<%= article.tags %>"
+                  />
+                  <div class="flex flex-wrap gap-2 margin-top-2">
+                    <% article.tagPills.forEach(function(tag) { %><span class="pad-inline-3 pad-block-2 radius-standard surface-panel color-muted text-caption text-1 flex align-center gap-1">#<%= tag %><button type="button" aria-label="Remove <%= tag %> tag">×</button></span><% }) %>
+                  </div>
+                </div>
+                <!-- Placement Tier / Prominence -->
+                <fieldset class="placement-fieldset">
+                  <legend class="text-label text-1 text-uppercase color-muted text-bold">Layout Prominence</legend>
+                  <div class="grid grid-split gap-2 margin-top-2">
+                    <label class="placement-option surface-muted radius-standard flex align-center gap-2 pad-inline-3 pad-block-2 text-label text-1">
+                      <input <%= article.placement === 'lead' ? 'checked' : '' %> name="placementTier" type="radio" value="lead" />
+                      Lead Story
+                    </label>
+                    <label class="placement-option surface-muted radius-standard flex align-center gap-2 pad-inline-3 pad-block-2 text-label text-1">
+                      <input <%= article.placement === 'standard' ? 'checked' : '' %> name="placementTier" type="radio" value="standard" />
+                      Standard Flow
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+              <!-- Publishing Ledger & Metadata -->
+              <section class="editor-card surface-paper pad-5 radius-panel shadow-subtle" aria-labelledby="revisionMetadataTitle">
+                <div class="flex align-center gap-2 margin-bottom-4">
+                  <span class="icon color-muted text-5">history_edu</span>
+                  <h3 class="text-headline text-4 color-primary" id="revisionMetadataTitle">Revision Metadata</h3>
+                </div>
+                <dl class="revision-ledger stack-2">
+                  <div><dt>Current assigned editor</dt><dd><%= article.assignedEditor %></dd></div>
+                  <div><dt>Original author</dt><dd><%= article.author %></dd></div>
+                  <div><dt>Current live version</dt><dd class="text-semibold"><%= article.liveVersion %> (Live)</dd></div>
+                </dl>
+                <p class="revision-note surface-muted radius-standard pad-3 margin-top-4 text-caption text-1 color-muted flex align-start gap-2">
+                  <span class="icon text-4">policy</span>
+                  <span>Submitting sends notifications to the student copy desk for fact-checking and layout clearance.</span>
+                </p>
+              </section>
+
+              <!-- Quick Desk Notes -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <label
+                  class="text-label text-1 text-uppercase color-muted text-bold"
+                  for="deskNotes"
+                  >Notes for Managing Desk</label
+                >
+                <textarea
+                  class="control-input width-full surface-muted pad-3 radius-card text-body text-1 color-body motion-colors control-no-resize"
+                  id="deskNotes"
+                  placeholder="Optional notes for the reviewing editor (e.g. quotes re-verified with dean)..."
+                  rows="3"
+                ><%= article.deskNotes %></textarea
+                >
+              </div>
+            </div>
+          </form>
+          <!-- Bottom Workspace Actions Sticky Bar -->
+          <div
+            class="workspace-actions margin-top-6 margin-bottom-6 flex flex-column sm-row align-center justify-between gap-4"
+          >
+            <button
+              class="color-alert pad-inline-4 pad-block-2 radius-card text-label text-2 motion-colors flex align-center gap-1"
+              id="deleteDraftBtn"
+              type="button"
+            >
+              <span class="icon text-4">delete</span>
+              <span class="">Delete Draft</span>
+            </button>
+            <div class="flex align-center gap-3 width-full justify-end">
+              <button
+                class="control-button control-button-secondary color-body text-label text-2 motion-colors shadow-subtle"
+                type="button"
+              >
+                Save Draft
+              </button>
+              <button
+                class="control-button color-inverse text-label text-2 motion-all shadow-raised flex align-center gap-2"
+                id="bottomSubmitBtn"
+                type="button"
+              >
+                <span class="icon text-5">send</span>
+                <span class="">Submit for Review</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="newsroom-footer width-full surface-muted pad-block-3">
+      <div class="page-shell text-center text-caption text-1 color-muted">
+        The Daily Web Student Newsroom CMS • Internal Editorial Dispatch •
+        v1.2.0
+      </div>
+    </footer>
+  </body>
+</html>

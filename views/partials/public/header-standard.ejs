@@ -1,0 +1,8 @@
+<header class="site-header site-header-standard fixed width-full surface-paper shadow-subtle">
+  <div class="site-header-bar page-shell width-content pad-inline-5 flex align-center justify-between gap-4">
+    <%- include('../shared/site-logo', { logoHref: '/', publicationName: 'The Daily Web', editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null }) %>
+    <nav class="site-primary-nav flex align-center gap-5" aria-label="Primary navigation"><a class="text-label text-2 color-muted motion-colors" href="/">Home</a><a class="text-label text-2 color-muted motion-colors" href="/technology">Technology</a><a class="text-label text-2 color-muted motion-colors" href="/search">Search</a></nav>
+    <div class="flex align-center gap-3"><form class="site-search relative" action="/search" method="get"><label class="state-hidden" for="siteSearch">Search articles</label><span class="site-search-icon icon absolute color-muted text-4">search</span><input class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard control-input" id="siteSearch" name="q" placeholder="Search the publication" type="search" value="<%= searchQuery || '' %>"></form><a class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1" href="/staff/login">Staff Login</a></div>
+  </div>
+  <% if (typeof showBreaking !== 'undefined' && showBreaking) { %><%- include('./breaking-strip', { breakingText: typeof breakingText !== 'undefined' ? breakingText : null }) %><% } %>
+</header>

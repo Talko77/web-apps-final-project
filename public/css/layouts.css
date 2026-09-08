@@ -1,0 +1,276 @@
+/*
+ * Shared page layouts
+ *
+ * Use these rules for page composition that recurs across public reading pages
+ * and newsroom tools. Content-specific styling belongs in pages.css.
+ */
+/* Page shells center content within the shared editorial maximum width. */
+.page-shell {
+  width: min(100% - (2 * var(--gutter-mobile)), var(--max-content-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Reading columns protect long-form text from becoming too wide. */
+.reading-column {
+  width: min(100%, var(--reading-column-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Editorial grids provide the responsive column framework for page sections. */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--column-gap);
+}
+
+/* Newsroom sidebars stay fixed while the workspace content scrolls independently. */
+.newsroom-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--newsroom-sidebar-width);
+}
+
+/* Newsroom content reserves space for the fixed navigation rail. */
+.newsroom-content {
+  min-width: 0;
+  margin-left: var(--newsroom-sidebar-width);
+}
+
+@media (min-width: 768px) {
+  /* Tablet layouts expand the editorial grid to eight columns. */
+  .editorial-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop layouts use wider gutters and the full twelve-column grid. */
+  .page-shell {
+    width: min(100% - (2 * var(--gutter-desktop)), var(--max-content-width));
+  }
+
+  .editorial-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  /* Mobile layouts move the newsroom rail above the workspace content. */
+  .newsroom-sidebar {
+    position: static;
+    width: 100%;
+  }
+
+  .newsroom-content {
+    margin-left: 0;
+  }
+}
+
+/* PUBLIC PARITY: responsive publication, archive, and desk compositions. */
+.article-page-main,
+.publication-main,
+.search-page-main {
+  padding-top: var(--public-standard-offset);
+}
+
+.editorial-home-main,
+.technology-main {
+  padding-top: var(--public-standard-offset);
+}
+
+.publication-shell,
+.public-footer > .width-content:not(.page-shell) {
+  width: min(100% - (2 * var(--gutter-mobile)), var(--max-content-width));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .public-footer > div > .grid:not(.editorial-grid) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .publication-shell,
+  .public-footer > .width-content:not(.page-shell) {
+    width: min(100% - (2 * var(--gutter-desktop)), var(--max-content-width));
+  }
+
+  .publication-primary,
+  .search-results-list,
+  .editorial-lead-story,
+  .technology-articles {
+    grid-column: span 8;
+  }
+
+  .publication-sidebar,
+  .search-filters,
+  .editorial-live-sidebar,
+  .technology-sidebar {
+    grid-column: span 4;
+  }
+
+  .technology-feature-media {
+    grid-column: span 7;
+  }
+
+  .technology-feature-media + div {
+    grid-column: span 5;
+  }
+
+  .editorial-telemetry > .grid > :first-child {
+    grid-column: span 5;
+  }
+
+  .editorial-telemetry > .grid > :last-child {
+    grid-column: span 7;
+  }
+
+  .editorial-modules > :first-child {
+    grid-column: span 7;
+  }
+
+  .editorial-modules > :last-child {
+    grid-column: span 5;
+  }
+
+  .editorial-spotlights > .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .editorial-footer > div > .grid,
+  .technology-footer > div > .grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .editorial-footer > div > .grid > :first-child,
+  .technology-footer > div > .grid > :first-child {
+    grid-column: span 2;
+  }
+}
+
+/* REPORTER PARITY: fixed newsroom shell and responsive authoring grid. */
+.newsroom-main {
+  padding-top: var(--site-header-height);
+}
+
+.reporter-workspace {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.newsroom-footer {
+  margin-top: auto;
+}
+
+.article-editor-grid .article-editor-column,
+.article-editor-grid .article-settings-column {
+  grid-column: auto;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .article-editor-grid .article-editor-column {
+    grid-column: span 8;
+  }
+
+  .article-editor-grid .article-settings-column {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 639px) {
+  .newsroom-header-shell {
+    gap: var(--space-2);
+  }
+
+  .newsroom-account-actions {
+    gap: var(--space-2);
+  }
+
+  .newsroom-account-actions > a[data-path="home"] {
+    display: none;
+  }
+}
+
+/* EDITOR PARITY: shared public-header and editorial workspace geometry. */
+.site-header {
+  top: 0;
+  left: 0;
+  z-index: var(--layer-site-header);
+  height: var(--site-header-height);
+}
+
+.site-header-inner {
+  width: min(100%, var(--max-content-width));
+  height: var(--site-header-height);
+  margin-inline: auto;
+}
+
+.site-header-offset {
+  padding-top: var(--site-header-height);
+}
+
+.editor-page-content {
+  width: min(100%, var(--max-content-width));
+  margin-inline: auto;
+}
+
+.workspace-header {
+  top: 0;
+  right: 0;
+  left: var(--newsroom-sidebar-width);
+  z-index: var(--layer-workspace-header);
+  height: var(--site-header-height);
+}
+
+.workspace-main {
+  width: 100%;
+  padding-top: var(--site-header-height);
+  padding-right: var(--space-6);
+  padding-left: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .site-primary-nav.state-hidden {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .editor-analytics-page .lg-content-span,
+  .editor-diff-page .lg-content-span {
+    grid-column: span 8;
+  }
+
+  .editor-analytics-page .decision-sidebar,
+  .editor-diff-page .review-audit-sidebar {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 1023px) {
+  .editor-analytics-page .lg-content-span,
+  .editor-analytics-page .decision-sidebar,
+  .editor-diff-page .lg-content-span,
+  .editor-diff-page .review-audit-sidebar {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .workspace-header {
+    position: static;
+    height: auto;
+    min-height: var(--site-header-height);
+  }
+
+  .workspace-main {
+    padding-top: var(--space-4);
+    padding-right: var(--gutter-mobile);
+    padding-left: var(--gutter-mobile);
+  }
+}

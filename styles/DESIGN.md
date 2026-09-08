@@ -1,13 +1,14 @@
 # The Daily Web CSS Design System
 
-This directory is the local visual system for The Daily Web. The styles are
-organized as a token-driven cascade and currently support public publication
-pages, reporter workflows, editor review tools, analytics, and staff login.
-The CSS files are the source of truth for the contracts documented here.
+This file documents the local visual system for The Daily Web. The browser CSS
+files live in `public/css/`; they are organized as a token-driven cascade and
+support public publication pages, reporter workflows, editor review tools,
+analytics, and staff login. Those CSS files are the source of truth for the
+contracts documented here.
 
 ## File responsibilities
 
-`style.css` loads the layers in this order:
+`public/css/style.css` loads the layers in this order:
 
 1. Google Fonts: Newsreader, Inter, and Material Symbols Outlined.
 2. `variables.css`: semantic color, typography, spacing, geometry, media,
@@ -102,10 +103,10 @@ at 768px, and twelve at 1024px. The `grid-single`, `grid-split`,
 describe common compositions without arbitrary-value class names.
 
 Newsroom navigation is fixed at 256px on desktop and becomes a normal,
-full-width block below 768px. Public pages use separate geometry for standard
-headers (64px bar, 96px content offset) and editorial desk headers (112px
-header, 136px content offset). Reporter and editor workspaces use a 64px site
-header, with editor workspace content reserving that header height.
+full-width block below 768px. Public pages share a stable 64px masthead and
+32px breaking-news strip, with a 96px content offset. Reporter and editor
+workspaces use a 64px site header, with editor workspace content reserving
+that header height.
 
 Use the existing responsive utilities at 640px, 768px, 1024px, and 1280px.
 Page rules also provide mobile-specific media heights, stacking, table
