@@ -458,6 +458,10 @@ table {
   display: none !important;
 }
 
+.site-mobile-menu {
+  display: none;
+}
+
 .site-search {
   width: 192px;
 }
@@ -483,7 +487,9 @@ table {
 }
 
 .site-breaking-bar > div {
+  justify-content: center;
   min-width: 0;
+  text-align: center;
 }
 
 .site-breaking-bar > div > :first-child {

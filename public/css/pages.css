@@ -239,6 +239,43 @@ main table {
   background: var(--color-surface-container-low);
 }
 
+.dispatch-item {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.dispatch-meta {
+  display: contents;
+}
+
+.dispatch-time {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.dispatch-category {
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 700;
+}
+
+.dispatch-headline {
+  grid-column: 3;
+  grid-row: 1;
+  min-width: 0;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.dispatch-read-time {
+  grid-column: 4;
+  grid-row: 1;
+  white-space: nowrap;
+}
+
 .publication-sidebar .text-display {
   letter-spacing: -0.02em;
 }
@@ -657,6 +694,56 @@ main table {
     display: none !important;
   }
 
+  .site-header-standard .site-header-bar > a .site-brand-name {
+    display: inline !important;
+  }
+
+  .site-header-standard .site-header-bar > div {
+    display: none;
+  }
+
+  .site-mobile-menu {
+    display: block;
+    margin-left: auto;
+  }
+
+  .site-mobile-menu summary {
+    list-style: none;
+  }
+
+  .site-mobile-menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .site-mobile-menu-button {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-outline);
+    border-radius: 50%;
+    box-shadow: var(--shadow-menu);
+    cursor: pointer;
+  }
+
+  .site-mobile-menu-panel {
+    top: calc(100% + var(--space-2));
+    right: 0;
+    z-index: 2;
+    display: flex;
+    width: 176px;
+    flex-direction: column;
+    padding: var(--space-2);
+    border: 1px solid var(--color-outline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-menu);
+  }
+
+  .site-mobile-menu-panel a {
+    padding: var(--space-3);
+  }
+
   .publication-primary,
   .publication-sidebar,
   .search-filters,
@@ -707,6 +794,35 @@ main table {
 
   .technology-filter-bar > div > div > :last-child {
     flex-wrap: wrap;
+  }
+
+  .dispatch-item {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .dispatch-meta {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .dispatch-category {
+    color: var(--color-secondary);
+    font-weight: 600;
+  }
+
+  .dispatch-read-time {
+    margin-left: auto;
+  }
+
+  .dispatch-headline {
+    width: 100%;
+    overflow: visible;
+    white-space: normal;
   }
 }
 
