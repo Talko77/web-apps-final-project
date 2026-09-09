@@ -114,8 +114,9 @@ main table {
 }
 
 .article-copy p:first-child::first-letter {
-  float: left;
-  margin-right: var(--space-3);
+  /* תכונות לוגיות ולא פיזיות, כדי שהאות הפותחת תישב בצד הנכון ב-RTL */
+  float: inline-start;
+  margin-inline-end: var(--space-3);
   color: var(--color-primary);
   font-family: var(--font-display);
   font-size: 48px;
@@ -319,7 +320,8 @@ main table {
 
 .search-console form .icon.absolute {
   top: 50%;
-  left: var(--space-4);
+  /* inset-inline-start כדי שסמל החיפוש יישב בתחילת השדה גם ב-RTL */
+  inset-inline-start: var(--space-4);
   transform: translateY(-50%);
   pointer-events: none;
 }
