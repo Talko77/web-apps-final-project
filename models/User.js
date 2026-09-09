@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+// bcryptjs ולא bcrypt: מימוש ב-JavaScript בלבד, ללא קומפילציה נייטיבית,
+// ולכן אותו node_modules עובד על macOS, Windows ו-Linux ובכל גרסת Node
+const bcrypt = require('bcryptjs');
 const { ROLES } = require('../config/constants');
 
 const userSchema = new mongoose.Schema({
