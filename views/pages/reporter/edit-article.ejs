@@ -1,0 +1,296 @@
+<%# עריכת כתבה. אין כפתור שמירה - autosave.js שומר את הטיוטה מעצמו %>
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <%- include('../../partials/shared/head', { pageTitle }) %>
+  </head>
+  <body
+    class="reporter-edit-page surface-page text-body color-body height-screen flex flex-column"
+  >
+    <%- include('../../partials/newsroom/header', { newsroomRole }) %>
+    <main class="newsroom-main width-full surface-page flex-grow">
+      <div class="reporter-workspace page-shell pad-block-3">
+        <nav
+          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
+          aria-label="מסלול ניווט"
+        >
+          <a class="interaction-underline" href="/reporter/articles">הכתבות שלי</a>
+          <span class="color-subtle">/</span>
+          <span class="color-body text-semibold"
+            ><%= article.isNew ? 'כתבה חדשה' : 'עריכת כתבה' %></span
+          >
+        </nav>
+        <div class="flex flex-column width-full">
+          <!-- פס פעולות עליון: מצב השמירה האוטומטית וההגשה לעורך -->
+          <div
+            class="command-ribbon surface-paper radius-panel shadow-subtle pad-inline-5 pad-block-3 margin-bottom-5 flex flex-column md-row align-center justify-between gap-4"
+          >
+            <div class="flex flex-column sm-row sm-align-center gap-3">
+              <div
+                class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-caption text-1"
+              >
+                <span class="autosave-indicator relative flex">
+                  <span
+                    class="state-loading absolute inline-flex height-full width-full radius-pill"
+                  ></span>
+                  <span class="relative inline-flex radius-pill"></span>
+                </span>
+                <span class="text-medium color-body">שמירה אוטומטית פעילה</span>
+              </div>
+              <div class="flex flex-column gap-1">
+                <p class="text-body text-1 color-muted" id="saveIndicator"></p>
+                <p class="text-caption text-1 color-muted">
+                  אין כפתור שמירה בעמוד. כל שינוי נשמר לשרת אוטומטית מעט לאחר
+                  שתפסיקו להקליד, כך שרענון או סגירת הדפדפן לא יאבדו את העבודה.
+                </p>
+              </div>
+            </div>
+            <div class="flex align-center gap-3 flex-wrap">
+              <span
+                class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-panel color-body text-label text-1"
+                >מצב הכתבה: <%= article.statusLabel %></span
+              >
+              <button
+                class="control-button color-inverse text-label text-2 motion-all shadow-subtle flex align-center gap-2"
+                id="submitForReviewBtn"
+                type="button"
+                <% if (article.isNew) { %>disabled<% } %>
+              >
+                <span class="icon text-4">send</span>
+                הגשה לאישור עורך
+              </button>
+            </div>
+          </div>
+          <% if (article.locked) { %>
+          <!-- הכתבה בבדיקת העורך ולכן נעולה לעריכה -->
+          <div
+            class="notice-banner surface-warning color-warning radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+            role="status"
+          >
+            <span class="icon icon-filled text-5 flex-no-shrink">lock</span>
+            <div class="flex-grow text-body text-2">
+              <span class="text-semibold">הכתבה ממתינה לעורך.</span>
+              לא ניתן לערוך אותה כרגע. לאחר שהעורך יאשר או יחזיר אותה לתיקונים,
+              העריכה תיפתח מחדש.
+            </div>
+          </div>
+          <% } %>
+          <% if (article.isPublished) { %>
+          <!-- קיימת גרסה מפורסמת. העדכון מחליף אותה רק לאחר אישור -->
+          <div
+            class="notice-banner surface-info color-info radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+            role="status"
+          >
+            <span class="icon icon-filled text-5 flex-no-shrink">info</span>
+            <div class="flex-grow text-body text-2">
+              <span class="text-semibold">הגרסה המפורסמת נשארת באתר.</span>
+              הקוראים ממשיכים לראות את הגרסה שפורסמה עד שהעורך יאשר את הגרסה
+              החדשה.
+            </div>
+          </div>
+          <% } %>
+          <% if (article.deskNotes) { %>
+          <!-- הערת העורך: התיקונים שנדרשים מהכתב -->
+          <div
+            class="notice-banner surface-alert color-alert radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+          >
+            <span class="icon icon-filled text-5 flex-no-shrink">rate_review</span>
+            <div class="flex-grow">
+              <h2 class="text-headline text-4 margin-bottom-2">הערת העורך</h2>
+              <p class="text-body text-2"><%= article.deskNotes %></p>
+              <p class="text-caption text-1 margin-top-2">
+                תקנו את הכתבה לפי ההערה והגישו אותה מחדש לאישור.
+              </p>
+            </div>
+          </div>
+          <% } %>
+          <!-- טופס העריכה. הערכים נשמרים ב-Ajax ולכן אין submit -->
+          <form
+            class="article-editor-grid grid grid-single lg-editorial-grid gap-5"
+            id="articleForm"
+            data-article-id="<%= article.id %>"
+            data-locked="<%= article.locked %>"
+          >
+            <div class="article-editor-column lg-content-span flex flex-column gap-5">
+              <!-- כותרת -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <label
+                  class="text-label text-1 color-muted text-bold"
+                  for="articleTitle"
+                  >כותרת הכתבה</label
+                >
+                <input
+                  class="control-input width-full text-headline text-6 surface-muted pad-inline-4 pad-block-3 radius-card color-body motion-all"
+                  id="articleTitle"
+                  name="articleTitle"
+                  maxlength="200"
+                  placeholder="הקלידו כותרת ברורה וקצרה"
+                  type="text"
+                  value="<%= article.title %>"
+                  <% if (article.locked) { %>disabled<% } %>
+                />
+                <span class="text-caption text-1 color-muted"
+                  >עד 200 תווים. הכותרת מוצגת ברשימת הכתבות ובעמוד הכתבה.</span
+                >
+              </div>
+              <!-- תקציר -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+              >
+                <div class="flex align-center justify-between gap-3">
+                  <label
+                    class="text-label text-1 color-muted text-bold"
+                    for="articleSubtitle"
+                    >תקציר הכתבה</label
+                  >
+                  <p class="text-label text-1 color-muted text-medium" id="charCounter"></p>
+                </div>
+                <textarea
+                  class="control-input width-full text-body text-2 surface-muted pad-4 radius-card color-body motion-all control-no-resize"
+                  id="articleSubtitle"
+                  name="articleSubtitle"
+                  maxlength="500"
+                  placeholder="שתי שורות שמסבירות על מה הכתבה"
+                  rows="3"
+                  <% if (article.locked) { %>disabled<% } %>
+                ><%= article.subtitle %></textarea>
+              </div>
+              <!-- תמונה מובילה -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+              >
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-1 color-muted text-bold"
+                    for="articleImageUrl"
+                    >כתובת התמונה המובילה</label
+                  >
+                  <input
+                    class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-all"
+                    id="articleImageUrl"
+                    name="articleImageUrl"
+                    placeholder="https://..."
+                    type="url"
+                    value="<%= article.image %>"
+                    <% if (article.locked) { %>disabled<% } %>
+                  />
+                  <span class="text-caption text-1 color-muted"
+                    >מומלץ יחס 16:9. שדה זה אינו חובה.</span
+                  >
+                </div>
+                <% if (article.image) { %>
+                <div class="surface-muted radius-panel pad-4 flex flex-column sm-row align-center gap-4">
+                  <div
+                    class="lead-image-preview width-full media-frame media-thumbnail radius-card flex-no-shrink shadow-subtle"
+                  >
+                    <img
+                      class="width-full height-full media-cover"
+                      alt="<%= article.imageAlt %>"
+                      src="<%= article.image %>"
+                    />
+                  </div>
+                  <div class="lead-image-copy flex-grow flex flex-column justify-center gap-1">
+                    <span class="text-label text-2 color-body">תצוגה מקדימה</span>
+                    <p class="text-caption text-1 color-muted">
+                      כך תיראה התמונה בראש הכתבה ובכרטיסים באתר.
+                    </p>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+              <!-- גוף הכתבה -->
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-3"
+              >
+                <div class="flex align-center justify-between gap-3">
+                  <label
+                    class="text-label text-1 color-muted text-bold"
+                    for="articleBody"
+                    >גוף הכתבה</label
+                  >
+                  <span class="text-caption text-1 color-muted"
+                    >שורה ריקה בין פסקאות מפרידה ביניהן בעמוד הפומבי.</span
+                  >
+                </div>
+                <textarea
+                  class="article-body-input control-input width-full surface-paper pad-4 radius-card text-deck color-body motion-colors text-relaxed shadow-subtle"
+                  id="articleBody"
+                  name="articleBody"
+                  placeholder="כתבו כאן את הכתבה"
+                  rows="16"
+                  <% if (article.locked) { %>disabled<% } %>
+                ><%= article.body %></textarea>
+              </div>
+            </div>
+            <!-- סרגל צד: קטגוריה ופרטי הגרסה -->
+            <div class="article-settings-column span-sidebar flex flex-column gap-5">
+              <div
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+              >
+                <div class="flex align-center gap-2">
+                  <span class="icon color-muted text-5">category</span>
+                  <h2 class="text-headline text-4 color-primary">קטגוריה</h2>
+                </div>
+                <div class="flex flex-column gap-2">
+                  <label
+                    class="text-label text-1 color-muted text-bold"
+                    for="articleCategory"
+                    >קטגוריית הכתבה</label
+                  >
+                  <div class="select-control relative">
+                    <select
+                      class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-colors"
+                      id="articleCategory"
+                      name="articleCategory"
+                      <% if (article.locked) { %>disabled<% } %>
+                    >
+                      <option value="">בחרו קטגוריה</option>
+                      <% article.categories.forEach(function (c) { %>
+                      <option value="<%= c.value %>" <% if (c.value === article.category) { %>selected<% } %>><%= c.label %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <section
+                class="editor-card surface-paper pad-5 radius-panel shadow-subtle"
+                aria-labelledby="revisionMetadataTitle"
+              >
+                <div class="flex align-center gap-2 margin-bottom-4">
+                  <span class="icon color-muted text-5">history_edu</span>
+                  <h2 class="text-headline text-4 color-primary" id="revisionMetadataTitle">
+                    פרטי הגרסה
+                  </h2>
+                </div>
+                <dl class="revision-ledger stack-2">
+                  <div><dt>כותב הכתבה</dt><dd><%= article.author %></dd></div>
+                  <div><dt>מצב הכתבה</dt><dd class="text-semibold"><%= article.statusLabel %></dd></div>
+                  <div><dt>הגרסה באתר</dt><dd><%= article.liveVersion %></dd></div>
+                  <div><dt>הגרסה בעריכה</dt><dd><%= article.draftVersion %></dd></div>
+                  <div><dt>נשמר לאחרונה</dt><dd><%= article.savedAt %></dd></div>
+                </dl>
+                <p
+                  class="revision-note surface-muted radius-standard pad-3 margin-top-4 text-caption text-1 color-muted flex align-start gap-2"
+                >
+                  <span class="icon text-4">policy</span>
+                  <span
+                    >ההגשה מעבירה את הכתבה לתור הסקירה של העורך, ומרגע זה לא
+                    ניתן לערוך אותה עד שתתקבל תשובה.</span
+                  >
+                </p>
+              </section>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer class="newsroom-footer width-full surface-muted pad-block-3">
+      <div class="page-shell text-center text-caption text-1 color-muted">
+        The Daily Web — מערכת החדשות הפנימית
+      </div>
+    </footer>
+    <script src="/js/autosave.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+.agents/
+.codex/
+.tmp/
+
+# Dependencies
+node_modules/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# Logs and debug output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Generated output and test artifacts
+coverage/
+dist/
+build/
+.cache/
+
+# Local OS files
+.DS_Store
+Thumbs.db

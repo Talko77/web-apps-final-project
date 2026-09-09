@@ -1,0 +1,255 @@
+<%# עמוד "הכתבות שלי" של הכתב. הנתונים מגיעים מ-pageController.reporterArticles %>
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <%- include('../../partials/shared/head', { pageTitle }) %>
+  </head>
+  <body
+    class="reporter-articles-page surface-page text-body color-body height-screen flex flex-column"
+  >
+    <%- include('../../partials/newsroom/header', { newsroomRole }) %>
+    <main class="newsroom-main width-full surface-page flex-grow">
+      <div class="reporter-workspace page-shell pad-block-3">
+        <nav
+          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
+          aria-label="מסלול ניווט"
+        >
+          <a class="interaction-underline" href="/reporter/articles">מערכת החדשות</a>
+          <span class="color-subtle">/</span>
+          <span class="color-body text-semibold">הכתבות שלי</span>
+        </nav>
+        <div class="flex flex-column width-full">
+          <!-- פס הקשר: מי מחובר ולאיזה דסק -->
+          <div
+            class="portal-context-bar width-full surface-muted pad-inline-4 pad-block-3 radius-card shadow-subtle margin-bottom-5 flex flex-wrap align-center justify-between gap-3"
+          >
+            <div class="flex align-center gap-3">
+              <span class="text-headline text-4 color-primary">אזור הכתב</span>
+              <span
+                class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
+                ><%= reporter.desk %></span
+              >
+            </div>
+            <div class="flex align-center gap-3 text-body text-1 color-muted">
+              <div
+                class="avatar-small surface-info color-info text-semibold flex align-center justify-center text-1 radius-pill"
+              ><%= reporter.initials %></div>
+              <span class="text-medium color-body"
+                ><%= reporter.name %>
+                <span class="color-muted text-normal">(<%= newsroomRole %>)</span></span
+              >
+            </div>
+          </div>
+          <!-- כותרת העמוד ופעולת היצירה -->
+          <div
+            class="reporter-page-heading flex flex-column md-row align-center justify-between gap-4 margin-bottom-5"
+          >
+            <div>
+              <h1 class="text-headline text-6 color-primary">הכתבות שלי</h1>
+              <p class="text-body text-1 color-muted margin-top-2">
+                כאן מנוהלות הטיוטות שלכם, הכתבות שהוגשו לאישור העורך והכתבות
+                שכבר פורסמו באתר.
+              </p>
+            </div>
+            <div class="flex align-center gap-3">
+              <a
+                class="create-article-button control-button color-inverse text-label text-2 shadow-subtle motion-all"
+                href="/reporter/articles/new/edit"
+              >
+                <span class="icon text-4">add_circle</span>
+                כתבה חדשה
+              </a>
+            </div>
+          </div>
+          <!-- סינון לפי מצב, קטגוריה וחיפוש חופשי. הסינון מתבצע בדפדפן -->
+          <div
+            class="article-filter-strip surface-paper pad-4 radius-card shadow-subtle margin-bottom-4 flex flex-column md-row align-center justify-between gap-4"
+          >
+            <div
+              class="flex flex-wrap align-center gap-2"
+              id="statusFilterPills"
+              role="group"
+              aria-label="סינון לפי מצב הכתבה"
+            >
+              <% statusFilters.forEach(function (filter, index) { %>
+              <button
+                class="filter-btn<%= index === 0 ? ' active' : '' %> surface-panel color-muted pad-inline-3 pad-block-2 radius-standard text-1 text-label motion-colors"
+                data-status="<%= filter.label %>"
+                type="button"
+              >
+                <%= filter.label %> <span>(<%= filter.count %>)</span>
+              </button>
+              <% }) %>
+            </div>
+            <div class="article-filter-controls flex flex-wrap align-center gap-3 width-full">
+              <div class="category-control relative flex flex-column gap-1 width-full">
+                <label
+                  class="text-label text-1 color-muted"
+                  for="categorySelect"
+                  >קטגוריה</label
+                >
+                <select
+                  class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3 pad-block-2 control-pointer"
+                  id="categorySelect"
+                >
+                  <% categories.forEach(function (category) { %>
+                  <option value="<%= category %>"><%= category %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="article-search-control relative flex flex-column gap-1 width-full">
+                <label
+                  class="text-label text-1 color-muted"
+                  for="articleSearchInput"
+                  >חיפוש לפי כותרת</label
+                >
+                <input
+                  class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3 pad-block-2"
+                  id="articleSearchInput"
+                  placeholder="הקלידו מילה מתוך הכותרת"
+                  type="search"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- טבלת הכתבות -->
+          <div
+            class="articles-table-card surface-paper radius-card shadow-subtle overflow-hidden margin-bottom-4"
+          >
+            <div class="overflow-scroll width-full">
+              <table class="reporter-articles-table width-full text-body text-1">
+                <thead
+                  class="surface-muted text-label text-1 color-muted"
+                >
+                  <tr>
+                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                      כותרת הכתבה
+                    </th>
+                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                      קטגוריה
+                    </th>
+                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                      מצב
+                    </th>
+                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                      עדכון אחרון
+                    </th>
+                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                      צפיות
+                    </th>
+                    <th class="pad-block-3 pad-inline-4 text-semibold text-center" scope="col">
+                      פעולות
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="articlesTableBody">
+                  <% articles.forEach(function (a) { %>
+                  <tr
+                    class="article-row <%= a.rowClass %>"
+                    data-status="<%= a.status %>"
+                    data-category="<%= a.category %>"
+                    data-title="<%= a.title %>"
+                  >
+                    <td class="pad-block-3 pad-inline-4">
+                      <div class="flex align-center gap-3">
+                        <% if (a.image) { %>
+                        <img
+                          class="avatar-large media-cover radius-standard flex-no-shrink"
+                          alt="<%= a.imageAlt %>"
+                          src="<%= a.image %>"
+                        />
+                        <% } else { %>
+                        <div
+                          class="avatar-large radius-standard surface-panel flex align-center justify-center color-muted flex-no-shrink"
+                        >
+                          <span class="icon text-5">image_not_supported</span>
+                        </div>
+                        <% } %>
+                        <div>
+                          <a
+                            class="text-headline text-4 color-primary interaction-underline block"
+                            href="<%= a.editUrl %>"
+                            ><%= a.title %></a
+                          >
+                          <span class="text-1 text-caption <%= a.detailClass %>"
+                            ><%= a.detail %></span
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td class="pad-block-3 pad-inline-4">
+                      <span
+                        class="inline pad-inline-3 pad-block-2 radius-standard surface-panel color-body text-label text-1"
+                        ><%= a.category %></span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4">
+                      <span
+                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard text-1 text-semibold <%= a.statusClass %>"
+                        ><span
+                          class="status-dot radius-pill <%= a.statusClass.split(' ')[0] %>"
+                        ></span><%= a.status %></span
+                      >
+                    </td>
+                    <td class="pad-block-3 pad-inline-4 color-muted no-wrap"><%= a.updated %></td>
+                    <td
+                      class="pad-block-3 pad-inline-4 <%= a.views === '-' ? 'color-muted' : 'text-medium color-body' %>"
+                    ><%= a.views %></td>
+                    <td class="pad-block-3 pad-inline-4 text-center">
+                      <div class="inline-flex radius-card shadow-subtle" role="group">
+                        <a
+                          class="pad-inline-3 pad-block-2 text-1 text-label surface-panel color-body radius-standard"
+                          href="<%= a.editUrl %>"
+                          >עריכה</a
+                        ><button
+                          class="pad-inline-3 pad-block-2 text-1 text-label <%= a.actionClass %>"
+                          data-submit-id="<%= a.id %>"
+                          type="button"
+                          <% if (a.disabled) { %>disabled<% } %>
+                        ><%= a.action %></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+            <p
+              class="state-hidden pad-6 text-center text-body text-1 color-muted"
+              id="noResultsState"
+            >
+              לא נמצאו כתבות שמתאימות לסינון. נסו לבחור מצב אחר, קטגוריה אחרת
+              או לנקות את החיפוש.
+            </p>
+          </div>
+          <!-- מונה תוצאות והודעות מערכת -->
+          <div
+            class="articles-pagination flex flex-column sm-row align-center justify-between gap-3 pad-inline-3 pad-block-3"
+          >
+            <div class="text-body text-1 color-muted">
+              מוצגות
+              <span class="text-semibold color-body" id="displayedCount"
+                ><%= articles.length %></span
+              >
+              מתוך
+              <span class="text-semibold color-body"><%= totalArticles %></span>
+              כתבות
+            </div>
+            <p
+              class="state-hidden text-body text-1 color-muted"
+              id="reporterStatus"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="newsroom-footer width-full surface-muted pad-block-3">
+      <div class="page-shell text-center text-caption text-1 color-muted">
+        The Daily Web — מערכת החדשות הפנימית
+      </div>
+    </footer>
+    <script src="/js/reporterArticles.js" defer></script>
+  </body>
+</html>

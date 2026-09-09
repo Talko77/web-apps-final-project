@@ -1,0 +1,90 @@
+<%# התחברות צוות המערכת. ההזדהות מתבצעת בשרת, staff-login.js רק שולח את הפרטים %>
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <%- include('../../partials/shared/head', { pageTitle }) %>
+  </head>
+  <body
+    class="staff-login-page surface-page text-body text-2 color-body height-screen flex align-center justify-center pad-5"
+  >
+    <main class="login-shell width-full width-reading">
+      <div class="flex flex-column width-full">
+        <div
+          class="login-panel surface-paper radius-panel shadow-raised pad-6 flex flex-column align-center"
+        >
+          <div class="width-full flex flex-column align-center margin-bottom-5">
+            <div class="login-logo-wrap width-full flex align-center justify-center">
+              <%- include('../../partials/shared/site-logo', {
+                logoHref: page.publicWebsiteHref,
+                publicationName: page.publicationName
+              }) %>
+            </div>
+          </div>
+
+          <div class="width-full text-center margin-bottom-5">
+            <h1 class="text-headline text-5 color-body"><%= page.heading %></h1>
+            <p class="text-body text-1 color-muted margin-top-2"><%= page.intro %></p>
+          </div>
+
+          <form
+            class="width-full flex flex-column gap-4"
+            id="loginForm"
+            data-next="<%= page.next %>"
+          >
+            <div class="flex flex-column gap-1">
+              <label class="text-label text-1 color-body" for="staffUsername"
+                ><%= page.form.usernameLabel %></label
+              >
+              <input
+                class="width-full surface-muted color-body text-body text-2 pad-inline-4 pad-block-3 radius-card control-input motion-colors"
+                id="staffUsername"
+                name="username"
+                type="text"
+                autocomplete="username"
+                placeholder="<%= page.form.usernamePlaceholder %>"
+                required
+              />
+            </div>
+            <div class="flex flex-column gap-1">
+              <label class="text-label text-1 color-body" for="staffPassword"
+                ><%= page.form.passwordLabel %></label
+              >
+              <input
+                class="width-full surface-muted color-body text-body text-2 pad-inline-4 pad-block-3 radius-card control-input motion-colors"
+                id="staffPassword"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="<%= page.form.passwordPlaceholder %>"
+                required
+              />
+            </div>
+            <button
+              class="login-submit width-full margin-top-2 pad-block-3 pad-inline-4 surface-ink color-inverse text-label text-2 radius-card shadow-subtle motion-all flex align-center justify-center gap-2"
+              type="submit"
+            >
+              <%= page.form.submitLabel %>
+            </button>
+            <p
+              class="login-feedback state-hidden text-center pad-block-2 pad-inline-3 radius-card text-body text-1 margin-top-2"
+              id="statusMessage"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+
+          <div class="margin-top-6 width-full flex justify-center">
+            <a
+              class="text-body text-1 color-muted motion-colors flex align-center gap-2"
+              href="<%= page.publicWebsiteHref %>"
+            >
+              <span aria-hidden="true">←</span>
+              <span><%= page.returnLabel %></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/js/staff-login.js" defer></script>
+  </body>
+</html>

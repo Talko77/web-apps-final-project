@@ -1,9 +1,14 @@
 {
   "name": "the-daily-web",
   "version": "1.0.0",
+  "description": "מערכת חדשות - ניהול, עריכה ופרסום כתבות",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node server.js",
+    "dev": "node --watch server.js",
     "seed": "node seed.js"
   },
   "dependencies": {
@@ -14,7 +19,6 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.3.0",
     "express-session": "^1.18.0",
-    "mongoose": "^8.5.1",
-    "node-fetch": "^2.7.0"
+    "mongoose": "^8.5.1"
   }
 }

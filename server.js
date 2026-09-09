@@ -1,48 +1,69 @@
+require('dotenv').config();
+
 const express = require('express');
-const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const path = require('path');
 
+const { connectDB, MONGO_URI } = require('./config/db');
+const logger = require('./utils/logger');
+const { notFound, errorHandler } = require('./middleware/errorHandler');
+
 const app = express();
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/daily_web';
 
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.error(err));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+connectDB();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// שמירת Session ב-MongoDB כדי לשמור חיבור active גם לאחר Restart של השרת
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
+
+// ה-session נשמר ב-MongoDB ולא בזיכרון התהליך,
+// כדי שמשתמש שהזדהה יישאר מחובר גם לאחר Restart של השרת.
+app.set('trust proxy', 1);
 app.use(session({
-  secret: 'daily_web_secret_key_2026',
+  name: 'connect.sid',
+  secret: process.env.SESSION_SECRET || 'daily_web_dev_secret_change_me',
   resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: MONGO_URI, ttl: 14 * 24 * 60 * 60 })
+  saveUninitialized: true, // נדרש למעקב "נצפה / לא נצפה" גם עבור אורחים
+  store: MongoStore.create({ mongoUrl: MONGO_URI, ttl: 14 * 24 * 60 * 60 }),
+  cookie: {
+    httpOnly: true,
+    maxAge: 14 * 24 * 60 * 60 * 1000,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production'
+  }
 }));
 
-// הנגשת נתוני משתמש לכל תבניות EJS
+// זמין לכל תבנית EJS
 app.use((req, res, next) => {
-  res.locals.currentUser = req.session.user || null;
+  res.locals.currentUser = (req.session && req.session.user) || null;
   next();
 });
 
-// נתיבים
+// REST API
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/articles', require('./routes/articles'));
 app.use('/api/comments', require('./routes/comments'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/weather', require('./routes/weather'));
 
-// נתיבי תצוגה (EJS)
-app.get('/', async (req, res) => {
-  res.render('index');
-});
+// עמודי התצוגה (EJS) - שומר על מבנה הנתיבים שנקבע במיגרציית ה-EJS
+app.use('/', require('./routes/pages'));
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const server = app.listen(PORT, () => logger.info(`השרת עלה על פורט ${PORT}`));
+
+// חריגה לא מטופלת נרשמת ללוג ואינה מפילה את התהליך בשקט
+process.on('unhandledRejection', err => logger.error('unhandledRejection', err));
+process.on('uncaughtException', err => {
+  logger.error('uncaughtException', err);
+  server.close(() => process.exit(1));
+});
+
+module.exports = app;

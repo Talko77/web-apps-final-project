@@ -1,0 +1,20 @@
+<header class="site-header site-header-standard fixed width-full surface-paper shadow-subtle">
+  <div class="site-header-bar page-shell width-content pad-inline-5 flex align-center justify-between gap-4">
+    <%- include('../shared/site-logo', { logoHref: '/', publicationName: 'The Daily Web', editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null }) %>
+    <nav class="site-primary-nav flex align-center gap-5" aria-label="ניווט ראשי"><a class="text-label text-2 color-muted motion-colors" href="/">דף הבית</a><a class="text-label text-2 color-muted motion-colors" href="/search">חיפוש</a></nav>
+    <div class="flex align-center gap-3">
+      <form class="site-search relative" action="/search" method="get"><label class="state-hidden" for="siteSearch">חיפוש כתבות</label><span class="site-search-icon icon absolute color-muted text-4">search</span><input class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard control-input" id="siteSearch" name="q" placeholder="חיפוש באתר" type="search" value="<%= typeof searchQuery !== 'undefined' && searchQuery ? searchQuery : '' %>"></form>
+      <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+        <a class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1" href="<%= currentUser.role === 'Editor' ? '/editor/reviews' : '/reporter/articles' %>">אזור העבודה</a>
+        <button class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1" id="logoutBtn" type="button">התנתקות</button>
+      <% } else { %>
+        <a class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1" href="/staff/login">התחברות צוות</a>
+      <% } %>
+    </div>
+    <details class="site-mobile-menu relative">
+      <summary class="site-mobile-menu-button surface-paper color-primary shadow-menu" aria-label="פתיחת תפריט הניווט"><span class="icon" aria-hidden="true">menu</span></summary>
+      <nav class="site-mobile-menu-panel absolute surface-paper shadow-menu" aria-label="ניווט למכשירים ניידים"><a class="text-label text-2 color-body" href="/">דף הבית</a><a class="text-label text-2 color-body" href="/search">חיפוש</a><a class="text-label text-2 color-body" href="/staff/login">התחברות צוות</a></nav>
+    </details>
+  </div>
+  <% if (typeof showBreaking !== 'undefined' && showBreaking) { %><%- include('./breaking-strip', { breakingText: typeof breakingText !== 'undefined' ? breakingText : null }) %><% } %>
+</header>

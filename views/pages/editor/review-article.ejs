@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
+  <body class="editor-diff-page surface-page text-body text-2 color-body">
+    <%- include('../../partials/newsroom/header', { newsroomRole }) %>
+    <main class="site-header-offset width-full pad-inline-5 pad-block-3 surface-page">
+      <div class="width-content flex flex-column margin-bottom-6">
+        <section
+          class="review-command-card width-full surface-paper shadow-subtle radius-panel pad-4 margin-bottom-5"
+        >
+          <div class="flex flex-column gap-4">
+            <div class="flex flex-column gap-2">
+              <span class="text-label text-1 text-uppercase color-muted"
+                >שולחן העורך · סקירת כתבה</span
+              >
+              <div class="flex flex-wrap align-center gap-3 margin-top-2">
+                <span
+                  class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard text-label text-1 text-semibold <%= page.article.statusClass %>"
+                >
+                  <%= page.article.statusLabel %>
+                </span>
+                <span
+                  class="text-label text-1 color-body text-semibold flex align-center gap-1"
+                >
+                  <span
+                    class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-1 text-bold"
+                    ><%= page.article.initials %></span
+                  >
+                  <%= page.article.reporter %>
+                </span>
+                <span class="color-muted">•</span>
+                <span
+                  class="text-caption text-1 surface-panel pad-inline-3 pad-block-2 radius-standard color-muted text-medium"
+                >
+                  מדור: <%= page.article.desk %>
+                </span>
+                <span class="color-muted">•</span>
+                <span class="text-caption text-1 color-muted flex align-center gap-1">
+                  <span class="icon text-2">schedule</span>
+                  הוגש: <%= page.article.submittedLabel %>
+                </span>
+                <span class="color-muted">•</span>
+                <span class="text-caption text-1 color-muted flex align-center gap-1">
+                  <span class="icon text-2">visibility</span>
+                  <%= page.article.views %> צפיות
+                </span>
+              </div>
+            </div>
+            <% if (page.article.isUpdate) { %>
+            <div
+              class="notice-banner surface-warning color-warning radius-card pad-4 flex align-start gap-3"
+              role="status"
+            >
+              <span class="icon text-4">update</span>
+              <div class="flex flex-column">
+                <span class="text-label text-2 text-semibold"
+                  >זהו עדכון לכתבה שכבר פורסמה</span
+                >
+                <span class="text-body text-1 margin-top-2"
+                  >הגרסה המפורסמת ממשיכה להיות גלויה לקוראים עד שהעדכון הזה
+                  יאושר. אישור העדכון יחליף את התוכן שמוצג לציבור.</span
+                >
+              </div>
+            </div>
+            <% } %>
+            <% if (page.article.editorNote) { %>
+            <div class="revision-note surface-info color-info radius-card pad-4 flex flex-column gap-2">
+              <span class="text-label text-1 text-uppercase text-semibold"
+                >הערת העורך האחרונה</span
+              >
+              <p class="text-body text-2"><%= page.article.editorNote %></p>
+            </div>
+            <% } %>
+          </div>
+        </section>
+        <div class="review-workspace grid grid-single lg-editorial-grid gap-5 align-start">
+          <div class="lg-content-span flex flex-column gap-4">
+            <div class="grid grid-single grid-split gap-4">
+              <div
+                class="comparison-pane comparison-pane-live surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
+              >
+                <div class="pad-4 surface-muted flex flex-column gap-2">
+                  <span
+                    class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
+                  >
+                    <span class="icon text-1">public</span>
+                    <%= page.article.published ? page.article.published.label : 'טרם פורסמה' %>
+                  </span>
+                  <span class="text-caption text-1 color-muted"
+                    >הגרסה שהקוראים רואים באתר הציבורי כרגע</span
+                  >
+                </div>
+                <% if (!page.article.published) { %>
+                <div class="pad-5 flex flex-column gap-2">
+                  <p class="text-body text-2 color-muted">
+                    הכתבה הזו מעולם לא פורסמה, ולכן אין גרסה שגלויה לקוראים.
+                    אישור הגרסה שמוצגת בצד השני יפרסם אותה בפעם הראשונה.
+                  </p>
+                </div>
+                <% } else { %>
+                <% const pane = page.article.published; %>
+                <article class="pad-5 flex flex-column stack-4 overflow-scroll">
+                  <span
+                    class="text-label text-1 text-uppercase color-muted"
+                    ><%= pane.category %></span
+                  >
+                  <h1 class="text-headline text-6 color-body"><%= pane.title %></h1>
+                  <% if (pane.imageUrl) { %>
+                  <div
+                    class="comparison-media relative width-full height-feature radius-standard overflow-hidden surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-cover"
+                      alt="<%= pane.imageAlt %>"
+                      src="<%= pane.imageUrl %>"
+                    />
+                  </div>
+                  <% } %>
+                  <p class="text-headline text-deck color-body text-italic">
+                    <%= pane.summary %>
+                  </p>
+                  <div class="stack-3 text-body text-2 color-muted">
+                    <% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %>
+                  </div>
+                </article>
+                <% } %>
+              </div>
+              <div
+                class="comparison-pane comparison-pane-draft surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
+              >
+                <div class="pad-4 surface-muted flex flex-column gap-2">
+                  <span
+                    class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1"
+                  >
+                    <span class="icon text-1">edit_note</span>
+                    <%= page.article.draft ? page.article.draft.label : 'אין גרסה ממתינה' %>
+                  </span>
+                  <span class="text-caption text-1 color-muted"
+                    >הגרסה שהוגשה על ידי הכתב וממתינה להחלטת העורך</span
+                  >
+                </div>
+                <% if (!page.article.draft) { %>
+                <div class="pad-5 flex flex-column gap-2">
+                  <p class="text-body text-2 color-muted">
+                    אין כרגע גרסה ממתינה לאישור עבור הכתבה הזו.
+                  </p>
+                </div>
+                <% } else { %>
+                <% const pane = page.article.draft; %>
+                <article class="pad-5 flex flex-column stack-4 overflow-scroll">
+                  <span
+                    class="text-label text-1 text-uppercase color-muted"
+                    ><%= pane.category %></span
+                  >
+                  <h1 class="text-headline text-6 color-body"><%= pane.title %></h1>
+                  <% if (pane.imageUrl) { %>
+                  <div
+                    class="comparison-media relative width-full height-feature radius-standard overflow-hidden surface-panel"
+                  >
+                    <img
+                      class="width-full height-full media-cover"
+                      alt="<%= pane.imageAlt %>"
+                      src="<%= pane.imageUrl %>"
+                    />
+                  </div>
+                  <% } %>
+                  <p class="text-headline text-deck color-body text-italic">
+                    <%= pane.summary %>
+                  </p>
+                  <div class="stack-3 text-body text-2 color-muted">
+                    <% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %>
+                  </div>
+                </article>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <aside class="review-audit-sidebar span-sidebar flex flex-column gap-4">
+            <div
+              class="decision-card surface-paper radius-panel shadow-subtle pad-5 flex flex-column gap-4"
+              id="reviewActions"
+              data-article-id="<%= page.article.id %>"
+            >
+              <div>
+                <h2 class="text-headline text-5 color-body">החלטת העורך</h2>
+                <p class="text-body text-1 color-muted margin-top-2">
+                  יש להשוות בין שתי הגרסאות לפני אישור הפרסום או החזרה לתיקונים.
+                </p>
+              </div>
+              <div class="flex flex-column gap-2">
+                <label class="text-label text-2 color-body" for="editorNotes"
+                  >הערה לכתב</label
+                >
+                <p class="text-caption text-1 color-muted">
+                  הערה היא חובה בהחזרה לתיקונים - יש להסביר בה אילו תיקונים
+                  נדרשים. באישור ופרסום ההערה אינה נדרשת.
+                </p>
+                <textarea
+                  class="width-full pad-3 surface-muted color-body text-body text-2 radius-card control-no-resize control-input motion-colors"
+                  id="editorNotes"
+                  placeholder="לדוגמה: יש להוסיף אימות נוסף למקור בפסקה השלישית."
+                  rows="5"
+                ></textarea>
+              </div>
+              <% if (!page.article.canDecide) { %>
+              <p class="text-body text-1 color-muted surface-muted radius-card pad-3">
+                רק כתבה שממתינה לאישור ניתן לאשר או להחזיר לתיקונים. הכתבה הזו
+                נמצאת במצב "<%= page.article.statusLabel %>".
+              </p>
+              <% } %>
+              <div class="flex flex-column gap-2 margin-top-2">
+                <button
+                  class="editor-action editor-action-approve width-full pad-block-3 pad-inline-4 surface-ink color-inverse radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all shadow-subtle"
+                  id="btn-approve"
+                  type="button"
+                  <% if (!page.article.canDecide) { %>disabled<% } %>
+                >
+                  <span class="icon text-4">check_circle</span>
+                  <span>אישור ופרסום</span>
+                </button>
+                <button
+                  class="editor-action editor-action-revise width-full pad-block-3 pad-inline-4 surface-info color-info radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all"
+                  id="btn-request-revisions"
+                  type="button"
+                  <% if (!page.article.canDecide) { %>disabled<% } %>
+                >
+                  <span class="icon text-4">reply</span>
+                  <span>החזרה לתיקונים</span>
+                </button>
+                <button
+                  class="editor-action editor-action-reject width-full pad-block-3 pad-inline-4 surface-alert color-alert radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all margin-top-2"
+                  id="btn-delete"
+                  type="button"
+                >
+                  <span class="icon text-4">delete</span>
+                  <span>מחיקת כתבה</span>
+                </button>
+              </div>
+              <p
+                class="state-hidden pad-3 radius-card text-body text-1 text-center"
+                id="statusAlert"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </div>
+            <div class="surface-muted radius-panel pad-4 flex flex-column gap-3">
+              <span class="text-label text-1 text-uppercase color-muted"
+                >נתוני הכתבה</span
+              >
+              <div class="flex align-center justify-between">
+                <span class="text-body text-1 color-body">כתב</span>
+                <span class="text-label text-1 text-bold color-body"
+                  ><%= page.article.reporter %></span
+                >
+              </div>
+              <div class="flex align-center justify-between">
+                <span class="text-body text-1 color-body">מדור</span>
+                <span class="text-label text-1 text-bold color-body"
+                  ><%= page.article.desk %></span
+                >
+              </div>
+              <div class="flex align-center justify-between">
+                <span class="text-body text-1 color-body">מועד ההגשה</span>
+                <span class="text-label text-1 text-bold color-body"
+                  ><%= page.article.submittedLabel %></span
+                >
+              </div>
+              <div class="flex align-center justify-between">
+                <span class="text-body text-1 color-body">צפיות</span>
+                <span class="text-label text-1 text-bold color-body"
+                  ><%= page.article.views %></span
+                >
+              </div>
+              <div class="flex align-center justify-between">
+                <span class="text-body text-1 color-body">מצב</span>
+                <span
+                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 text-semibold <%= page.article.statusClass %>"
+                  ><%= page.article.statusLabel %></span
+                >
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+    <script src="/js/editorReview.js" defer></script>
+  </body>
+</html>

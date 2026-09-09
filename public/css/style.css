@@ -1,0 +1,17 @@
+/* External type dependencies used by the editorial design system. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
+
+/*
+ * The Daily Web stylesheet entry point.
+ *
+ * Loading order is intentional: design values first, then browser defaults,
+ * reusable utility classes, shared components, layouts, and page details.
+ * This file is prepared for a later HTML wiring step.
+ */
+@import url("./variables.css");
+@import url("./base.css");
+@import url("./utilities.css");
+@import url("./components.css");
+@import url("./layouts.css");
+@import url("./pages.css");
