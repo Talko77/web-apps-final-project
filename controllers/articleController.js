@@ -6,7 +6,7 @@ const logger = require('../utils/logger');
 const { formatDateTime, formatViews } = require('../utils/viewMappers');
 const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE } = require('../config/constants');
 
-// מנטרל תווים מיוחדים כדי שקלט חופשי לא יתפרש כביטוי רגולרי
+// Escapes special characters so free-text input is not interpreted as a regular expression
 const escapeRegex = str => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function sanitizeContent(body) {
@@ -19,7 +19,7 @@ function sanitizeContent(body) {
   };
 }
 
-// בונה את שאילתת הפיד הציבורי מתוך פרמטרי ה-query
+// Builds the public feed query from the request query parameters
 function buildFeedQuery(req) {
   const query = { isPublished: true };
 
@@ -31,7 +31,7 @@ function buildFeedQuery(req) {
     query['publishedVersion.title'] = { $regex: escapeRegex(req.query.search.trim()), $options: 'i' };
   }
 
-  // סינון נצפה / לא נצפה לפי הכתבות שנקראו ב-session הנוכחי
+  // Seen / unseen filtering based on the articles read in the current session
   const seen = (req.session.viewedArticles || []);
   if (req.query.seen === 'seen') query._id = { $in: seen };
   else if (req.query.seen === 'unseen') query._id = { $nin: seen };
@@ -39,7 +39,7 @@ function buildFeedQuery(req) {
   return query;
 }
 
-// GET /api/articles/feed - פיד ציבורי לגלילה אינסופית
+// GET /api/articles/feed - public feed for infinite scrolling
 exports.getFeed = asyncHandler(async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
   const query = buildFeedQuery(req);
@@ -47,7 +47,7 @@ exports.getFeed = asyncHandler(async (req, res) => {
     ? { totalViews: -1, publishedAt: -1 }
     : { publishedAt: -1 };
 
-  // נשלפים רק השדות שהכרטיס בפיד מציג, ולא גוף הכתבה המלא
+  // Only the fields the feed card displays are fetched, not the full article body
   const articles = await Article.find(query)
     .populate('reporter', 'username displayName')
     .sort(sort)
@@ -58,8 +58,8 @@ exports.getFeed = asyncHandler(async (req, res) => {
 
   const seen = new Set((req.session.viewedArticles || []).map(String));
 
-  // השדות מוחזרים מעוצבים מראש כדי ש-feed.js יבנה כרטיס זהה
-  // ל-views/partials/public/article-card.ejs ללא לוגיקת תצוגה בלקוח
+  // The fields are returned pre-formatted so that feed.js can build a card identical
+  // to views/partials/public/article-card.ejs without any display logic on the client
   res.json({
     page,
     hasMore: articles.length === FEED_PAGE_SIZE,
@@ -72,13 +72,13 @@ exports.getFeed = asyncHandler(async (req, res) => {
       imageAlt: a.publishedVersion.title,
       dateLabel: formatDateTime(a.publishedAt),
       views: formatViews(a.totalViews),
-      reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'לא ידוע',
+      reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
       seen: seen.has(String(a._id))
     }))
   });
 });
 
-// GET /api/articles/mine - כתבות הכתב המחובר בלבד
+// GET /api/articles/mine - only the articles of the signed-in reporter
 exports.getMyArticles = asyncHandler(async (req, res) => {
   const articles = await Article.find({ reporter: req.session.user._id })
     .sort({ updatedAt: -1 })
@@ -86,7 +86,7 @@ exports.getMyArticles = asyncHandler(async (req, res) => {
   res.json({ articles });
 });
 
-// GET /api/articles/manage - כלל הכתבות במערכת, לעורך בלבד, עם סינון לפי מצב
+// GET /api/articles/manage - every article in the system, editors only, with filtering by status
 exports.getAllForEditor = asyncHandler(async (req, res) => {
   const query = {};
   if (req.query.status && Object.values(STATUS).includes(req.query.status)) {
@@ -102,62 +102,63 @@ exports.getAllForEditor = asyncHandler(async (req, res) => {
   res.json({
     articles: articles.map(a => ({
       ...a,
-      reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'לא ידוע',
+      reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
       hasPendingUpdate: a.isPublished && a.status === STATUS.PENDING
     }))
   });
 });
 
-// GET /api/articles/:id - כתבה בודדת לעריכה או לסקירה
+// GET /api/articles/:id - a single article for editing or review
 exports.getOne = asyncHandler(async (req, res) => {
   const article = await Article.findById(req.params.id)
     .populate('reporter', 'username displayName')
     .lean();
 
-  if (!article) return res.status(404).json({ error: 'הכתבה לא נמצאה' });
+  if (!article) return res.status(404).json({ error: 'Article not found' });
 
   const user = req.session.user;
-  // כתב רשאי לגשת רק לכתבות שלו; עורך רשאי לגשת לכולן
+  // A reporter may access only their own articles; an editor may access all of them
   if (user.role === ROLES.REPORTER && String(article.reporter._id) !== String(user._id)) {
-    return res.status(403).json({ error: 'אין לך הרשאה לצפות בכתבה זו' });
+    return res.status(403).json({ error: 'You do not have permission to view this article' });
   }
 
   res.json({ article });
 });
 
-// POST /api/articles - יצירת כתבה חדשה במצב "בהכנה"
+// POST /api/articles - creates a new article in "draft" status
 exports.create = asyncHandler(async (req, res) => {
   const article = await Article.create({
     reporter: req.session.user._id,
     status: STATUS.DRAFT,
     draftVersion: sanitizeContent(req.body || {})
   });
-  logger.info(`כתבה חדשה נוצרה ${article._id} על ידי ${req.session.user.username}`);
+  logger.info(`New article ${article._id} created by ${req.session.user.username}`);
   res.status(201).json({ success: true, articleId: article._id });
 });
 
-// PUT /api/articles/:id - שמירה אוטומטית של הטיוטה, ללא כפתור שמור.
-// הטיוטה נשמרת בשרת כך שרענון, סגירת דפדפן או מחשב אחר לא יאבדו את העבודה.
+// PUT /api/articles/:id - automatic saving of the draft, with no save button.
+// The draft is stored on the server so a refresh, closing the browser or switching
+// computers does not lose the work.
 exports.saveDraft = asyncHandler(async (req, res) => {
   const user = req.session.user;
   const article = await Article.findById(req.params.id);
 
-  if (!article) return res.status(404).json({ error: 'הכתבה לא נמצאה' });
+  if (!article) return res.status(404).json({ error: 'Article not found' });
 
-  // כתב עורך רק את הכתבות שלו, עורך עורך כל כתבה
+  // A reporter edits only their own articles, an editor edits any article
   if (user.role === ROLES.REPORTER && String(article.reporter) !== String(user._id)) {
-    return res.status(403).json({ error: 'אין לך הרשאה לערוך כתבה זו' });
+    return res.status(403).json({ error: 'You do not have permission to edit this article' });
   }
 
-  // אין לערוך כתבה שממתינה כרגע להחלטת העורך
+  // An article currently awaiting the editor's decision must not be edited
   if (article.status === STATUS.PENDING && user.role === ROLES.REPORTER) {
-    return res.status(409).json({ error: 'הכתבה ממתינה לאישור העורך ולא ניתן לערוך אותה כעת' });
+    return res.status(409).json({ error: 'This article is awaiting editor approval and cannot be edited right now' });
   }
 
   article.draftVersion = sanitizeContent(req.body || {});
 
-  // עריכת כתבה שפורסמה מחזירה את הטיוטה למצב "בהכנה".
-  // הגרסה המאושרת נשארת ב-publishedVersion וממשיכה להיות מוצגת לציבור.
+  // Editing a published article returns the draft to "draft" status.
+  // The approved version stays in publishedVersion and keeps being shown to the public.
   if (article.status === STATUS.PUBLISHED) article.status = STATUS.DRAFT;
 
   await article.save();
@@ -170,42 +171,42 @@ exports.saveDraft = asyncHandler(async (req, res) => {
   });
 });
 
-// PATCH /api/articles/:id/status - מעברים בין מצבי כתבה
+// PATCH /api/articles/:id/status - transitions between article statuses
 exports.changeStatus = asyncHandler(async (req, res) => {
   const user = req.session.user;
   const { newStatus, editorNote } = req.body || {};
   const article = await Article.findById(req.params.id);
 
-  if (!article) return res.status(404).json({ error: 'הכתבה לא נמצאה' });
+  if (!article) return res.status(404).json({ error: 'Article not found' });
 
   if (user.role === ROLES.REPORTER) {
     if (String(article.reporter) !== String(user._id)) {
-      return res.status(403).json({ error: 'אין לך הרשאה לשנות כתבה זו' });
+      return res.status(403).json({ error: 'You do not have permission to change this article' });
     }
-    // המעבר היחיד המותר לכתב: בהכנה / הוחזרה לתיקונים -> ממתינה לאישור
+    // The only transition allowed for a reporter: draft / changes requested -> pending review
     const allowed = article.status === STATUS.DRAFT || article.status === STATUS.RETURNED;
     if (!allowed || newStatus !== STATUS.PENDING) {
-      return res.status(400).json({ error: 'מעבר מצב זה אינו מותר לכתב' });
+      return res.status(400).json({ error: 'This status change is not allowed for a reporter' });
     }
     if (!article.isDraftComplete()) {
-      return res.status(400).json({ error: 'יש למלא כותרת, תקציר, תוכן וקטגוריה לפני ההגשה לאישור' });
+      return res.status(400).json({ error: 'Add a title, summary, content and category before submitting for review' });
     }
     article.status = STATUS.PENDING;
     article.editorNote = '';
 
   } else {
-    // עורך: רק מתוך "ממתינה לאישור"
+    // Editor: only out of "pending review"
     if (article.status !== STATUS.PENDING) {
-      return res.status(400).json({ error: 'ניתן לאשר או להחזיר רק כתבה שממתינה לאישור' });
+      return res.status(400).json({ error: 'Only an article awaiting approval can be approved or returned' });
     }
 
     if (newStatus === STATUS.PUBLISHED) {
-      // אישור העדכון הופך את הטיוטה לגרסה המוצגת לקוראים
+      // Approving the update makes the draft the version shown to readers
       article.publishedVersion = article.draftVersion.toObject();
       article.status = STATUS.PUBLISHED;
       article.isPublished = true;
       article.publishedAt = article.publishedAt || new Date();
-      article.publishEvents.push(new Date()); // נקודת סימון על גרף ה-Analytics
+      article.publishEvents.push(new Date()); // Marker point on the analytics chart
       article.editorNote = '';
 
     } else if (newStatus === STATUS.RETURNED) {
@@ -213,25 +214,25 @@ exports.changeStatus = asyncHandler(async (req, res) => {
       article.editorNote = String(editorNote || '').slice(0, 1000);
 
     } else {
-      return res.status(400).json({ error: 'מעבר מצב זה אינו מותר לעורך' });
+      return res.status(400).json({ error: 'This status change is not allowed for an editor' });
     }
   }
 
   await article.save();
-  logger.info(`כתבה ${article._id} עברה ל-${article.status} על ידי ${user.username}`);
+  logger.info(`Article ${article._id} moved to ${article.status} by ${user.username}`);
   res.json({ success: true, status: article.status, isPublished: article.isPublished });
 });
 
-// DELETE /api/articles/:id - עורך בלבד. מוחק גם את התגובות ונתוני הצפייה
+// DELETE /api/articles/:id - editors only. Also deletes the comments and the view data
 exports.remove = asyncHandler(async (req, res) => {
   const article = await Article.findByIdAndDelete(req.params.id);
-  if (!article) return res.status(404).json({ error: 'הכתבה לא נמצאה' });
+  if (!article) return res.status(404).json({ error: 'Article not found' });
 
   await Promise.all([
     Comment.deleteMany({ article: article._id }),
     Analytics.deleteMany({ article: article._id })
   ]);
 
-  logger.info(`כתבה ${article._id} נמחקה על ידי ${req.session.user.username}`);
+  logger.info(`Article ${article._id} deleted by ${req.session.user.username}`);
   res.json({ success: true });
 });

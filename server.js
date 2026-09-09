@@ -20,14 +20,14 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
 
-// ה-session נשמר ב-MongoDB ולא בזיכרון התהליך,
-// כדי שמשתמש שהזדהה יישאר מחובר גם לאחר Restart של השרת.
+// The session store is MongoDB rather than the process memory,
+// so a signed-in user stays signed in even after the server restarts.
 app.set('trust proxy', 1);
 app.use(session({
   name: 'connect.sid',
   secret: process.env.SESSION_SECRET || 'daily_web_dev_secret_change_me',
   resave: false,
-  saveUninitialized: true, // נדרש למעקב "נצפה / לא נצפה" גם עבור אורחים
+  saveUninitialized: true, // needed to track read/unread articles for guests too
   store: MongoStore.create({ mongoUrl: MONGO_URI, ttl: 14 * 24 * 60 * 60 }),
   cookie: {
     httpOnly: true,
@@ -37,7 +37,7 @@ app.use(session({
   }
 }));
 
-// זמין לכל תבנית EJS
+// Available to every EJS template
 app.use((req, res, next) => {
   res.locals.currentUser = (req.session && req.session.user) || null;
   next();
@@ -50,16 +50,16 @@ app.use('/api/comments', require('./routes/comments'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/weather', require('./routes/weather'));
 
-// עמודי התצוגה (EJS) - שומר על מבנה הנתיבים שנקבע במיגרציית ה-EJS
+// View pages (EJS) - keeps the path structure established during the EJS migration
 app.use('/', require('./routes/pages'));
 
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => logger.info(`השרת עלה על פורט ${PORT}`));
+const server = app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`));
 
-// חריגה לא מטופלת נרשמת ללוג ואינה מפילה את התהליך בשקט
+// An unhandled error is written to the log and does not kill the process silently
 process.on('unhandledRejection', err => logger.error('unhandledRejection', err));
 process.on('uncaughtException', err => {
   logger.error('uncaughtException', err);

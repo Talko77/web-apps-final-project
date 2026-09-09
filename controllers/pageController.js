@@ -9,19 +9,19 @@ const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE } = require('..
 const MAX_TRACKED_VIEWS = 500;
 const PUBLISHED = { isPublished: true };
 
-// locals שהכותרות והכותרים העליונים בתבניות מצפים להם בכל עמוד ציבורי
+// The locals that the mastheads and top headers in the templates expect on every public page
 const publicChrome = (overrides = {}) => ({
-  editionLabel: new Date().toLocaleDateString('he-IL', {
+  editionLabel: new Date().toLocaleDateString('en-US', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   }),
   showBreaking: true,
-  breakingText: 'מהדורת הדגמה - כל התכנים באתר זה הם נתוני דמה לצורכי הפרויקט',
+  breakingText: 'Demo edition — all content on this site is sample data for the course project',
   searchQuery: '',
   categories: CATEGORIES,
   ...overrides
 });
 
-// כרטיס כתבה בפיד הציבורי
+// An article card in the public feed
 function toCard(article) {
   const v = article.publishedVersion || {};
   return {
@@ -35,18 +35,18 @@ function toCard(article) {
     dateLabel: m.formatDateTime(article.publishedAt),
     datetime: article.publishedAt ? new Date(article.publishedAt).toISOString() : '',
     views: m.formatViews(article.totalViews),
-    reads: `${m.formatViews(article.totalViews)} צפיות`,
+    reads: `${m.formatViews(article.totalViews)} views`,
     readLabel: m.readingLabel(v.content),
-    author: article.reporter ? (article.reporter.displayName || article.reporter.username) : 'לא ידוע',
+    author: article.reporter ? (article.reporter.displayName || article.reporter.username) : 'Unknown',
     initials: m.initials(article.reporter ? (article.reporter.displayName || article.reporter.username) : ''),
-    role: v.category ? `כתב ${v.category}` : 'כתב'
+    role: v.category ? `${v.category} Reporter` : 'Reporter'
   };
 }
 
-// ---------- עמודים ציבוריים ----------
+// ---------- Public pages ----------
 
-// GET / - מסך הבית. הכותרות העליונות מרונדרות בשרת,
-// והפיד שמתחתן נטען ומתעדכן ב-Ajex ללא רענון מלא.
+// GET / - the home screen. The top headlines are rendered on the server,
+// and the feed below them loads and updates over Ajax without a full refresh.
 exports.home = asyncHandler(async (req, res) => {
   const [top, feed, mostRead] = await Promise.all([
     Article.find(PUBLISHED).sort({ publishedAt: -1 }).limit(11)
@@ -60,7 +60,7 @@ exports.home = asyncHandler(async (req, res) => {
   const cards = top.map(toCard);
 
   res.render('pages/public/home', publicChrome({
-    pageTitle: 'The Daily Web - חדשות',
+    pageTitle: 'The Daily Web — News',
     featured: cards.slice(0, 3),
     dispatches: cards.slice(3, 11).map(c => ({
       time: c.dateLabel, category: c.category, readTime: c.readLabel, title: c.title, url: c.url
@@ -77,8 +77,8 @@ exports.home = asyncHandler(async (req, res) => {
 });
 
 // GET /articles/:id
-// רינדור מלא בשרת: הכותרת, גוף הכתבה והתגובות נמצאים ב-HTML הראשוני,
-// כדי שהעמוד יהיה נגיש למנועי חיפוש גם ללא הרצת JavaScript בדפדפן.
+// Fully server-rendered: the headline, the article body and the comments are in the initial HTML,
+// so the page is reachable by search engines even without running JavaScript in the browser.
 exports.articlePage = asyncHandler(async (req, res, next) => {
   const article = await Article.findOne({ _id: req.params.id, isPublished: true })
     .populate('reporter', 'username displayName')
@@ -89,7 +89,7 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
   const v = article.publishedVersion;
   const reporterName = article.reporter
     ? (article.reporter.displayName || article.reporter.username)
-    : 'לא ידוע';
+    : 'Unknown';
 
   const [comments, related] = await Promise.all([
     Comment.find({ article: article._id }).sort({ createdAt: -1 }).limit(50).lean(),
@@ -100,8 +100,8 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
     }).sort({ publishedAt: -1 }).limit(3).lean()
   ]);
 
-  // רישום צפייה: $inc אטומי על דלי השעה ועל המונה המצטבר.
-  // לא ממתינים לתוצאה כדי לא לעכב את הרינדור, ותקלה כאן לא מפילה את העמוד.
+  // Recording a view: an atomic $inc on the hour bucket and on the cumulative counter.
+  // We do not await the result so rendering is not delayed, and a failure here does not break the page.
   Promise.all([
     Analytics.updateOne(
       { article: article._id, timestamp: Analytics.hourBucket() },
@@ -109,9 +109,9 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
       { upsert: true }
     ),
     Article.updateOne({ _id: article._id }, { $inc: { totalViews: 1 } })
-  ]).catch(err => logger.error(`רישום צפייה נכשל לכתבה ${article._id}`, err));
+  ]).catch(err => logger.error(`Recording a view failed for article ${article._id}`, err));
 
-  // סימון הכתבה כנצפית, לצורך סינון "נצפה / לא נצפה" בפיד
+  // Marking the article as seen, for the "seen / unseen" filter in the feed
   if (!req.session.viewedArticles) req.session.viewedArticles = [];
   const id = String(article._id);
   if (!req.session.viewedArticles.includes(id)) {
@@ -125,7 +125,7 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
       id,
       title: v.title,
       summary: v.summary,
-      // פסקאות במקום HTML גולמי - התבנית מקודדת כל פסקה ומונעת הזרקת תגיות
+      // Paragraphs instead of raw HTML - the template escapes each paragraph and prevents tag injection
       paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
       category: v.category,
       imageUrl: v.imageUrl || '',
@@ -152,7 +152,7 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
   }));
 });
 
-// GET /search - חיפוש עם רינדור בשרת. הסינון בעמוד עצמו מתעדכן ב-Ajax.
+// GET /search - server-rendered search. The filtering on the page itself updates over Ajax.
 exports.search = asyncHandler(async (req, res) => {
   const q = String(req.query.q || '').trim();
   const category = CATEGORIES.includes(req.query.category) ? req.query.category : '';
@@ -170,7 +170,7 @@ exports.search = asyncHandler(async (req, res) => {
     Article.find(query).sort(sort).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
     Article.countDocuments(query),
-    // ספירה מקובצת בשאילתה אחת במקום שאילתה נפרדת לכל קטגוריה
+    // A grouped count in a single query instead of a separate query per category
     Article.aggregate([
       { $match: PUBLISHED },
       { $group: { _id: '$publishedVersion.category', count: { $sum: 1 } } }
@@ -180,50 +180,50 @@ exports.search = asyncHandler(async (req, res) => {
   const counts = Object.fromEntries(categoryCounts.map(c => [c._id, c.count]));
 
   res.render('pages/public/search-results', publicChrome({
-    pageTitle: q ? `תוצאות חיפוש: ${q}` : 'חיפוש כתבות',
+    pageTitle: q ? `Search results: ${q}` : 'Search Articles',
     searchQuery: q,
     resultCount,
     sort: req.query.sort === 'popularity' ? 'popularity' : 'publishedAt',
     categories: [
-      { label: 'כל הקטגוריות', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0), checked: !category },
+      { label: 'All Categories', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0), checked: !category },
       ...CATEGORIES.map(c => ({ label: c, value: c, count: counts[c] || 0, checked: c === category }))
     ],
     results: results.map(toCard)
   }));
 });
 
-// ---------- אזור הכתב ----------
+// ---------- Reporter area ----------
 
 // GET /reporter/articles
 exports.reporterArticles = asyncHandler(async (req, res) => {
   const user = req.session.user;
   const articles = await Article.find({ reporter: user._id }).sort({ updatedAt: -1 }).lean();
 
-  // מונה לכל מצב, לשימוש פסי הסינון
+  // A count per status, used by the filter bars
   const counts = articles.reduce((acc, a) => {
     acc[a.status] = (acc[a.status] || 0) + 1;
     return acc;
   }, {});
 
   res.render('pages/reporter/articles', {
-    pageTitle: 'הכתבות שלי',
-    newsroomRole: 'כתב',
+    pageTitle: 'My Articles',
+    newsroomRole: 'Reporter',
     reporter: {
       name: user.displayName || user.username,
-      desk: 'דסק חדשות',
+      desk: 'Newsroom',
       initials: m.initials(user.displayName || user.username)
     },
     statusFilters: [
-      { label: 'הכול', count: articles.length },
+      { label: 'All', count: articles.length },
       ...Object.values(STATUS).map(s => ({ label: STATUS_LABELS[s], count: counts[s] || 0 }))
     ],
-    categories: ['הכול', ...CATEGORIES],
+    categories: ['All', ...CATEGORIES],
     articles: articles.map(m.toReporterRow),
     totalArticles: articles.length
   });
 });
 
-// GET /reporter/articles/new/edit ו-/reporter/articles/:id/edit
+// GET /reporter/articles/new/edit and /reporter/articles/:id/edit
 exports.reporterEdit = asyncHandler(async (req, res, next) => {
   const user = req.session.user;
   const isNew = !req.params.id || req.params.id === 'new';
@@ -238,19 +238,19 @@ exports.reporterEdit = asyncHandler(async (req, res, next) => {
   const approved = article ? (article.publishEvents || []).length : 0;
 
   res.render('pages/reporter/edit-article', {
-    pageTitle: isNew ? 'כתבה חדשה' : 'עריכת כתבה',
-    newsroomRole: 'כתב',
+    pageTitle: isNew ? 'New Article' : 'Edit Article',
+    newsroomRole: 'Reporter',
     article: {
       id: article ? String(article._id) : '',
       isNew,
       status: article ? article.status : STATUS.DRAFT,
       statusLabel: article ? STATUS_LABELS[article.status] : STATUS_LABELS[STATUS.DRAFT],
-      // מצב עריכה נעול כשהכתבה בבדיקת העורך
+      // Editing is locked while the article is under editor review
       locked: Boolean(article && article.status === STATUS.PENDING),
       isPublished: Boolean(article && article.isPublished),
-      liveVersion: approved ? `גרסה ${approved} מפורסמת` : 'טרם פורסמה',
+      liveVersion: approved ? `v${approved}.0 published` : 'Not yet published',
       draftVersion: m.versionLabel(article || { publishEvents: [] }),
-      savedAt: article ? m.formatDateTime(article.updatedAt) : 'טרם נשמר',
+      savedAt: article ? m.formatDateTime(article.updatedAt) : 'Not saved yet',
       title: d.title || '',
       subtitle: d.summary || '',
       body: d.content || '',
@@ -264,9 +264,9 @@ exports.reporterEdit = asyncHandler(async (req, res, next) => {
   });
 });
 
-// ---------- אזור העורך ----------
+// ---------- Editor area ----------
 
-// GET /editor/reviews - תור הסקירה, עם סינון לפי מצב
+// GET /editor/reviews - the review queue, with filtering by status
 exports.editorQueue = asyncHandler(async (req, res) => {
   const status = Object.values(STATUS).includes(req.query.status) ? req.query.status : '';
   const query = status ? { status } : {};
@@ -280,13 +280,13 @@ exports.editorQueue = asyncHandler(async (req, res) => {
   const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
 
   res.render('pages/editor/review-queue', {
-    pageTitle: 'תור הסקירה',
-    newsroomRole: 'עורך',
+    pageTitle: 'Review Queue',
+    newsroomRole: 'Editor',
     page: {
       activeStatus: status,
       articles: articles.map(m.toQueueRow),
       statusFilters: [
-        { label: 'הכול', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0) },
+        { label: 'All', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0) },
         ...Object.values(STATUS).map(s => ({ label: STATUS_LABELS[s], value: s, count: counts[s] || 0 }))
       ],
       categories: CATEGORIES
@@ -295,8 +295,8 @@ exports.editorQueue = asyncHandler(async (req, res) => {
 });
 
 // GET /editor/reviews/:id
-// מציג במקביל את הגרסה המפורסמת ואת הגרסה הממתינה לאישור,
-// כדי שהעורך יבין בדיוק מה גלוי לציבור כרגע ומה עומד להחליף אותו.
+// Shows the published version and the version awaiting approval side by side,
+// so the editor sees exactly what the public can see right now and what is about to replace it.
 exports.editorReview = asyncHandler(async (req, res, next) => {
   const article = await Article.findById(req.params.id)
     .populate('reporter', 'username displayName')
@@ -308,14 +308,14 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
   const draft = article.draftVersion || {};
   const reporterName = article.reporter
     ? (article.reporter.displayName || article.reporter.username)
-    : 'לא ידוע';
+    : 'Unknown';
 
   const asPane = (v, label) => v ? {
     label,
-    title: v.title || '(ללא כותרת)',
+    title: v.title || '(Untitled article)',
     summary: v.summary || '',
     paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
-    category: v.category || 'ללא קטגוריה',
+    category: v.category || 'Uncategorised',
     imageUrl: v.imageUrl || '',
     imageAlt: v.title || ''
   } : null;
@@ -323,8 +323,8 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
   const approved = (article.publishEvents || []).length;
 
   res.render('pages/editor/review-article', {
-    pageTitle: `סקירה: ${draft.title || pub && pub.title || 'כתבה'}`,
-    newsroomRole: 'עורך',
+    pageTitle: `Review: ${draft.title || pub && pub.title || 'Article'}`,
+    newsroomRole: 'Editor',
     page: {
       article: {
         id: String(article._id),
@@ -333,15 +333,15 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         statusClass: m.STATUS_STYLE[article.status],
         reporter: reporterName,
         initials: m.initials(reporterName),
-        desk: draft.category || (pub && pub.category) || 'ללא קטגוריה',
+        desk: draft.category || (pub && pub.category) || 'Uncategorised',
         submittedLabel: m.formatDateTime(article.updatedAt),
         views: m.formatViews(article.totalViews),
         editorNote: article.editorNote || '',
-        // האם זה עדכון לכתבה מפורסמת או כתבה חדשה
+        // Whether this is an update to a published article or a brand new one
         isUpdate: Boolean(article.isPublished && article.status === STATUS.PENDING),
         canDecide: article.status === STATUS.PENDING,
-        published: asPane(pub, approved ? `גרסה ${approved} - מוצגת לציבור כרגע` : 'טרם פורסמה'),
-        draft: asPane(draft, article.isPublished ? `גרסה ${approved + 1} - ממתינה לאישור` : 'גרסה חדשה')
+        published: asPane(pub, approved ? `v${approved}.0 — currently live` : 'Not yet published'),
+        draft: asPane(draft, article.isPublished ? `v${approved + 1}.0 — pending approval` : 'New version')
       }
     }
   });
@@ -358,7 +358,7 @@ exports.editorAnalytics = asyncHandler(async (req, res, next) => {
   const v = article.publishedVersion || article.draftVersion || {};
   const reporterName = article.reporter
     ? (article.reporter.displayName || article.reporter.username)
-    : 'לא ידוע';
+    : 'Unknown';
 
   const events = article.publishEvents || [];
   const since = Analytics.hourBucket(Date.now() - 7 * 24 * 3600 * 1000);
@@ -367,45 +367,45 @@ exports.editorAnalytics = asyncHandler(async (req, res, next) => {
     { $group: { _id: null, total: { $sum: '$viewsCount' } } }
   ]);
 
-  // רשימת הכתבות לבחירה בתפריט
+  // The list of articles to choose from in the menu
   const options = await Article.find({ isPublished: true })
     .sort({ totalViews: -1 }).limit(50)
     .select('publishedVersion.title totalViews').lean();
 
   res.render('pages/editor/analytics', {
-    pageTitle: `סטטיסטיקות: ${v.title || 'כתבה'}`,
-    newsroomRole: 'עורך',
+    pageTitle: `Analytics: ${v.title || 'Article'}`,
+    newsroomRole: 'Editor',
     page: {
       article: {
         id: String(article._id),
-        title: v.title || '(ללא כותרת)',
+        title: v.title || '(Untitled article)',
         reporter: reporterName,
         imageUrl: v.imageUrl || '',
-        category: v.category || 'ללא קטגוריה'
+        category: v.category || 'Uncategorised'
       },
-      // התבנית מקבלת את המזהה ו-analyticsChart.js שולף את הנתונים מה-API
+      // The template receives the id and analyticsChart.js fetches the data from the API
       articleId: String(article._id),
       articleOptions: options.map(a => ({
         id: String(a._id), title: a.publishedVersion.title, selected: String(a._id) === String(article._id)
       })),
       metrics: [
-        { label: 'סך הצפיות', value: m.formatViews(article.totalViews), comparison: 'מאז הפרסום', icon: 'visibility' },
-        { label: 'צפיות בשבוע האחרון', value: m.formatViews(weekViews.length ? weekViews[0].total : 0), comparison: '7 ימים', icon: 'trending_up' },
-        { label: 'עדכונים שאושרו', value: String(Math.max(0, events.length - 1)), comparison: 'לאחר הפרסום הראשוני', icon: 'update' },
-        { label: 'פורסם לראשונה', value: m.formatRelative(article.publishedAt), comparison: m.formatDateTime(article.publishedAt), icon: 'schedule' }
+        { label: 'Total Views', value: m.formatViews(article.totalViews), comparison: 'Since publication', icon: 'visibility' },
+        { label: 'Views This Week', value: m.formatViews(weekViews.length ? weekViews[0].total : 0), comparison: 'Last 7 days', icon: 'trending_up' },
+        { label: 'Approved Updates', value: String(Math.max(0, events.length - 1)), comparison: 'After initial publication', icon: 'update' },
+        { label: 'First Published', value: m.formatRelative(article.publishedAt), comparison: m.formatDateTime(article.publishedAt), icon: 'schedule' }
       ]
     }
   });
 });
 
-// GET /editor/analytics - מפנה לכתבה הנצפית ביותר כברירת מחדל
+// GET /editor/analytics - redirects to the most viewed article by default
 exports.editorAnalyticsIndex = asyncHandler(async (req, res, next) => {
   const top = await Article.findOne({ isPublished: true }).sort({ totalViews: -1 }).select('_id').lean();
   if (!top) return next();
   res.redirect(`/editor/articles/${top._id}/analytics`);
 });
 
-// ---------- התחברות ----------
+// ---------- Sign in ----------
 
 // GET /staff/login
 exports.staffLogin = (req, res) => {
@@ -414,22 +414,22 @@ exports.staffLogin = (req, res) => {
   }
 
   res.render('pages/auth/staff-login', {
-    pageTitle: 'התחברות לצוות המערכת',
+    pageTitle: 'Staff Login',
     page: {
-      title: 'התחברות לצוות המערכת',
+      title: 'Staff Login',
       publicationName: 'The Daily Web',
       publicWebsiteHref: '/',
-      heading: 'התחברות לצוות',
-      intro: 'הזדהות עבור כתבים ועורכים בלבד.',
+      heading: 'Staff Login',
+      intro: 'Sign in for reporters and editors.',
       next: req.query.next || '',
       form: {
-        usernameLabel: 'שם משתמש',
-        usernamePlaceholder: 'לדוגמה reporter1',
-        passwordLabel: 'סיסמה',
-        passwordPlaceholder: 'הזינו סיסמה',
-        submitLabel: 'התחברות'
+        usernameLabel: 'Username',
+        usernamePlaceholder: 'e.g. reporter1',
+        passwordLabel: 'Password',
+        passwordPlaceholder: 'Enter your password',
+        submitLabel: 'Sign In'
       },
-      returnLabel: 'חזרה לאתר הציבורי'
+      returnLabel: 'Back to public site'
     }
   });
 };

@@ -1,5 +1,5 @@
-// טבלת "הכתבות שלי": סינון מקומי לפי מצב, קטגוריה וחיפוש,
-// והגשת כתבה לאישור העורך ללא רענון העמוד.
+// "My articles" table: client-side filtering by status, category and search,
+// plus submitting an article for the editor's approval without reloading the page.
 (function () {
   'use strict';
 
@@ -13,16 +13,16 @@
   const countEl = document.getElementById('displayedCount');
   const statusEl = document.getElementById('reporterStatus');
 
-  let activeStatus = 'הכול';
+  let activeStatus = 'All';
 
   function applyFilters() {
-    const category = categoryEl ? categoryEl.value : 'הכול';
+    const category = categoryEl ? categoryEl.value : 'All';
     const term = searchEl ? searchEl.value.trim().toLowerCase() : '';
     let visible = 0;
 
     tbody.querySelectorAll('.article-row').forEach(row => {
-      const matchStatus = activeStatus === 'הכול' || row.dataset.status === activeStatus;
-      const matchCategory = !category || category === 'הכול' || row.dataset.category === category;
+      const matchStatus = activeStatus === 'All' || row.dataset.status === activeStatus;
+      const matchCategory = !category || category === 'All' || row.dataset.category === category;
       const matchTerm = !term || row.dataset.title.toLowerCase().includes(term);
       const show = matchStatus && matchCategory && matchTerm;
 
@@ -48,7 +48,7 @@
   if (categoryEl) categoryEl.addEventListener('change', applyFilters);
   if (searchEl) searchEl.addEventListener('input', applyFilters);
 
-  // הגשה לאישור. המעבר עצמו נבדק ונאכף בשרת.
+  // Submit for approval. The transition itself is validated and enforced on the server.
   tbody.addEventListener('click', async event => {
     const btn = event.target.closest('button[data-submit-id]');
     if (!btn || btn.disabled) return;

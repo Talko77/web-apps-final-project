@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
 <body class="public-page article-page surface-page text-body color-body height-screen flex flex-column">
 <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
@@ -8,9 +8,9 @@
     <div class="search-layout grid grid-single lg-editorial-grid gap-6 align-start">
       <div class="lg-content-span flex flex-column gap-6">
         <article class="article-reading width-full">
-          <nav aria-label="מסלול ניווט" class="article-breadcrumb flex align-center gap-2 text-label text-1 color-muted margin-bottom-5">
-            <a class="motion-colors" href="/">דף הבית</a>
-            <span class="icon color-subtle text-1">chevron_left</span>
+          <nav aria-label="Breadcrumb" class="article-breadcrumb flex align-center gap-2 text-label text-1 color-muted margin-bottom-5">
+            <a class="motion-colors" href="/">Home</a>
+            <span class="icon color-subtle text-1" aria-hidden="true">chevron_right</span>
             <a class="motion-colors" href="/search?category=<%= article.category %>"><%= article.category %></a>
           </nav>
 
@@ -18,7 +18,7 @@
             <div class="flex align-center gap-3 margin-bottom-2">
               <span class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"><%= article.category %></span>
               <% if (article.updateCount > 0) { %>
-              <span class="color-muted text-caption text-1 flex align-center gap-1"><span class="radius-pill"></span>הכתבה עודכנה <%= article.updateCount %> פעמים מאז פרסומה</span>
+              <span class="color-muted text-caption text-1 flex align-center gap-1"><span class="radius-pill"></span>Updated <%= article.updateCount %> times since publication</span>
               <% } %>
             </div>
             <h1 class="text-display text-heading-xl color-primary margin-bottom-4 text-tight"><%= article.title %></h1>
@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="flex align-center gap-5 color-muted text-caption text-1">
-                <span class="flex align-center gap-1"><span class="icon text-2">visibility</span><%= article.views %> צפיות</span>
+                <span class="flex align-center gap-1"><span class="icon text-2">visibility</span><%= article.views %> views</span>
               </div>
             </div>
           </header>
@@ -57,7 +57,7 @@
 
           <% if ((locals.tags || []).length) { %>
           <div class="article-tags margin-top-6 pad-5 flex flex-wrap align-center gap-2">
-            <span class="text-kicker text-1 color-muted text-uppercase">תחת הקטגוריה:</span>
+            <span class="text-kicker text-1 color-muted text-uppercase">Filed under:</span>
             <% (locals.tags || []).forEach(function (tag) { %>
             <span class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1"><%= tag %></span>
             <% }) %>
@@ -67,7 +67,7 @@
           <% if ((locals.related || []).length) { %>
           <section aria-labelledby="related-heading" class="related-dispatches margin-top-6 margin-bottom-6">
             <div class="flex align-center justify-between margin-bottom-5">
-              <h2 class="text-headline text-5 color-primary" id="related-heading">כתבות נוספות בנושא</h2>
+              <h2 class="text-headline text-5 color-primary" id="related-heading">More on this story</h2>
             </div>
             <div class="grid grid-single md-grid-triple gap-4">
               <% (locals.related || []).forEach(function (item) { %>
@@ -80,31 +80,31 @@
           <section aria-labelledby="comments-title" class="comment-thread surface-paper pad-6 radius-panel shadow-subtle">
             <div class="flex align-center justify-between pad-block-3 margin-bottom-5">
               <div class="flex align-center gap-2">
-                <h2 class="text-headline text-5 color-primary" id="comments-title">תגובות</h2>
+                <h2 class="text-headline text-5 color-primary" id="comments-title">Comments</h2>
                 <span class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-pill text-bold" id="comments-count"><%= commentsCount %></span>
               </div>
             </div>
 
             <form class="surface-muted pad-5 radius-card margin-bottom-6 stack-4" id="comment-form" data-article-id="<%= article.id %>">
               <div class="flex align-center justify-between">
-                <span class="text-label text-2 color-primary">הוספת תגובה</span>
-                <span class="text-caption text-1 color-muted">אין צורך בהרשמה</span>
+                <span class="text-label text-2 color-primary">Add a comment</span>
+                <span class="text-caption text-1 color-muted">No sign-up required</span>
               </div>
               <div>
-                <label class="block text-label text-1 color-muted" for="guest-name">שם (לא חובה)</label>
+                <label class="block text-label text-1 color-muted" for="guest-name">Name (optional)</label>
                 <input class="width-full pad-inline-3 pad-block-2 surface-paper radius-standard text-body text-1 shadow-subtle control-input" id="guest-name" name="name" type="text">
               </div>
               <div>
                 <div class="flex justify-between align-center">
-                  <label class="text-label text-1 color-muted" for="comment-text">התגובה שלך</label>
+                  <label class="text-label text-1 color-muted" for="comment-text">Your comment</label>
                   <span class="text-caption text-1 color-subtle" id="char-counter"></span>
                 </div>
                 <textarea class="width-full pad-3 surface-paper radius-standard text-body text-1 shadow-subtle control-no-resize control-input" id="comment-text" name="comment" maxlength="1000" required rows="3"></textarea>
               </div>
               <p class="state-hidden text-body text-1 color-muted" id="comment-status" role="status"></p>
               <div class="flex flex-column sm-row sm-align-center justify-between gap-4 pad-block-2">
-                <p class="text-caption text-1 color-muted">ניתן לפרסם עד שלוש תגובות בדקה.</p>
-                <button class="control-button color-inverse text-label text-1" type="submit">פרסום תגובה</button>
+                <p class="text-caption text-1 color-muted">You can post up to three comments per minute.</p>
+                <button class="control-button color-inverse text-label text-1" type="submit">Post Comment</button>
               </div>
             </form>
 
@@ -114,14 +114,14 @@
               <% }) %>
             </div>
             <% if (!(locals.comments || []).length) { %>
-            <p class="text-body text-1 color-muted text-center">אין עדיין תגובות. אתם מוזמנים להיות הראשונים.</p>
+            <p class="text-body text-1 color-muted text-center">No comments yet. Be the first to join the conversation.</p>
             <% } %>
           </section>
         </article>
       </div>
 
       <aside class="publication-sidebar lg-sidebar-span flex flex-column gap-5">
-        <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="מזג האוויר">
+        <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="Weather">
           <div id="weatherWidget"></div>
         </section>
       </aside>
@@ -131,8 +131,8 @@
 <footer class="public-footer width-full surface-muted">
   <div class="width-content page-shell pad-inline-5 pad-6">
     <p class="text-headline text-4 color-primary">The Daily Web</p>
-    <p class="text-body text-1 color-muted">אתר חדשות לדוגמה, נבנה כפרויקט גמר בקורס פיתוח יישומי ווב.</p>
-    <div class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle">כל התכנים באתר הם נתוני דמה לצורכי הדגמה.</div>
+    <p class="text-body text-1 color-muted">A sample news site, built as the final project for a web application development course.</p>
+    <div class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle">All content on this site is demo data for illustration purposes only.</div>
   </div>
 </footer>
 <script src="/js/comments.js" defer></script>

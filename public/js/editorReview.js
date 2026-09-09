@@ -1,5 +1,5 @@
-// פעולות העורך: אישור ופרסום, החזרה לתיקונים עם הערה, ומחיקת כתבה.
-// כל הבדיקות נאכפות בשרת - הכפתורים כאן הם רק ממשק.
+// Editor actions: approve and publish, return for revisions with a note, and delete an article.
+// All the checks are enforced on the server - the buttons here are only the interface.
 (function () {
   'use strict';
 
@@ -32,9 +32,9 @@
   if (returnBtn) {
     returnBtn.addEventListener('click', () => {
       const note = noteEl ? noteEl.value.trim() : '';
-      // הערה היא חלק מהדרישה להחזרה לתיקונים, ולכן נדרשת כאן
+      // A note is part of the requirement for returning an article for revisions, so it is required here
       if (!note) {
-        window.api.flash(statusEl, 'יש לצרף הערה המסבירה אילו תיקונים נדרשים.', true);
+        window.api.flash(statusEl, 'Add a note explaining what changes are needed.', true);
         if (noteEl) noteEl.focus();
         return;
       }
@@ -51,7 +51,7 @@
   const deleteBtn = document.getElementById('btn-delete');
   if (deleteBtn) {
     deleteBtn.addEventListener('click', () => {
-      if (!window.confirm('למחוק את הכתבה לצמיתות? הפעולה תמחק גם את התגובות ונתוני הצפייה ואינה ניתנת לביטול.')) return;
+      if (!window.confirm('Delete this article permanently? This also removes its comments and view data and cannot be undone.')) return;
       act(deleteBtn, async () => {
         await window.api.sendJSON(`/api/articles/${articleId}`, 'DELETE');
         window.location.assign('/editor/reviews');

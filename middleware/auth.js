@@ -1,8 +1,8 @@
 const { ROLES } = require('../config/constants');
 const logger = require('../utils/logger');
 
-// כל בדיקות ההרשאה מתבצעות בצד השרת על סמך ה-session בלבד,
-// ולא על סמך מידע שהלקוח שולח ויכול לשנות בדפדפן.
+// All permission checks run on the server based on the session only,
+// never on data the client sends and could tamper with in the browser.
 
 function wantsJson(req) {
   return req.originalUrl.startsWith('/api/') || req.xhr ||
@@ -10,21 +10,21 @@ function wantsJson(req) {
 }
 
 function deny(req, res, code, message) {
-  logger.warn(`גישה נדחתה ${code} ל-${req.method} ${req.originalUrl}`);
+  logger.warn(`Access denied ${code} for ${req.method} ${req.originalUrl}`);
   if (wantsJson(req)) return res.status(code).json({ error: message });
   if (code === 401) return res.redirect('/login?next=' + encodeURIComponent(req.originalUrl));
-  return res.status(403).render('error', { title: 'אין הרשאה', message });
+  return res.status(403).render('error', { title: 'Access Denied', message });
 }
 
 exports.isAuthenticated = (req, res, next) => {
   if (req.session && req.session.user) return next();
-  return deny(req, res, 401, 'גישה מותנית בהתחברות למערכת');
+  return deny(req, res, 401, 'You must be signed in to access this area');
 };
 
 exports.requireRole = (...roles) => (req, res, next) => {
   const user = req.session && req.session.user;
-  if (!user) return deny(req, res, 401, 'גישה מותנית בהתחברות למערכת');
-  if (!roles.includes(user.role)) return deny(req, res, 403, 'אין לך הרשאה לבצע פעולה זו');
+  if (!user) return deny(req, res, 401, 'You must be signed in to access this area');
+  if (!roles.includes(user.role)) return deny(req, res, 403, 'You do not have permission to perform this action');
   return next();
 };
 

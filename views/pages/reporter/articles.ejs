@@ -1,6 +1,6 @@
-<%# עמוד "הכתבות שלי" של הכתב. הנתונים מגיעים מ-pageController.reporterArticles %>
+<%# The reporter's "My Articles" page. Data comes from pageController.reporterArticles %>
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en">
   <head>
     <%- include('../../partials/shared/head', { pageTitle }) %>
   </head>
@@ -12,19 +12,19 @@
       <div class="reporter-workspace page-shell pad-block-3">
         <nav
           class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
-          aria-label="מסלול ניווט"
+          aria-label="Breadcrumb"
         >
-          <a class="interaction-underline" href="/reporter/articles">מערכת החדשות</a>
+          <a class="interaction-underline" href="/reporter/articles">Newsroom</a>
           <span class="color-subtle">/</span>
-          <span class="color-body text-semibold">הכתבות שלי</span>
+          <span class="color-body text-semibold">My Articles</span>
         </nav>
         <div class="flex flex-column width-full">
-          <!-- פס הקשר: מי מחובר ולאיזה דסק -->
+          <!-- Context bar: who is signed in and which desk they belong to -->
           <div
             class="portal-context-bar width-full surface-muted pad-inline-4 pad-block-3 radius-card shadow-subtle margin-bottom-5 flex flex-wrap align-center justify-between gap-3"
           >
             <div class="flex align-center gap-3">
-              <span class="text-headline text-4 color-primary">אזור הכתב</span>
+              <span class="text-headline text-4 color-primary">Reporter Workspace</span>
               <span
                 class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
                 ><%= reporter.desk %></span
@@ -40,15 +40,15 @@
               >
             </div>
           </div>
-          <!-- כותרת העמוד ופעולת היצירה -->
+          <!-- Page heading and the create action -->
           <div
             class="reporter-page-heading flex flex-column md-row align-center justify-between gap-4 margin-bottom-5"
           >
             <div>
-              <h1 class="text-headline text-6 color-primary">הכתבות שלי</h1>
+              <h1 class="text-headline text-6 color-primary">My Articles</h1>
               <p class="text-body text-1 color-muted margin-top-2">
-                כאן מנוהלות הטיוטות שלכם, הכתבות שהוגשו לאישור העורך והכתבות
-                שכבר פורסמו באתר.
+                Manage your drafts here, along with the stories waiting on an
+                editor and the ones already live on the site.
               </p>
             </div>
             <div class="flex align-center gap-3">
@@ -57,11 +57,11 @@
                 href="/reporter/articles/new/edit"
               >
                 <span class="icon text-4">add_circle</span>
-                כתבה חדשה
+                New Article
               </a>
             </div>
           </div>
-          <!-- סינון לפי מצב, קטגוריה וחיפוש חופשי. הסינון מתבצע בדפדפן -->
+          <!-- Filter by status, category and free-text search. Filtering runs in the browser -->
           <div
             class="article-filter-strip surface-paper pad-4 radius-card shadow-subtle margin-bottom-4 flex flex-column md-row align-center justify-between gap-4"
           >
@@ -69,7 +69,7 @@
               class="flex flex-wrap align-center gap-2"
               id="statusFilterPills"
               role="group"
-              aria-label="סינון לפי מצב הכתבה"
+              aria-label="Filter by article status"
             >
               <% statusFilters.forEach(function (filter, index) { %>
               <button
@@ -86,7 +86,7 @@
                 <label
                   class="text-label text-1 color-muted"
                   for="categorySelect"
-                  >קטגוריה</label
+                  >Category</label
                 >
                 <select
                   class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3 pad-block-2 control-pointer"
@@ -101,18 +101,18 @@
                 <label
                   class="text-label text-1 color-muted"
                   for="articleSearchInput"
-                  >חיפוש לפי כותרת</label
+                  >Search by headline</label
                 >
                 <input
                   class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3 pad-block-2"
                   id="articleSearchInput"
-                  placeholder="הקלידו מילה מתוך הכותרת"
+                  placeholder="Type a word from the headline"
                   type="search"
                 />
               </div>
             </div>
           </div>
-          <!-- טבלת הכתבות -->
+          <!-- The articles table -->
           <div
             class="articles-table-card surface-paper radius-card shadow-subtle overflow-hidden margin-bottom-4"
           >
@@ -123,22 +123,22 @@
                 >
                   <tr>
                     <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
-                      כותרת הכתבה
+                      Headline
                     </th>
                     <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
-                      קטגוריה
+                      Category
                     </th>
                     <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
-                      מצב
+                      Status
                     </th>
                     <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
-                      עדכון אחרון
+                      Last Updated
                     </th>
                     <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
-                      צפיות
+                      Views
                     </th>
                     <th class="pad-block-3 pad-inline-4 text-semibold text-center" scope="col">
-                      פעולות
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -200,7 +200,7 @@
                         <a
                           class="pad-inline-3 pad-block-2 text-1 text-label surface-panel color-body radius-standard"
                           href="<%= a.editUrl %>"
-                          >עריכה</a
+                          >Edit</a
                         ><button
                           class="pad-inline-3 pad-block-2 text-1 text-label <%= a.actionClass %>"
                           data-submit-id="<%= a.id %>"
@@ -218,22 +218,22 @@
               class="state-hidden pad-6 text-center text-body text-1 color-muted"
               id="noResultsState"
             >
-              לא נמצאו כתבות שמתאימות לסינון. נסו לבחור מצב אחר, קטגוריה אחרת
-              או לנקות את החיפוש.
+              No articles match the current filters. Try another status or
+              category, or clear the search.
             </p>
           </div>
-          <!-- מונה תוצאות והודעות מערכת -->
+          <!-- Result counter and system messages -->
           <div
             class="articles-pagination flex flex-column sm-row align-center justify-between gap-3 pad-inline-3 pad-block-3"
           >
             <div class="text-body text-1 color-muted">
-              מוצגות
+              Showing
               <span class="text-semibold color-body" id="displayedCount"
                 ><%= articles.length %></span
               >
-              מתוך
+              of
               <span class="text-semibold color-body"><%= totalArticles %></span>
-              כתבות
+              articles
             </div>
             <p
               class="state-hidden text-body text-1 color-muted"
@@ -247,7 +247,7 @@
     </main>
     <footer class="newsroom-footer width-full surface-muted pad-block-3">
       <div class="page-shell text-center text-caption text-1 color-muted">
-        The Daily Web — מערכת החדשות הפנימית
+        The Daily Web — Internal Newsroom System
       </div>
     </footer>
     <script src="/js/reporterArticles.js" defer></script>

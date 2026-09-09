@@ -2,18 +2,18 @@ const Analytics = require('../models/Analytics');
 const Article = require('../models/Article');
 const asyncHandler = require('../utils/asyncHandler');
 
-// GET /api/analytics/article/:articleId - נתוני הגרף: ציר זמן, צפיות ונקודות פרסום
+// GET /api/analytics/article/:articleId - chart data: timeline, views and publish markers
 exports.getArticleTimeline = asyncHandler(async (req, res) => {
   const hours = Math.min(720, Math.max(6, parseInt(req.query.hours, 10) || 96));
 
   const article = await Article.findById(req.params.articleId)
     .select('publishedVersion draftVersion publishEvents totalViews')
     .lean();
-  if (!article) return res.status(404).json({ error: 'הכתבה לא נמצאה' });
+  if (!article) return res.status(404).json({ error: 'Article not found' });
 
   const since = Analytics.hourBucket(Date.now() - hours * 3600 * 1000);
 
-  // הנתונים כבר צבורים לפי שעה, ולכן זו שליפה קלה על אינדקס ולא aggregation
+  // The data is already aggregated by hour, so this is a light indexed lookup rather than an aggregation
   const timeline = await Analytics.find({ article: article._id, timestamp: { $gte: since } })
     .sort({ timestamp: 1 })
     .select('timestamp viewsCount -_id')
@@ -27,7 +27,7 @@ exports.getArticleTimeline = asyncHandler(async (req, res) => {
   });
 });
 
-// GET /api/analytics/articles - רשימת כתבות לבחירה בתפריט הגרף
+// GET /api/analytics/articles - the list of articles to choose from in the chart menu
 exports.listAnalyzableArticles = asyncHandler(async (req, res) => {
   const articles = await Article.find({ isPublished: true })
     .sort({ totalViews: -1 })

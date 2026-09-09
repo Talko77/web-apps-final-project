@@ -1,4 +1,4 @@
-// פיד החדשות: גלילה אינסופית, חיפוש, סינון ומיון - הכול ללא רענון מלא של העמוד.
+// News feed: infinite scroll, search, filtering and sorting - all without a full page reload.
 (function () {
   'use strict';
 
@@ -17,7 +17,7 @@
   let page = Number(grid.dataset.page || 1);
   let hasMore = grid.dataset.hasMore === 'true';
   let loading = false;
-  let requestId = 0; // מונע מתשובה איטית לדרוס תוצאה חדשה יותר
+  let requestId = 0; // prevents a slow response from overwriting a newer result
 
   function params(nextPage) {
     const q = new URLSearchParams({ page: String(nextPage) });
@@ -28,7 +28,7 @@
     return q.toString();
   }
 
-  // חייב להישאר זהה למבנה של views/partials/public/article-card.ejs
+  // Must stay identical to the markup in views/partials/public/article-card.ejs
   function cardHtml(a) {
     const media = a.imageUrl
       ? `<div class="media-frame media-thumbnail surface-panel"><img class="width-full height-full media-cover" src="${esc(a.imageUrl)}" alt="${esc(a.imageAlt)}" loading="lazy"></div>`
@@ -37,7 +37,7 @@
       ? `<p class="text-body text-1 color-muted margin-top-2">${esc(a.summary)}</p>`
       : '';
     const seenBadge = a.seen
-      ? '<span class="text-caption text-1 color-muted margin-top-2 block">נקראה</span>'
+      ? '<span class="text-caption text-1 color-muted margin-top-2 block">Read</span>'
       : '';
     const read = a.readLabel ? ` · ${esc(a.readLabel)}` : '';
 
@@ -46,14 +46,14 @@
     ${media}
     <div class="pad-4">
       <div class="flex align-center justify-between gap-2">
-        <span class="text-label text-1 text-uppercase color-primary">${esc(a.category || 'חדשות')}</span>
+        <span class="text-label text-1 text-uppercase color-primary">${esc(a.category || 'News')}</span>
         <span class="text-caption text-1 color-muted">${esc(a.dateLabel || '')}</span>
       </div>
-      <h2 class="text-headline text-4 color-body margin-top-2">${esc(a.title || 'כתבה ללא כותרת')}</h2>
+      <h2 class="text-headline text-4 color-body margin-top-2">${esc(a.title || 'Untitled article')}</h2>
       ${summary}
       <div class="flex align-center justify-between gap-2 margin-top-3">
         <span class="text-caption text-1 color-subtle">${esc(a.reporterName || '')}</span>
-        <span class="text-caption text-1 color-muted">${esc(a.views || '0')} צפיות${read}</span>
+        <span class="text-caption text-1 color-muted">${esc(a.views || '0')} views${read}</span>
       </div>
       ${seenBadge}
     </div>
@@ -66,12 +66,12 @@
     loading = true;
     const myRequest = ++requestId;
 
-    if (statusEl) window.api.flash(statusEl, 'טוען כתבות...', false);
+    if (statusEl) window.api.flash(statusEl, 'Loading articles...', false);
 
     try {
       const data = await window.api.getJSON('/api/articles/feed?' + params(nextPage));
 
-      // תשובה שהתיישנה בזמן שהמשתמש שינה סינון - מתעלמים ממנה
+      // A response that went stale while the user changed a filter - ignore it
       if (myRequest !== requestId) return;
 
       if (replace) grid.innerHTML = '';
@@ -81,9 +81,9 @@
       hasMore = data.hasMore;
 
       if (!grid.children.length) {
-        window.api.flash(statusEl, 'לא נמצאו כתבות שמתאימות לחיפוש.', false);
+        window.api.flash(statusEl, 'No articles match your search.', false);
       } else if (!hasMore) {
-        window.api.flash(statusEl, 'הגעת לסוף הפיד.', false);
+        window.api.flash(statusEl, 'You have reached the end of the feed.', false);
       } else if (statusEl) {
         statusEl.classList.add('state-hidden');
       }
@@ -94,7 +94,7 @@
     }
   }
 
-  // השהיה קצרה כדי לא לשלוח בקשה על כל הקשה
+  // Short delay so we do not fire a request on every keystroke
   let debounce = null;
   function reset() {
     clearTimeout(debounce);
@@ -104,7 +104,7 @@
   if (searchEl) searchEl.addEventListener('input', reset);
   [categoryEl, sortEl, seenEl].forEach(el => el && el.addEventListener('change', () => load(1, true)));
 
-  // טעינת העמוד הבא כשהמשתמש מתקרב לתחתית הפיד
+  // Load the next page as the user approaches the bottom of the feed
   if (sentinel && 'IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore && !loading) load(page + 1, false);

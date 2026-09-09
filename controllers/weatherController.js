@@ -1,29 +1,29 @@
 const logger = require('../utils/logger');
 
-const CACHE_TTL = 15 * 60 * 1000; // הנתון המוצג למשתמש יכול להיות בפיגור של עד 15 דקות
+const CACHE_TTL = 15 * 60 * 1000; // The value shown to the user may be up to 15 minutes behind
 const CITY = process.env.WEATHER_CITY || 'Tel Aviv';
 
-// מטמון בתהליך: אלפי מבקרים במקביל מתורגמים לקריאה חיצונית אחת ל-15 דקות.
-// inFlight מונע מספר קריאות מקבילות לאותו נתון כשהמטמון פג.
+// In-process cache: thousands of concurrent visitors turn into one external call every 15 minutes.
+// inFlight prevents several parallel calls for the same value when the cache expires.
 let cache = null;
 let cachedAt = 0;
 let inFlight = null;
 
-const FALLBACK = { city: 'תל אביב', temp: null, condition: 'נתוני מזג האוויר אינם זמינים כרגע', icon: '01d' };
+const FALLBACK = { city: 'Tel Aviv', temp: null, condition: 'Weather data is unavailable right now', icon: '01d' };
 
 async function fetchFromApi() {
   const key = process.env.WEATHER_API_KEY;
-  if (!key) throw new Error('WEATHER_API_KEY חסר');
+  if (!key) throw new Error('WEATHER_API_KEY is not set');
 
   const url = 'https://api.openweathermap.org/data/2.5/weather' +
-    `?q=${encodeURIComponent(CITY)}&units=metric&lang=he&appid=${key}`;
+    `?q=${encodeURIComponent(CITY)}&units=metric&lang=en&appid=${key}`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 5000);
 
   try {
     const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) throw new Error(`OpenWeatherMap החזיר ${response.status}`);
+    if (!response.ok) throw new Error(`OpenWeatherMap returned ${response.status}`);
     const data = await response.json();
     return {
       city: data.name,
@@ -54,8 +54,8 @@ exports.getWeather = async (req, res) => {
     cachedAt = Date.now();
     res.json({ source: 'api', ageSeconds: 0, data: cache });
   } catch (err) {
-    logger.warn(`שליפת מזג אוויר נכשלה: ${err.message}`);
-    // מחזירים מטמון ישן אם קיים, אחרת ברירת מחדל - הווידג'ט לא מפיל את העמוד
+    logger.warn(`Weather lookup failed: ${err.message}`);
+    // Return the stale cache if there is one, otherwise the fallback - the widget must not break the page
     res.json({ source: cache ? 'stale-cache' : 'fallback', data: cache || FALLBACK });
   }
 };

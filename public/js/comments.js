@@ -1,5 +1,5 @@
-// תגובות: הוספת תגובה חדשה מציגה אותה מיד ברשימה,
-// ללא טעינה מחדש של הרשימה כולה וללא רענון העמוד.
+// Comments: adding a new comment shows it in the list immediately,
+// without reloading the whole list and without refreshing the page.
 (function () {
   'use strict';
 
@@ -20,7 +20,7 @@
 
   if (textEl && counterEl) {
     const update = () => {
-      counterEl.textContent = `נותרו ${MAX - textEl.value.length} תווים`;
+      counterEl.textContent = `${MAX - textEl.value.length} characters remaining`;
     };
     textEl.addEventListener('input', update);
     update();
@@ -37,9 +37,11 @@
 </article>`;
   }
 
-  // מחשב תווית זמן יחסית עבור תגובה שנוספה כרגע
+  // Builds the avatar initials for a comment rendered on the client.
+  // The server does the same in utils/viewMappers.initials, so a comment
+  // posted now looks identical to one rendered on the next page load.
   function initialsOf(name) {
-    return String(name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('.');
+    return String(name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
   }
 
   form.addEventListener('submit', async event => {
@@ -47,7 +49,7 @@
 
     const content = textEl.value.trim();
     if (!content) {
-      window.api.flash(statusEl, 'לא ניתן לפרסם תגובה ריקה.', true);
+      window.api.flash(statusEl, 'Comment cannot be empty.', true);
       return;
     }
 
@@ -65,17 +67,17 @@
         initials: initialsOf(c.authorName),
         author: c.authorName,
         datetime: c.createdAt,
-        dateLabel: 'עכשיו',
+        dateLabel: 'Just now',
         text: c.content
       }));
 
       if (countEl) countEl.textContent = String(list.querySelectorAll('.comment-item').length);
 
       textEl.value = '';
-      if (counterEl) counterEl.textContent = `נותרו ${MAX} תווים`;
-      window.api.flash(statusEl, 'התגובה פורסמה.', false);
+      if (counterEl) counterEl.textContent = `${MAX} characters remaining`;
+      window.api.flash(statusEl, 'Comment posted.', false);
     } catch (err) {
-      // 429 הוא חריגה ממגבלת שלוש התגובות בדקה שנאכפת בשרת
+      // A 429 means the server-enforced limit of three comments per minute was exceeded
       window.api.flash(statusEl, err.message, true);
     } finally {
       submitEl.disabled = false;

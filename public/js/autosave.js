@@ -1,6 +1,6 @@
-// שמירה אוטומטית של הטיוטה. אין כפתור "שמור":
-// העבודה נשמרת בשרת שתי שניות לאחר שהכתב מפסיק להקליד,
-// כך שרענון, סגירת הדפדפן או מעבר למחשב אחר לא מאבדים את התוכן.
+// Draft autosave. There is no "Save" button:
+// the work is saved on the server two seconds after the reporter stops typing,
+// so a refresh, closing the browser or moving to another machine does not lose content.
 (function () {
   'use strict';
 
@@ -38,25 +38,25 @@
   async function save() {
     if (saving) { pending = true; return; }
     saving = true;
-    window.api.flash(indicator, 'שומר...', false);
+    window.api.flash(indicator, 'Saving...', false);
 
     try {
-      // כתבה חדשה נוצרת בשמירה הראשונה, ומכאן והלאה מתעדכנת
+      // A new article is created on the first save, and updated from then on
       if (!articleId) {
         const created = await window.api.sendJSON('/api/articles', 'POST', collect());
         articleId = created.articleId;
         form.dataset.articleId = articleId;
-        // מעדכן את הכתובת בלי לטעון מחדש, כדי שרענון יחזיר לאותה כתבה
+        // Updates the URL without reloading, so a refresh returns to the same article
         window.history.replaceState({}, '', `/reporter/articles/${articleId}/edit`);
         if (submitBtn) submitBtn.disabled = false;
       } else {
         await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', collect());
       }
 
-      const time = new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
-      window.api.flash(indicator, `נשמר אוטומטית ב-${time}`, false);
+      const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      window.api.flash(indicator, `Autosaved at ${time}`, false);
     } catch (err) {
-      window.api.flash(indicator, `השמירה נכשלה: ${err.message}`, true);
+      window.api.flash(indicator, `Autosave failed: ${err.message}`, true);
     } finally {
       saving = false;
       if (pending) { pending = false; schedule(); }
@@ -75,7 +75,7 @@
       el.addEventListener('change', schedule);
     });
 
-    // שמירה מיד אם המשתמש עובר לחלון אחר או סוגר את הטאב
+    // Save immediately if the user switches to another window or closes the tab
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden' && timer) { clearTimeout(timer); save(); }
     });
@@ -83,16 +83,16 @@
 
   if (fields.summary && counterEl) {
     const max = Number(fields.summary.getAttribute('maxlength') || 500);
-    const update = () => { counterEl.textContent = `נותרו ${max - fields.summary.value.length} תווים`; };
+    const update = () => { counterEl.textContent = `${max - fields.summary.value.length} characters remaining`; };
     fields.summary.addEventListener('input', update);
     update();
   }
 
-  // הגשה לאישור העורך
+  // Submit for the editor's approval
   if (submitBtn) {
     submitBtn.addEventListener('click', async () => {
       clearTimeout(timer);
-      if (!articleId) { window.api.flash(indicator, 'יש להזין תוכן לפני ההגשה.', true); return; }
+      if (!articleId) { window.api.flash(indicator, 'Add content before submitting.', true); return; }
 
       submitBtn.disabled = true;
       try {

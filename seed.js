@@ -17,29 +17,29 @@ const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const pick = arr => arr[rand(0, arr.length - 1)];
 
 const REPORTERS = [
-  { username: 'reporter1', displayName: 'דנה לוי' },
-  { username: 'reporter2', displayName: 'יוסי מזרחי' },
-  { username: 'reporter3', displayName: 'מיכל אברהם' },
-  { username: 'reporter4', displayName: 'אורי שגב' }
+  { username: 'reporter1', displayName: 'Elena Vasquez' },
+  { username: 'reporter2', displayName: 'Marcus Bell' },
+  { username: 'reporter3', displayName: 'Priya Raman' },
+  { username: 'reporter4', displayName: 'Jonah Keller' }
 ];
 
 const EDITORS = [
-  { username: 'editor1', displayName: 'רונית כהן' },
-  { username: 'editor2', displayName: 'אלון ברק' }
+  { username: 'editor1', displayName: 'Sarah Chen' },
+  { username: 'editor2', displayName: 'Daniel Okafor' }
 ];
 
 const COMMENT_TEXTS = [
-  'כתבה מעניינת מאוד, תודה על הסקירה.',
-  'לא בטוח שאני מסכים עם המסקנה, אבל הנתונים חשובים.',
-  'אפשר לקבל הרחבה על הנושא הזה?',
-  'סוף סוף מישהו כותב על זה בצורה רצינית.',
-  'הכותרת מטעה ביחס לתוכן.',
-  'שיתפתי עם חברים, רלוונטי מאוד.',
-  'יש טעות בפסקה השלישית, כדאי לבדוק.',
-  'תודה על העבודה היסודית.'
+  'Genuinely useful breakdown, thanks for the reporting.',
+  'I am not convinced by the conclusion, but the data matters.',
+  'Any chance of a follow-up with more detail on this?',
+  'Finally someone covering this properly.',
+  'The headline oversells what the article actually says.',
+  'Shared this with colleagues, very relevant right now.',
+  'There is an error in the third paragraph worth checking.',
+  'Appreciate the thorough sourcing here.'
 ];
 
-const COMMENTER_NAMES = ['אורח', 'קורא מתל אביב', 'נועה', 'איתי', 'ש. גולן', 'רותי', 'דני'];
+const COMMENTER_NAMES = ['Guest', 'A. Reader', 'Noa', 'Ethan', 'S. Gold', 'Ruth', 'Danny'];
 
 const IMAGES = [
   'https://picsum.photos/seed/news1/800/500',
@@ -50,17 +50,30 @@ const IMAGES = [
   'https://picsum.photos/seed/news6/800/500'
 ];
 
+// Headline fragments per category, so seeded titles read like real copy
+// instead of all sharing one template.
+const ANGLES = {
+  World: ['border talks resume', 'aid convoy reaches the region', 'election monitors report'],
+  Business: ['quarterly earnings surprise', 'merger clears review', 'supply chain costs ease'],
+  Technology: ['chip supply shifts', 'platform opens its API', 'security flaw disclosed'],
+  Science: ['trial results published', 'telescope captures new data', 'study revises estimate'],
+  Culture: ['festival lineup announced', 'retrospective opens', 'debut novel draws praise'],
+  Sports: ['late goal decides the tie', 'transfer window closes', 'season record broken'],
+  Opinion: ['the case for patience', 'why the numbers mislead', 'a policy worth rethinking']
+};
+
 function buildContent(i, category, revision) {
-  const suffix = revision > 1 ? ` (עדכון ${revision - 1})` : '';
+  const angle = pick(ANGLES[category] || ['newsroom update']);
+  const suffix = revision > 1 ? ` (Update ${revision - 1})` : '';
   return {
-    title: `${category}: דיווח מיוחד מספר ${i}${suffix}`,
-    summary: `תקציר כתבה ${i} בתחום ${category}. סקירה קצרה של העיקר לפני הכניסה לגוף הכתבה.`,
+    title: `${category}: ${angle} — report ${i}${suffix}`,
+    summary: `A short summary of report ${i} covering ${category.toLowerCase()}, outlining the key points before the main story.`,
     content: [
-      `זו כתבה מספר ${i} בקטגוריית ${category}.`,
-      revision > 1 ? `הכתבה עודכנה ${revision - 1} פעמים לאחר הפרסום הראשוני.` : '',
-      'גוף הכתבה מכיל מספר פסקאות כדי לדמות תוכן אמיתי ולבחון את קריאות העמוד במסכים שונים.',
-      'הפסקה הזו קיימת כדי לבדוק את רוחב עמודת הקריאה ואת ההיררכיה הטיפוגרפית בעמוד הכתבה.',
-      'לסיום, הנתונים בכתבה זו הם נתוני הדגמה בלבד ואינם מתייחסים לאירועים אמיתיים.'
+      `This is report number ${i}, filed to the ${category} desk.`,
+      revision > 1 ? `The story has been updated ${revision - 1} time(s) since it was first published.` : '',
+      'The body carries several paragraphs so the page reflects realistic content and the reading column can be assessed at different screen sizes.',
+      'This paragraph exists to exercise the measure of the reading column and the typographic hierarchy on the article page.',
+      'All figures in this article are demonstration data and do not refer to real events.'
     ].filter(Boolean).join('\n\n'),
     category,
     imageUrl: pick(IMAGES)
@@ -69,7 +82,7 @@ function buildContent(i, category, revision) {
 
 async function seed() {
   await mongoose.connect(MONGO_URI);
-  console.log('התחברות למסד הנתונים הצליחה');
+  console.log('Connected to MongoDB');
 
   await Promise.all([
     User.deleteMany({}),
@@ -77,19 +90,20 @@ async function seed() {
     Comment.deleteMany({}),
     Analytics.deleteMany({})
   ]);
-  console.log('נתונים קודמים נמחקו');
+  console.log('Cleared previous data');
 
-  // create() ולא insertMany() כדי שה-hook שמגבב את הסיסמה ירוץ
+  // create() rather than insertMany() so the password hashing hook runs
   const reporters = await User.create(
     REPORTERS.map(r => ({ ...r, password: DEMO_PASSWORD, role: ROLES.REPORTER }))
   );
   const editors = await User.create(
     EDITORS.map(e => ({ ...e, password: DEMO_PASSWORD, role: ROLES.EDITOR }))
   );
-  console.log(`נוצרו ${reporters.length} כתבים ו-${editors.length} עורכים`);
+  console.log(`Created ${reporters.length} reporters and ${editors.length} editors`);
 
-  // התפלגות המצבים: 400 פורסמו, 40 ממתינות, 30 הוחזרו, 30 בהכנה,
-  // ומתוך המפורסמות חלק עם עדכון שממתין לאישור וחלק עם מספר עדכונים.
+  // State spread: 400 published, 40 pending, 30 returned, 30 draft.
+  // Among the published ones, some carry several approved updates and some
+  // have a further update still waiting for the editor.
   const docs = [];
   for (let i = 1; i <= TOTAL_ARTICLES; i++) {
     const category = CATEGORIES[i % CATEGORIES.length];
@@ -106,7 +120,9 @@ async function seed() {
       reporter,
       status,
       isPublished,
-      editorNote: status === STATUS.RETURNED ? 'נא לחדד את הכותרת ולהוסיף מקור לנתון בפסקה השנייה.' : '',
+      editorNote: status === STATUS.RETURNED
+        ? 'Please tighten the headline and add a source for the figure in the second paragraph.'
+        : '',
       publishEvents: [],
       totalViews: 0,
       draftVersion: buildContent(i, category, 1),
@@ -119,7 +135,7 @@ async function seed() {
       doc.publishedAt = firstPublish;
       doc.publishEvents = [firstPublish];
 
-      // כל כתבה עשירית קיבלה מספר עדכונים לאחר הפרסום
+      // Every tenth article received several post-publication updates
       let revision = 1;
       if (i % 10 === 0) {
         const updates = rand(1, 3);
@@ -133,8 +149,8 @@ async function seed() {
       doc.draftVersion = doc.publishedVersion;
       doc.totalViews = rand(50, 8000);
 
-      // כל כתבה 25 היא כתבה מפורסמת שיש לה עדכון שממתין לאישור העורך.
-      // publishedVersion נשאר גלוי לציבור בזמן שהטיוטה החדשה בבדיקה.
+      // Every 25th article is a published story with an update awaiting approval.
+      // publishedVersion stays public while the new draft is under review.
       if (i % 25 === 0) {
         doc.status = STATUS.PENDING;
         doc.draftVersion = buildContent(i, category, revision + 1);
@@ -145,11 +161,11 @@ async function seed() {
   }
 
   const articles = await Article.insertMany(docs);
-  console.log(`נוצרו ${articles.length} כתבות`);
+  console.log(`Created ${articles.length} articles`);
 
   const published = articles.filter(a => a.isPublished);
 
-  // תגובות על מחצית מהכתבות המפורסמות
+  // Comments on half of the published articles
   const comments = [];
   published.forEach((article, idx) => {
     if (idx % 2 !== 0) return;
@@ -163,11 +179,11 @@ async function seed() {
     }
   });
   await Comment.insertMany(comments);
-  console.log(`נוצרו ${comments.length} תגובות`);
+  console.log(`Created ${comments.length} comments`);
 
-  // נתוני צפייה שעתיים ל-40 הכתבות הראשונות שעברו עדכון.
-  // סביב כל נקודת פרסום נוצרת קפיצה בצפיות, כדי שהגרף יראה
-  // את ההשפעה של העדכון לפני ואחרי.
+  // Hourly view data for the first 40 articles that received an update.
+  // Views spike around each publish event so the graph shows the impact of
+  // an update before and after the approval point.
   const updated = published.filter(a => a.publishEvents.length > 1).slice(0, 40);
   const buckets = [];
   const HOURS_BACK = 21 * 24;
@@ -181,11 +197,11 @@ async function seed() {
       const t = ts.getTime();
       if (t < new Date(article.publishedAt).getTime()) continue;
 
-      // דעיכה טבעית של תשומת הלב מרגע הפרסום
+      // Natural decay of attention from the moment of publication
       const hoursSincePublish = (t - events[0]) / HOUR;
       let views = Math.max(3, Math.round(120 / (1 + hoursSincePublish / 24)));
 
-      // קפיצה ב-24 השעות שאחרי כל עדכון שאושר
+      // Spike in the 24 hours following each approved update
       for (const evt of events.slice(1)) {
         const delta = (t - evt) / HOUR;
         if (delta >= 0 && delta <= 24) views += Math.round(250 / (1 + delta / 4));
@@ -197,22 +213,23 @@ async function seed() {
       buckets.push({ article: article._id, timestamp: ts, viewsCount: views });
     }
 
-    // המונה המצטבר חייב להיות עקבי עם סכום הדליים, אחרת מיון לפי פופולריות ישקר
+    // The running counter must agree with the sum of the buckets,
+    // otherwise sorting by popularity would be wrong.
     await Article.updateOne({ _id: article._id }, { $set: { totalViews: total } });
   }
 
   await Analytics.insertMany(buckets);
-  console.log(`נוצרו ${buckets.length} דליי צפייה עבור ${updated.length} כתבות`);
+  console.log(`Created ${buckets.length} view buckets for ${updated.length} articles`);
 
-  console.log('\nמשתמשי הדגמה (סיסמה לכולם: %s)', DEMO_PASSWORD);
+  console.log('\nDemo users (password for all: %s)', DEMO_PASSWORD);
   [...REPORTERS, ...EDITORS].forEach(u => console.log(`  ${u.username} - ${u.displayName}`));
 
   await mongoose.connection.close();
-  console.log('\nהזרעת הנתונים הושלמה');
+  console.log('\nSeeding complete');
 }
 
 seed().catch(async err => {
-  console.error('הזרעת הנתונים נכשלה:', err);
+  console.error('Seeding failed:', err);
   await mongoose.connection.close();
   process.exit(1);
 });

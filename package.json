@@ -1,7 +1,7 @@
 {
   "name": "the-daily-web",
   "version": "1.0.0",
-  "description": "מערכת חדשות - ניהול, עריכה ופרסום כתבות",
+  "description": "News publication and newsroom workspace - drafting, editorial review and publishing",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"

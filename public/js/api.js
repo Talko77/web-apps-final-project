@@ -1,10 +1,10 @@
-// עזרי Ajax משותפים לכל עמודי הלקוח.
-// נטען לפני כל שאר קבצי ה-JS ומגדיר את window.api.
+// Shared Ajax helpers for all client pages.
+// Loaded before every other JS file and defines window.api.
 (function () {
   'use strict';
 
-  // כל טקסט שמגיע מהמשתמש עובר דרך כאן לפני הכנסה ל-DOM,
-  // כדי למנוע הזרקת HTML בתגובות ובשמות.
+  // Every piece of user-supplied text goes through here before being inserted
+  // into the DOM, to prevent HTML injection via comments and names.
   function escapeHtml(value) {
     return String(value == null ? '' : value)
       .replace(/&/g, '&amp;')
@@ -29,7 +29,7 @@
     }
 
     if (!res.ok) {
-      const message = (body && body.error) || `הבקשה נכשלה (${res.status})`;
+      const message = (body && body.error) || `Request failed (${res.status})`;
       const error = new Error(message);
       error.status = res.status;
       throw error;
@@ -46,7 +46,7 @@
     body: payload === undefined ? undefined : JSON.stringify(payload)
   });
 
-  // מציג הודעה קצרה באלמנט נתון, ומנקה אותה לאחר מכן
+  // Shows a short message in the given element, then clears it afterwards
   function flash(el, message, isError) {
     if (!el) return;
     el.textContent = message;
@@ -57,8 +57,8 @@
 
   window.api = { escapeHtml, getJSON, sendJSON, flash };
 
-  // התנתקות זמינה מכל עמוד שמציג את כפתור ההתנתקות בכותרת.
-  // POST ולא קישור, כדי שלא תתבצע התנתקות בעקבות ניווט או טעינה מוקדמת.
+  // Logout is available from every page that shows the header logout button.
+  // A POST rather than a link, so navigation or prefetching cannot log the user out.
   document.addEventListener('click', async event => {
     const btn = event.target.closest('#logoutBtn');
     if (!btn) return;

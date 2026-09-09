@@ -1,6 +1,6 @@
-<%# כרטיס כתבה בפיד הציבורי.
-    המקור היחיד למבנה הכרטיס: public/js/feed.js בונה DOM זהה
-    עבור הכתבות שנטענות בגלילה האינסופית. שינוי כאן מחייב שינוי שם. %>
+<%# Article card used in the public feed.
+    Single source of truth for the card markup: public/js/feed.js builds identical DOM
+    for the articles loaded by infinite scroll. Any change here must be mirrored there. %>
 <% const card = typeof article !== 'undefined' && article ? article : {}; %>
 <article class="article-card surface-paper radius-card overflow-hidden shadow-subtle" data-id="<%= card.id || '' %>" data-seen="<%= card.seen ? 'true' : 'false' %>">
   <a class="block" href="<%= card.url || '#' %>">
@@ -9,16 +9,16 @@
     <% } %>
     <div class="pad-4">
       <div class="flex align-center justify-between gap-2">
-        <span class="text-label text-1 text-uppercase color-primary"><%= card.category || 'חדשות' %></span>
+        <span class="text-label text-1 text-uppercase color-primary"><%= card.category || 'News' %></span>
         <span class="text-caption text-1 color-muted"><%= card.dateLabel || '' %></span>
       </div>
-      <h2 class="text-headline text-4 color-body margin-top-2"><%= card.title || 'כתבה ללא כותרת' %></h2>
+      <h2 class="text-headline text-4 color-body margin-top-2"><%= card.title || 'Untitled article' %></h2>
       <% if (card.summary) { %><p class="text-body text-1 color-muted margin-top-2"><%= card.summary %></p><% } %>
       <div class="flex align-center justify-between gap-2 margin-top-3">
         <span class="text-caption text-1 color-subtle"><%= card.author || '' %></span>
-        <span class="text-caption text-1 color-muted"><%= card.views || '0' %> צפיות<% if (card.readLabel) { %> · <%= card.readLabel %><% } %></span>
+        <span class="text-caption text-1 color-muted"><%= card.views || '0' %> views<% if (card.readLabel) { %> · <%= card.readLabel %><% } %></span>
       </div>
-      <% if (card.seen) { %><span class="text-caption text-1 color-muted margin-top-2 block">נקראה</span><% } %>
+      <% if (card.seen) { %><span class="text-caption text-1 color-muted margin-top-2 block">Read</span><% } %>
     </div>
   </a>
 </article>

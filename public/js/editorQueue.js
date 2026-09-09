@@ -1,5 +1,5 @@
-// תור הסקירה: סינון מקומי של השורות שכבר נטענו,
-// לפי חיפוש חופשי, קטגוריה ומצב.
+// Review queue: client-side filtering of the rows that were already loaded,
+// by free-text search, category and status.
 (function () {
   'use strict';
 

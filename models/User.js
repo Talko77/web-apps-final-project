@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-// bcryptjs ולא bcrypt: מימוש ב-JavaScript בלבד, ללא קומפילציה נייטיבית,
-// ולכן אותו node_modules עובד על macOS, Windows ו-Linux ובכל גרסת Node
+// bcryptjs rather than bcrypt: a pure JavaScript implementation with no native
+// compilation step, so the same node_modules works on macOS, Windows and Linux
+// and on any Node version
 const bcrypt = require('bcryptjs');
 const { ROLES } = require('../config/constants');
 
@@ -11,7 +12,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: Object.values(ROLES), required: true }
 }, { timestamps: true });
 
-// הסיסמה עוברת גיבוב חד-כיווני ולא נשמרת כטקסט גלוי
+// The password is one-way hashed and never stored as plain text
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 10);
@@ -22,7 +23,7 @@ userSchema.methods.verifyPassword = function (plain) {
   return bcrypt.compare(plain, this.password);
 };
 
-// אובייקט בטוח להחזרה ללקוח - ללא הסיסמה
+// An object that is safe to return to the client - without the password
 userSchema.methods.toPublic = function () {
   return {
     _id: this._id,

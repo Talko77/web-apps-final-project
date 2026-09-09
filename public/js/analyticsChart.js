@@ -1,6 +1,6 @@
-// Impact Analytics: צפיות לאורך זמן, עם סימון נקודות הזמן
-// שבהן העורך אישר ופרסם עדכון לכתבה.
-// מצויר ב-canvas נטו, ללא ספריות חיצוניות.
+// Impact Analytics: views over time, marking the points in time
+// where the editor approved and published an update to the article.
+// Drawn on a plain canvas, with no external libraries.
 (function () {
   'use strict';
 
@@ -23,7 +23,7 @@
 
   let current = { timeline: [], publishEvents: [] };
 
-  // התאמת הרזולוציה לצפיפות הפיקסלים כדי שהגרף לא ייראה מטושטש
+  // Match the resolution to the pixel density so the chart does not look blurry
   function fitCanvas() {
     const ratio = window.devicePixelRatio || 1;
     const width = canvas.clientWidth || 800;
@@ -34,7 +34,7 @@
     return { width, height };
   }
 
-  const fmtHour = d => new Date(d).toLocaleString('he-IL', {
+  const fmtHour = d => new Date(d).toLocaleString('en-US', {
     day: '2-digit', month: '2-digit', hour: '2-digit'
   });
 
@@ -47,7 +47,7 @@
       ctx.fillStyle = COLORS.text;
       ctx.font = '14px Inter, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('אין נתוני צפייה להצגה בטווח הזמן הנבחר', width / 2, height / 2);
+      ctx.fillText('No view data for the selected time range', width / 2, height / 2);
       return;
     }
 
@@ -63,7 +63,7 @@
     const x = t => PADDING.left + ((t - minT) / spanT) * plotW;
     const y = v => PADDING.top + plotH - (v / maxV) * plotH;
 
-    // ציר הצפיות עם קווי עזר אופקיים
+    // Views axis with horizontal gridlines
     ctx.strokeStyle = COLORS.axis;
     ctx.fillStyle = COLORS.text;
     ctx.lineWidth = 1;
@@ -81,7 +81,7 @@
       ctx.fillText(String(value), PADDING.left - 8, gy);
     }
 
-    // ציר הזמן
+    // Time axis
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     const labelCount = Math.min(6, points.length);
@@ -95,7 +95,7 @@
       ctx.restore();
     }
 
-    // שטח מתחת לקו
+    // Area under the line
     ctx.beginPath();
     ctx.moveTo(x(times[0]), y(points[0].viewsCount));
     points.forEach((p, i) => ctx.lineTo(x(times[i]), y(p.viewsCount)));
@@ -105,7 +105,7 @@
     ctx.fillStyle = COLORS.fill;
     ctx.fill();
 
-    // קו הצפיות
+    // Views line
     ctx.beginPath();
     points.forEach((p, i) => {
       const px = x(times[i]);
@@ -116,8 +116,8 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // נקודות אישור הפרסום - קו אנכי מקווקו לכל עדכון,
-    // כך שניתן לראות את הצפיות לפני ואחרי אותה נקודה
+    // Publish approval points - a dashed vertical line per update,
+    // so the views before and after that point can be compared
     ctx.setLineDash([5, 4]);
     ctx.strokeStyle = COLORS.event;
     ctx.fillStyle = COLORS.event;
@@ -132,7 +132,7 @@
       ctx.moveTo(ex, PADDING.top);
       ctx.lineTo(ex, PADDING.top + plotH);
       ctx.stroke();
-      const label = i === 0 ? 'פרסום' : `עדכון ${i}`;
+      const label = i === 0 ? 'Published' : `Update ${i}`;
       ctx.fillText(label, ex, PADDING.top - 14);
     });
     ctx.setLineDash([]);
@@ -140,7 +140,7 @@
 
   async function load(articleId, hours) {
     if (!articleId) return;
-    window.api.flash(statusEl, 'טוען נתוני צפייה...', false);
+    window.api.flash(statusEl, 'Loading view data...', false);
 
     try {
       const query = hours ? `?hours=${encodeURIComponent(hours)}` : '';
@@ -151,7 +151,7 @@
       const updates = Math.max(0, current.publishEvents.length - 1);
       window.api.flash(
         statusEl,
-        `${data.totalViews} צפיות בסך הכול · ${updates} עדכונים מסומנים על הגרף`,
+        `${data.totalViews} views in total · ${updates} updates marked on the chart`,
         false
       );
     } catch (err) {
@@ -163,7 +163,7 @@
 
   if (selectEl) {
     selectEl.addEventListener('change', () => {
-      // הכתובת מתעדכנת כדי שרענון יישאר על אותה כתבה
+      // The URL is updated so a refresh stays on the same article
       window.history.replaceState({}, '', `/editor/articles/${selectEl.value}/analytics`);
       load(articleId(), rangeEl && rangeEl.value);
     });

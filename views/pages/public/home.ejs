@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
 <body class="public-page publication-page surface-page text-body text-2 color-body height-screen flex flex-column">
 <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
@@ -19,18 +19,18 @@
             <% } %>
             <div class="pad-5 flex flex-column flex-grow">
               <div class="flex align-center gap-2 text-label text-1 color-muted margin-bottom-2">
-                <span class="text-semibold color-body">מאת <%= lead.author %></span>
+                <span class="text-semibold color-body">By <%= lead.author %></span>
                 <span>•</span>
                 <span><%= lead.dateLabel %></span>
                 <span>•</span>
                 <span class="flex align-center gap-1"><span class="icon text-2">timer</span><%= lead.readLabel %></span>
                 <span>•</span>
-                <span><%= lead.views %> צפיות</span>
+                <span><%= lead.views %> views</span>
               </div>
               <h1 class="text-headline text-7 color-body margin-bottom-2 motion-colors text-tight"><%= lead.title %></h1>
               <p class="text-headline text-deck color-muted margin-bottom-5 text-relaxed"><%= lead.summary %></p>
               <div class="margin-top-4 flex align-center justify-between">
-                <a class="inline-flex align-center gap-2 text-label text-2 color-primary motion-colors" href="<%= lead.url %>"><span>לכתבה המלאה</span><span class="icon text-4">arrow_forward</span></a>
+                <a class="inline-flex align-center gap-2 text-label text-2 color-primary motion-colors" href="<%= lead.url %>"><span>Read the full story</span><span class="icon text-4">arrow_forward</span></a>
               </div>
             </div>
           </article>
@@ -40,8 +40,8 @@
           <% if (secondary.length) { %>
           <section aria-labelledby="featured-heading">
             <div class="flex align-center justify-between margin-bottom-4">
-              <h2 class="text-headline text-5 color-body" id="featured-heading">כתבות נבחרות</h2>
-              <span class="text-label text-1 color-muted text-uppercase">בחירת המערכת</span>
+              <h2 class="text-headline text-5 color-body" id="featured-heading">Featured Stories</h2>
+              <span class="text-label text-1 color-muted text-uppercase">Editor's Picks</span>
             </div>
             <div class="publication-featured-grid grid grid-single md-grid-triple gap-4">
               <% secondary.forEach(function (item) { %>
@@ -56,7 +56,7 @@
                   <span class="text-caption text-1 color-muted margin-bottom-2"><%= item.dateLabel %></span>
                   <h3 class="text-headline text-4 color-body margin-bottom-2 motion-colors"><a class="motion-colors" href="<%= item.url %>"><%= item.title %></a></h3>
                   <p class="text-body text-1 color-muted title-clamp"><%= item.summary %></p>
-                  <span class="text-caption text-1 color-muted margin-top-2"><%= item.author %> · <%= item.views %> צפיות</span>
+                  <span class="text-caption text-1 color-muted margin-top-2"><%= item.author %> · <%= item.views %> views</span>
                 </div>
               </article>
               <% }) %>
@@ -68,9 +68,9 @@
             <div class="flex align-center justify-between margin-bottom-4">
               <div class="flex align-center gap-2">
                 <span class="icon color-primary">schedule</span>
-                <h2 class="text-headline text-5 color-body" id="dispatches-heading">מבזקים לפי סדר כרונולוגי</h2>
+                <h2 class="text-headline text-5 color-body" id="dispatches-heading">Latest Dispatches</h2>
               </div>
-              <span class="text-caption text-1 color-muted">עדכוני המערכת בזמן אמת</span>
+              <span class="text-caption text-1 color-muted">Live updates from the newsroom</span>
             </div>
             <div class="stack-4">
               <% (locals.dispatches || []).forEach(function (item) { %>
@@ -88,36 +88,36 @@
 
           <section aria-labelledby="feed-heading" class="flex flex-column gap-4">
             <div class="flex align-center justify-between">
-              <h2 class="text-headline text-5 color-body" id="feed-heading">כל הכתבות</h2>
-              <span class="text-caption text-1 color-muted">הפיד נטען בגלילה, ללא רענון העמוד</span>
+              <h2 class="text-headline text-5 color-body" id="feed-heading">All Articles</h2>
+              <span class="text-caption text-1 color-muted">More stories load as you scroll, with no page refresh</span>
             </div>
             <div class="surface-paper radius-panel pad-4 shadow-subtle grid grid-single md-grid-triple gap-4">
               <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSearch">חיפוש בפיד</label>
-                <input class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1 color-body control-input" id="feedSearch" name="search" placeholder="חיפוש לפי כותרת" type="search">
+                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSearch">Search the feed</label>
+                <input class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1 color-body control-input" id="feedSearch" name="search" placeholder="Search by headline" type="search">
               </div>
               <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedCategory">קטגוריה</label>
+                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedCategory">Category</label>
                 <select class="width-full surface-muted radius-standard pad-block-2 pad-inline-3 text-body text-1 color-body" id="feedCategory" name="category">
-                  <option value="">כל הקטגוריות</option>
+                  <option value="">All Categories</option>
                   <% (locals.categories || []).forEach(function (category) { %>
                   <option value="<%= category %>"><%= category %></option>
                   <% }) %>
                 </select>
               </div>
               <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSort">מיון</label>
+                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSort">Sort by</label>
                 <select class="width-full surface-muted radius-standard pad-block-2 pad-inline-3 text-body text-1 color-body" id="feedSort" name="sortBy">
-                  <option value="publishedAt">לפי תאריך פרסום</option>
-                  <option value="popularity">לפי פופולריות</option>
+                  <option value="publishedAt">Newest First</option>
+                  <option value="popularity">Most Popular</option>
                 </select>
               </div>
               <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSeen">סטטוס קריאה</label>
+                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSeen">Reading status</label>
                 <select class="width-full surface-muted radius-standard pad-block-2 pad-inline-3 text-body text-1 color-body" id="feedSeen" name="seen">
-                  <option value="">הכול</option>
-                  <option value="unseen">שלא קראתי</option>
-                  <option value="seen">שקראתי</option>
+                  <option value="">All</option>
+                  <option value="unseen">Unread</option>
+                  <option value="seen">Read</option>
                 </select>
               </div>
             </div>
@@ -132,7 +132,7 @@
         </div>
 
         <aside class="publication-sidebar span-sidebar flex flex-column gap-5">
-          <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="מזג האוויר">
+          <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="Weather">
             <div id="weatherWidget"></div>
           </section>
 
@@ -140,7 +140,7 @@
             <div class="flex align-center justify-between margin-bottom-4">
               <div class="flex align-center gap-2">
                 <span class="icon color-primary text-4">trending_up</span>
-                <h2 class="text-headline text-5 color-body" id="most-read-heading">הנקראות ביותר</h2>
+                <h2 class="text-headline text-5 color-body" id="most-read-heading">Most Read</h2>
               </div>
             </div>
             <ol class="stack-4">
@@ -152,7 +152,7 @@
                   <div class="flex align-center gap-2 text-caption text-1 color-muted margin-top-2">
                     <span><%= item.category %></span>
                     <span>•</span>
-                    <span class="text-medium color-body"><%= item.views %> צפיות</span>
+                    <span class="text-medium color-body"><%= item.views %> views</span>
                   </div>
                 </div>
               </li>
@@ -167,8 +167,8 @@
 <footer class="public-footer width-full surface-muted">
   <div class="width-content pad-inline-5 pad-block-3">
     <span class="text-headline text-4 color-primary">The Daily Web</span>
-    <p class="text-body text-1 color-muted">אתר חדשות לדוגמה, נבנה כפרויקט גמר בקורס פיתוח יישומי ווב.</p>
-    <div class="margin-top-6 text-center text-caption text-1 color-subtle">כל התכנים באתר הם נתוני דמה לצורכי הדגמה.</div>
+    <p class="text-body text-1 color-muted">A sample news site, built as the final project for a web application development course.</p>
+    <div class="margin-top-6 text-center text-caption text-1 color-subtle">All content on this site is demo data for illustration purposes only.</div>
   </div>
 </footer>
 <script src="/js/feed.js" defer></script>

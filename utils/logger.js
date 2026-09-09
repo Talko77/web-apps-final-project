@@ -6,7 +6,7 @@ const LOG_FILE = path.join(LOG_DIR, 'app.log');
 
 if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
 
-// כתיבה לזרם פתוח כדי לא לפתוח את הקובץ מחדש בכל שורת לוג
+// Write to an open stream so the file is not reopened for every log line
 const stream = fs.createWriteStream(LOG_FILE, { flags: 'a' });
 
 function write(level, message, extra) {

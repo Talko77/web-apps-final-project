@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
   <body class="editor-diff-page surface-page text-body text-2 color-body">
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
@@ -11,7 +11,7 @@
           <div class="flex flex-column gap-4">
             <div class="flex flex-column gap-2">
               <span class="text-label text-1 text-uppercase color-muted"
-                >שולחן העורך · סקירת כתבה</span
+                >Editor's Desk · Article Review</span
               >
               <div class="flex flex-wrap align-center gap-3 margin-top-2">
                 <span
@@ -32,17 +32,17 @@
                 <span
                   class="text-caption text-1 surface-panel pad-inline-3 pad-block-2 radius-standard color-muted text-medium"
                 >
-                  מדור: <%= page.article.desk %>
+                  Desk: <%= page.article.desk %>
                 </span>
                 <span class="color-muted">•</span>
                 <span class="text-caption text-1 color-muted flex align-center gap-1">
                   <span class="icon text-2">schedule</span>
-                  הוגש: <%= page.article.submittedLabel %>
+                  Submitted: <%= page.article.submittedLabel %>
                 </span>
                 <span class="color-muted">•</span>
                 <span class="text-caption text-1 color-muted flex align-center gap-1">
                   <span class="icon text-2">visibility</span>
-                  <%= page.article.views %> צפיות
+                  <%= page.article.views %> views
                 </span>
               </div>
             </div>
@@ -54,11 +54,12 @@
               <span class="icon text-4">update</span>
               <div class="flex flex-column">
                 <span class="text-label text-2 text-semibold"
-                  >זהו עדכון לכתבה שכבר פורסמה</span
+                  >This is an update to an already published article</span
                 >
                 <span class="text-body text-1 margin-top-2"
-                  >הגרסה המפורסמת ממשיכה להיות גלויה לקוראים עד שהעדכון הזה
-                  יאושר. אישור העדכון יחליף את התוכן שמוצג לציבור.</span
+                  >Readers continue to see the published version until this update
+                  is approved. Approving it will replace the content shown to the
+                  public.</span
                 >
               </div>
             </div>
@@ -66,7 +67,7 @@
             <% if (page.article.editorNote) { %>
             <div class="revision-note surface-info color-info radius-card pad-4 flex flex-column gap-2">
               <span class="text-label text-1 text-uppercase text-semibold"
-                >הערת העורך האחרונה</span
+                >Latest Editor Note</span
               >
               <p class="text-body text-2"><%= page.article.editorNote %></p>
             </div>
@@ -84,17 +85,18 @@
                     class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
                   >
                     <span class="icon text-1">public</span>
-                    <%= page.article.published ? page.article.published.label : 'טרם פורסמה' %>
+                    <%= page.article.published ? page.article.published.label : 'Not yet published' %>
                   </span>
                   <span class="text-caption text-1 color-muted"
-                    >הגרסה שהקוראים רואים באתר הציבורי כרגע</span
+                    >The version readers currently see on the public site</span
                   >
                 </div>
                 <% if (!page.article.published) { %>
                 <div class="pad-5 flex flex-column gap-2">
                   <p class="text-body text-2 color-muted">
-                    הכתבה הזו מעולם לא פורסמה, ולכן אין גרסה שגלויה לקוראים.
-                    אישור הגרסה שמוצגת בצד השני יפרסם אותה בפעם הראשונה.
+                    This article has never been published, so there is no version
+                    visible to readers. Approving the version shown alongside will
+                    publish it for the first time.
                   </p>
                 </div>
                 <% } else { %>
@@ -133,16 +135,16 @@
                     class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1"
                   >
                     <span class="icon text-1">edit_note</span>
-                    <%= page.article.draft ? page.article.draft.label : 'אין גרסה ממתינה' %>
+                    <%= page.article.draft ? page.article.draft.label : 'No pending version' %>
                   </span>
                   <span class="text-caption text-1 color-muted"
-                    >הגרסה שהוגשה על ידי הכתב וממתינה להחלטת העורך</span
+                    >The version submitted by the reporter, awaiting an editorial decision</span
                   >
                 </div>
                 <% if (!page.article.draft) { %>
                 <div class="pad-5 flex flex-column gap-2">
                   <p class="text-body text-2 color-muted">
-                    אין כרגע גרסה ממתינה לאישור עבור הכתבה הזו.
+                    There is no version currently awaiting approval for this article.
                   </p>
                 </div>
                 <% } else { %>
@@ -182,30 +184,31 @@
               data-article-id="<%= page.article.id %>"
             >
               <div>
-                <h2 class="text-headline text-5 color-body">החלטת העורך</h2>
+                <h2 class="text-headline text-5 color-body">Editorial Decision</h2>
                 <p class="text-body text-1 color-muted margin-top-2">
-                  יש להשוות בין שתי הגרסאות לפני אישור הפרסום או החזרה לתיקונים.
+                  Compare the two versions before publishing or requesting changes.
                 </p>
               </div>
               <div class="flex flex-column gap-2">
                 <label class="text-label text-2 color-body" for="editorNotes"
-                  >הערה לכתב</label
+                  >Note to the reporter</label
                 >
                 <p class="text-caption text-1 color-muted">
-                  הערה היא חובה בהחזרה לתיקונים - יש להסביר בה אילו תיקונים
-                  נדרשים. באישור ופרסום ההערה אינה נדרשת.
+                  A note is required when requesting changes - explain what needs
+                  fixing. It is optional when approving and publishing.
                 </p>
                 <textarea
                   class="width-full pad-3 surface-muted color-body text-body text-2 radius-card control-no-resize control-input motion-colors"
                   id="editorNotes"
-                  placeholder="לדוגמה: יש להוסיף אימות נוסף למקור בפסקה השלישית."
+                  placeholder="For example: the source in the third paragraph needs a second confirmation."
                   rows="5"
                 ></textarea>
               </div>
               <% if (!page.article.canDecide) { %>
               <p class="text-body text-1 color-muted surface-muted radius-card pad-3">
-                רק כתבה שממתינה לאישור ניתן לאשר או להחזיר לתיקונים. הכתבה הזו
-                נמצאת במצב "<%= page.article.statusLabel %>".
+                Only an article that is pending review can be approved or sent
+                back for changes. This article is currently
+                "<%= page.article.statusLabel %>".
               </p>
               <% } %>
               <div class="flex flex-column gap-2 margin-top-2">
@@ -216,7 +219,7 @@
                   <% if (!page.article.canDecide) { %>disabled<% } %>
                 >
                   <span class="icon text-4">check_circle</span>
-                  <span>אישור ופרסום</span>
+                  <span>Approve &amp; Publish</span>
                 </button>
                 <button
                   class="editor-action editor-action-revise width-full pad-block-3 pad-inline-4 surface-info color-info radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all"
@@ -225,7 +228,7 @@
                   <% if (!page.article.canDecide) { %>disabled<% } %>
                 >
                   <span class="icon text-4">reply</span>
-                  <span>החזרה לתיקונים</span>
+                  <span>Request Changes</span>
                 </button>
                 <button
                   class="editor-action editor-action-reject width-full pad-block-3 pad-inline-4 surface-alert color-alert radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all margin-top-2"
@@ -233,7 +236,7 @@
                   type="button"
                 >
                   <span class="icon text-4">delete</span>
-                  <span>מחיקת כתבה</span>
+                  <span>Delete Article</span>
                 </button>
               </div>
               <p
@@ -245,34 +248,34 @@
             </div>
             <div class="surface-muted radius-panel pad-4 flex flex-column gap-3">
               <span class="text-label text-1 text-uppercase color-muted"
-                >נתוני הכתבה</span
+                >Article Details</span
               >
               <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">כתב</span>
+                <span class="text-body text-1 color-body">Reporter</span>
                 <span class="text-label text-1 text-bold color-body"
                   ><%= page.article.reporter %></span
                 >
               </div>
               <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">מדור</span>
+                <span class="text-body text-1 color-body">Desk</span>
                 <span class="text-label text-1 text-bold color-body"
                   ><%= page.article.desk %></span
                 >
               </div>
               <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">מועד ההגשה</span>
+                <span class="text-body text-1 color-body">Submitted</span>
                 <span class="text-label text-1 text-bold color-body"
                   ><%= page.article.submittedLabel %></span
                 >
               </div>
               <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">צפיות</span>
+                <span class="text-body text-1 color-body">Views</span>
                 <span class="text-label text-1 text-bold color-body"
                   ><%= page.article.views %></span
                 >
               </div>
               <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">מצב</span>
+                <span class="text-body text-1 color-body">Status</span>
                 <span
                   class="pad-inline-3 pad-block-2 radius-standard text-label text-1 text-semibold <%= page.article.statusClass %>"
                   ><%= page.article.statusLabel %></span

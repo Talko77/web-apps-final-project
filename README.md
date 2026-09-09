@@ -1,14 +1,16 @@
 # The Daily Web
 
-מערכת חדשות לניהול, עריכה ופרסום כתבות: כתיבה, שמירה אוטומטית, סקירת עורך, החזרה לתיקונים,
-אישור ופרסום, עדכון כתבה לאחר פרסום, תגובות, מעקב צפיות וגרף Impact Analytics.
+A news publication and newsroom workspace covering the full article lifecycle: drafting,
+autosaving, editorial review, requested changes, approval, publication, post-publication
+revisions, comments, view tracking and Impact Analytics.
 
-## הוראות התקנה והרצה
+## Install and run
 
-דרישות מוקדמות: **Node.js 18 ומעלה** (המערכת משתמשת ב-`fetch` המובנה) ו-**MongoDB** מקומי או Atlas.
+Requirements: **Node.js 18 or newer** (the app uses the built-in `fetch`) and **MongoDB**,
+either locally or on Atlas.
 
-הפקודות מיועדות להעתקה ישירה. אין להוסיף להן הערות באותה שורה, מכיוון של-zsh
-יש התנהגות שונה עבור `#` ו-`~` בשורת הפקודה.
+The commands below are meant to be copied as-is. Do not add trailing comments on the same
+line — zsh does not treat `#` as an inline comment and will expand `~`.
 
 ```bash
 npm install
@@ -17,204 +19,228 @@ npm run seed
 npm start
 ```
 
-1. `npm install` – התקנת התלויות. כל התלויות הן JavaScript נטו ואינן דורשות קומפילציה.
-2. `cp .env.example .env` – יצירת קובץ הסביבה. לאחר מכן יש לפתוח את `.env` ולמלא
-   `SESSION_SECRET`, ואם רוצים ווידג'ט מזג אוויר פעיל גם `WEATHER_API_KEY`.
-   המערכת עולה גם ללא הקובץ, עם ערכי ברירת מחדל.
-3. `npm run seed` – הזרעת 500 כתבות, 6 משתמשים, תגובות ונתוני צפייה.
-4. `npm start` – הרצת השרת. לחלופין `npm run dev` לטעינה מחדש אוטומטית.
+1. `npm install` — installs dependencies. All dependencies are pure JavaScript, so there is
+   no native compilation step and the same `node_modules` works on macOS, Linux and Windows.
+2. `cp .env.example .env` — creates the environment file. Open `.env` and set
+   `SESSION_SECRET`, and `WEATHER_API_KEY` if you want a live weather widget. The app also
+   starts without the file, using defaults.
+3. `npm run seed` — seeds 500 articles, 6 users, comments and view history.
+4. `npm start` — starts the server. Use `npm run dev` for automatic reload.
 
-האתר יעלה בכתובת <http://localhost:3000>.
+The site runs at <http://localhost:3000>.
 
-### משתני סביבה
+### Environment variables
 
-| משתנה | חובה | תיאור |
+| Variable | Required | Description |
 |---|---|---|
-| `MONGO_URI` | לא | כברירת מחדל `mongodb://127.0.0.1:27017/daily_web` |
-| `SESSION_SECRET` | כן בייצור | מפתח לחתימת ה-session |
-| `PORT` | לא | כברירת מחדל 3000 |
-| `NODE_ENV` | לא | `development` או `production` |
-| `WEATHER_API_KEY` | לא | מפתח חינמי מ-OpenWeatherMap. בהיעדרו הווידג'ט מציג נתוני ברירת מחדל |
-| `WEATHER_CITY` | לא | כברירת מחדל `Tel Aviv` |
+| `MONGO_URI` | no | Defaults to `mongodb://127.0.0.1:27017/daily_web` |
+| `SESSION_SECRET` | in production | Key used to sign the session cookie |
+| `PORT` | no | Defaults to 3000 |
+| `NODE_ENV` | no | `development` or `production` |
+| `WEATHER_API_KEY` | no | Free key from OpenWeatherMap. Without it the widget shows fallback data |
+| `WEATHER_CITY` | no | Defaults to `Tel Aviv` |
 
-קובץ `.env` אינו נכנס ל-Git. `.env.example` הוא התבנית היחידה שנשמרת במאגר.
+`.env` is never committed. `.env.example` is the only template kept in the repository.
 
-### משתמשי הדגמה
+### Demo users
 
-הסיסמה לכל המשתמשים היא `123456`, ונוצרת על ידי `npm run seed` בלבד לצורכי הדגמה.
+The password for every seeded user is `123456`. These accounts are created by
+`npm run seed` only, for demonstration purposes.
 
-| שם משתמש | תפקיד |
-|---|---|
-| `reporter1` – `reporter4` | כתב |
-| `editor1`, `editor2` | עורך |
+| Username | Role | Name |
+|---|---|---|
+| `reporter1` | Reporter | Elena Vasquez |
+| `reporter2` | Reporter | Marcus Bell |
+| `reporter3` | Reporter | Priya Raman |
+| `reporter4` | Reporter | Jonah Keller |
+| `editor1` | Editor | Sarah Chen |
+| `editor2` | Editor | Daniel Okafor |
 
-## מבנה הפרויקט
+## Project structure
 
 ```
-server.js                 נקודת הכניסה: middleware, session, חיבור הנתיבים
-seed.js                   הזרעת נתוני הדגמה
+server.js                 Entry point: middleware, session, route mounting
+seed.js                   Demo data seeding
 config/
-  constants.js            קטגוריות, מצבי כתבה, תפקידים, גודל עמוד
-  db.js                   חיבור ל-MongoDB
-models/                   שכבת ה-Model
-  User.js                 משתמשים, גיבוב סיסמה חד-כיווני
-  Article.js              כתבות, גרסת טיוטה וגרסה מפורסמת, אינדקסים
-  Comment.js              תגובות
-  Analytics.js            דליי צפייה לפי שעה
-controllers/              שכבת ה-Controller
-  authController.js       התחברות, התנתקות, זהות המשתמש
-  articleController.js    פיד, טיוטות, מעברי מצבים, מחיקה
-  commentController.js    תגובות
-  analyticsController.js  נתוני הגרף
-  weatherController.js    שירות חיצוני עם מטמון
-  pageController.js       רינדור עמודי ה-EJS
-routes/                   נתיבי REST ונתיבי תצוגה
+  constants.js            Categories, article states, roles, page size
+  db.js                   MongoDB connection
+models/                   Model layer
+  User.js                 Users, one-way password hashing
+  Article.js              Articles, draft and published versions, indexes
+  Comment.js              Comments
+  Analytics.js            Hourly view buckets
+controllers/              Controller layer
+  authController.js       Sign in, sign out, current identity
+  articleController.js    Feed, drafts, state transitions, deletion
+  commentController.js    Comments
+  analyticsController.js  Chart data
+  weatherController.js    External service with caching
+  pageController.js       EJS page rendering
+routes/                   REST routes and view routes
 middleware/
-  auth.js                 בדיקות הזדהות והרשאה בצד השרת
-  rateLimit.js            הגבלת תגובות והתחברות
-  errorHandler.js         404 וטיפול שגיאות מרכזי
+  auth.js                 Server-side authentication and authorisation
+  rateLimit.js            Comment and sign-in rate limits
+  errorHandler.js         404 and centralised error handling
 utils/
-  logger.js               כתיבת לוגים לקובץ ולמסוף
-  asyncHandler.js         העברת שגיאות אסינכרוניות ל-handler
-  viewMappers.js          המרת מסמכי DB לשדות התצוגה
-views/                    שכבת ה-View (EJS)
-  error.ejs               עמוד שגיאה כללי
-  pages/public/           דף הבית, עמוד כתבה, תוצאות חיפוש
-  pages/reporter/         אזור הכתב
-  pages/editor/           תור סקירה, השוואת גרסאות, סטטיסטיקות
-  pages/auth/             התחברות צוות
-  partials/               רכיבים משותפים
+  logger.js               Writes logs to file and console
+  asyncHandler.js         Forwards async errors to the error handler
+  viewMappers.js          Maps DB documents onto view fields
+views/                    View layer (EJS)
+  error.ejs               Generic error page
+  pages/public/           Home, article page, search results
+  pages/reporter/         Reporter workspace
+  pages/editor/           Review queue, version comparison, analytics
+  pages/auth/             Staff login
+  partials/               Shared components
 public/
-  css/                    מערכת העיצוב (variables, base, utilities, components, layouts, pages)
-  js/                     JavaScript צד לקוח (Vanilla, ללא פריימוורק)
-logs/app.log              לוג שגיאות ואירועים תפעוליים
-styles/DESIGN.md          תיעוד מערכת העיצוב
+  css/                    Design system (variables, base, utilities, components, layouts, pages)
+  js/                     Client-side JavaScript (vanilla, no framework)
+logs/app.log              Error and operational event log
+styles/DESIGN.md          Design system documentation
 ```
 
-## פונקציונליות מרכזית
+## Core functionality
 
-### מסך הבית
-פיד של כתבות שפורסמו בלבד, עם גלילה אינסופית שטוענת 20 כתבות בכל פעם
-(`IntersectionObserver` ב-`public/js/feed.js`), חיפוש לפי כותרת, סינון לפי קטגוריה,
-סינון נצפה / לא נצפה ומיון לפי תאריך פרסום או פופולריות. כל אלה מתבצעים ב-Ajax ללא רענון העמוד.
+### Home page
+A feed of published articles only, with infinite scroll loading 20 articles at a time
+(`IntersectionObserver` in `public/js/feed.js`), title search, category filtering,
+read/unread filtering and sorting by publication date or popularity. All of these run over
+Ajax with no full page reload.
 
-### עמוד כתבה
-מרונדר במלואו בשרת: הכותרת, גוף הכתבה והתגובות נמצאים ב-HTML הראשוני,
-כך שהעמוד נגיש למנועי חיפוש גם ללא הרצת JavaScript. הוספת תגובה מתבצעת ב-Ajax
-והתגובה מופיעה מיד ברשימה ללא טעינה מחדש שלה.
+### Article page
+Fully server-rendered: the headline, body and comments are present in the initial HTML, so
+the page is accessible to search engines without JavaScript. Posting a comment happens over
+Ajax and the new comment appears immediately without reloading the list.
 
-### מצבי כתבה והמעברים ביניהם
+### Article states and transitions
 
-| מצב | מי מעביר | לאן |
+| State | Moved by | To |
 |---|---|---|
-| בהכנה (`draft`) | כתב | ממתינה לאישור |
-| ממתינה לאישור (`pending`) | עורך | פורסמה / הוחזרה לתיקונים |
-| הוחזרה לתיקונים (`returned`) | כתב | ממתינה לאישור |
-| פורסמה (`published`) | כתב (עריכה) | חוזרת ל-בהכנה |
+| Draft (`draft`) | Reporter | Pending Review |
+| Pending Review (`pending`) | Editor | Published / Changes Requested |
+| Changes Requested (`returned`) | Reporter | Pending Review |
+| Published (`published`) | Reporter (editing) | back to Draft |
 
-כל מעבר אחר נדחה בשרת. מעבר ל-`pending` נחסם אם חסרים כותרת, תקציר, תוכן או קטגוריה.
+Every other transition is rejected on the server. Moving to `pending` is blocked when the
+title, summary, content or category is missing.
 
-### עריכת כתבה שפורסמה
-המודל מפריד בין `status` (המצב העריכתי של הטיוטה) ובין `isPublished` (האם קיימת גרסה ציבורית).
-`publishedVersion` הוא מה שהקוראים רואים ו-`draftVersion` הוא מה שהכתב עובד עליו.
-לכן כתבה שפורסמה ממשיכה להיות גלויה לציבור גם כשעדכון שלה ממתין לאישור,
-והתוכן החדש מחליף אותה רק לאחר אישור העורך.
+### Editing a published article
+The model separates `status` (the editorial state of the draft) from `isPublished` (whether a
+public version exists). `publishedVersion` is what readers see and `draftVersion` is what the
+reporter is working on. A published article therefore stays visible to the public while an
+update to it is awaiting approval, and the new content replaces it only once an editor
+approves.
 
-### המשכיות עבודה
-אין כפתור "שמור". `public/js/autosave.js` שולח את הטיוטה לשרת שתי שניות לאחר שהכתב מפסיק
-להקליד, וגם כאשר הטאב מוסתר. הטיוטה נשמרת ב-MongoDB, ולכן רענון, סגירת הדפדפן או מעבר
-למחשב אחר אינם מאבדים את העבודה.
+### Work continuity
+There is no save button. `public/js/autosave.js` sends the draft to the server two seconds
+after the reporter stops typing, and also when the tab is hidden. Drafts are stored in
+MongoDB, so refreshing, closing the browser or moving to another computer does not lose work.
 
-### אזור העורך
-צפייה בכלל הכתבות עם סינון לפי מצב, קטגוריה וחיפוש. עמוד הסקירה מציג זו לצד זו את הגרסה
-המפורסמת ואת הגרסה הממתינה לאישור, כך שברור מה גלוי לציבור כרגע ומה עומד להחליף אותו.
-העורך יכול לאשר ולפרסם, להחזיר לתיקונים בצירוף הערה (הערה היא תנאי להחזרה), ולמחוק כתבה
-יחד עם התגובות ונתוני הצפייה שלה.
+### Editor workspace
+All articles with filtering by state, category and search. The review page shows the
+published version and the version awaiting approval side by side, so it is clear what is
+currently public and what would replace it. The editor can approve and publish, request
+changes with a note (a note is required), and delete an article along with its comments and
+view data.
 
 ### Impact Analytics
-`public/js/analyticsChart.js` מצייר ב-`<canvas>` נטו, ללא ספריות חיצוניות: ציר זמן, כמות צפיות
-לאורכו, וקווים אנכיים מקווקווים בכל נקודת זמן שבה העורך אישר ופרסם עדכון. כך ניתן לראות
-כיצד השתנתה כמות הצפיות לפני ואחרי כל עדכון.
+`public/js/analyticsChart.js` draws on a plain `<canvas>` with no external library: a time
+axis, view counts along it, and dashed vertical lines at every point where an editor approved
+and published an update. This makes it possible to see how the view count changed before and
+after each update.
 
-הצפיות נשמרות בצבירה מוקדמת לפי דלי של שעה (`models/Analytics.js`) ולא כשורה לכל צפייה.
-כל צפייה היא `$inc` אטומי בודד עם `upsert`, ולכן אלפי קוראים במקביל אינם מאבדים ספירות
-ואינם יוצרים עומס כתיבה. `Article.totalViews` מתוחזק במקביל כדי לאפשר מיון לפי פופולריות
-בשאילתה אחת ללא aggregation.
+Views are pre-aggregated into hourly buckets (`models/Analytics.js`) rather than one row per
+view. Each view is a single atomic `$inc` with `upsert`, so thousands of concurrent readers
+neither lose counts nor create write pressure. `Article.totalViews` is maintained alongside so
+that sorting by popularity is a single query with no aggregation.
 
-### שירות חיצוני - מזג אוויר
-`controllers/weatherController.js` קורא ל-OpenWeatherMap במסלול החינמי (ללא פרטי אשראי)
-ושומר את התוצאה במטמון ל-15 דקות. משתנה `inFlight` מונע קריאות מקבילות מיותרות כשהמטמון פג,
-ולכן אלפי מבקרים מתורגמים לקריאה חיצונית אחת ל-15 דקות. בכשל מוחזר מטמון ישן או נתוני
-ברירת מחדל, והווידג'ט מסמן למשתמש שהנתון אינו עדכני.
+### External service — weather
+`controllers/weatherController.js` calls OpenWeatherMap on the free tier (no payment details)
+and caches the result for 15 minutes. An `inFlight` guard prevents parallel calls when the
+cache expires, so thousands of visitors translate into one external call per 15 minutes. On
+failure it returns a stale cache or fallback data, and the widget marks the value as not
+current.
 
-## אבטחה והרשאות
+## Security and permissions
 
-- שלושה סוגי משתמשים: אורח, כתב (`Reporter`), עורך (`Editor`).
-- סיסמאות נשמרות כגיבוב bcrypt חד-כיווני בלבד ואינן ניתנות לשחזור.
-- ההרשאות נקבעות מתוך ה-session בצד השרת ולא ממידע שהדפדפן שולח.
-- כל נתיב מוגן נבדק בשרת (`middleware/auth.js`). הסתרת כפתורים בלקוח אינה מהווה הרשאה.
-- כתב יכול לערוך רק כתבות שלו ואינו יכול לפרסם. עורך רשאי לצפות, לערוך, לאשר, להחזיר ולמחוק.
-- ה-session נשמר ב-MongoDB (`connect-mongo`), ולכן משתמש שהזדהה נשאר מחובר גם לאחר Restart של השרת.
-- כל טקסט מהמשתמש מוצג דרך `<%= %>` ב-EJS או דרך `escapeHtml` בלקוח, כדי למנוע הזרקת HTML.
-- הגבלת קצב: עד 3 תגובות בדקה לכל מכשיר, ועד 20 ניסיונות התחברות ב-5 דקות.
-- קלט מהמשתמש נחתך לאורך מותר, וקטגוריה נבדקת מול רשימה סגורה.
+- Three user types: Guest, Reporter, Editor.
+- Passwords are stored only as one-way bcrypt hashes and cannot be recovered.
+- Permissions are derived from the server-side session, never from data sent by the browser.
+- Every protected route is checked on the server (`middleware/auth.js`). Hiding a button in
+  the client is not authorisation.
+- A reporter can edit only their own articles and cannot publish. An editor can view, edit,
+  approve, return and delete.
+- Sessions are stored in MongoDB (`connect-mongo`), so a signed-in user stays signed in
+  across a server restart.
+- All user text is output through `<%= %>` in EJS or `escapeHtml` on the client, preventing
+  HTML injection.
+- Rate limits: up to 3 comments per minute per device, and up to 20 sign-in attempts per
+  5 minutes.
+- User input is truncated to allowed lengths and categories are validated against a fixed list.
 
-## נקודות קצה (REST)
+## REST endpoints
 
-| שיטה | נתיב | הרשאה | תיאור |
+| Method | Path | Access | Description |
 |---|---|---|---|
-| POST | `/api/auth/login` | ציבורי | התחברות |
-| POST | `/api/auth/logout` | ציבורי | התנתקות |
-| GET | `/api/auth/me` | ציבורי | מי מחובר |
-| GET | `/api/articles/feed` | ציבורי | פיד עם עימוד, חיפוש, סינון ומיון |
-| GET | `/api/articles/mine` | כתב | הכתבות שלי |
-| GET | `/api/articles/manage` | עורך | כלל הכתבות |
-| GET | `/api/articles/:id` | כתב/עורך | כתבה בודדת |
-| POST | `/api/articles` | כתב | יצירת כתבה |
-| PUT | `/api/articles/:id` | כתב/עורך | שמירת טיוטה (שמירה אוטומטית) |
-| PATCH | `/api/articles/:id/status` | כתב/עורך | מעבר מצב |
-| DELETE | `/api/articles/:id` | עורך | מחיקת כתבה |
-| GET | `/api/comments/article/:id` | ציבורי | תגובות לכתבה |
-| POST | `/api/comments/article/:id` | ציבורי | הוספת תגובה (מוגבל בקצב) |
-| DELETE | `/api/comments/:id` | עורך | מחיקת תגובה |
-| GET | `/api/analytics/articles` | עורך | כתבות לבחירה בגרף |
-| GET | `/api/analytics/article/:id` | עורך | ציר זמן, צפיות ונקודות פרסום |
-| GET | `/api/weather` | ציבורי | מזג אוויר ממוטמן |
+| POST | `/api/auth/login` | public | Sign in |
+| POST | `/api/auth/logout` | public | Sign out |
+| GET | `/api/auth/me` | public | Current user |
+| GET | `/api/articles/feed` | public | Feed with paging, search, filter and sort |
+| GET | `/api/articles/mine` | Reporter | Own articles |
+| GET | `/api/articles/manage` | Editor | All articles |
+| GET | `/api/articles/:id` | Reporter/Editor | Single article |
+| POST | `/api/articles` | Reporter | Create article |
+| PUT | `/api/articles/:id` | Reporter/Editor | Save draft (autosave) |
+| PATCH | `/api/articles/:id/status` | Reporter/Editor | State transition |
+| DELETE | `/api/articles/:id` | Editor | Delete article |
+| GET | `/api/comments/article/:id` | public | Comments for an article |
+| POST | `/api/comments/article/:id` | public | Add comment (rate limited) |
+| DELETE | `/api/comments/:id` | Editor | Delete comment |
+| GET | `/api/analytics/articles` | Editor | Articles selectable in the chart |
+| GET | `/api/analytics/article/:id` | Editor | Timeline, views and publish events |
+| GET | `/api/weather` | public | Cached weather |
 
-### עמודי תצוגה
+### View routes
 
-`/` דף הבית · `/search` חיפוש · `/articles/:id` עמוד כתבה · `/staff/login` התחברות ·
-`/reporter/articles` הכתבות שלי · `/reporter/articles/new/edit` כתבה חדשה ·
-`/reporter/articles/:id/edit` עריכה · `/editor/reviews` תור סקירה ·
-`/editor/reviews/:id` השוואת גרסאות · `/editor/articles/:id/analytics` סטטיסטיקות
+`/` home · `/search` search · `/articles/:id` article page · `/staff/login` sign in ·
+`/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
+`/reporter/articles/:id/edit` edit · `/editor/reviews` review queue ·
+`/editor/reviews/:id` version comparison · `/editor/articles/:id/analytics` analytics
 
-## מודלים ואינדקסים
+## Models and indexes
 
-| מודל | אינדקסים |
+| Model | Indexes |
 |---|---|
-| `User` | `username` ייחודי |
+| `User` | `username` unique |
 | `Article` | `(isPublished, publishedAt)`, `(isPublished, totalViews)`, `(isPublished, category, publishedAt)`, `(reporter, updatedAt)`, `(status, updatedAt)` |
 | `Comment` | `article`, `(article, createdAt)` |
-| `Analytics` | `(article, timestamp)` ייחודי |
+| `Analytics` | `(article, timestamp)` unique |
 
-העימוד, הסינון והמיון מתבצעים במסד הנתונים, והפיד שולף רק את השדות שהכרטיס מציג
-ולא את גוף הכתבה, כדי שהמערכת תישאר מהירה גם על אלפי כתבות.
+Paging, filtering and sorting all happen in the database, and the feed selects only the
+fields the card displays rather than the full article body, so the system stays fast with
+thousands of articles.
 
-## מה להדגים בהגנה
+## What to demonstrate
 
-1. **הרשאות** – ניסיון גישה ל-`/editor/reviews` כאורח וכ-כתב, וניסיון עריכת כתבה של כתב אחר.
-2. **המשכיות עבודה** – הקלדה בעורך הכתבות, רענון העמוד, וחזרה לאותו תוכן.
-3. **Restart של השרת** – עצירת השרת והפעלתו מחדש בזמן שהמשתמש מחובר.
-4. **גרסאות** – עריכת כתבה שפורסמה, הגשה לאישור, ובדיקה שהציבור עדיין רואה את הגרסה הקודמת.
-5. **חיפוש ודפדוף** – גלילה אינסופית וסינון על מאגר של 500 כתבות.
-6. **הגבלת תגובות** – פרסום ארבע תגובות בדקה וקבלת חסימה מהשרת.
-7. **מזג אוויר** – בקשה ראשונה מול השירות, ובקשה שנייה שמוגשת מהמטמון.
-8. **Impact Analytics** – בחירת כתבה שעברה מספר עדכונים וזיהוי הקפיצה בצפיות סביב נקודת העדכון.
+1. **Permissions** — try `/editor/reviews` as a guest and as a reporter, and try editing
+   another reporter's article.
+2. **Work continuity** — type in the article editor, refresh the page, and return to the
+   same content.
+3. **Server restart** — stop and restart the server while signed in.
+4. **Versions** — edit a published article, submit it for approval, and confirm the public
+   still sees the previous version.
+5. **Search and paging** — infinite scroll and filtering over 500 articles.
+6. **Comment limit** — post four comments in a minute and get blocked by the server.
+7. **Weather** — first request hits the service, the second is served from cache.
+8. **Impact Analytics** — pick an article with several updates and identify the view spike
+   around each update point.
 
-## תיעוד עבודת הצוות ושימוש בבינה מלאכותית
+## Team contributions and AI usage
 
-יש להשלים לפני ההגשה:
+To be completed before submission:
 
-- טבלת תרומות: שם כל סטודנט, הרכיבים שעליהם עבד וה-branches שפתח.
-- קישור למאגר ה-Git (פתוח לצפייה) ותיעוד ה-pull requests.
-- תיאור השימוש בכלי בינה מלאכותית: אילו חלקים נכתבו בעזרתם וכיצד אומתו והובנו.
+- Contribution table: each student's name, the components they worked on and the branches
+  they opened.
+- Link to the Git repository (open for viewing) and documentation of the pull requests.
+- Description of AI tool usage: which parts were produced with assistance, and how they were
+  verified and understood.

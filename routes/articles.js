@@ -2,18 +2,18 @@ const router = require('express').Router();
 const c = require('../controllers/articleController');
 const { isAuthenticated, isReporter, isEditor, isStaff } = require('../middleware/auth');
 
-// ציבורי
+// Public
 router.get('/feed', c.getFeed);
 
-// כתב
+// Reporter
 router.get('/mine', isReporter, c.getMyArticles);
 router.post('/', isReporter, c.create);
 
-// עורך
+// Editor
 router.get('/manage', isEditor, c.getAllForEditor);
 router.delete('/:id', isEditor, c.remove);
 
-// כתב על הכתבות שלו, עורך על כל הכתבות - הבדיקה בתוך ה-controller
+// A reporter on their own articles, an editor on every article - the check lives in the controller
 router.get('/:id', isStaff, c.getOne);
 router.put('/:id', isStaff, c.saveDraft);
 router.patch('/:id/status', isAuthenticated, c.changeStatus);

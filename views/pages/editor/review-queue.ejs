@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
   <body
     class="editor-queue-page surface-page text-body text-2 color-body height-screen flex flex-column"
@@ -14,21 +14,21 @@
             <div class="queue-heading-row flex flex-column gap-4">
               <div>
                 <span class="text-label text-1 text-uppercase color-muted"
-                  >מערכת החדשות</span
+                  >Newsroom</span
                 >
                 <h1 class="text-headline text-6 color-body margin-top-2">
-                  תור הסקירה
+                  Review Queue
                 </h1>
                 <p class="text-body text-2 color-muted margin-top-2">
-                  כתבות שהוגשו על ידי הכתבים וממתינות לסקירת העורך, לאישור
-                  ולפרסום.
+                  Stories submitted by reporters and waiting on an editor to
+                  review, approve and publish them.
                 </p>
                 <p class="text-body text-2 color-body margin-top-2">
-                  מוצגות
+                  Showing
                   <span class="text-semibold" id="queueCount"
                     ><%= page.articles.length %></span
                   >
-                  כתבות מתוך <%= page.articles.length %>.
+                  of <%= page.articles.length %> articles.
                 </p>
               </div>
               <div class="flex flex-wrap align-center gap-2">
@@ -53,12 +53,12 @@
                 <label
                   class="text-label text-1 color-muted"
                   for="queueSearch"
-                  >חיפוש לפי כותרת הכתבה או שם הכתב</label
+                  >Search by headline or reporter name</label
                 >
                 <input
                   class="width-full pad-inline-4 pad-block-2 text-1 text-body surface-paper color-body radius-card control-input motion-all"
                   id="queueSearch"
-                  placeholder="לדוגמה: בחירות, או שם הכתב"
+                  placeholder="For example: elections, or a reporter name"
                   type="search"
                 />
               </div>
@@ -67,13 +67,13 @@
                   <label
                     class="text-label text-1 color-muted"
                     for="categoryFilter"
-                    >קטגוריה</label
+                    >Category</label
                   >
                   <select
                     class="surface-paper text-label text-1 color-body pad-inline-3 pad-block-2 radius-card control-pointer control-input shadow-subtle"
                     id="categoryFilter"
                   >
-                    <option value="">כל הקטגוריות</option>
+                    <option value="">All Categories</option>
                     <% page.categories.forEach(function (category) { %>
                     <option value="<%= category %>"><%= category %></option>
                     <% }); %>
@@ -83,7 +83,7 @@
                   <label
                     class="text-label text-1 color-muted"
                     for="statusFilter"
-                    >מצב הכתבה</label
+                    >Status</label
                   >
                   <select
                     class="surface-paper text-label text-1 color-body pad-inline-3 pad-block-2 radius-card control-pointer control-input shadow-subtle"
@@ -105,7 +105,7 @@
                   type="button"
                 >
                   <span class="icon text-2">refresh</span>
-                  איפוס סינון
+                  Reset Filters
                 </button>
               </div>
             </div>
@@ -119,13 +119,13 @@
                   <tr
                     class="surface-raised color-muted text-label text-1 text-uppercase"
                   >
-                    <th class="pad-block-3 pad-inline-4">כתב</th>
-                    <th class="pad-block-3 pad-inline-4">כותרת הכתבה</th>
-                    <th class="pad-block-3 pad-inline-4">קטגוריה</th>
-                    <th class="pad-block-3 pad-inline-4">מצב</th>
-                    <th class="pad-block-3 pad-inline-4">גרסה</th>
-                    <th class="pad-block-3 pad-inline-4">תאריך הגשה</th>
-                    <th class="pad-block-3 pad-inline-4 text-left">פעולה</th>
+                    <th class="pad-block-3 pad-inline-4">Reporter</th>
+                    <th class="pad-block-3 pad-inline-4">Headline</th>
+                    <th class="pad-block-3 pad-inline-4">Category</th>
+                    <th class="pad-block-3 pad-inline-4">Status</th>
+                    <th class="pad-block-3 pad-inline-4">Version</th>
+                    <th class="pad-block-3 pad-inline-4">Submitted</th>
+                    <th class="pad-block-3 pad-inline-4 text-left">Action</th>
                   </tr>
                 </thead>
                 <tbody class="text-body text-1 color-body">
@@ -160,7 +160,7 @@
                         class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-warning color-warning text-label text-1 text-semibold margin-bottom-2"
                       >
                         <span class="icon text-2">update</span>
-                        עדכון לכתבה שפורסמה - אינה כתבה חדשה
+                        Update to a published story - not a new article
                       </span>
                       <% } %>
                       <a
@@ -204,7 +204,7 @@
                       <a
                         class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
                         href="<%= a.url %>"
-                        >סקירה</a
+                        >Review</a
                       >
                     </td>
                   </tr>
@@ -217,7 +217,7 @@
                 class="text-body text-1 color-muted text-center state-hidden"
                 id="queueEmptyState"
               >
-                לא נמצאו כתבות המתאימות לסינון שנבחר.
+                No articles match the selected filters.
               </p>
             </div>
           </div>
@@ -228,7 +228,7 @@
       <div
         class="width-content pad-inline-5 text-center text-caption text-1 color-muted"
       >
-        The Daily Web · מערכת החדשות · שולחן העורך
+        The Daily Web · Newsroom · Editor's Desk
       </div>
     </footer>
     <script src="/js/editorQueue.js" defer></script>

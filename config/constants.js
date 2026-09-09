@@ -1,5 +1,5 @@
-// ערכים קבועים המשותפים לשרת ולתצוגות
-const CATEGORIES = ['חדשות', 'ספורט', 'טכנולוגיה', 'תרבות', 'כלכלה', 'בריאות'];
+// Shared values used by both the server and the EJS views.
+const CATEGORIES = ['World', 'Business', 'Technology', 'Science', 'Culture', 'Sports', 'Opinion'];
 
 const STATUS = {
   DRAFT: 'draft',
@@ -8,11 +8,12 @@ const STATUS = {
   RETURNED: 'returned'
 };
 
+// Editorial vocabulary from the original prototypes.
 const STATUS_LABELS = {
-  draft: 'בהכנה',
-  pending: 'ממתינה לאישור עורך',
-  published: 'פורסמה',
-  returned: 'הוחזרה לתיקונים'
+  draft: 'Draft',
+  pending: 'Pending Review',
+  published: 'Published',
+  returned: 'Changes Requested'
 };
 
 const ROLES = {

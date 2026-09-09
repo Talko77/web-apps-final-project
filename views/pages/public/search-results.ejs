@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
 <body class="public-page search-page surface-page text-body color-body height-screen flex flex-column">
 <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery }) %>
@@ -8,28 +8,28 @@
     <div class="flex flex-column width-full">
       <section class="search-console surface-paper pad-5 radius-panel shadow-subtle margin-bottom-6" aria-labelledby="search-heading">
         <div class="width-reading page-shell flex flex-column gap-4">
-          <h1 class="text-headline text-5 color-body" id="search-heading">חיפוש בארכיון הכתבות</h1>
+          <h1 class="text-headline text-5 color-body" id="search-heading">Search the Archive</h1>
           <form class="flex flex-column sm-row gap-2 align-start" id="searchForm" action="/search" method="get">
             <div class="relative flex-grow">
               <span class="icon absolute color-muted text-5">search</span>
-              <label class="state-hidden" for="searchInput">מילות חיפוש</label>
-              <input class="width-full pad-block-3 surface-muted radius-standard text-body text-3 color-body motion-colors control-input" id="searchInput" name="q" type="search" placeholder="חיפוש לפי כותרת" value="<%= searchQuery %>">
+              <label class="state-hidden" for="searchInput">Search terms</label>
+              <input class="width-full pad-block-3 surface-muted radius-standard text-body text-3 color-body motion-colors control-input" id="searchInput" name="q" type="search" placeholder="Search by headline" value="<%= searchQuery %>">
             </div>
             <div class="stack-2">
-              <label class="state-hidden" for="sortSelect">מיון התוצאות</label>
+              <label class="state-hidden" for="sortSelect">Sort results</label>
               <select class="width-full surface-muted radius-standard pad-block-3 pad-inline-3 text-body text-1 color-body" id="sortSelect" name="sort">
-                <option value="publishedAt"<% if (sort !== 'popularity') { %> selected<% } %>>לפי תאריך</option>
-                <option value="popularity"<% if (sort === 'popularity') { %> selected<% } %>>לפי פופולריות</option>
+                <option value="publishedAt"<% if (sort !== 'popularity') { %> selected<% } %>>Newest First</option>
+                <option value="popularity"<% if (sort === 'popularity') { %> selected<% } %>>Most Popular</option>
               </select>
             </div>
             <button class="inline-flex align-center justify-center gap-2 pad-inline-5 pad-block-3 surface-ink color-inverse text-label text-2 radius-standard shadow-subtle motion-transform" type="submit">
-              <span class="icon text-4">manage_search</span><span>חיפוש</span>
+              <span class="icon text-4">manage_search</span><span>Search</span>
             </button>
           </form>
           <div class="flex flex-wrap align-center gap-2 pad-block-2 text-body text-1 color-body">
-            <span class="text-bold color-body">נמצאו <%= resultCount %> כתבות</span>
+            <span class="text-bold color-body"><%= resultCount %> articles found</span>
             <% if (searchQuery) { %>
-            <span class="color-muted">עבור</span>
+            <span class="color-muted">for</span>
             <span class="text-headline text-4 color-primary text-italic">"<%= searchQuery %>"</span>
             <% } %>
           </div>
@@ -40,10 +40,10 @@
         <aside class="search-filters lg-sidebar-span flex flex-column gap-5">
           <div class="surface-paper pad-5 radius-panel shadow-subtle stack-5 sticky">
             <div class="flex align-center justify-between pad-block-2">
-              <h2 class="text-headline text-4 color-primary flex align-center gap-2"><span class="icon color-muted text-5">tune</span>סינון לפי קטגוריה</h2>
+              <h2 class="text-headline text-4 color-primary flex align-center gap-2"><span class="icon color-muted text-5">tune</span>Filter by Category</h2>
             </div>
             <fieldset class="stack-2">
-              <legend class="block text-kicker text-1 text-uppercase color-muted">מדור</legend>
+              <legend class="block text-kicker text-1 text-uppercase color-muted">Section</legend>
               <div class="stack-2 surface-muted pad-2 radius-standard">
                 <% (locals.categories || []).forEach(function (category) { %>
                 <label class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors<% if (category.checked) { %> surface-paper shadow-subtle<% } %>">
@@ -56,19 +56,19 @@
                 <% }) %>
               </div>
             </fieldset>
-            <button class="width-full pad-block-2 surface-ink color-inverse text-label text-1 radius-standard text-center motion-colors" form="searchForm" type="submit">החלת הסינון</button>
+            <button class="width-full pad-block-2 surface-ink color-inverse text-label text-1 radius-standard text-center motion-colors" form="searchForm" type="submit">Apply Filters</button>
           </div>
         </aside>
 
-        <section class="search-results-list lg-content-span flex flex-column gap-4" aria-label="תוצאות החיפוש">
+        <section class="search-results-list lg-content-span flex flex-column gap-4" aria-label="Search results">
           <% (locals.results || []).forEach(function (item) { %>
           <%- include('../../partials/public/article-card', { article: item }) %>
           <% }) %>
           <% if (!(locals.results || []).length) { %>
           <div class="surface-paper pad-6 radius-panel shadow-subtle flex flex-column align-center gap-3 text-center">
             <span class="icon color-muted text-7">search_off</span>
-            <h2 class="text-headline text-5 color-body">לא נמצאו כתבות</h2>
-            <p class="text-body text-1 color-muted">נסו מילות חיפוש אחרות או בחרו קטגוריה אחרת.</p>
+            <h2 class="text-headline text-5 color-body">No articles found</h2>
+            <p class="text-body text-1 color-muted">Try different search terms, or pick another category.</p>
           </div>
           <% } %>
         </section>
@@ -79,8 +79,8 @@
 <footer class="public-footer width-full surface-muted">
   <div class="width-content page-shell pad-inline-5 pad-6">
     <p class="text-headline text-4 color-primary">The Daily Web</p>
-    <p class="text-body text-1 color-muted">אתר חדשות לדוגמה, נבנה כפרויקט גמר בקורס פיתוח יישומי ווב.</p>
-    <div class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle">כל התכנים באתר הם נתוני דמה לצורכי הדגמה.</div>
+    <p class="text-body text-1 color-muted">A sample news site, built as the final project for a web application development course.</p>
+    <div class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle">All content on this site is demo data for illustration purposes only.</div>
   </div>
 </footer>
 </body>

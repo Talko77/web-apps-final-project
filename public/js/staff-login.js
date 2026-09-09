@@ -1,5 +1,5 @@
-// התחברות צוות. ההזדהות מתבצעת בשרת בלבד -
-// הלקוח רק שולח את הפרטים ומקבל את היעד להפניה.
+// Staff login. Authentication happens on the server only -
+// the client just sends the credentials and receives the redirect target.
 (function () {
   'use strict';
 
@@ -19,7 +19,7 @@
     const password = passwordEl.value;
 
     if (!username || !password) {
-      window.api.flash(statusEl, 'יש להזין שם משתמש וסיסמה.', true);
+      window.api.flash(statusEl, 'Enter a username and password.', true);
       statusEl.classList.add('login-feedback-error');
       return;
     }
@@ -30,7 +30,7 @@
     try {
       const data = await window.api.sendJSON('/api/auth/login', 'POST', { username, password });
       statusEl.classList.remove('login-feedback-error');
-      // היעד נקבע בשרת לפי התפקיד שנשמר ב-session
+      // The target is decided on the server based on the role stored in the session
       window.location.assign(nextUrl || data.redirect);
     } catch (err) {
       window.api.flash(statusEl, err.message, true);
