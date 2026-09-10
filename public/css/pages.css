@@ -56,10 +56,6 @@ main table {
   min-width: 0;
 }
 
-.publication-feature-card {
-  min-width: 0;
-}
-
 .site-header.site-header--standard,
 .site-header.site-header-standard,
 .site-header.site-header-desk {
@@ -225,16 +221,6 @@ main table {
 .publication-lead-media > .absolute > span {
   padding-top: var(--space-1);
   padding-bottom: var(--space-1);
-}
-
-.publication-feature-media {
-  height: var(--publication-card-media-height);
-}
-
-.publication-feature-media > .absolute {
-  bottom: var(--space-2);
-  left: var(--space-2);
-  padding: 2px var(--space-2);
 }
 
 .publication-dispatches > .stack-4 > div:hover {

@@ -60,9 +60,11 @@ a {
 .site-mobile-menu__link { color: var(--color-on-surface); font-family: var(--font-interface); font-size: var(--text-2); font-weight: 600; }
 
 .article-card { overflow: hidden; background: var(--color-surface-container-lowest); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
-.article-card__link { display: block; }
+.article-card__link { display: block; height: 100%; }
 .article-card__media { position: relative; aspect-ratio: var(--thumbnail-media-ratio); overflow: hidden; background: var(--color-surface-container); }
-.article-card__image { width: 100%; height: 100%; object-fit: cover; }
+.article-card__image { width: 100%; height: 100%; object-fit: cover; transition: transform 300ms ease; }
+.article-card:hover .article-card__image,
+.article-card:focus-within .article-card__image { transform: scale(1.05); }
 .article-card__body { padding: var(--space-4); }
 .article-card__meta, .article-card__footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
 .article-card__category { color: var(--color-primary); font-family: var(--font-interface); font-size: var(--text-1); font-weight: 600; text-transform: uppercase; }

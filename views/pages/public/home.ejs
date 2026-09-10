@@ -45,20 +45,7 @@
             </div>
             <div class="publication-featured-grid grid grid-single md-grid-triple gap-4">
               <% secondary.forEach(function (item) { %>
-              <article class="publication-feature-card surface-paper radius-panel overflow-hidden shadow-subtle flex flex-column motion-shadow">
-                <% if (item.imageUrl) { %>
-                <div class="publication-feature-media relative height-feature width-full surface-panel overflow-hidden">
-                  <img class="width-full height-full media-cover interaction-zoom motion-transform" src="<%= item.imageUrl %>" alt="<%= item.imageAlt %>">
-                  <span class="absolute pad-inline-3 pad-block-2 radius-standard surface-paper text-label text-1 color-body text-uppercase"><%= item.category %></span>
-                </div>
-                <% } %>
-                <div class="pad-4 flex flex-column flex-grow">
-                  <span class="text-caption text-1 color-muted margin-bottom-2"><%= item.dateLabel %></span>
-                  <h3 class="text-headline text-4 color-body margin-bottom-2 motion-colors"><a class="motion-colors" href="<%= item.url %>"><%= item.title %></a></h3>
-                  <p class="text-body text-1 color-muted title-clamp"><%= item.summary %></p>
-                  <span class="text-caption text-1 color-muted margin-top-2"><%= item.author %> · <%= item.views %> views</span>
-                </div>
-              </article>
+              <%- include('../../partials/public/article-card', { article: item }) %>
               <% }) %>
             </div>
           </section>
