@@ -193,6 +193,48 @@ exports.search = asyncHandler(async (req, res) => {
   }));
 });
 
+const CATEGORY_DESCRIPTIONS = {
+  World: 'International coverage, global diplomacy, and dispatches from correspondents around the world.',
+  Business: 'Markets, finance, corporate strategy, and economic analysis.',
+  Technology: 'In-depth reporting on artificial intelligence, computing, cybersecurity, and digital policy.',
+  Science: 'Discoveries, space exploration, environment, and scientific research.',
+  Culture: 'Arts, literature, entertainment, society, and cultural commentary.',
+  Sports: 'Coverage, scores, profiles, and reporting across global sports.',
+  Opinion: 'Columns, perspectives, and editorial commentary from our writers and contributors.'
+};
+
+// GET /category/:category - server-rendered category page
+exports.category = asyncHandler(async (req, res, next) => {
+  const rawCategory = String(req.params.category || '').trim();
+  const matchedCategory = CATEGORIES.find(
+    c => c.toLowerCase() === rawCategory.toLowerCase()
+  );
+
+  if (!matchedCategory) return next();
+
+  const articles = await Article.find({
+    ...PUBLISHED,
+    'publishedVersion.category': matchedCategory
+  })
+    .sort({ publishedAt: -1 })
+    .populate('reporter', 'username displayName')
+    .lean();
+
+  const viewedIds = new Set(req.session.viewedArticles || []);
+  const cards = articles.map(a => ({
+    ...toCard(a),
+    seen: viewedIds.has(String(a._id))
+  }));
+
+  res.render('pages/public/category', publicChrome({
+    pageTitle: `${matchedCategory} — The Daily Web`,
+    category: matchedCategory,
+    categoryDescription: CATEGORY_DESCRIPTIONS[matchedCategory] || `Latest reporting, analysis, and dispatches in ${matchedCategory}.`,
+    articles: cards,
+    articleCount: cards.length
+  }));
+});
+
 // ---------- Reporter area ----------
 
 // GET /reporter/articles

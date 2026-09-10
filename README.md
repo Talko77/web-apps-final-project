@@ -87,7 +87,7 @@ utils/
   viewMappers.js          Maps DB documents onto view fields
 views/                    View layer (EJS)
   error.ejs               Generic error page
-  pages/public/           Home, article page, search results
+  pages/public/           Home, article page, search results, category page
   pages/reporter/         Reporter workspace
   pages/editor/           Review queue, version comparison, analytics
   pages/auth/             Staff login
@@ -201,8 +201,8 @@ current.
 
 ### View routes
 
-`/` home · `/search` search · `/articles/:id` article page · `/staff/login` sign in ·
-`/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
+`/` home · `/category/:category` category · `/search` search · `/articles/:id` article page ·
+`/staff/login` sign in · `/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
 `/reporter/articles/:id/edit` edit · `/editor/reviews` review queue ·
 `/editor/reviews/:id` version comparison · `/editor/articles/:id/analytics` analytics
 

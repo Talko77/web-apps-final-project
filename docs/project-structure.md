@@ -116,8 +116,8 @@ Server-rendered EJS templates generating full HTML pages across public and newsr
 - **`views/pages/public/home.ejs`**: Main publication portal displaying featured stories, breaking news, latest dispatches, and the infinite-scroll article feed.
 - **`views/pages/public/article.ejs`**: Full article view displaying story copy, reporter byline, metadata, related articles, and public comment thread.
 - **`views/pages/public/search-results.ejs`**: Search results page offering keyword query matching, category filters, and popularity/date sorting.
+- **`views/pages/public/category.ejs`**: Dynamic category page rendering category metadata, article counts, and filtered published article grid.
 - **`views/pages/public/editorial-home.ejs`**: Static prototype layout retained for visual design reference.
-- **`views/pages/public/technology.ejs`**: Static prototype layout retained for visual design reference.
 - **`views/pages/reporter/articles.ejs`**: Reporter dashboard listing personal articles, publication statuses, view counts, and quick actions.
 - **`views/pages/reporter/edit-article.ejs`**: Comprehensive reporter writing interface with headline, summary, body, image URL, category controls, and revision details.
 - **`views/pages/editor/review-queue.ejs`**: Editorial queue displaying submitted articles awaiting review with filterable status counters and metadata.

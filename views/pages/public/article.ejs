@@ -12,7 +12,7 @@
           <nav aria-label="Breadcrumb" class="article-breadcrumb flex align-center gap-2 text-label text-1 color-muted margin-bottom-5">
             <a class="motion-colors" href="/">Home</a>
             <span class="icon color-subtle text-1" aria-hidden="true">chevron_right</span>
-            <a class="motion-colors" href="/search?category=<%= article.category %>"><%= article.category %></a>
+            <a class="motion-colors" href="/category/<%= article.category.toLowerCase() %>"><%= article.category %></a>
           </nav>
 
           <%# Article header and byline %>
@@ -63,7 +63,7 @@
           <div class="article-tags margin-top-6 pad-5 flex flex-wrap align-center gap-2">
             <span class="text-kicker text-1 color-muted text-uppercase">Filed under:</span>
             <% (locals.tags || []).forEach(function (tag) { %>
-            <span class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1"><%= tag %></span>
+            <a class="pad-inline-3 pad-block-2 surface-panel radius-standard text-label text-1 motion-colors" href="/category/<%= tag.toLowerCase() %>"><%= tag %></a>
             <% }) %>
           </div>
           <% } %>

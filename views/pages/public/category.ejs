@@ -1,0 +1,54 @@
+<%# Public category page: displays category headline/intro, article count, and published article grid. %>
+<!doctype html>
+<html lang="en">
+<head><%- include('../../partials/shared/head', { pageTitle }) %></head>
+<body class="public-page category-page surface-page text-body text-2 color-body height-screen flex flex-column">
+<%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
+<main class="publication-main width-full surface-page flex-grow">
+  <div class="category-shell page-shell width-content pad-inline-5 pad-block-3">
+    <div class="flex flex-column width-full">
+      <header class="category-header margin-bottom-6">
+        <nav aria-label="Breadcrumb" class="category-breadcrumb flex align-center gap-2 text-label text-1 color-muted margin-bottom-3">
+          <a class="motion-colors" href="/">Home</a>
+          <span class="icon color-subtle text-1" aria-hidden="true">chevron_right</span>
+          <span class="color-body text-bold"><%= category %></span>
+        </nav>
+        <div class="flex flex-column md-row md-align-end justify-between gap-4">
+          <div class="stack-2">
+            <div class="flex align-center gap-2">
+              <span class="surface-raised color-primary text-kicker text-1 pad-block-2 pad-inline-3 radius-standard text-uppercase text-bold">Category</span>
+            </div>
+            <h1 class="text-headline text-7 color-body text-tight"><%= category %></h1>
+            <p class="text-headline text-deck color-muted text-relaxed"><%= typeof categoryDescription !== 'undefined' && categoryDescription ? categoryDescription : `Latest reporting, analysis, and dispatches in ${category}.` %></p>
+          </div>
+          <div class="category-stats surface-paper pad-3 radius-panel shadow-subtle flex align-center gap-2 flex-no-shrink">
+            <span class="icon color-muted text-3">article</span>
+            <span class="text-label text-2 color-body text-semibold"><%= articleCount %> <%= articleCount === 1 ? 'article' : 'articles' %></span>
+          </div>
+        </div>
+      </header>
+
+      <% if ((locals.articles || []).length) { %>
+      <section aria-label="<%= category %> articles">
+        <div class="publication-featured-grid grid grid-single md-grid-triple gap-4">
+          <% (locals.articles || []).forEach(function (item) { %>
+          <%- include('../../partials/public/article-card', { article: item }) %>
+          <% }) %>
+        </div>
+      </section>
+      <% } else { %>
+      <section class="surface-paper pad-6 radius-panel shadow-subtle text-center stack-3" aria-label="No articles">
+        <span class="icon color-muted text-6">feed</span>
+        <h2 class="text-headline text-4 color-body">No articles found</h2>
+        <p class="text-body text-1 color-muted">There are currently no published articles in <%= category %>.</p>
+        <div class="margin-top-4">
+          <a class="button button--secondary inline-flex" href="/">Return to Home</a>
+        </div>
+      </section>
+      <% } %>
+    </div>
+  </div>
+</main>
+<%- include('../../partials/public/footer') %>
+</body>
+</html>
