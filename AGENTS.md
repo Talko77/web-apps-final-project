@@ -1,156 +1,155 @@
-# The Daily Web
+# The Daily Web: Repository Instructions
 
-## Project Overview
+## Scope and stack
 
-The Daily Web is a full-stack digital news publication and newsroom workspace. It supports the complete article lifecycle: drafting, autosaving, editorial review, requested changes, approval, publication, post-publication revisions, comments, view tracking, and impact analytics.
+The Daily Web is a server-rendered news publication and newsroom application.
+The active implementation uses Node.js, Express, MongoDB/Mongoose, EJS, vanilla
+browser JavaScript, and CSS under `public/css/`. Do not introduce a client
+framework, a second rendering system, or architectural layers beyond the
+course requirements.
 
-The product has three user roles:
+Roles remain server-enforced: guests read/search/comment; reporters manage and
+submit their own drafts; editors review all work, publish or return it, delete
+it, and inspect analytics. Derive roles from the session and never treat hidden
+controls or browser-supplied role data as authorization.
 
-- **Guest:** reads published articles, searches and filters the public feed, and posts comments.
-- **Reporter:** creates and edits owned articles, autosaves work, and submits articles for review.
-- **Editor:** reviews all articles, edits and approves submissions, publishes content, requests changes, and removes content.
+## Current architecture
 
-The current repository contains the CSS design system and project
-documentation. The former HTML prototypes have been removed from the active
-source tree; historical versions remain recoverable through Git history.
-The implementation should remain focused on this scope and should not
-introduce a more complex architecture than the course requirements need.
+`server.js` is the composition root. It configures EJS, serves `public/`, uses a
+Mongo-backed session store, exposes `currentUser` to templates, mounts JSON APIs
+under `/api`, mounts page routes at `/`, and finishes with centralized errors.
 
-## Required Technology
+- `routes/`: page/API paths and authentication middleware.
+- `controllers/`: data access, workflow rules, view-model mapping, renders/JSON.
+- `models/`: Mongoose users, articles, comments, and hourly analytics buckets.
+- `middleware/`: role checks, rate limits, and error handling.
+- `utils/`: async, logging, validation, and view-formatting helpers.
+- `config/`: database setup and shared constants.
+- `views/`: the only active EJS view tree.
+- `public/css/` and `public/js/`: assets served by Express.
+- `data/mock/`, `docs/`, and `styles/DESIGN.md`: supporting/reference material.
 
-Use the technologies and patterns required by the course:
+Do not use `publics/` as the asset root; Express serves `public/`. Do not add
+runtime CSS to top-level `styles/`; its current file is documentation only.
 
-- Node.js and Express for the server, routes, middleware, and API.
-- MVC separation between models, views, and controllers.
-- MongoDB with Mongoose for persistent data.
-- EJS where server-rendered templates are appropriate.
-- Semantic HTML5, CSS, Flexbox, and responsive layouts.
-- Vanilla JavaScript and Ajax for client-side interaction without unnecessary full-page reloads.
-- REST-style routes and HTTP status codes.
+## Active views and routes
 
-React, Angular, Vue, and other unapproved frameworks or libraries must not be added. A package that was not taught in the course or explicitly allowed should be approved before use. Chart.js or canvas may be used for Impact Analytics, and a free weather service may be used without requiring payment details.
+- Public: `views/pages/public/home.ejs` (`/`), `article.ejs`
+  (`/articles/:id`), and `search-results.ejs` (`/search`).
+- Auth: `views/pages/auth/staff-login.ejs` (`/staff/login`).
+- Reporter: `views/pages/reporter/articles.ejs` and `edit-article.ejs`.
+- Editor: `views/pages/editor/review-queue.ejs`, `review-article.ejs`, and
+  `analytics.ejs`.
+- Errors: `views/error.ejs`.
 
-## Functional Requirements
+`views/pages/public/editorial-home.ejs` and `technology.ejs` contain large
+hard-coded reference/prototype markup but are not rendered. `/editorial`
+redirects to `/`; `/technology` redirects to Technology-filtered search. Do
+not copy their sample content into active pages or treat them as another public
+implementation unless a requested feature deliberately changes that contract.
 
-### Public experience
+## EJS composition and reuse
 
-- Show only approved and published articles in the public feed.
-- Support infinite scrolling in batches of 20, search, category filtering, read/unread filtering, and sorting by publication date or popularity.
-- Keep search, filters, sorting, loading more articles, and comments asynchronous where appropriate.
-- Render the full article body in the initial server response for SEO; do not require JavaScript to load the article text.
-- Track article views and allow public comments.
-- Enforce a maximum of three comments per minute per guest device on the server. Client-side checks may improve the UI but cannot replace server enforcement.
+Pages are complete HTML documents; no EJS layout engine is installed. Every
+active page includes `partials/shared/head`, which loads `/css/style.css` and
+the shared `/js/api.js`. Page scripts are loaded at the end of their owner page.
 
-### Authentication and roles
+Partials are grouped into `shared/`, `public/`, `newsroom/`, `comments/`, and
+`analytics/`. Actual active reuse matters more than a file's presence:
 
-- Provide login for reporters and editors.
-- Persist authentication across a server restart using a store outside process memory.
-- Determine roles from the authenticated server-side user, never from values submitted by the browser.
-- Enforce every permission on the server. A hidden or disabled client button is not authorization.
+- `shared/head` is universal; `shared/site-logo` is used by headers and login.
+- `public/header-standard` serves active public/error pages and includes the
+  optional `breaking-strip`.
+- `newsroom/header` serves all active reporter/editor pages.
+- `public/article-card` serves home, search, and related articles.
+- `comments/comment-item`, `newsroom/editor-status-badge`, and
+  `analytics/summary-metric` are used by their active domain pages.
+- `header-desk` is used only by the two non-routed reference templates.
+- `chart-legend`, `comment-form`, `editor-queue-row`, `editor-review-actions`,
+  `feedback-form`, `reporter-command-ribbon`, `reporter-filter-strip`, and
+  `newsroom/sidebar` currently have no active page include. Editing them alone
+  does not change rendered UI.
 
-### Reporter workflow
+Pass explicit locals and retain partial defaults. Use escaped EJS (`<%=`) for
+data; reserve `<%-` for trusted partial inclusion or deliberately prepared
+markup. Article bodies are server-rendered as escaped paragraphs for SEO and
+injection safety.
 
-- Reporters can create, search, filter, autosave, edit, and submit their own articles.
-- Reporters can read editor feedback, revise returned work, and resubmit it.
-- Reporters cannot edit another reporter's article, approve or publish content, or bypass the workflow.
-- Autosaved drafts must be stored in MongoDB so work survives refreshes, browser closure, and switching computers.
+`public/js/feed.js` builds the same article-card DOM as
+`partials/public/article-card.ejs`; `public/js/comments.js` builds comment items
+matching `partials/comments/comment-item.ejs`. Update both render paths when a
+requested change alters either structure.
 
-### Editor workflow
+## Browser JavaScript contracts
 
-- Editors can view and filter all articles, inspect pending content, compare revisions, approve and publish, request changes with a note, and delete articles.
-- Enforce the legal article states: draft, awaiting approval, published, and returned for changes.
-- Published content must remain public while a new revision is being edited or reviewed. Store the new work separately and replace the public revision only after editor approval.
+Keep browser code vanilla and page-scoped; use `public/js/api.js` for shared
+request/error/logout behavior. Existing IDs, `data-*`, and state classes are
+behavioral APIs, including `data-article-id`, `data-status`, `data-category`,
+`data-title`, `.filter-btn.active`, `.state-hidden`, and
+`.is-authenticating`. Search `public/js/` before renaming markup hooks.
 
-### Analytics and weather
+Article copy must not depend on client loading. Ajax is appropriate for feed
+loading/filtering, comments, autosave/workflow actions, queue filtering,
+analytics data, and weather.
 
-- Impact Analytics must show views over time and mark publication times for article updates.
-- Aggregate views into time buckets with atomic updates so concurrent readers do not lose counts.
-- Weather data must be cached and no older than 15 minutes. Do not make a separate external request for every visitor.
+## CSS architecture
 
-## Data and Security
+`public/css/style.css` is the sole entry point. Its fixed cascade is:
 
-The core data should cover users, articles, article revisions, comments, view statistics, and persistent sessions. Keep revisions separate from the public article state so an update cannot accidentally replace published content before approval.
+1. `variables.css`: tokens and shared measurements.
+2. `base.css`: reset, element defaults, focus, disabled, reduced motion.
+3. `utilities.css`: composable layout, spacing, type, color, state, responsive.
+4. `components.css`: reusable controls, headers, cards, forms, media, statuses.
+5. `layouts.css`: shells, reading widths, grids, offsets, workspaces.
+6. `pages.css`: public, reporter, login, editor, and analytics page rules.
 
-- Store passwords only as one-way salted hashes; never store plaintext passwords.
-- Keep secrets in environment variables. Commit `.env.example`, never real credentials, keys, or tokens.
-- Validate route parameters, query strings, and request bodies.
-- Check ownership and roles on every protected route.
-- Escape user-provided text and prevent HTML injection in comments and other text fields.
-- Return clear user-facing errors without exposing stack traces or secrets.
-- Use suitable status codes, centralized error handling, and logs for important failures and workflow events.
-- Paginate and filter in the database, return only required feed fields, and add indexes for common article, comment, revision, view, and session queries.
+Read `styles.md` before styling. Preserve import order and use the owning layer.
+Markup intentionally mixes utilities (`flex`, `gap-*`, `text-*`, `surface-*`)
+with BEM-like semantic names (`.article-card__title`,
+`.review-article__action--approve`). Do not wholesale-convert either style.
 
-## Design and Accessibility
+Before modifying a shared class or reusable partial, determine every page/component that uses it. 
+Prefer page-specific modifier classes when the requested change applies to only one page.
 
-Follow the **Contemporary Editorial Broadsheet** direction already established in the repository:
+## Responsive conventions
 
-- Use Newsreader for editorial headlines and Inter for interface text and metadata.
-- Use a crisp paper-like neutral canvas, deep ink navy/slate structure, and restrained crimson for urgent or destructive states.
-- Prefer strong typography, hairline rules, clear hierarchy, readable long-form measures, and minimal corner rounding.
-- Use the responsive editorial grid: 12 columns on desktop, 8 on tablet, and 4 on mobile.
-- Preserve accessible labels, readable contrast, keyboard-friendly controls, semantic elements, and clear status indicators.
+Use the existing 640px, 768px, 1024px, and 1280px boundaries and matching
+narrow `max-width` queries; do not create a second scale.
 
-Do not replace the established visual language with generic dashboard styling. Keep public reading pages and newsroom tools visually related while making each workflow easy to scan.
+- `page-shell` centers content and supplies gutters.
+- `reading-column` limits long-form measure.
+- `editorial-grid` has 4 columns by default, 8 at 768px, and 12 at 1024px.
+- Responsive utilities use `sm-`, `md-`, and `lg-` prefixes.
+- Shared layout rules own fixed public/newsroom header offsets.
+- Reporter/editor workspaces become desktop grids at 1024px; tables stack or
+  scroll on narrow screens.
+- Navigation compacts below 768px, with further control changes below 640px.
 
-### Local Stylesheets
+Preserve reduced-motion behavior, focus styles, semantic HTML, labels, keyboard
+access, and contrast.
 
-The `styles/` directory is the token-driven visual system for the public,
-reporter, editor, analytics, and staff-login prototypes. Treat
-[`styles/DESIGN.md`](styles/DESIGN.md) as the detailed CSS reference and keep
-each file limited to its responsibility:
+## Change boundaries
 
-- `styles/style.css` imports Google Fonts and the local layers in order:
-	variables, base, utilities, components, layouts, then pages.
-- `styles/variables.css` contains semantic colors, Newsreader/Inter typography,
-	spacing, responsive breakpoints, media dimensions, radii, shadows, workflow
-	states, and page-parity geometry tokens.
-- `styles/base.css` contains sizing resets, document defaults, media defaults,
-	form inheritance, focus behavior, disabled controls, scrollbar rules, and
-	reduced-motion behavior.
-- `styles/utilities.css` contains reusable layout, spacing, typography, color,
-	surface, media, responsive, state, motion, and interaction classes.
-- `styles/components.css` contains shared links, buttons, inputs, media frames,
-	icons, tables, newsroom controls, public mastheads, and status treatments.
-- `styles/layouts.css` contains page shells, reading columns, four/eight/twelve
-	column editorial grids, newsroom navigation, public offsets, and workspaces.
-- `styles/pages.css` contains page-family details for public reading/search/
-	technology views, reporter editing/articles/login, and editor
-	analytics/queue/diff workflows.
+- Make the smallest requested change; do not opportunistically refactor or
+  redesign adjacent code.
+- Reuse an active partial for genuinely identical markup. Do not extract a
+  one-off fragment merely for abstraction or assume an unused partial is live.
+- Modify a shared partial/class only when every consumer should change.
+  Otherwise use page-owned markup or a page-root-scoped rule in `pages.css`.
+- Preserve separate draft/published versions and legal workflow states;
+  published content stays public while an update is reviewed.
+- Keep passwords hashed, secrets in environment variables, sessions in MongoDB,
+  authorization/validation server-side, comment limits server-enforced, and
+  analytics increments atomic.
+- Do not add React/Vue/Angular, unapproved packages, prototype HTML, duplicate
+  asset trees, or another token/breakpoint system.
+- Update `README.md` when implementation changes affect setup, environment,
+  routes, structure, or documented features.
 
-Use the existing Newsreader and Inter pairing, semantic surface/color tokens,
-and named utility classes. The responsive grid is four columns on mobile,
-eight at 768px, and twelve at 1024px; newsroom navigation is 256px wide on
-desktop and stacks below 768px. Reuse the existing 640px, 768px, 1024px, and
-1280px breakpoints rather than adding a second scale.
+## Verification
 
-Preserve accessible focus states, reduced-motion behavior, semantic HTML,
-existing class names, and script-controlled state hooks such as
-`.filter-btn.active`, `.is-authenticating`, and `.state-hidden`. Do not add
-React or another frontend framework, arbitrary-value utility names, or a
-second token scale. Keep stylesheet headers and section comments current when
-CSS changes are made.
-
-## Repository and Documentation
-
-The active repository no longer contains the former root page prototypes or
-the design-reference HTML files. Do not recreate or add HTML prototype files
-to the project. Any archived prototype material is outside the project source
-tree and is not an implementation dependency.
-
-The [`styles/DESIGN.md`](styles/DESIGN.md) file is the authoritative reference
-for the CSS system: layer order, tokens, typography, spacing, responsive
-layout, visual roles, and page-family contracts. Use documentation as design
-guidance, not as a reason to add a new framework or duplicate complex
-architecture.
-
-Keep [`README.md`](README.md) up to date with installation and run instructions, required environment variables, the main folder structure, and the implemented features. It may also document demo users, seed instructions, key routes, models, indexes, team contributions, and AI usage required by the course.
-
-## Development Expectations
-
-- Keep changes small, understandable, and consistent with the existing project.
-- Make the simplest implementation that satisfies the requirements; avoid unnecessary service layers or abstractions.
-- Use Git branches, focused commits, merges, and pull requests throughout development.
-- Do not copy code from other projects or repositories. Everyone on the team must understand the code used in the submission.
-- AI assistance is allowed, but its output must be verified, understood, and documented according to course policy.
-- Before submission, seed at least 500 varied articles plus users, comments, workflow states, revisions, and view history for analytics.
-- Test the critical demo paths: role restrictions, ownership, autosave and restart persistence, revision safety, public search/filtering, comment rate limiting, analytics, and weather-cache failure behavior.
+Match checks to the change. For EJS/CSS, inspect every active consumer, check
+browser-script hooks, and test narrow/wide layouts. For application work,
+exercise relevant role, ownership, workflow, persistence, and error paths.
+Never treat a reference template or unused partial as proof an active route
+works.
