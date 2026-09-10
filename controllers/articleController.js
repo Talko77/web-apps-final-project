@@ -2,9 +2,10 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');
+const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
-const { formatDateTime, formatViews } = require('../utils/viewMappers');
+const { formatDateTime, formatViews, toQueueRow } = require('../utils/viewMappers');
 const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE } = require('../config/constants');
 
 // Escapes special characters so free-text input is not interpreted as a regular expression
@@ -89,22 +90,59 @@ exports.getMyArticles = asyncHandler(async (req, res) => {
   res.json({ articles });
 });
 
-// GET /api/articles/manage - every article in the system, editors only, with filtering by status
+// GET /api/articles/manage - every article in the system, editors only, with filtering by status, category and search
 exports.getAllForEditor = asyncHandler(async (req, res) => {
   const query = {};
   if (req.query.status && Object.values(STATUS).includes(req.query.status)) {
     query.status = req.query.status;
   }
+  if (req.query.category && CATEGORIES.includes(req.query.category)) {
+    query.$or = [
+      { 'draftVersion.category': req.query.category },
+      { 'publishedVersion.category': req.query.category }
+    ];
+  }
+  if (req.query.search && String(req.query.search).trim()) {
+    const term = escapeRegex(String(req.query.search).trim());
+    const regex = { $regex: term, $options: 'i' };
+    const matchingUsers = await User.find({
+      $or: [{ displayName: regex }, { username: regex }]
+    }).select('_id').lean();
+    const reporterIds = matchingUsers.map(u => u._id);
 
-  const articles = await Article.find(query)
-    .populate('reporter', 'username displayName')
-    .sort({ updatedAt: -1 })
-    .limit(200)
-    .lean();
+    const searchCondition = [
+      { 'draftVersion.title': regex },
+      { 'publishedVersion.title': regex }
+    ];
+    if (reporterIds.length > 0) {
+      searchCondition.push({ reporter: { $in: reporterIds } });
+    }
+
+    if (query.$or) {
+      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
+      delete query.$or;
+    } else {
+      query.$or = searchCondition;
+    }
+  }
+
+  const [articles, grouped] = await Promise.all([
+    Article.find(query)
+      .populate('reporter', 'username displayName')
+      .sort({ updatedAt: -1 })
+      .lean(),
+    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }])
+  ]);
+
+  const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
+  const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
 
   res.json({
+    total: req.query.status ? (counts[req.query.status] || 0) : totalCount,
+    totalInSystem: totalCount,
     articles: articles.map(a => ({
       ...a,
+      ...toQueueRow(a),
       reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
       hasPendingUpdate: a.isPublished && a.status === STATUS.PENDING
     }))

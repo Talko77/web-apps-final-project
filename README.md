@@ -220,7 +220,7 @@ current.
 | DELETE | `/api/users/:id` | Editor | Delete a staff account |
 | GET | `/api/articles/feed` | public | Feed with paging, search, filter and sort |
 | GET | `/api/articles/mine` | Reporter | Own articles |
-| GET | `/api/articles/manage` | Editor | All articles |
+| GET | `/api/articles/manage` | Editor | All articles with filtering by status, category, and search |
 | GET | `/api/articles/:id` | Reporter/Editor | Single article |
 | POST | `/api/articles` | Reporter | Create article |
 | PUT | `/api/articles/:id` | Reporter/Editor | Save draft |

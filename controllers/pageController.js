@@ -321,27 +321,62 @@ exports.reporterEdit = asyncHandler(async (req, res, next) => {
 
 // ---------- Editor area ----------
 
-// GET /editor/reviews - the review queue, with filtering by status
+// GET /editor/reviews - the review queue, with filtering by status, category and search
 exports.editorQueue = asyncHandler(async (req, res) => {
   const status = Object.values(STATUS).includes(req.query.status) ? req.query.status : '';
   const query = status ? { status } : {};
 
+  if (req.query.category && CATEGORIES.includes(req.query.category)) {
+    query.$or = [
+      { 'draftVersion.category': req.query.category },
+      { 'publishedVersion.category': req.query.category }
+    ];
+  }
+
+  if (req.query.search && String(req.query.search).trim()) {
+    const term = String(req.query.search).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = { $regex: term, $options: 'i' };
+    const matchingUsers = await User.find({
+      $or: [{ displayName: regex }, { username: regex }]
+    }).select('_id').lean();
+    const reporterIds = matchingUsers.map(u => u._id);
+
+    const searchCondition = [
+      { 'draftVersion.title': regex },
+      { 'publishedVersion.title': regex }
+    ];
+    if (reporterIds.length > 0) {
+      searchCondition.push({ reporter: { $in: reporterIds } });
+    }
+
+    if (query.$or) {
+      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
+      delete query.$or;
+    } else {
+      query.$or = searchCondition;
+    }
+  }
+
   const [articles, grouped] = await Promise.all([
-    Article.find(query).sort({ updatedAt: -1 }).limit(200)
+    Article.find(query).sort({ updatedAt: -1 })
       .populate('reporter', 'username displayName').lean(),
     Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }])
   ]);
 
   const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
+  const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
 
   res.render('pages/editor/review-queue', {
     pageTitle: 'Review Queue',
     newsroomRole: 'Editor',
     page: {
       activeStatus: status,
+      activeCategory: req.query.category || '',
+      searchQuery: req.query.search || '',
+      totalCount: status ? (counts[status] || 0) : totalCount,
       articles: articles.map(m.toQueueRow),
       statusFilters: [
-        { label: 'All', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0) },
+        { label: 'All', value: '', count: totalCount },
         ...Object.values(STATUS).map(s => ({ label: STATUS_LABELS[s], value: s, count: counts[s] || 0 }))
       ],
       categories: CATEGORIES

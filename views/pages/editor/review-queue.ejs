@@ -13,7 +13,7 @@
               <span class="review-queue__eyebrow">Newsroom</span>
               <h1 class="review-queue__title">Review Queue</h1>
               <p class="review-queue__description">Stories submitted by reporters and waiting on an editor to review, approve and publish them.</p>
-              <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <%= page.articles.length %> articles.</p>
+              <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <span id="queueTotal"><%= page.totalCount %></span> articles.</p>
             </div>
             <div class="review-queue__status-summary">
               <% (page.statusFilters || []).forEach(function (filter) { %>
@@ -31,15 +31,15 @@
           <div class="review-queue__filter-layout">
             <div class="review-queue__search-field">
               <label class="review-queue__field-label" for="queueSearch">Search by headline or reporter name</label>
-              <input class="review-queue__search-input control-input" id="queueSearch" placeholder="For example: elections, or a reporter name" type="search" />
+              <input class="review-queue__search-input control-input" id="queueSearch" placeholder="For example: elections, or a reporter name" type="search" value="<%= page.searchQuery || '' %>" />
             </div>
             <div class="review-queue__filter-controls">
               <div class="review-queue__select-field">
                 <label class="review-queue__field-label" for="categoryFilter">Category</label>
                 <select class="review-queue__select control-input" id="categoryFilter">
-                  <option value="">All Categories</option>
+                  <option value="" <% if (!page.activeCategory) { %>selected<% } %>>All Categories</option>
                   <% (page.categories || []).forEach(function (category) { %>
-                  <option value="<%= category %>"><%= category %></option>
+                  <option value="<%= category %>" <% if (category === page.activeCategory) { %>selected<% } %>><%= category %></option>
                   <% }); %>
                 </select>
               </div>
@@ -115,7 +115,7 @@
             </table>
           </div>
           <div class="review-queue__empty-container">
-            <p class="review-queue__empty state-hidden" id="queueEmptyState">No articles match the selected filters.</p>
+            <p class="review-queue__empty <%= page.articles.length > 0 ? 'state-hidden' : '' %>" id="queueEmptyState">No articles match the selected filters.</p>
           </div>
         </div>
       </div>

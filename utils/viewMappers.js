@@ -130,7 +130,9 @@ function toReporterRow(article) {
 
 // A row in the editor's review queue.
 function toQueueRow(article) {
-  const version = article.draftVersion || {};
+  const version = (article.draftVersion && article.draftVersion.title)
+    ? article.draftVersion
+    : (article.publishedVersion || article.draftVersion || {});
   const reporterName = article.reporter
     ? (article.reporter.displayName || article.reporter.username)
     : 'Unknown';
