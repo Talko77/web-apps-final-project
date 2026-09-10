@@ -1,67 +1,72 @@
-<%# Public article reading view: renders article header, media, body paragraphs, tags, related articles, comment thread, and weather sidebar. %>
+<%# Public article reading view: renders article header, media, body paragraphs, tags, related articles, comment thread, and weather sidebar.
+    Follows BEM component conventions (.article-page, .article-comments). %>
 <!doctype html>
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
-<body class="public-page article-page surface-page text-body color-body height-screen flex flex-column">
+<body class="public-page article-page">
 <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
-<main class="article-page-main width-full surface-page flex-grow">
-  <div class="width-content page-shell pad-inline-5 pad-block-3">
-    <div class="search-layout grid grid-single lg-editorial-grid gap-6 align-start">
-      <div class="lg-content-span flex flex-column gap-6">
-        <article class="article-reading width-full">
-          <nav aria-label="Breadcrumb" class="article-breadcrumb flex align-center gap-2 text-label text-1 color-muted margin-bottom-5">
-            <a class="motion-colors" href="/">Home</a>
-            <span class="icon color-subtle text-1" aria-hidden="true">chevron_right</span>
-            <a class="motion-colors" href="/category/<%= article.category.toLowerCase() %>"><%= article.category %></a>
+<main class="article-page__main">
+  <div class="article-page__container page-shell">
+    <div class="article-page__layout">
+      <div class="article-page__primary">
+        <article class="article-page__content">
+          <nav aria-label="Breadcrumb" class="article-page__breadcrumb">
+            <a class="article-page__breadcrumb-link" href="/">Home</a>
+            <span class="article-page__breadcrumb-separator icon" aria-hidden="true">chevron_right</span>
+            <a class="article-page__breadcrumb-link" href="/category/<%= article.category.toLowerCase() %>"><%= article.category %></a>
           </nav>
 
           <%# Article header and byline %>
-          <header class="article-heading margin-bottom-6">
-            <div class="flex align-center gap-3 margin-bottom-2">
-              <span class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"><%= article.category %></span>
+          <header class="article-page__header">
+            <div class="article-page__meta-bar">
+              <span class="article-page__category"><%= article.category %></span>
               <% if (article.updateCount > 0) { %>
-              <span class="color-muted text-caption text-1 flex align-center gap-1"><span class="radius-pill"></span>Updated <%= article.updateCount %> times since publication</span>
+              <span class="article-page__updates">
+                <span class="article-page__updates-dot"></span>
+                Updated <%= article.updateCount %> times since publication
+              </span>
               <% } %>
             </div>
-            <h1 class="text-display text-heading-xl color-primary margin-bottom-4 text-tight"><%= article.title %></h1>
+            <h1 class="article-page__title"><%= article.title %></h1>
             <% if (article.summary) { %>
-            <p class="text-deck color-muted text-relaxed margin-bottom-5"><%= article.summary %></p>
+            <p class="article-page__deck"><%= article.summary %></p>
             <% } %>
-            <div class="article-byline flex flex-wrap align-center justify-between gap-4 pad-block-3 surface-muted pad-inline-4 radius-card">
-              <div class="flex align-center gap-3">
-                <div class="avatar-medium radius-pill surface-ink color-inverse flex align-center justify-center text-label text-1 shadow-subtle"><%= article.initials %></div>
-                <div>
-                  <div class="text-label text-2 color-primary"><%= article.reporterName %></div>
-                  <div class="text-caption text-1 color-muted">
+            <div class="article-page__byline">
+              <div class="article-page__author-info">
+                <div class="article-page__author-avatar"><%= article.initials %></div>
+                <div class="article-page__author-details">
+                  <div class="article-page__author-name"><%= article.reporterName %></div>
+                  <div class="article-page__pub-meta">
                     <time datetime="<%= article.datetime %>"><%= article.dateLabel %></time> • <%= article.readLabel %>
                   </div>
                 </div>
               </div>
-              <div class="flex align-center gap-5 color-muted text-caption text-1">
-                <span class="flex align-center gap-1"><span class="icon text-2">visibility</span><%= article.views %> views</span>
+              <div class="article-page__metrics">
+                <span class="icon" aria-hidden="true">visibility</span>
+                <span><%= article.views %> views</span>
               </div>
             </div>
           </header>
 
           <%# Featured media %>
           <% if (article.imageUrl) { %>
-          <figure class="margin-bottom-6">
-            <div class="article-feature-media width-full height-feature radius-card overflow-hidden surface-panel shadow-raised">
-              <img class="media-image" src="<%= article.imageUrl %>" alt="<%= article.imageAlt %>">
+          <figure class="article-page__media">
+            <div class="article-page__media-frame">
+              <img class="article-page__media-image" src="<%= article.imageUrl %>" alt="<%= article.imageAlt %>">
             </div>
           </figure>
           <% } %>
 
           <%# Article body copy %>
-          <div class="article-copy stack-5 text-article color-body text-relaxed text-normal">
+          <div class="article-page__body">
             <% (article.paragraphs || []).forEach(function (p) { %>
-            <p class="text-body text-2 color-body text-relaxed"><%= p %></p>
+            <p><%= p %></p>
             <% }) %>
           </div>
 
           <% if ((locals.tags || []).length) { %>
-          <div class="article-tags margin-top-6 pad-5 flex flex-wrap align-center gap-2">
-            <span class="text-kicker text-1 color-muted text-uppercase">Filed under:</span>
+          <div class="article-page__tags">
+            <span class="article-page__tags-label">Filed under:</span>
             <% (locals.tags || []).forEach(function (tag) { %>
             <a class="article-tags__link" href="/category/<%= tag.toLowerCase() %>"><%= tag %></a>
             <% }) %>
@@ -70,11 +75,11 @@
 
           <%# Related stories %>
           <% if ((locals.related || []).length) { %>
-          <section aria-labelledby="related-heading" class="related-dispatches margin-top-6 margin-bottom-6">
-            <div class="flex align-center justify-between margin-bottom-5">
-              <h2 class="text-headline text-5 color-primary" id="related-heading">More on this story</h2>
+          <section aria-labelledby="related-heading" class="article-page__related">
+            <div class="article-page__related-header">
+              <h2 class="article-page__related-title" id="related-heading">More on this story</h2>
             </div>
-            <div class="grid grid-single md-grid-triple gap-4">
+            <div class="article-page__related-grid">
               <% (locals.related || []).forEach(function (item) { %>
               <%- include('../../partials/public/article-card', { article: item }) %>
               <% }) %>
@@ -83,59 +88,58 @@
           <% } %>
 
           <%# Comments section and submission form %>
-          <section aria-labelledby="comments-title" class="comment-thread surface-paper pad-6 radius-panel shadow-subtle">
-            <div class="flex align-center justify-between pad-block-3 margin-bottom-5">
-              <div class="flex align-center gap-2">
-                <h2 class="text-headline text-5 color-primary" id="comments-title">Comments</h2>
-                <span class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-pill text-bold" id="comments-count"><%= commentsCount %></span>
+          <section aria-labelledby="comments-title" class="article-comments">
+            <div class="article-comments__header">
+              <div class="article-comments__title-group">
+                <h2 class="article-comments__title" id="comments-title">Comments</h2>
+                <span class="article-comments__count" id="comments-count"><%= commentsCount %></span>
               </div>
             </div>
 
-            <form class="surface-muted pad-5 radius-card margin-bottom-6 stack-4" id="comment-form" data-article-id="<%= article.id %>">
-              <div class="flex align-center justify-between">
-                <span class="text-label text-2 color-primary">Add a comment</span>
-                <span class="text-caption text-1 color-muted">No sign-up required</span>
+            <form class="article-comments__form" id="comment-form" data-article-id="<%= article.id %>">
+              <div class="article-comments__form-header">
+                <span class="article-comments__form-title">Add a comment</span>
+                <span class="article-comments__form-hint">No sign-up required</span>
               </div>
-              <div>
-                <label class="block text-label text-1 color-muted" for="guest-name">Name (optional)</label>
-                <input class="width-full pad-inline-3 pad-block-2 surface-paper radius-standard text-body text-1 shadow-subtle control-input" id="guest-name" name="name" type="text">
+              <div class="article-comments__field">
+                <label class="article-comments__label" for="guest-name">Name (optional)</label>
+                <input class="article-comments__input" id="guest-name" name="name" type="text">
               </div>
-              <div>
-                <div class="flex justify-between align-center">
-                  <label class="text-label text-1 color-muted" for="comment-text">Your comment</label>
-                  <span class="text-caption text-1 color-subtle" id="char-counter"></span>
+              <div class="article-comments__field">
+                <div class="article-comments__field-header">
+                  <label class="article-comments__label" for="comment-text">Your comment</label>
+                  <span class="article-comments__counter" id="char-counter"></span>
                 </div>
-                <textarea class="width-full pad-3 surface-paper radius-standard text-body text-1 shadow-subtle control-no-resize control-input" id="comment-text" name="comment" maxlength="1000" required rows="3"></textarea>
+                <textarea class="article-comments__textarea" id="comment-text" name="comment" maxlength="1000" required rows="3"></textarea>
               </div>
-              <p class="state-hidden text-body text-1 color-muted" id="comment-status" role="status"></p>
-              <div class="flex flex-column sm-row sm-align-center justify-between gap-4 pad-block-2">
-                <p class="text-caption text-1 color-muted">You can post up to three comments per minute.</p>
-                <button class="control-button color-inverse text-label text-1" type="submit">Post Comment</button>
+              <p class="article-comments__status state-hidden" id="comment-status" role="status"></p>
+              <div class="article-comments__form-footer">
+                <p class="article-comments__policy">You can post up to three comments per minute.</p>
+                <button class="article-comments__submit" type="submit">Post Comment</button>
               </div>
             </form>
 
-            <div class="stack-4" id="comments-list">
+            <div class="article-comments__list" id="comments-list">
               <% (locals.comments || []).forEach(function (comment) { %>
               <%- include('../../partials/comments/comment-item', { item: comment }) %>
               <% }) %>
             </div>
             <% if (!(locals.comments || []).length) { %>
-            <p class="text-body text-1 color-muted text-center">No comments yet. Be the first to join the conversation.</p>
+            <p class="article-comments__empty">No comments yet. Be the first to join the conversation.</p>
             <% } %>
           </section>
         </article>
       </div>
 
       <%# Weather sidebar %>
-      <aside class="publication-sidebar lg-sidebar-span flex flex-column gap-5">
-        <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="Weather">
+      <aside class="article-page__sidebar" aria-label="Sidebar">
+        <section class="article-page__weather" aria-label="Weather">
           <div id="weatherWidget"></div>
         </section>
       </aside>
     </div>
   </div>
 </main>
-<%# Public footer %>
 <%- include('../../partials/public/footer') %>
 <script src="/js/comments.js" defer></script>
 <script src="/js/weather.js" defer></script>

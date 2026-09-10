@@ -1,163 +1,167 @@
-<%# Public homepage: renders lead story, featured grid, dispatches, sidebar weather/most-read, and infinite scroll feed. %>
+<%# Public homepage: renders lead story, featured grid, dispatches, sidebar weather/most-read, and infinite scroll feed.
+    Follows BEM component conventions (.home-page). %>
 <!doctype html>
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
-<body class="public-page publication-page surface-page text-body text-2 color-body height-screen flex flex-column">
+<body class="public-page home-page publication-page">
 <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
-<main class="publication-main width-full surface-page flex-grow">
-  <div class="publication-shell page-shell width-content pad-inline-5 pad-block-3">
-    <div class="flex flex-column width-full">
-      <div class="publication-grid grid grid-single lg-editorial-grid gap-6">
-        <div class="publication-primary lg-content-span flex flex-column gap-6">
-          <%# Lead story %>
-          <% const lead = (locals.featured || [])[0]; %>
-          <% if (lead) { %>
-          <article class="publication-lead surface-paper radius-panel overflow-hidden shadow-subtle motion-shadow flex flex-column">
-            <% if (lead.imageUrl) { %>
-            <div class="publication-lead-media relative width-full height-feature overflow-hidden surface-panel">
-              <img class="width-full height-full media-cover interaction-zoom motion-transform" src="<%= lead.imageUrl %>" alt="<%= lead.imageAlt %>">
-              <div class="absolute"><span class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 text-uppercase shadow-subtle"><%= lead.category %></span></div>
-            </div>
-            <% } %>
-            <div class="pad-5 flex flex-column flex-grow">
-              <div class="flex align-center gap-2 text-label text-1 color-muted margin-bottom-2">
-                <span class="text-semibold color-body">By <%= lead.author %></span>
-                <span>•</span>
-                <span><%= lead.dateLabel %></span>
-                <span>•</span>
-                <span class="flex align-center gap-1"><span class="icon text-2">timer</span><%= lead.readLabel %></span>
-                <span>•</span>
-                <span><%= lead.views %> views</span>
-              </div>
-              <h1 class="text-headline text-7 color-body margin-bottom-2 motion-colors text-tight"><%= lead.title %></h1>
-              <p class="text-headline text-deck color-muted margin-bottom-5 text-relaxed"><%= lead.summary %></p>
-              <div class="margin-top-4 flex align-center justify-between">
-                <a class="inline-flex align-center gap-2 text-label text-2 color-primary motion-colors" href="<%= lead.url %>"><span>Read the full story</span><span class="icon text-4">arrow_forward</span></a>
-              </div>
-            </div>
-          </article>
+<main class="home-page__main">
+  <div class="home-page__container page-shell">
+    <div class="home-page__grid">
+      <div class="home-page__primary">
+        <%# Lead story %>
+        <% const lead = (locals.featured || [])[0]; %>
+        <% if (lead) { %>
+        <article class="home-page__lead">
+          <% if (lead.imageUrl) { %>
+          <div class="home-page__lead-media">
+            <img class="home-page__lead-image" src="<%= lead.imageUrl %>" alt="<%= lead.imageAlt %>">
+            <span class="home-page__lead-category"><%= lead.category %></span>
+          </div>
           <% } %>
+          <div class="home-page__lead-body">
+            <div class="home-page__lead-meta">
+              <span class="home-page__lead-author">By <%= lead.author %></span>
+              <span class="home-page__meta-separator">•</span>
+              <span class="home-page__lead-date"><%= lead.dateLabel %></span>
+              <span class="home-page__meta-separator">•</span>
+              <span class="home-page__lead-read-time">
+                <span class="icon home-page__lead-icon" aria-hidden="true">timer</span>
+                <%= lead.readLabel %>
+              </span>
+              <span class="home-page__meta-separator">•</span>
+              <span class="home-page__lead-views"><%= lead.views %> views</span>
+            </div>
+            <h1 class="home-page__lead-title"><%= lead.title %></h1>
+            <p class="home-page__lead-summary"><%= lead.summary %></p>
+            <div class="home-page__lead-action">
+              <a class="home-page__lead-link" href="<%= lead.url %>">
+                <span>Read the full story</span>
+                <span class="icon home-page__lead-link-icon" aria-hidden="true">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </article>
+        <% } %>
 
-          <%# Featured stories %>
-          <% const secondary = (locals.featured || []).slice(1); %>
-          <% if (secondary.length) { %>
-          <section aria-labelledby="featured-heading">
-            <div class="flex align-center justify-between margin-bottom-4">
-              <h2 class="text-headline text-5 color-body" id="featured-heading">Featured Stories</h2>
-              <span class="text-label text-1 color-muted text-uppercase">Editor's Picks</span>
-            </div>
-            <div class="publication-featured-grid grid grid-single md-grid-triple gap-4">
-              <% secondary.forEach(function (item) { %>
-              <%- include('../../partials/public/article-card', { article: item }) %>
-              <% }) %>
-            </div>
-          </section>
-          <% } %>
+        <%# Featured stories %>
+        <% const secondary = (locals.featured || []).slice(1); %>
+        <% if (secondary.length) { %>
+        <section class="home-page__section" aria-labelledby="featured-heading">
+          <div class="home-page__section-header">
+            <h2 class="home-page__section-title" id="featured-heading">Featured Stories</h2>
+            <span class="home-page__section-kicker">Editor's Picks</span>
+          </div>
+          <div class="home-page__articles-grid">
+            <% secondary.forEach(function (item) { %>
+            <%- include('../../partials/public/article-card', { article: item }) %>
+            <% }) %>
+          </div>
+        </section>
+        <% } %>
 
-          <%# Latest dispatches %>
-          <section class="publication-dispatches surface-paper radius-panel pad-5 shadow-subtle" aria-labelledby="dispatches-heading">
-            <div class="flex align-center justify-between margin-bottom-4">
-              <div class="flex align-center gap-2">
-                <span class="icon color-primary">schedule</span>
-                <h2 class="text-headline text-5 color-body" id="dispatches-heading">Latest Dispatches</h2>
-              </div>
-              <span class="text-caption text-1 color-muted">Live updates from the newsroom</span>
+        <%# Latest dispatches %>
+        <section class="home-page__dispatches" aria-labelledby="dispatches-heading">
+          <div class="home-page__dispatches-header">
+            <div class="home-page__dispatches-title-group">
+              <span class="icon home-page__dispatches-icon" aria-hidden="true">schedule</span>
+              <h2 class="home-page__dispatches-title" id="dispatches-heading">Latest Dispatches</h2>
             </div>
-            <div class="stack-4">
-              <% (locals.dispatches || []).forEach(function (item) { %>
-              <div class="dispatch-item pad-3 radius-card motion-colors">
-                <div class="dispatch-meta">
-                  <span class="dispatch-time text-caption text-1 text-semibold color-muted"><%= item.time %></span>
-                  <span class="dispatch-category text-label text-1 color-body text-uppercase"><%= item.category %></span>
-                  <span class="dispatch-read-time text-caption text-1 color-subtle"><%= item.readTime %></span>
-                </div>
-                <a class="dispatch-headline text-headline text-4 color-body truncate" href="<%= item.url %>"><%= item.title %></a>
+            <span class="home-page__dispatches-subtitle">Live updates from the newsroom</span>
+          </div>
+          <div class="home-page__dispatches-list">
+            <% (locals.dispatches || []).forEach(function (item) { %>
+            <div class="dispatch-item">
+              <div class="dispatch-meta">
+                <span class="dispatch-time"><%= item.time %></span>
+                <span class="dispatch-category"><%= item.category %></span>
+                <span class="dispatch-read-time"><%= item.readTime %></span>
               </div>
-              <% }) %>
+              <a class="dispatch-headline" href="<%= item.url %>"><%= item.title %></a>
             </div>
-          </section>
+            <% }) %>
+          </div>
+        </section>
 
-          <%# Infinite scroll feed with search and filters %>
-          <section aria-labelledby="feed-heading" class="flex flex-column gap-4">
-            <div class="flex align-center justify-between">
-              <h2 class="text-headline text-5 color-body" id="feed-heading">All Articles</h2>
-              <span class="text-caption text-1 color-muted">More stories load as you scroll, with no page refresh</span>
+        <%# Infinite scroll feed with search and filters %>
+        <section class="home-page__feed" aria-labelledby="feed-heading">
+          <div class="home-page__feed-header">
+            <h2 class="home-page__feed-title" id="feed-heading">All Articles</h2>
+            <span class="home-page__feed-subtitle">More stories load as you scroll, with no page refresh</span>
+          </div>
+          <div class="home-page__feed-filters">
+            <div class="home-page__filter-field">
+              <label class="home-page__filter-label" for="feedSearch">Search the feed</label>
+              <input class="home-page__filter-input" id="feedSearch" name="search" placeholder="Search by headline" type="search">
             </div>
-            <div class="surface-paper radius-panel pad-4 shadow-subtle grid grid-single md-grid-triple gap-4">
-              <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSearch">Search the feed</label>
-                <input class="width-full pad-inline-3 pad-block-2 surface-muted radius-standard text-body text-1 color-body control-input" id="feedSearch" name="search" placeholder="Search by headline" type="search">
-              </div>
-              <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedCategory">Category</label>
-                <select class="width-full surface-muted radius-standard pad-block-2 pad-inline-3 text-body text-1 color-body" id="feedCategory" name="category">
-                  <option value="">All Categories</option>
-                  <% (locals.categories || []).forEach(function (category) { %>
-                  <option value="<%= category %>"><%= category %></option>
-                  <% }) %>
-                </select>
-              </div>
-              <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSort">Sort by</label>
-                <select class="width-full surface-muted radius-standard pad-block-2 pad-inline-3 text-body text-1 color-body" id="feedSort" name="sortBy">
-                  <option value="publishedAt">Newest First</option>
-                  <option value="popularity">Most Popular</option>
-                </select>
-              </div>
-              <div class="stack-2">
-                <label class="block text-kicker text-1 text-uppercase color-muted" for="feedSeen">Reading status</label>
-                <select class="width-full surface-muted radius-standard pad-block-2 pad-inline-3 text-body text-1 color-body" id="feedSeen" name="seen">
-                  <option value="">All</option>
-                  <option value="unseen">Unread</option>
-                  <option value="seen">Read</option>
-                </select>
-              </div>
+            <div class="home-page__filter-field">
+              <label class="home-page__filter-label" for="feedCategory">Category</label>
+              <select class="home-page__filter-select" id="feedCategory" name="category">
+                <option value="">All Categories</option>
+                <% (locals.categories || []).forEach(function (category) { %>
+                <option value="<%= category %>"><%= category %></option>
+                <% }) %>
+              </select>
             </div>
-            <div class="publication-featured-grid grid grid-single md-grid-triple gap-4" id="feedGrid" data-page="1" data-has-more="<%= hasMore %>">
-              <% (locals.feed || []).forEach(function (item) { %>
-              <%- include('../../partials/public/article-card', { article: item }) %>
-              <% }) %>
+            <div class="home-page__filter-field">
+              <label class="home-page__filter-label" for="feedSort">Sort by</label>
+              <select class="home-page__filter-select" id="feedSort" name="sortBy">
+                <option value="publishedAt">Newest First</option>
+                <option value="popularity">Most Popular</option>
+              </select>
             </div>
-            <p class="state-hidden text-body text-1 color-muted text-center" id="feedStatus" role="status"></p>
-            <div id="feedSentinel"></div>
-          </section>
-        </div>
-
-        <%# Sidebar with weather and most-read articles %>
-        <aside class="publication-sidebar span-sidebar flex flex-column gap-5">
-          <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="Weather">
-            <div id="weatherWidget"></div>
-          </section>
-
-          <section class="surface-paper radius-panel pad-5 shadow-subtle flex flex-column" aria-labelledby="most-read-heading">
-            <div class="flex align-center justify-between margin-bottom-4">
-              <div class="flex align-center gap-2">
-                <span class="icon color-primary text-4">trending_up</span>
-                <h2 class="text-headline text-5 color-body" id="most-read-heading">Most Read</h2>
-              </div>
+            <div class="home-page__filter-field">
+              <label class="home-page__filter-label" for="feedSeen">Reading status</label>
+              <select class="home-page__filter-select" id="feedSeen" name="seen">
+                <option value="">All</option>
+                <option value="unseen">Unread</option>
+                <option value="seen">Read</option>
+              </select>
             </div>
-            <ol class="stack-4">
-              <% (locals.mostRead || []).forEach(function (item, index) { %>
-              <li class="flex align-start gap-4">
-                <span class="text-headline text-6 color-muted state-muted text-bold text-tight avatar-small text-center"><%= index + 1 %></span>
-                <div class="flex-grow">
-                  <a class="text-body text-2 text-semibold color-body motion-colors title-clamp" href="<%= item.url %>"><%= item.title %></a>
-                  <div class="flex align-center gap-2 text-caption text-1 color-muted margin-top-2">
-                    <span><%= item.category %></span>
-                    <span>•</span>
-                    <span class="text-medium color-body"><%= item.views %> views</span>
-                  </div>
-                </div>
-              </li>
-              <% }) %>
-            </ol>
-          </section>
-        </aside>
+          </div>
+          <div class="home-page__articles-grid" id="feedGrid" data-page="1" data-has-more="<%= hasMore %>">
+            <% (locals.feed || []).forEach(function (item) { %>
+            <%- include('../../partials/public/article-card', { article: item }) %>
+            <% }) %>
+          </div>
+          <p class="home-page__feed-status state-hidden" id="feedStatus" role="status"></p>
+          <div id="feedSentinel"></div>
+        </section>
       </div>
+
+      <%# Sidebar with weather and most-read articles %>
+      <aside class="home-page__sidebar" aria-label="Sidebar">
+        <section class="home-page__weather-card" aria-label="Weather">
+          <div id="weatherWidget"></div>
+        </section>
+
+        <section class="home-page__most-read" aria-labelledby="most-read-heading">
+          <div class="home-page__most-read-header">
+            <div class="home-page__most-read-title-group">
+              <span class="icon home-page__most-read-icon" aria-hidden="true">trending_up</span>
+              <h2 class="home-page__most-read-title" id="most-read-heading">Most Read</h2>
+            </div>
+          </div>
+          <ol class="home-page__most-read-list">
+            <% (locals.mostRead || []).forEach(function (item, index) { %>
+            <li class="home-page__most-read-item">
+              <span class="home-page__most-read-rank"><%= index + 1 %></span>
+              <div class="home-page__most-read-content">
+                <a class="home-page__most-read-link" href="<%= item.url %>"><%= item.title %></a>
+                <div class="home-page__most-read-meta">
+                  <span class="home-page__most-read-category"><%= item.category %></span>
+                  <span class="home-page__meta-separator">•</span>
+                  <span class="home-page__most-read-views"><%= item.views %> views</span>
+                </div>
+              </div>
+            </li>
+            <% }) %>
+          </ol>
+        </section>
+      </aside>
     </div>
   </div>
 </main>
-<%# Public footer %>
 <%- include('../../partials/public/footer') %>
 <script src="/js/feed.js" defer></script>
 <script src="/js/weather.js" defer></script>

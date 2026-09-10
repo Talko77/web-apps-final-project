@@ -210,6 +210,7 @@ textarea {
   gap: var(--space-2);
   min-height: var(--control-height);
   padding: 0 var(--space-4);
+  border-radius: var(--radius-default);
   background: var(--color-primary);
   color: var(--color-on-primary);
   font-family: var(--font-interface);

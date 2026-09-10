@@ -95,6 +95,7 @@
   --text-label-md-line: 16px;
   --text-label-caps: 11px;
   --text-label-caps-line: 14px;
+  --text-label-caps-tracking: 0.05em;
   --text-caption: 12px;
   --text-caption-line: 18px;
 
@@ -165,11 +166,17 @@
   --radius-lg: 8px;
   --radius-xl: 12px;
   --radius-full: 9999px;
+  --radius-standard: var(--radius-default);
+  --radius-card: var(--radius-lg);
+  --radius-panel: var(--radius-xl);
+  --radius-pill: var(--radius-full);
   --border-hairline: 1px solid var(--color-outline-variant);
   --shadow-sm: 0 1px 8px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
   --shadow-menu: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
   --shadow-modal: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+  --shell-max-width: var(--max-content-width);
 
   /* EDITOR PARITY: shared newsroom geometry and workflow colors. */
   --site-header-height: 64px;
