@@ -1,76 +1,30 @@
-<%# Article editor. There is no save button - autosave.js persists the draft on its own %>
+<%# Reporter article editor with explicit draft save and review submission actions. %>
 <!doctype html>
 <html lang="en">
   <head>
     <%- include('../../partials/shared/head', { pageTitle }) %>
   </head>
-  <body
-    class="reporter-edit-page surface-page text-body color-body height-screen flex flex-column"
-  >
+  <body class="article-editor">
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
-    <main class="newsroom-main width-full surface-page flex-grow">
-      <div class="reporter-workspace page-shell pad-block-3">
-        <nav
-          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
-          aria-label="Breadcrumb"
-        >
-          <a class="interaction-underline" href="/reporter/articles">My Articles</a>
-          <span class="color-subtle">/</span>
-          <span class="color-body text-semibold"
+    <main class="article-editor__main newsroom-main">
+      <div class="article-editor__workspace reporter-workspace page-shell">
+        <nav class="article-editor__breadcrumb" aria-label="Breadcrumb">
+          <a class="article-editor__breadcrumb-link" href="/reporter/articles">My Articles</a>
+          <span class="article-editor__breadcrumb-separator">/</span>
+          <span class="article-editor__breadcrumb-current"
             ><%= article.isNew ? 'New Article' : 'Edit Article' %></span
           >
         </nav>
-        <div class="flex flex-column width-full">
-          <!-- Top command ribbon: autosave state and submission to the editor -->
-          <div
-            class="command-ribbon surface-paper radius-panel shadow-subtle pad-inline-5 pad-block-3 margin-bottom-5 flex flex-column md-row align-center justify-between gap-4"
-          >
-            <div class="flex flex-column sm-row sm-align-center gap-3">
-              <div
-                class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-caption text-1"
-              >
-                <span class="autosave-indicator relative flex">
-                  <span
-                    class="state-loading absolute inline-flex height-full width-full radius-pill"
-                  ></span>
-                  <span class="relative inline-flex radius-pill"></span>
-                </span>
-                <span class="text-medium color-body">Autosave on</span>
-              </div>
-              <div class="flex flex-column gap-1">
-                <p class="text-body text-1 color-muted" id="saveIndicator"></p>
-                <p class="text-caption text-1 color-muted">
-                  There is no save button on this page. Every change is sent to
-                  the server shortly after you stop typing, so refreshing or
-                  closing the browser will not lose your work.
-                </p>
-              </div>
-            </div>
-            <div class="flex align-center gap-3 flex-wrap">
-              <span
-                class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-panel color-body text-label text-1"
-                >Status: <%= article.statusLabel %></span
-              >
-              <button
-                class="control-button color-inverse text-label text-2 motion-all shadow-subtle flex align-center gap-2"
-                id="submitForReviewBtn"
-                type="button"
-                <% if (article.isNew) { %>disabled<% } %>
-              >
-                <span class="icon text-4">send</span>
-                Submit for Review
-              </button>
-            </div>
-          </div>
+        <div class="article-editor__content">
           <% if (article.locked) { %>
           <!-- The article is under editorial review and therefore locked for editing -->
           <div
-            class="notice-banner surface-warning color-warning radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+            class="article-editor__notice article-editor__notice--locked"
             role="status"
           >
-            <span class="icon icon-filled text-5 flex-no-shrink">lock</span>
-            <div class="flex-grow text-body text-2">
-              <span class="text-semibold">Awaiting Editor.</span>
+            <span class="icon icon-filled article-editor__notice-icon">lock</span>
+            <div class="article-editor__notice-copy">
+              <span class="article-editor__notice-emphasis">Awaiting Editor.</span>
               This article cannot be edited right now. Editing reopens as soon as
               an editor either publishes it or requests changes.
             </div>
@@ -79,12 +33,12 @@
           <% if (article.isPublished) { %>
           <!-- A published version exists. This update replaces it only once approved -->
           <div
-            class="notice-banner surface-info color-info radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+            class="article-editor__notice article-editor__notice--published"
             role="status"
           >
-            <span class="icon icon-filled text-5 flex-no-shrink">info</span>
-            <div class="flex-grow text-body text-2">
-              <span class="text-semibold">The published version stays live.</span>
+            <span class="icon icon-filled article-editor__notice-icon">info</span>
+            <div class="article-editor__notice-copy">
+              <span class="article-editor__notice-emphasis">The published version stays live.</span>
               Readers continue to see the published version until an editor
               approves this update.
             </div>
@@ -93,13 +47,13 @@
           <% if (article.deskNotes) { %>
           <!-- Editor note: the changes requested from the reporter -->
           <div
-            class="notice-banner surface-alert color-alert radius-panel pad-4 margin-bottom-5 shadow-subtle flex align-start gap-3"
+            class="article-editor__notice article-editor__notice--feedback"
           >
-            <span class="icon icon-filled text-5 flex-no-shrink">rate_review</span>
-            <div class="flex-grow">
-              <h2 class="text-headline text-4 margin-bottom-2">Editor Note</h2>
-              <p class="text-body text-2"><%= article.deskNotes %></p>
-              <p class="text-caption text-1 margin-top-2">
+            <span class="icon icon-filled article-editor__notice-icon">rate_review</span>
+            <div class="article-editor__notice-copy">
+              <h2 class="article-editor__notice-title">Editor Note</h2>
+              <p class="article-editor__notice-text"><%= article.deskNotes %></p>
+              <p class="article-editor__notice-note">
                 Address the note above, then re-submit the article for review.
               </p>
             </div>
@@ -107,23 +61,23 @@
           <% } %>
           <!-- The editing form. Values are saved over Ajax, so there is no submit -->
           <form
-            class="article-editor-grid grid grid-single lg-editorial-grid gap-5"
+            class="article-editor__form"
             id="articleForm"
             data-article-id="<%= article.id %>"
             data-locked="<%= article.locked %>"
           >
-            <div class="article-editor-column lg-content-span flex flex-column gap-5">
+            <div class="article-editor__main-column">
               <!-- Headline -->
               <div
-                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+                class="article-editor__card article-editor__card--headline"
               >
                 <label
-                  class="text-label text-1 color-muted text-bold"
+                  class="article-editor__label"
                   for="articleTitle"
                   >Headline</label
                 >
                 <input
-                  class="control-input width-full text-headline text-6 surface-muted pad-inline-4 pad-block-3 radius-card color-body motion-all"
+                  class="control-input article-editor__input article-editor__input--headline"
                   id="articleTitle"
                   name="articleTitle"
                   maxlength="200"
@@ -132,24 +86,24 @@
                   value="<%= article.title %>"
                   <% if (article.locked) { %>disabled<% } %>
                 />
-                <span class="text-caption text-1 color-muted"
+                <span class="article-editor__hint"
                   >Up to 200 characters. The headline appears in article lists and on the article page.</span
                 >
               </div>
               <!-- Summary -->
               <div
-                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-2"
+                class="article-editor__card article-editor__card--summary"
               >
-                <div class="flex align-center justify-between gap-3">
+                <div class="article-editor__field-header">
                   <label
-                    class="text-label text-1 color-muted text-bold"
+                    class="article-editor__label"
                     for="articleSubtitle"
                     >Summary</label
                   >
-                  <p class="text-label text-1 color-muted text-medium" id="charCounter"></p>
+                  <p class="article-editor__counter" id="charCounter"></p>
                 </div>
                 <textarea
-                  class="control-input width-full text-body text-2 surface-muted pad-4 radius-card color-body motion-all control-no-resize"
+                  class="control-input article-editor__input article-editor__input--summary"
                   id="articleSubtitle"
                   name="articleSubtitle"
                   maxlength="500"
@@ -160,16 +114,16 @@
               </div>
               <!-- Lead image -->
               <div
-                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+                class="article-editor__card article-editor__card--image"
               >
-                <div class="flex flex-column gap-2">
+                <div class="article-editor__image-field">
                   <label
-                    class="text-label text-1 color-muted text-bold"
+                    class="article-editor__label"
                     for="articleImageUrl"
                     >Lead image URL</label
                   >
                   <input
-                    class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-all"
+                    class="control-input article-editor__input article-editor__input--image"
                     id="articleImageUrl"
                     name="articleImageUrl"
                     placeholder="https://..."
@@ -177,24 +131,24 @@
                     value="<%= article.image %>"
                     <% if (article.locked) { %>disabled<% } %>
                   />
-                  <span class="text-caption text-1 color-muted"
+                  <span class="article-editor__hint"
                     >A 16:9 ratio works best. This field is optional.</span
                   >
                 </div>
                 <% if (article.image) { %>
-                <div class="surface-muted radius-panel pad-4 flex flex-column sm-row align-center gap-4">
+                <div class="article-editor__image-preview">
                   <div
-                    class="lead-image-preview width-full media-frame media-thumbnail radius-card flex-no-shrink shadow-subtle"
+                    class="article-editor__preview-media lead-image-preview"
                   >
                     <img
-                      class="width-full height-full media-cover"
+                      class="article-editor__preview-image"
                       alt="<%= article.imageAlt %>"
                       src="<%= article.image %>"
                     />
                   </div>
-                  <div class="lead-image-copy flex-grow flex flex-column justify-center gap-1">
-                    <span class="text-label text-2 color-body">Preview</span>
-                    <p class="text-caption text-1 color-muted">
+                  <div class="article-editor__preview-copy lead-image-copy">
+                    <span class="article-editor__preview-title">Preview</span>
+                    <p class="article-editor__preview-description">
                       This is how the image will look at the top of the article and on cards across the site.
                     </p>
                   </div>
@@ -203,20 +157,20 @@
               </div>
               <!-- Article body -->
               <div
-                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-3"
+                class="article-editor__card article-editor__card--body"
               >
-                <div class="flex align-center justify-between gap-3">
+                <div class="article-editor__field-header">
                   <label
-                    class="text-label text-1 color-muted text-bold"
+                    class="article-editor__label"
                     for="articleBody"
                     >Body</label
                   >
-                  <span class="text-caption text-1 color-muted"
+                  <span class="article-editor__hint"
                     >A blank line between paragraphs splits them on the public page.</span
                   >
                 </div>
                 <textarea
-                  class="article-body-input control-input width-full surface-paper pad-4 radius-card text-deck color-body motion-colors text-relaxed shadow-subtle"
+                  class="article-editor__input article-editor__input--body article-body-input control-input"
                   id="articleBody"
                   name="articleBody"
                   placeholder="Write the article here"
@@ -226,23 +180,23 @@
               </div>
             </div>
             <!-- Sidebar: category and version details -->
-            <div class="article-settings-column span-sidebar flex flex-column gap-5">
+            <div class="article-editor__sidebar">
               <div
-                class="editor-card surface-paper pad-5 radius-panel shadow-subtle flex flex-column gap-4"
+                class="article-editor__card article-editor__card--category"
               >
-                <div class="flex align-center gap-2">
-                  <span class="icon color-muted text-5">category</span>
-                  <h2 class="text-headline text-4 color-primary">Category</h2>
+                <div class="article-editor__card-heading">
+                  <span class="icon article-editor__card-icon">category</span>
+                  <h2 class="article-editor__card-title">Category</h2>
                 </div>
-                <div class="flex flex-column gap-2">
+                <div class="article-editor__category-field">
                   <label
-                    class="text-label text-1 color-muted text-bold"
+                    class="article-editor__label"
                     for="articleCategory"
                     >Article category</label
                   >
-                  <div class="select-control relative">
+                  <div class="select-control article-editor__select-wrap">
                     <select
-                      class="control-input width-full surface-muted pad-inline-4 pad-block-3 radius-card text-body text-1 color-body motion-colors"
+                      class="control-input article-editor__input article-editor__input--category"
                       id="articleCategory"
                       name="articleCategory"
                       <% if (article.locked) { %>disabled<% } %>
@@ -256,42 +210,57 @@
                 </div>
               </div>
               <section
-                class="editor-card surface-paper pad-5 radius-panel shadow-subtle"
+                class="article-editor__card article-editor__card--revision"
                 aria-labelledby="revisionMetadataTitle"
               >
-                <div class="flex align-center gap-2 margin-bottom-4">
-                  <span class="icon color-muted text-5">history_edu</span>
-                  <h2 class="text-headline text-4 color-primary" id="revisionMetadataTitle">
+                <div class="article-editor__card-heading article-editor__card-heading--spaced">
+                  <span class="icon article-editor__card-icon">history_edu</span>
+                  <h2 class="article-editor__card-title" id="revisionMetadataTitle">
                     Version Details
                   </h2>
                 </div>
-                <dl class="revision-ledger stack-2">
+                <dl class="article-editor__revision-ledger revision-ledger">
                   <div><dt>Author</dt><dd><%= article.author %></dd></div>
-                  <div><dt>Status</dt><dd class="text-semibold"><%= article.statusLabel %></dd></div>
+                  <div><dt>Status</dt><dd class="article-editor__revision-value--emphasis"><%= article.statusLabel %></dd></div>
                   <div><dt>Live version</dt><dd><%= article.liveVersion %></dd></div>
                   <div><dt>Draft version</dt><dd><%= article.draftVersion %></dd></div>
                   <div><dt>Last saved</dt><dd><%= article.savedAt %></dd></div>
                 </dl>
                 <p
-                  class="revision-note surface-muted radius-standard pad-3 margin-top-4 text-caption text-1 color-muted flex align-start gap-2"
+                  class="article-editor__revision-note revision-note"
                 >
-                  <span class="icon text-4">policy</span>
+                  <span class="icon article-editor__revision-note-icon">policy</span>
                   <span
                     >Submitting moves the article into the editor's review queue.
                     From that point it stays locked until a decision comes back.</span
                   >
                 </p>
               </section>
+              <section class="article-editor__card article-editor__actions-card" aria-labelledby="articleActionsTitle">
+                <div class="article-editor__card-heading">
+                  <span class="icon article-editor__card-icon">edit_note</span>
+                  <h2 class="article-editor__card-title" id="articleActionsTitle">Article Actions</h2>
+                </div>
+                <div class="article-editor__actions-status">
+                  <span class="article-editor__actions-status-label">Status</span>
+                  <span class="status-badge article-editor__status-badge"><%= article.statusLabel %></span>
+                </div>
+                <div class="article-editor__actions-buttons">
+                  <button class="button button--secondary article-editor__save-action" id="saveDraftBtn" type="button" <% if (article.locked) { %>disabled<% } %>>Save Draft</button>
+                  <button class="button button--primary article-editor__submit-action" id="submitForReviewBtn" type="button" <% if (article.locked) { %>disabled<% } %>><span class="icon article-editor__submit-icon">send</span>Submit for Review</button>
+                </div>
+                <p class="article-editor__action-message state-hidden" id="articleActionMessage" role="status" aria-live="polite"></p>
+              </section>
             </div>
           </form>
         </div>
       </div>
     </main>
-    <footer class="newsroom-footer width-full surface-muted pad-block-3">
-      <div class="page-shell text-center text-caption text-1 color-muted">
+    <footer class="article-editor__footer newsroom-footer">
+      <div class="article-editor__footer-content page-shell">
         The Daily Web — Internal Newsroom System
       </div>
     </footer>
-    <script src="/js/autosave.js" defer></script>
+    <script src="/js/article-editor.js" defer></script>
   </body>
 </html>

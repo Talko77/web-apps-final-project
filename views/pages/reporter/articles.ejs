@@ -4,76 +4,66 @@
   <head>
     <%- include('../../partials/shared/head', { pageTitle }) %>
   </head>
-  <body
-    class="reporter-articles-page surface-page text-body color-body height-screen flex flex-column"
-  >
+  <body class="reporter-articles">
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
-    <main class="newsroom-main width-full surface-page flex-grow">
-      <div class="reporter-workspace page-shell pad-block-3">
-        <nav
-          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
-          aria-label="Breadcrumb"
-        >
-          <a class="interaction-underline" href="/reporter/articles">Newsroom</a>
-          <span class="color-subtle">/</span>
-          <span class="color-body text-semibold">My Articles</span>
+    <main class="reporter-articles__main newsroom-main">
+      <div class="reporter-articles__workspace reporter-workspace page-shell">
+        <nav class="reporter-articles__breadcrumb" aria-label="Breadcrumb">
+          <a class="reporter-articles__breadcrumb-link" href="/reporter/articles">Newsroom</a>
+          <span class="reporter-articles__breadcrumb-separator">/</span>
+          <span class="reporter-articles__breadcrumb-current">My Articles</span>
         </nav>
-        <div class="flex flex-column width-full">
+        <div class="reporter-articles__content">
           <!-- Context bar: who is signed in and which desk they belong to -->
           <div
-            class="portal-context-bar width-full surface-muted pad-inline-4 pad-block-3 radius-card shadow-subtle margin-bottom-5 flex flex-wrap align-center justify-between gap-3"
+            class="reporter-articles__context"
           >
-            <div class="flex align-center gap-3">
-              <span class="text-headline text-4 color-primary">Reporter Workspace</span>
-              <span
-                class="inline-flex align-center pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
-                ><%= reporter.desk %></span
-              >
+            <div class="reporter-articles__context-title">
+              <span class="reporter-articles__context-heading">Reporter Workspace</span>
+              <span class="reporter-articles__desk"><%= reporter.desk %></span>
             </div>
-            <div class="flex align-center gap-3 text-body text-1 color-muted">
-              <div
-                class="avatar-small surface-info color-info text-semibold flex align-center justify-center text-1 radius-pill"
-              ><%= reporter.initials %></div>
-              <span class="text-medium color-body"
+            <div class="reporter-articles__reporter">
+              <div class="reporter-articles__avatar"><%= reporter.initials %></div>
+              <span class="reporter-articles__reporter-name"
                 ><%= reporter.name %>
-                <span class="color-muted text-normal">(<%= newsroomRole %>)</span></span
+                <span class="reporter-articles__reporter-role">(<%= newsroomRole %>)</span></span
               >
             </div>
           </div>
           <!-- Page heading and the create action -->
           <div
-            class="reporter-page-heading flex flex-column md-row align-center justify-between gap-4 margin-bottom-5"
+            class="reporter-articles__heading"
           >
             <div>
-              <h1 class="text-headline text-6 color-primary">My Articles</h1>
-              <p class="text-body text-1 color-muted margin-top-2">
+              <h1 class="reporter-articles__title">My Articles</h1>
+              <p class="reporter-articles__description">
                 Manage your drafts here, along with the stories waiting on an
                 editor and the ones already live on the site.
               </p>
             </div>
-            <div class="flex align-center gap-3">
+            <div class="reporter-articles__heading-actions">
               <a
-                class="create-article-button control-button color-inverse text-label text-2 shadow-subtle motion-all"
+                class="button button--primary reporter-articles__create-action"
                 href="/reporter/articles/new/edit"
               >
-                <span class="icon text-4">add_circle</span>
+                <span class="icon reporter-articles__create-icon">add_circle</span>
                 New Article
               </a>
             </div>
           </div>
           <!-- Filter by status, category and free-text search. Filtering runs in the browser -->
           <div
-            class="article-filter-strip surface-paper pad-4 radius-card shadow-subtle margin-bottom-4 flex flex-column md-row align-center justify-between gap-4"
+            class="article-filter-strip reporter-articles__filters"
           >
             <div
-              class="flex flex-wrap align-center gap-2"
+              class="article-filter-strip__options reporter-articles__filter-options"
               id="statusFilterPills"
               role="group"
               aria-label="Filter by article status"
             >
               <% statusFilters.forEach(function (filter, index) { %>
               <button
-                class="filter-btn<%= index === 0 ? ' active' : '' %> surface-panel color-muted pad-inline-3 pad-block-2 radius-standard text-1 text-label motion-colors"
+                class="article-filter-strip__option filter-btn<%= index === 0 ? ' active' : '' %>"
                 data-status="<%= filter.label %>"
                 type="button"
               >
@@ -81,15 +71,11 @@
               </button>
               <% }) %>
             </div>
-            <div class="article-filter-controls flex flex-wrap align-center gap-3 width-full">
-              <div class="category-control relative flex flex-column gap-1 width-full">
-                <label
-                  class="text-label text-1 color-muted"
-                  for="categorySelect"
-                  >Category</label
-                >
+            <div class="reporter-articles__filter-controls">
+              <div class="reporter-articles__filter-field reporter-articles__filter-field--category category-control">
+                <label class="reporter-articles__filter-label" for="categorySelect">Category</label>
                 <select
-                  class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3 pad-block-2 control-pointer"
+                  class="control-input reporter-articles__filter-input"
                   id="categorySelect"
                 >
                   <% categories.forEach(function (category) { %>
@@ -97,14 +83,10 @@
                   <% }) %>
                 </select>
               </div>
-              <div class="article-search-control relative flex flex-column gap-1 width-full">
-                <label
-                  class="text-label text-1 color-muted"
-                  for="articleSearchInput"
-                  >Search by headline</label
-                >
+              <div class="reporter-articles__filter-field reporter-articles__filter-field--search">
+                <label class="reporter-articles__filter-label" for="articleSearchInput">Search by headline</label>
                 <input
-                  class="control-input width-full surface-muted color-body text-1 text-body radius-standard pad-inline-3 pad-block-2"
+                  class="control-input reporter-articles__filter-input"
                   id="articleSearchInput"
                   placeholder="Type a word from the headline"
                   type="search"
@@ -114,30 +96,28 @@
           </div>
           <!-- The articles table -->
           <div
-            class="articles-table-card surface-paper radius-card shadow-subtle overflow-hidden margin-bottom-4"
+            class="reporter-articles__table-card"
           >
-            <div class="overflow-scroll width-full">
-              <table class="reporter-articles-table width-full text-body text-1">
-                <thead
-                  class="surface-muted text-label text-1 color-muted"
-                >
+            <div class="reporter-articles__table-scroll">
+              <table class="reporter-articles__table">
+                <thead class="reporter-articles__table-head">
                   <tr>
-                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                    <th scope="col">
                       Headline
                     </th>
-                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                    <th scope="col">
                       Category
                     </th>
-                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                    <th scope="col">
                       Status
                     </th>
-                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                    <th scope="col">
                       Last Updated
                     </th>
-                    <th class="pad-block-3 pad-inline-4 text-semibold" scope="col">
+                    <th scope="col">
                       Views
                     </th>
-                    <th class="pad-block-3 pad-inline-4 text-semibold text-center" scope="col">
+                    <th class="reporter-articles__actions-header" scope="col">
                       Actions
                     </th>
                   </tr>
@@ -145,64 +125,59 @@
                 <tbody id="articlesTableBody">
                   <% articles.forEach(function (a) { %>
                   <tr
-                    class="article-row <%= a.rowClass %>"
+                    class="reporter-articles__row article-row"
                     data-status="<%= a.status %>"
                     data-category="<%= a.category %>"
                     data-title="<%= a.title %>"
                   >
-                    <td class="pad-block-3 pad-inline-4">
-                      <div class="flex align-center gap-3">
+                    <td class="reporter-articles__article-cell">
+                      <div class="reporter-articles__article">
                         <% if (a.image) { %>
                         <img
-                          class="avatar-large media-cover radius-standard flex-no-shrink"
+                          class="reporter-articles__thumbnail"
                           alt="<%= a.imageAlt %>"
                           src="<%= a.image %>"
                         />
                         <% } else { %>
                         <div
-                          class="avatar-large radius-standard surface-panel flex align-center justify-center color-muted flex-no-shrink"
+                          class="reporter-articles__thumbnail reporter-articles__thumbnail--placeholder"
                         >
-                          <span class="icon text-5">image_not_supported</span>
+                          <span class="icon reporter-articles__thumbnail-icon">image_not_supported</span>
                         </div>
                         <% } %>
-                        <div>
+                        <div class="reporter-articles__article-details">
                           <a
-                            class="text-headline text-4 color-primary interaction-underline block"
+                            class="reporter-articles__article-title"
                             href="<%= a.editUrl %>"
                             ><%= a.title %></a
                           >
-                          <span class="text-1 text-caption <%= a.detailClass %>"
+                          <span class="reporter-articles__article-detail<%= a.status === 'Changes Requested' || a.status === 'Rejected' ? ' reporter-articles__article-detail--alert' : '' %>"
                             ><%= a.detail %></span
                           >
                         </div>
                       </div>
                     </td>
-                    <td class="pad-block-3 pad-inline-4">
+                    <td class="reporter-articles__category-cell">
+                      <span class="reporter-articles__category"><%= a.category %></span>
+                    </td>
+                    <td class="reporter-articles__status-cell">
                       <span
-                        class="inline pad-inline-3 pad-block-2 radius-standard surface-panel color-body text-label text-1"
-                        ><%= a.category %></span
+                        class="status-badge reporter-articles__status"
+                        ><span class="status-dot reporter-articles__status-dot"></span><%= a.status %></span
                       >
                     </td>
-                    <td class="pad-block-3 pad-inline-4">
-                      <span
-                        class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard text-1 text-semibold <%= a.statusClass %>"
-                        ><span
-                          class="status-dot radius-pill <%= a.statusClass.split(' ')[0] %>"
-                        ></span><%= a.status %></span
-                      >
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 color-muted no-wrap"><%= a.updated %></td>
+                    <td class="reporter-articles__updated"><%= a.updated %></td>
                     <td
-                      class="pad-block-3 pad-inline-4 <%= a.views === '-' ? 'color-muted' : 'text-medium color-body' %>"
+                      class="reporter-articles__views<%= a.views === '-' ? ' reporter-articles__views--empty' : '' %>"
                     ><%= a.views %></td>
-                    <td class="pad-block-3 pad-inline-4 text-center">
-                      <div class="inline-flex radius-card shadow-subtle" role="group">
+                    <td class="reporter-articles__actions-cell">
+                      <div class="reporter-articles__actions" role="group">
                         <a
-                          class="pad-inline-3 pad-block-2 text-1 text-label surface-panel color-body radius-standard"
+                          class="reporter-articles__action reporter-articles__action--edit"
                           href="<%= a.editUrl %>"
                           >Edit</a
                         ><button
-                          class="pad-inline-3 pad-block-2 text-1 text-label <%= a.actionClass %>"
+                          class="reporter-articles__action reporter-articles__action--submit"
                           data-submit-id="<%= a.id %>"
                           type="button"
                           <% if (a.disabled) { %>disabled<% } %>
@@ -215,7 +190,7 @@
               </table>
             </div>
             <p
-              class="state-hidden pad-6 text-center text-body text-1 color-muted"
+              class="reporter-articles__empty state-hidden"
               id="noResultsState"
             >
               No articles match the current filters. Try another status or
@@ -224,19 +199,19 @@
           </div>
           <!-- Result counter and system messages -->
           <div
-            class="articles-pagination flex flex-column sm-row align-center justify-between gap-3 pad-inline-3 pad-block-3"
+            class="reporter-articles__pagination"
           >
-            <div class="text-body text-1 color-muted">
+            <div class="reporter-articles__results">
               Showing
-              <span class="text-semibold color-body" id="displayedCount"
+              <span class="reporter-articles__results-count" id="displayedCount"
                 ><%= articles.length %></span
               >
               of
-              <span class="text-semibold color-body"><%= totalArticles %></span>
+              <span class="reporter-articles__results-count"><%= totalArticles %></span>
               articles
             </div>
             <p
-              class="state-hidden text-body text-1 color-muted"
+              class="reporter-articles__status-message state-hidden"
               id="reporterStatus"
               role="status"
               aria-live="polite"
@@ -245,8 +220,8 @@
         </div>
       </div>
     </main>
-    <footer class="newsroom-footer width-full surface-muted pad-block-3">
-      <div class="page-shell text-center text-caption text-1 color-muted">
+    <footer class="reporter-articles__footer newsroom-footer">
+      <div class="reporter-articles__footer-content page-shell">
         The Daily Web — Internal Newsroom System
       </div>
     </footer>

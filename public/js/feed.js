@@ -31,29 +31,29 @@
   // Must stay identical to the markup in views/partials/public/article-card.ejs
   function cardHtml(a) {
     const media = a.imageUrl
-      ? `<div class="media-frame media-thumbnail surface-panel"><img class="width-full height-full media-cover" src="${esc(a.imageUrl)}" alt="${esc(a.imageAlt)}" loading="lazy"></div>`
+      ? `<div class="article-card__media"><img class="article-card__image" src="${esc(a.imageUrl)}" alt="${esc(a.imageAlt)}" loading="lazy"></div>`
       : '';
     const summary = a.summary
-      ? `<p class="text-body text-1 color-muted margin-top-2">${esc(a.summary)}</p>`
+      ? `<p class="article-card__summary">${esc(a.summary)}</p>`
       : '';
     const seenBadge = a.seen
-      ? '<span class="text-caption text-1 color-muted margin-top-2 block">Read</span>'
+      ? '<span class="article-card__read-state">Read</span>'
       : '';
     const read = a.readLabel ? ` · ${esc(a.readLabel)}` : '';
 
-    return `<article class="article-card surface-paper radius-card overflow-hidden shadow-subtle" data-id="${esc(a._id)}" data-seen="${a.seen ? 'true' : 'false'}">
-  <a class="block" href="/articles/${esc(a._id)}">
+    return `<article class="article-card" data-id="${esc(a._id)}" data-seen="${a.seen ? 'true' : 'false'}">
+  <a class="article-card__link" href="/articles/${esc(a._id)}">
     ${media}
-    <div class="pad-4">
-      <div class="flex align-center justify-between gap-2">
-        <span class="text-label text-1 text-uppercase color-primary">${esc(a.category || 'News')}</span>
-        <span class="text-caption text-1 color-muted">${esc(a.dateLabel || '')}</span>
+    <div class="article-card__body">
+      <div class="article-card__meta">
+        <span class="article-card__category">${esc(a.category || 'News')}</span>
+        <span class="article-card__date">${esc(a.dateLabel || '')}</span>
       </div>
-      <h2 class="text-headline text-4 color-body margin-top-2">${esc(a.title || 'Untitled article')}</h2>
+      <h2 class="article-card__title">${esc(a.title || 'Untitled article')}</h2>
       ${summary}
-      <div class="flex align-center justify-between gap-2 margin-top-3">
-        <span class="text-caption text-1 color-subtle">${esc(a.reporterName || '')}</span>
-        <span class="text-caption text-1 color-muted">${esc(a.views || '0')} views${read}</span>
+      <div class="article-card__footer">
+        <span class="article-card__author">${esc(a.reporterName || '')}</span>
+        <span class="article-card__metrics">${esc(a.views || '0')} views${read}</span>
       </div>
       ${seenBadge}
     </div>

@@ -136,9 +136,7 @@ exports.create = asyncHandler(async (req, res) => {
   res.status(201).json({ success: true, articleId: article._id });
 });
 
-// PUT /api/articles/:id - automatic saving of the draft, with no save button.
-// The draft is stored on the server so a refresh, closing the browser or switching
-// computers does not lose the work.
+// PUT /api/articles/:id - saves the reporter's draft on an explicit Save Draft action.
 exports.saveDraft = asyncHandler(async (req, res) => {
   const user = req.session.user;
   const article = await Article.findById(req.params.id);

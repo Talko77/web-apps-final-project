@@ -1,286 +1,146 @@
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
-  <body class="editor-diff-page surface-page text-body text-2 color-body">
+  <body class="review-article editor-diff-page">
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
-    <main class="site-header-offset width-full pad-inline-5 pad-block-3 surface-page">
-      <div class="width-content flex flex-column margin-bottom-6">
-        <section
-          class="review-command-card width-full surface-paper shadow-subtle radius-panel pad-4 margin-bottom-5"
-        >
-          <div class="flex flex-column gap-4">
-            <div class="flex flex-column gap-2">
-              <span class="text-label text-1 text-uppercase color-muted"
-                >Editor's Desk · Article Review</span
-              >
-              <div class="flex flex-wrap align-center gap-3 margin-top-2">
-                <span
-                  class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard text-label text-1 text-semibold <%= page.article.statusClass %>"
-                >
-                  <%= page.article.statusLabel %>
-                </span>
-                <span
-                  class="text-label text-1 color-body text-semibold flex align-center gap-1"
-                >
-                  <span
-                    class="avatar-small radius-pill surface-ink color-inverse flex align-center justify-center text-1 text-bold"
-                    ><%= page.article.initials %></span
-                  >
+    <main class="review-article__main">
+      <div class="review-article__content">
+        <section class="review-command-card">
+          <div class="review-command-card__content">
+            <div class="review-command-card__summary">
+              <span class="review-command-card__eyebrow">Editor's Desk · Article Review</span>
+              <div class="review-command-card__metadata">
+                <span class="review-command-card__status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span>
+                <span class="review-command-card__reporter">
+                  <span class="review-command-card__avatar"><%= page.article.initials %></span>
                   <%= page.article.reporter %>
                 </span>
-                <span class="color-muted">•</span>
-                <span
-                  class="text-caption text-1 surface-panel pad-inline-3 pad-block-2 radius-standard color-muted text-medium"
-                >
-                  Desk: <%= page.article.desk %>
-                </span>
-                <span class="color-muted">•</span>
-                <span class="text-caption text-1 color-muted flex align-center gap-1">
-                  <span class="icon text-2">schedule</span>
+                <span class="review-command-card__separator">•</span>
+                <span class="review-command-card__desk">Desk: <%= page.article.desk %></span>
+                <span class="review-command-card__separator">•</span>
+                <span class="review-command-card__meta-item">
+                  <span class="icon review-command-card__meta-icon">schedule</span>
                   Submitted: <%= page.article.submittedLabel %>
                 </span>
-                <span class="color-muted">•</span>
-                <span class="text-caption text-1 color-muted flex align-center gap-1">
-                  <span class="icon text-2">visibility</span>
+                <span class="review-command-card__separator">•</span>
+                <span class="review-command-card__meta-item">
+                  <span class="icon review-command-card__meta-icon">visibility</span>
                   <%= page.article.views %> views
                 </span>
               </div>
             </div>
             <% if (page.article.isUpdate) { %>
-            <div
-              class="notice-banner surface-warning color-warning radius-card pad-4 flex align-start gap-3"
-              role="status"
-            >
-              <span class="icon text-4">update</span>
-              <div class="flex flex-column">
-                <span class="text-label text-2 text-semibold"
-                  >This is an update to an already published article</span
-                >
-                <span class="text-body text-1 margin-top-2"
-                  >Readers continue to see the published version until this update
-                  is approved. Approving it will replace the content shown to the
-                  public.</span
-                >
+            <div class="review-command-card__update-notice" role="status">
+              <span class="icon review-command-card__notice-icon">update</span>
+              <div class="review-command-card__notice-content">
+                <span class="review-command-card__notice-title">This is an update to an already published article</span>
+                <span class="review-command-card__notice-text">Readers continue to see the published version until this update is approved. Approving it will replace the content shown to the public.</span>
               </div>
             </div>
             <% } %>
             <% if (page.article.editorNote) { %>
-            <div class="revision-note surface-info color-info radius-card pad-4 flex flex-column gap-2">
-              <span class="text-label text-1 text-uppercase text-semibold"
-                >Latest Editor Note</span
-              >
-              <p class="text-body text-2"><%= page.article.editorNote %></p>
+            <div class="review-command-card__editor-note">
+              <span class="review-command-card__note-label">Latest Editor Note</span>
+              <p class="review-command-card__note-text"><%= page.article.editorNote %></p>
             </div>
             <% } %>
           </div>
         </section>
-        <div class="review-workspace grid grid-single lg-editorial-grid gap-5 align-start">
-          <div class="lg-content-span flex flex-column gap-4">
-            <div class="grid grid-single grid-split gap-4">
-              <div
-                class="comparison-pane comparison-pane-live surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
-              >
-                <div class="pad-4 surface-muted flex flex-column gap-2">
-                  <span
-                    class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1"
-                  >
-                    <span class="icon text-1">public</span>
+
+        <div class="review-article__layout">
+          <div class="review-article__comparison">
+            <div class="review-article__panes">
+              <div class="comparison-pane comparison-pane--live">
+                <div class="comparison-pane__header">
+                  <span class="comparison-pane__version comparison-pane__version--live">
+                    <span class="icon comparison-pane__version-icon">public</span>
                     <%= page.article.published ? page.article.published.label : 'Not yet published' %>
                   </span>
-                  <span class="text-caption text-1 color-muted"
-                    >The version readers currently see on the public site</span
-                  >
+                  <span class="comparison-pane__description">The version readers currently see on the public site</span>
                 </div>
                 <% if (!page.article.published) { %>
-                <div class="pad-5 flex flex-column gap-2">
-                  <p class="text-body text-2 color-muted">
-                    This article has never been published, so there is no version
-                    visible to readers. Approving the version shown alongside will
-                    publish it for the first time.
-                  </p>
+                <div class="comparison-pane__empty">
+                  <p>This article has never been published, so there is no version visible to readers. Approving the version shown alongside will publish it for the first time.</p>
                 </div>
                 <% } else { %>
                 <% const pane = page.article.published; %>
-                <article class="pad-5 flex flex-column stack-4 overflow-scroll">
-                  <span
-                    class="text-label text-1 text-uppercase color-muted"
-                    ><%= pane.category %></span
-                  >
-                  <h1 class="text-headline text-6 color-body"><%= pane.title %></h1>
+                <article class="comparison-pane__article">
+                  <span class="comparison-pane__category"><%= pane.category %></span>
+                  <h1 class="comparison-pane__title"><%= pane.title %></h1>
                   <% if (pane.imageUrl) { %>
-                  <div
-                    class="comparison-media relative width-full height-feature radius-standard overflow-hidden surface-panel"
-                  >
-                    <img
-                      class="width-full height-full media-cover"
-                      alt="<%= pane.imageAlt %>"
-                      src="<%= pane.imageUrl %>"
-                    />
+                  <div class="comparison-media">
+                    <img class="comparison-media__image" alt="<%= pane.imageAlt %>" src="<%= pane.imageUrl %>" />
                   </div>
                   <% } %>
-                  <p class="text-headline text-deck color-body text-italic">
-                    <%= pane.summary %>
-                  </p>
-                  <div class="stack-3 text-body text-2 color-muted">
-                    <% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %>
-                  </div>
+                  <p class="comparison-pane__summary"><%= pane.summary %></p>
+                  <div class="comparison-pane__body"><% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %></div>
                 </article>
                 <% } %>
               </div>
-              <div
-                class="comparison-pane comparison-pane-draft surface-paper radius-panel shadow-subtle overflow-hidden flex flex-column"
-              >
-                <div class="pad-4 surface-muted flex flex-column gap-2">
-                  <span
-                    class="inline-flex align-center gap-2 pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1"
-                  >
-                    <span class="icon text-1">edit_note</span>
+
+              <div class="comparison-pane comparison-pane--draft">
+                <div class="comparison-pane__header">
+                  <span class="comparison-pane__version comparison-pane__version--draft">
+                    <span class="icon comparison-pane__version-icon">edit_note</span>
                     <%= page.article.draft ? page.article.draft.label : 'No pending version' %>
                   </span>
-                  <span class="text-caption text-1 color-muted"
-                    >The version submitted by the reporter, awaiting an editorial decision</span
-                  >
+                  <span class="comparison-pane__description">The version submitted by the reporter, awaiting an editorial decision</span>
                 </div>
                 <% if (!page.article.draft) { %>
-                <div class="pad-5 flex flex-column gap-2">
-                  <p class="text-body text-2 color-muted">
-                    There is no version currently awaiting approval for this article.
-                  </p>
-                </div>
+                <div class="comparison-pane__empty"><p>There is no version currently awaiting approval for this article.</p></div>
                 <% } else { %>
                 <% const pane = page.article.draft; %>
-                <article class="pad-5 flex flex-column stack-4 overflow-scroll">
-                  <span
-                    class="text-label text-1 text-uppercase color-muted"
-                    ><%= pane.category %></span
-                  >
-                  <h1 class="text-headline text-6 color-body"><%= pane.title %></h1>
+                <article class="comparison-pane__article">
+                  <span class="comparison-pane__category"><%= pane.category %></span>
+                  <h1 class="comparison-pane__title"><%= pane.title %></h1>
                   <% if (pane.imageUrl) { %>
-                  <div
-                    class="comparison-media relative width-full height-feature radius-standard overflow-hidden surface-panel"
-                  >
-                    <img
-                      class="width-full height-full media-cover"
-                      alt="<%= pane.imageAlt %>"
-                      src="<%= pane.imageUrl %>"
-                    />
+                  <div class="comparison-media">
+                    <img class="comparison-media__image" alt="<%= pane.imageAlt %>" src="<%= pane.imageUrl %>" />
                   </div>
                   <% } %>
-                  <p class="text-headline text-deck color-body text-italic">
-                    <%= pane.summary %>
-                  </p>
-                  <div class="stack-3 text-body text-2 color-muted">
-                    <% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %>
-                  </div>
+                  <p class="comparison-pane__summary"><%= pane.summary %></p>
+                  <div class="comparison-pane__body"><% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %></div>
                 </article>
                 <% } %>
               </div>
             </div>
           </div>
-          <aside class="review-audit-sidebar span-sidebar flex flex-column gap-4">
-            <div
-              class="decision-card surface-paper radius-panel shadow-subtle pad-5 flex flex-column gap-4"
-              id="reviewActions"
-              data-article-id="<%= page.article.id %>"
-            >
+
+          <aside class="review-article__sidebar">
+            <div class="decision-card" id="reviewActions" data-article-id="<%= page.article.id %>">
               <div>
-                <h2 class="text-headline text-5 color-body">Editorial Decision</h2>
-                <p class="text-body text-1 color-muted margin-top-2">
-                  Compare the two versions before publishing or requesting changes.
-                </p>
+                <h2 class="decision-card__title">Editorial Decision</h2>
+                <p class="decision-card__description">Compare the two versions before publishing or requesting changes.</p>
               </div>
-              <div class="flex flex-column gap-2">
-                <label class="text-label text-2 color-body" for="editorNotes"
-                  >Note to the reporter</label
-                >
-                <p class="text-caption text-1 color-muted">
-                  A note is required when requesting changes - explain what needs
-                  fixing. It is optional when approving and publishing.
-                </p>
-                <textarea
-                  class="width-full pad-3 surface-muted color-body text-body text-2 radius-card control-no-resize control-input motion-colors"
-                  id="editorNotes"
-                  placeholder="For example: the source in the third paragraph needs a second confirmation."
-                  rows="5"
-                ></textarea>
+              <div class="decision-card__field">
+                <label class="decision-card__label" for="editorNotes">Note to the reporter</label>
+                <p class="decision-card__hint">A note is required when requesting changes - explain what needs fixing. It is optional when approving and publishing.</p>
+                <textarea class="decision-card__textarea control-input" id="editorNotes" placeholder="For example: the source in the third paragraph needs a second confirmation." rows="5"></textarea>
               </div>
               <% if (!page.article.canDecide) { %>
-              <p class="text-body text-1 color-muted surface-muted radius-card pad-3">
-                Only an article that is pending review can be approved or sent
-                back for changes. This article is currently
-                "<%= page.article.statusLabel %>".
-              </p>
+              <p class="decision-card__unavailable">Only an article that is pending review can be approved or sent back for changes. This article is currently "<%= page.article.statusLabel %>".</p>
               <% } %>
-              <div class="flex flex-column gap-2 margin-top-2">
-                <button
-                  class="editor-action editor-action-approve width-full pad-block-3 pad-inline-4 surface-ink color-inverse radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all shadow-subtle"
-                  id="btn-approve"
-                  type="button"
-                  <% if (!page.article.canDecide) { %>disabled<% } %>
-                >
-                  <span class="icon text-4">check_circle</span>
-                  <span>Approve &amp; Publish</span>
+              <div class="review-article__actions">
+                <button class="review-article__action review-article__action--approve" id="btn-approve" type="button" <% if (!page.article.canDecide) { %>disabled<% } %>>
+                  <span class="icon review-article__action-icon">check_circle</span><span>Approve &amp; Publish</span>
                 </button>
-                <button
-                  class="editor-action editor-action-revise width-full pad-block-3 pad-inline-4 surface-info color-info radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all"
-                  id="btn-request-revisions"
-                  type="button"
-                  <% if (!page.article.canDecide) { %>disabled<% } %>
-                >
-                  <span class="icon text-4">reply</span>
-                  <span>Request Changes</span>
+                <button class="review-article__action review-article__action--revise" id="btn-request-revisions" type="button" <% if (!page.article.canDecide) { %>disabled<% } %>>
+                  <span class="icon review-article__action-icon">reply</span><span>Request Changes</span>
                 </button>
-                <button
-                  class="editor-action editor-action-reject width-full pad-block-3 pad-inline-4 surface-alert color-alert radius-card text-label text-2 text-semibold flex align-center justify-center gap-2 motion-all margin-top-2"
-                  id="btn-delete"
-                  type="button"
-                >
-                  <span class="icon text-4">delete</span>
-                  <span>Delete Article</span>
+                <button class="review-article__action review-article__action--delete" id="btn-delete" type="button">
+                  <span class="icon review-article__action-icon">delete</span><span>Delete Article</span>
                 </button>
               </div>
-              <p
-                class="state-hidden pad-3 radius-card text-body text-1 text-center"
-                id="statusAlert"
-                role="status"
-                aria-live="polite"
-              ></p>
+              <p class="decision-card__status state-hidden" id="statusAlert" role="status" aria-live="polite"></p>
             </div>
-            <div class="surface-muted radius-panel pad-4 flex flex-column gap-3">
-              <span class="text-label text-1 text-uppercase color-muted"
-                >Article Details</span
-              >
-              <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">Reporter</span>
-                <span class="text-label text-1 text-bold color-body"
-                  ><%= page.article.reporter %></span
-                >
-              </div>
-              <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">Desk</span>
-                <span class="text-label text-1 text-bold color-body"
-                  ><%= page.article.desk %></span
-                >
-              </div>
-              <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">Submitted</span>
-                <span class="text-label text-1 text-bold color-body"
-                  ><%= page.article.submittedLabel %></span
-                >
-              </div>
-              <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">Views</span>
-                <span class="text-label text-1 text-bold color-body"
-                  ><%= page.article.views %></span
-                >
-              </div>
-              <div class="flex align-center justify-between">
-                <span class="text-body text-1 color-body">Status</span>
-                <span
-                  class="pad-inline-3 pad-block-2 radius-standard text-label text-1 text-semibold <%= page.article.statusClass %>"
-                  ><%= page.article.statusLabel %></span
-                >
-              </div>
+
+            <div class="review-article__details">
+              <span class="review-article__details-title">Article Details</span>
+              <div class="review-article__detail"><span class="review-article__detail-label">Reporter</span><span class="review-article__detail-value"><%= page.article.reporter %></span></div>
+              <div class="review-article__detail"><span class="review-article__detail-label">Desk</span><span class="review-article__detail-value"><%= page.article.desk %></span></div>
+              <div class="review-article__detail"><span class="review-article__detail-label">Submitted</span><span class="review-article__detail-value"><%= page.article.submittedLabel %></span></div>
+              <div class="review-article__detail"><span class="review-article__detail-label">Views</span><span class="review-article__detail-value"><%= page.article.views %></span></div>
+              <div class="review-article__detail"><span class="review-article__detail-label">Status</span><span class="review-article__detail-status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span></div>
             </div>
           </aside>
         </div>

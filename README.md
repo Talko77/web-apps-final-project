@@ -132,9 +132,8 @@ update to it is awaiting approval, and the new content replaces it only once an 
 approves.
 
 ### Work continuity
-There is no save button. `public/js/autosave.js` sends the draft to the server two seconds
-after the reporter stops typing, and also when the tab is hidden. Drafts are stored in
-MongoDB, so refreshing, closing the browser or moving to another computer does not lose work.
+Reporters explicitly save drafts from the article action card. Drafts are stored in MongoDB
+when **Save Draft** is selected.
 
 ### Editor workspace
 All articles with filtering by state, category and search. The review page shows the
@@ -190,7 +189,7 @@ current.
 | GET | `/api/articles/manage` | Editor | All articles |
 | GET | `/api/articles/:id` | Reporter/Editor | Single article |
 | POST | `/api/articles` | Reporter | Create article |
-| PUT | `/api/articles/:id` | Reporter/Editor | Save draft (autosave) |
+| PUT | `/api/articles/:id` | Reporter/Editor | Save draft |
 | PATCH | `/api/articles/:id/status` | Reporter/Editor | State transition |
 | DELETE | `/api/articles/:id` | Editor | Delete article |
 | GET | `/api/comments/article/:id` | public | Comments for an article |

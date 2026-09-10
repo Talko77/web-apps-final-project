@@ -1,136 +1,80 @@
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
-  <body
-    class="editor-analytics-page surface-page text-body text-2 color-body height-screen flex flex-column"
-  >
+  <body class="analytics-page editor-analytics-page">
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
-    <main class="site-header-offset width-full surface-page flex-grow">
-      <div class="editor-page-content width-content pad-inline-5 pad-block-3">
-        <div class="flex flex-column width-full gap-5">
-          <section
-            class="review-article-card surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-3"
-          >
-            <span class="text-label text-1 text-uppercase color-muted"
-              >Impact Analytics</span
-            >
-            <h1 class="text-headline text-6 color-body">
-              <%= page.article.title %>
-            </h1>
-            <div
-              class="reporter-strip flex flex-wrap align-center gap-3 pad-block-2 surface-muted pad-inline-4 radius-card"
-            >
-              <span
-                class="pad-inline-3 pad-block-2 radius-pill surface-ink color-inverse text-label text-1"
-                ><%= page.article.category %></span
-              >
-              <span class="text-label text-2 color-body flex align-center gap-1">
-                <span class="icon text-2 color-muted">badge</span>
-                <%= page.article.reporter %>
-              </span>
+    <main class="analytics-page__main">
+      <div class="analytics-page__content">
+        <section class="analytics-page__article-summary">
+          <span class="analytics-page__eyebrow">Impact Analytics</span>
+          <h1 class="analytics-page__title"><%= page.article.title %></h1>
+          <div class="analytics-page__article-meta">
+            <span class="analytics-page__category"><%= page.article.category %></span>
+            <span class="analytics-page__reporter">
+              <span class="icon analytics-page__meta-icon">badge</span>
+              <%= page.article.reporter %>
+            </span>
+          </div>
+        </section>
+        <section class="analytics-card">
+          <div class="analytics-card__header">
+            <div>
+              <h2 class="analytics-card__title">
+                <span class="icon analytics-card__title-icon">trending_up</span>
+                Views Over Time
+              </h2>
+              <p class="analytics-card__description">
+                Hourly view counts for this article across the selected time range.
+              </p>
             </div>
-          </section>
-          <section
-            class="analytics-card surface-paper radius-panel pad-5 shadow-subtle flex flex-column gap-4"
-          >
-            <div
-              class="flex flex-column sm-row sm-align-center justify-between gap-3"
-            >
-              <div>
-                <h2
-                  class="text-headline text-4 color-body flex align-center gap-2"
-                >
-                  <span class="icon text-4 color-muted">trending_up</span>
-                  Views Over Time
-                </h2>
-                <p class="text-caption text-1 color-muted margin-top-2">
-                  Hourly view counts for this article across the selected time range.
-                </p>
+            <div class="analytics-card__filters">
+              <div class="analytics-card__field">
+                <label class="analytics-card__label" for="analyticsArticleSelect">Article</label>
+                <select class="analytics-card__select control-input" id="analyticsArticleSelect">
+                  <% page.articleOptions.forEach(function (o) { %>
+                  <option value="<%= o.id %>" <% if (o.selected) { %>selected<% } %>>
+                    <%= o.title %>
+                  </option>
+                  <% }); %>
+                </select>
               </div>
-              <div class="flex flex-wrap align-end gap-3">
-                <div class="flex flex-column gap-2">
-                  <label
-                    class="text-label text-1 color-muted"
-                    for="analyticsArticleSelect"
-                    >Article</label
-                  >
-                  <select
-                    class="surface-paper text-label text-1 color-body pad-inline-3 pad-block-2 radius-card control-pointer control-input shadow-subtle"
-                    id="analyticsArticleSelect"
-                  >
-                    <% page.articleOptions.forEach(function (o) { %>
-                    <option value="<%= o.id %>" <% if (o.selected) { %>selected<% } %>>
-                      <%= o.title %>
-                    </option>
-                    <% }); %>
-                  </select>
-                </div>
-                <div class="flex flex-column gap-2">
-                  <label class="text-label text-1 color-muted" for="analyticsRange"
-                    >Time range</label
-                  >
-                  <select
-                    class="surface-paper text-label text-1 color-body pad-inline-3 pad-block-2 radius-card control-pointer control-input shadow-subtle"
-                    id="analyticsRange"
-                  >
-                    <option value="48">Last 48 hours</option>
-                    <option value="96" selected>Last 4 days</option>
-                    <option value="168">Last week</option>
-                    <option value="504">Last 3 weeks</option>
-                  </select>
-                </div>
+              <div class="analytics-card__field">
+                <label class="analytics-card__label" for="analyticsRange">Time range</label>
+                <select class="analytics-card__select control-input" id="analyticsRange">
+                  <option value="48">Last 48 hours</option>
+                  <option value="96" selected>Last 4 days</option>
+                  <option value="168">Last week</option>
+                  <option value="504">Last 3 weeks</option>
+                </select>
               </div>
             </div>
-            <div class="width-full surface-muted radius-card pad-4">
-              <div class="analytics-plot relative width-full">
-                <canvas
-                  class="width-full height-full"
-                  id="analyticsChart"
-                  data-article-id="<%= page.articleId %>"
-                  height="224"
-                  role="img"
-                  aria-label="Chart of article views over time"
-                ></canvas>
-              </div>
+          </div>
+          <div class="analytics-card__chart-frame">
+            <div class="analytics-plot">
+              <canvas class="analytics-plot__canvas" id="analyticsChart" data-article-id="<%= page.articleId %>" height="224" role="img" aria-label="Chart of article views over time"></canvas>
             </div>
-            <p
-              class="state-hidden pad-3 radius-card text-body text-1 text-center"
-              id="chartStatus"
-              role="status"
-              aria-live="polite"
-            ></p>
-            <div
-              class="flex flex-column gap-2 text-label text-1 color-muted"
-              aria-label="Chart legend"
-            >
-              <span class="flex align-center gap-2">
-                <span class="avatar-small radius-pill surface-info"></span>
-                The dark line shows the number of views for this article
-              </span>
-              <span class="flex align-center gap-2">
-                <span class="avatar-small radius-pill surface-alert"></span>
-                The dashed red vertical lines mark the moments an editor approved
-                and published an update to this article
-              </span>
-            </div>
-          </section>
-          <section
-            class="grid grid-single sm-grid-split gap-3"
-            aria-label="Summary metrics"
-          >
-            <% page.metrics.forEach(function (metric) { %>
-            <%- include('../../partials/analytics/summary-metric', { item: metric }) %>
-            <% }); %>
-          </section>
-        </div>
+          </div>
+          <p class="analytics-card__status state-hidden" id="chartStatus" role="status" aria-live="polite"></p>
+          <div class="analytics-chart-legend" aria-label="Chart legend">
+            <span class="analytics-chart-legend__item">
+              <span class="analytics-chart-legend__marker analytics-chart-legend__marker--views"></span>
+              The dark line shows the number of views for this article
+            </span>
+            <span class="analytics-chart-legend__item">
+              <span class="analytics-chart-legend__marker analytics-chart-legend__marker--publication"></span>
+              The dashed red vertical lines mark the moments an editor approved and published an update to this article
+            </span>
+          </div>
+        </section>
+        <section class="analytics-page__metrics" aria-label="Summary metrics">
+          <% page.metrics.forEach(function (metric) { %>
+          <%- include('../../partials/analytics/summary-metric', { item: metric }) %>
+          <% }); %>
+        </section>
       </div>
     </main>
-    <footer class="width-full surface-panel pad-block-3">
-      <div
-        class="width-content pad-inline-5 text-center text-caption text-1 color-muted"
-      >
-        The Daily Web · Newsroom · Editor's Desk
-      </div>
+    <footer class="analytics-page__footer">
+      <div class="analytics-page__footer-content">The Daily Web · Newsroom · Editor's Desk</div>
     </footer>
     <script src="/js/analyticsChart.js" defer></script>
   </body>

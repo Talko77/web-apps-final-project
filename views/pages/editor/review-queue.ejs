@@ -1,236 +1,106 @@
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
-  <body
-    class="editor-queue-page surface-page text-body text-2 color-body height-screen flex flex-column"
-  >
+  <body class="review-queue editor-queue-page">
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
-    <main class="site-header-offset width-full surface-page flex-grow">
-      <div class="editor-page-content width-content pad-inline-5 pad-block-3">
-        <div class="flex flex-column width-full">
-          <section
-            class="queue-intro-card surface-paper radius-panel pad-5 shadow-subtle margin-bottom-5"
-          >
-            <div class="queue-heading-row flex flex-column gap-4">
-              <div>
-                <span class="text-label text-1 text-uppercase color-muted"
-                  >Newsroom</span
-                >
-                <h1 class="text-headline text-6 color-body margin-top-2">
-                  Review Queue
-                </h1>
-                <p class="text-body text-2 color-muted margin-top-2">
-                  Stories submitted by reporters and waiting on an editor to
-                  review, approve and publish them.
-                </p>
-                <p class="text-body text-2 color-body margin-top-2">
-                  Showing
-                  <span class="text-semibold" id="queueCount"
-                    ><%= page.articles.length %></span
-                  >
-                  of <%= page.articles.length %> articles.
-                </p>
-              </div>
-              <div class="flex flex-wrap align-center gap-2">
-                <% page.statusFilters.forEach(function (filter) { %>
-                <span
-                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-raised color-body text-label text-1"
-                >
-                  <span class="text-semibold"><%= filter.count %></span>
-                  <%= filter.label %>
-                </span>
-                <% }); %>
-              </div>
+    <main class="review-queue__main">
+      <div class="review-queue__content">
+        <section class="review-queue__intro">
+          <div class="review-queue__heading-row">
+            <div>
+              <span class="review-queue__eyebrow">Newsroom</span>
+              <h1 class="review-queue__title">Review Queue</h1>
+              <p class="review-queue__description">Stories submitted by reporters and waiting on an editor to review, approve and publish them.</p>
+              <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <%= page.articles.length %> articles.</p>
             </div>
-          </section>
-          <section
-            class="queue-filters surface-paper radius-panel pad-4 shadow-subtle margin-bottom-4"
-          >
-            <div
-              class="flex flex-column sm-row align-start sm-align-center justify-between gap-3"
-            >
-              <div class="queue-search flex flex-column gap-2 flex-grow">
-                <label
-                  class="text-label text-1 color-muted"
-                  for="queueSearch"
-                  >Search by headline or reporter name</label
-                >
-                <input
-                  class="width-full pad-inline-4 pad-block-2 text-1 text-body surface-paper color-body radius-card control-input motion-all"
-                  id="queueSearch"
-                  placeholder="For example: elections, or a reporter name"
-                  type="search"
-                />
-              </div>
-              <div class="flex flex-wrap align-end gap-2">
-                <div class="queue-select flex flex-column gap-2">
-                  <label
-                    class="text-label text-1 color-muted"
-                    for="categoryFilter"
-                    >Category</label
-                  >
-                  <select
-                    class="surface-paper text-label text-1 color-body pad-inline-3 pad-block-2 radius-card control-pointer control-input shadow-subtle"
-                    id="categoryFilter"
-                  >
-                    <option value="">All Categories</option>
-                    <% page.categories.forEach(function (category) { %>
-                    <option value="<%= category %>"><%= category %></option>
-                    <% }); %>
-                  </select>
-                </div>
-                <div class="queue-select flex flex-column gap-2">
-                  <label
-                    class="text-label text-1 color-muted"
-                    for="statusFilter"
-                    >Status</label
-                  >
-                  <select
-                    class="surface-paper text-label text-1 color-body pad-inline-3 pad-block-2 radius-card control-pointer control-input shadow-subtle"
-                    id="statusFilter"
-                  >
-                    <% page.statusFilters.forEach(function (filter) { %>
-                    <option
-                      value="<%= filter.value %>"
-                      <% if (filter.value === page.activeStatus) { %>selected<% } %>
-                    >
-                      <%= filter.label %> (<%= filter.count %>)
-                    </option>
-                    <% }); %>
-                  </select>
-                </div>
-                <button
-                  class="pad-inline-3 pad-block-2 text-1 text-label color-muted radius-card surface-raised motion-colors flex align-center gap-1"
-                  id="resetFilters"
-                  type="button"
-                >
-                  <span class="icon text-2">refresh</span>
-                  Reset Filters
-                </button>
-              </div>
+            <div class="review-queue__status-summary">
+              <% page.statusFilters.forEach(function (filter) { %>
+              <span class="review-queue__status-total">
+                <span class="review-queue__status-count"><%= filter.count %></span>
+                <%= filter.label %>
+              </span>
+              <% }); %>
             </div>
-          </section>
-          <div
-            class="queue-table-card surface-paper radius-panel shadow-subtle overflow-hidden margin-bottom-5"
-          >
-            <div class="overflow-scroll">
-              <table class="width-full text-right" id="queueTable">
-                <thead>
-                  <tr
-                    class="surface-raised color-muted text-label text-1 text-uppercase"
-                  >
-                    <th class="pad-block-3 pad-inline-4">Reporter</th>
-                    <th class="pad-block-3 pad-inline-4">Headline</th>
-                    <th class="pad-block-3 pad-inline-4">Category</th>
-                    <th class="pad-block-3 pad-inline-4">Status</th>
-                    <th class="pad-block-3 pad-inline-4">Version</th>
-                    <th class="pad-block-3 pad-inline-4">Submitted</th>
-                    <th class="pad-block-3 pad-inline-4 text-left">Action</th>
-                  </tr>
-                </thead>
-                <tbody class="text-body text-1 color-body">
-                  <% page.articles.forEach(function (a) { %>
-                  <tr
-                    class="motion-colors"
-                    data-status="<%= a.statusCode %>"
-                    data-category="<%= a.categoryCode %>"
-                    data-title="<%= a.title %>"
-                    data-reporter="<%= a.reporterName %>"
-                  >
-                    <td class="pad-block-3 pad-inline-4 no-wrap">
-                      <div class="flex align-center gap-2">
-                        <div
-                          class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-bold text-1"
-                        >
-                          <%= a.initials %>
-                        </div>
-                        <div>
-                          <span class="text-semibold color-body block"
-                            ><%= a.reporterName %></span
-                          >
-                          <span class="text-caption text-1 color-muted"
-                            ><%= a.beat %></span
-                          >
-                        </div>
-                      </div>
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 width-reading">
-                      <% if (a.isUpdate) { %>
-                      <span
-                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 radius-standard surface-warning color-warning text-label text-1 text-semibold margin-bottom-2"
-                      >
-                        <span class="icon text-2">update</span>
-                        Update to a published story - not a new article
-                      </span>
-                      <% } %>
-                      <a
-                        class="text-headline text-4 color-body motion-colors text-bold block"
-                        href="<%= a.url %>"
-                        ><%= a.title %></a
-                      >
-                      <p class="color-muted margin-top-2 text-caption text-1">
-                        <%= a.summary %>
-                      </p>
-                      <span class="text-caption text-1 color-subtle"
-                        ><%= a.readLabel %></span
-                      >
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 no-wrap">
-                      <span
-                        class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1"
-                        ><%= a.category %></span
-                      >
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 no-wrap">
-                      <span class="inline-flex radius-standard <%= a.statusClass %>">
-                        <%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %>
-                      </span>
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 no-wrap">
-                      <span
-                        class="pad-inline-3 pad-block-2 radius-standard surface-raised color-muted text-label text-1"
-                        ><%= a.version %></span
-                      >
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 no-wrap">
-                      <div class="color-body text-medium">
-                        <%= a.submittedLabel %>
-                      </div>
-                      <div class="text-caption text-1 color-muted">
-                        <%= a.relativeDate %>
-                      </div>
-                    </td>
-                    <td class="pad-block-3 pad-inline-4 text-left no-wrap">
-                      <a
-                        class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all"
-                        href="<%= a.url %>"
-                        >Review</a
-                      >
-                    </td>
-                  </tr>
+          </div>
+        </section>
+
+        <section class="review-queue__filters">
+          <div class="review-queue__filter-layout">
+            <div class="review-queue__search-field">
+              <label class="review-queue__field-label" for="queueSearch">Search by headline or reporter name</label>
+              <input class="review-queue__search-input control-input" id="queueSearch" placeholder="For example: elections, or a reporter name" type="search" />
+            </div>
+            <div class="review-queue__filter-controls">
+              <div class="review-queue__select-field">
+                <label class="review-queue__field-label" for="categoryFilter">Category</label>
+                <select class="review-queue__select control-input" id="categoryFilter">
+                  <option value="">All Categories</option>
+                  <% page.categories.forEach(function (category) { %>
+                  <option value="<%= category %>"><%= category %></option>
                   <% }); %>
-                </tbody>
-              </table>
+                </select>
+              </div>
+              <div class="review-queue__select-field">
+                <label class="review-queue__field-label" for="statusFilter">Status</label>
+                <select class="review-queue__select control-input" id="statusFilter">
+                  <% page.statusFilters.forEach(function (filter) { %>
+                  <option value="<%= filter.value %>" <% if (filter.value === page.activeStatus) { %>selected<% } %>><%= filter.label %> (<%= filter.count %>)</option>
+                  <% }); %>
+                </select>
+              </div>
+              <button class="review-queue__reset" id="resetFilters" type="button">
+                <span class="icon review-queue__reset-icon">refresh</span>
+                Reset Filters
+              </button>
             </div>
-            <div class="pad-4 surface-muted">
-              <p
-                class="text-body text-1 color-muted text-center state-hidden"
-                id="queueEmptyState"
-              >
-                No articles match the selected filters.
-              </p>
-            </div>
+          </div>
+        </section>
+
+        <div class="review-queue__table-card">
+          <div class="review-queue__table-scroll">
+            <table class="review-queue__table" id="queueTable">
+              <thead>
+                <tr class="review-queue__table-heading">
+                  <th>Reporter</th><th>Headline</th><th>Category</th><th>Status</th><th>Version</th><th>Submitted</th><th class="review-queue__action-heading">Action</th>
+                </tr>
+              </thead>
+              <tbody class="review-queue__table-body">
+                <% page.articles.forEach(function (a) { %>
+                <tr class="review-queue__row" data-status="<%= a.statusCode %>" data-category="<%= a.categoryCode %>" data-title="<%= a.title %>" data-reporter="<%= a.reporterName %>">
+                  <td class="review-queue__reporter-cell">
+                    <div class="review-queue__reporter">
+                      <div class="review-queue__avatar"><%= a.initials %></div>
+                      <div>
+                        <span class="review-queue__reporter-name"><%= a.reporterName %></span>
+                        <span class="review-queue__reporter-beat"><%= a.beat %></span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="review-queue__headline-cell">
+                    <% if (a.isUpdate) { %>
+                    <span class="review-queue__update-label"><span class="icon review-queue__update-icon">update</span>Update to a published story - not a new article</span>
+                    <% } %>
+                    <a class="review-queue__headline" href="<%= a.url %>"><%= a.title %></a>
+                    <p class="review-queue__summary"><%= a.summary %></p>
+                    <span class="review-queue__read-time"><%= a.readLabel %></span>
+                  </td>
+                  <td class="review-queue__category-cell"><span class="review-queue__category"><%= a.category %></span></td>
+                  <td class="review-queue__status-cell"><span class="review-queue__status" data-status="<%= a.statusCode %>"><%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %></span></td>
+                  <td class="review-queue__version-cell"><span class="review-queue__version"><%= a.version %></span></td>
+                  <td class="review-queue__submitted-cell"><div class="review-queue__submitted-date"><%= a.submittedLabel %></div><div class="review-queue__relative-date"><%= a.relativeDate %></div></td>
+                  <td class="review-queue__action-cell"><a class="review-queue__review-link" href="<%= a.url %>">Review</a></td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <div class="review-queue__empty-container">
+            <p class="review-queue__empty state-hidden" id="queueEmptyState">No articles match the selected filters.</p>
           </div>
         </div>
       </div>
     </main>
-    <footer class="width-full surface-muted pad-block-3">
-      <div
-        class="width-content pad-inline-5 text-center text-caption text-1 color-muted"
-      >
-        The Daily Web · Newsroom · Editor's Desk
-      </div>
-    </footer>
+    <footer class="review-queue__footer"><div class="review-queue__footer-content">The Daily Web · Newsroom · Editor's Desk</div></footer>
     <script src="/js/editorQueue.js" defer></script>
   </body>
 </html>

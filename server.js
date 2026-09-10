@@ -18,7 +18,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
+app.use(express.static(path.join(__dirname, 'public'), {
+  // Avoid stale CSS and JavaScript while developing locally.
+  maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0
+}));
 
 // The session store is MongoDB rather than the process memory,
 // so a signed-in user stays signed in even after the server restarts.
