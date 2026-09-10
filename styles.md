@@ -71,12 +71,12 @@ used by only one page belongs in `pages.css`.
 Page-family rules, preferably scoped by these roots:
 
 - Public: `.public-page`, `.publication-page`, `.article-page`, `.search-page`,
-  `.category-page`; `.editorial-home-page` belongs to non-routed reference.
+  `.category-page`.
 - Reporter: `.reporter-articles*` and `.article-editor*`.
 - Auth: `.staff-login*`.
-- Editor: `.review-queue*`, `.review-article*`, `.analytics-page*`, plus
-  compatibility roots `.editor-queue-page`, `.editor-diff-page`, and
-  `.editor-analytics-page`.
+- Editor: `.review-queue*`, `.review-article*`, `.analytics-page*`,
+  `.staff-directory*`, plus compatibility roots `.editor-queue-page`,
+  `.editor-diff-page`, and `.editor-analytics-page`.
 
 Put one-page exceptions here and scope them under the page root.
 
@@ -104,10 +104,10 @@ Two structures also have browser renderers:
 
 - `partials/public/article-card.ejs` matches `public/js/feed.js`.
 - `partials/comments/comment-item.ejs` matches `public/js/comments.js`.
+- `pages/editor/staff.ejs` table rows match `public/js/staffDirectory.js`.
 
 Keep each pair synchronized. Before editing a component based on a partial,
-search for active `include()` calls: several newsroom/comment/analytics
-partials are unused, and `header-desk` serves only non-routed reference pages.
+search for active `include()` calls; every remaining partial has at least one.
 
 ## Responsive conventions
 

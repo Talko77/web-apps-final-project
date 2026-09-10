@@ -27,10 +27,10 @@ under `/api`, mounts page routes at `/`, and finishes with centralized errors.
 - `config/`: database setup and shared constants.
 - `views/`: the only active EJS view tree.
 - `public/css/` and `public/js/`: assets served by Express.
-- `data/mock/`, `docs/`, and `styles/DESIGN.md`: supporting/reference material.
+- `docs/` and `styles.md`: supporting/reference material.
 
-Do not use `publics/` as the asset root; Express serves `public/`. Do not add
-runtime CSS to top-level `styles/`; its current file is documentation only.
+Express serves `public/`; do not introduce a second asset tree. Do not add
+runtime CSS to `styles.md`; it is documentation only.
 
 ## Active views and routes
 
@@ -39,15 +39,14 @@ runtime CSS to top-level `styles/`; its current file is documentation only.
   `search-results.ejs` (`/search`).
 - Auth: `views/pages/auth/staff-login.ejs` (`/staff/login`).
 - Reporter: `views/pages/reporter/articles.ejs` and `edit-article.ejs`.
-- Editor: `views/pages/editor/review-queue.ejs`, `review-article.ejs`, and
-  `analytics.ejs`.
+- Editor: `views/pages/editor/review-queue.ejs`, `review-article.ejs`,
+  `analytics.ejs`, and `staff.ejs` (`/editor/staff`, editor-only user CRUD).
 - Errors: `views/error.ejs`.
 
-`views/pages/public/editorial-home.ejs` contains large hard-coded
-reference/prototype markup but is not rendered. `/editorial` redirects to `/`;
-`/technology` redirects to `/category/technology`. Do not copy sample content
-into active pages or treat it as another public implementation unless a
-requested feature deliberately changes that contract.
+The prototype templates and their unused partials have been removed. `/editorial`
+redirects to `/` and `/technology` redirects to `/category/technology`; both
+paths are kept only so old links still resolve. Every template under `views/` is
+now reachable from a route — do not add prototype markup that is not.
 
 ## EJS composition and reuse
 
@@ -63,14 +62,12 @@ Partials are grouped into `shared/`, `public/`, `newsroom/`, `comments/`, and
   optional `breaking-strip`.
 - `public/footer` serves all active public pages.
 - `newsroom/header` serves all active reporter/editor pages.
-- `public/article-card` serves home, search, and related articles.
+- `public/article-card` serves home, search, category, and related articles.
 - `comments/comment-item`, `newsroom/editor-status-badge`, and
   `analytics/summary-metric` are used by their active domain pages.
-- `header-desk` is used only by the two non-routed reference templates.
-- `chart-legend`, `comment-form`, `editor-queue-row`, `editor-review-actions`,
-  `feedback-form`, `reporter-command-ribbon`, `reporter-filter-strip`, and
-  `newsroom/sidebar` currently have no active page include. Editing them alone
-  does not change rendered UI.
+
+Every remaining partial has at least one active consumer. Before adding one,
+confirm the markup is genuinely shared.
 
 Pass explicit locals and retain partial defaults. Use escaped EJS (`<%=`) for
 data; reserve `<%-` for trusted partial inclusion or deliberately prepared
@@ -79,8 +76,9 @@ injection safety.
 
 `public/js/feed.js` builds the same article-card DOM as
 `partials/public/article-card.ejs`; `public/js/comments.js` builds comment items
-matching `partials/comments/comment-item.ejs`. Update both render paths when a
-requested change alters either structure.
+matching `partials/comments/comment-item.ejs`; `public/js/staffDirectory.js`
+builds table rows matching `pages/editor/staff.ejs`. Update both render paths
+when a requested change alters either structure.
 
 ## Browser JavaScript contracts
 

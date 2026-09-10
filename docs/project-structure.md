@@ -39,6 +39,7 @@ Business logic handlers processing requests, executing database operations, and 
 - **`controllers/pageController.js`**: Prepares view-models and server-renders all public, reporter, editor, and authentication EJS pages.
 - **`controllers/articleController.js`**: Handles article lifecycle actions including feed querying, drafting, autosaving, review submission, editorial approval/rejection, and deletion.
 - **`controllers/authController.js`**: Manages staff login authentication, session destruction (logout), and current user identity queries.
+- **`controllers/userController.js`**: Editor-only staff account management: listing with search, creation, update through `save()` so password hashing runs, and deletion with last-editor guards.
 - **`controllers/commentController.js`**: Validates, saves, and retrieves public reader comments for published stories.
 - **`controllers/analyticsController.js`**: Aggregates hourly view statistics and editorial publication milestones for impact chart rendering.
 - **`controllers/weatherController.js`**: Retrieves live weather data from OpenWeatherMap API with server-side caching and fallback data support.
@@ -52,6 +53,7 @@ Express routing modules mapping HTTP paths to their corresponding controller act
 - **`routes/pages.js`**: Defines HTML page routes for public pages, reporter workspaces, and editor desks.
 - **`routes/articles.js`**: REST API routes for article feed retrieval, drafting, submissions, reviews, and deletion.
 - **`routes/auth.js`**: REST API routes for staff login, logout, and current session inspection.
+- **`routes/users.js`**: Editor-only REST routes for the staff directory (`GET`, `POST`, `PUT`, `DELETE` on `/api/users`).
 - **`routes/comments.js`**: REST API routes for submitting and fetching article comments.
 - **`routes/analytics.js`**: REST API route returning time-series analytics and milestone data for articles.
 - **`routes/weather.js`**: REST API route providing current weather widget data.
@@ -103,6 +105,7 @@ Page-scoped vanilla browser scripts implementing interactivity and AJAX workflow
 - **`public/js/editorQueue.js`**: Manages client-side filtering, text searching, and filter resetting in the editor review queue table.
 - **`public/js/editorReview.js`**: Handles editor decision buttons (approve, revise, delete) and revision feedback submissions via AJAX.
 - **`public/js/analyticsChart.js`**: Renders the custom canvas-based views-over-time chart and plots revision milestone indicators.
+- **`public/js/staffDirectory.js`**: Handles editor-only staff account creation, search, inline updates, and deletion over AJAX.
 - **`public/js/staff-login.js`**: Handles staff login form submission, input validation, and asynchronous error message display.
 - **`public/js/weather.js`**: Fetches current weather status and injects the live widget into publication sidebars.
 
@@ -117,12 +120,12 @@ Server-rendered EJS templates generating full HTML pages across public and newsr
 - **`views/pages/public/article.ejs`**: Full article view displaying story copy, reporter byline, metadata, related articles, and public comment thread.
 - **`views/pages/public/search-results.ejs`**: Search results page offering keyword query matching, category filters, and popularity/date sorting.
 - **`views/pages/public/category.ejs`**: Dynamic category page rendering category metadata, article counts, and filtered published article grid.
-- **`views/pages/public/editorial-home.ejs`**: Static prototype layout retained for visual design reference.
 - **`views/pages/reporter/articles.ejs`**: Reporter dashboard listing personal articles, publication statuses, view counts, and quick actions.
 - **`views/pages/reporter/edit-article.ejs`**: Comprehensive reporter writing interface with headline, summary, body, image URL, category controls, and revision details.
 - **`views/pages/editor/review-queue.ejs`**: Editorial queue displaying submitted articles awaiting review with filterable status counters and metadata.
 - **`views/pages/editor/review-article.ejs`**: Editorial review interface displaying side-by-side comparison of the published version against the submitted draft, alongside decision controls.
 - **`views/pages/editor/analytics.ejs`**: Editor dashboard displaying time-series view metrics, milestone annotations, and performance summary statistics.
+- **`views/pages/editor/staff.ejs`**: Editor-only staff directory providing full create, search, update, and delete management of reporter and editor accounts.
 - **`views/pages/auth/staff-login.ejs`**: Dedicated login screen allowing staff members to sign into reporter or editor workspaces.
 
 ---
@@ -137,7 +140,6 @@ Modular EJS fragments grouped by domain for consistent rendering across pages.
 
 ### Public Partials (`views/partials/public/`)
 - **`views/partials/public/header-standard.ejs`**: Standard header with logo, primary navigation links, search bar, and staff login/logout buttons.
-- **`views/partials/public/header-desk.ejs`**: Reference desktop header partial used in non-routed prototype templates.
 - **`views/partials/public/article-card.ejs`**: Universal article preview card displaying image, category, headline, excerpt, author, date, and reading time.
 - **`views/partials/public/breaking-strip.ejs`**: High-visibility banner displayed beneath the header for breaking news alerts.
 - **`views/partials/public/footer.ejs`**: Shared publication footer displaying brand title, course project disclaimer, and demo data notice across all active public pages.
@@ -145,24 +147,9 @@ Modular EJS fragments grouped by domain for consistent rendering across pages.
 ### Newsroom Partials (`views/partials/newsroom/`)
 - **`views/partials/newsroom/header.ejs`**: Internal newsroom navigation bar with role badge, desk links, staff identity, and quick link to public site.
 - **`views/partials/newsroom/editor-status-badge.ejs`**: Color-coded visual indicator displaying an article's current workflow state.
-- **`views/partials/newsroom/editor-queue-row.ejs`**: Component representing a single story in the editor review queue.
-- **`views/partials/newsroom/editor-review-actions.ejs`**: Grouping of decision buttons (Approve, Request Changes, Reject) for reviewing drafts.
-- **`views/partials/newsroom/feedback-form.ejs`**: Form allowing editors to compose and send constructive revision requests to reporters.
-- **`views/partials/newsroom/reporter-command-ribbon.ejs`**: Reporter action toolbar showing autosave cloud indicators and draft submission buttons.
-- **`views/partials/newsroom/reporter-filter-strip.ejs`**: Status pill buttons for filtering reporter article lists.
-- **`views/partials/newsroom/sidebar.ejs`**: Navigation sidebar for editor queue and telemetry views.
 
 ### Comments Partials (`views/partials/comments/`)
 - **`views/partials/comments/comment-item.ejs`**: Single comment item displaying user avatar, author name, timestamp, and message text.
-- **`views/partials/comments/comment-form.ejs`**: Guest comment entry form with name, affiliation, char counter, and submit action.
 
 ### Analytics Partials (`views/partials/analytics/`)
 - **`views/partials/analytics/summary-metric.ejs`**: Key metric summary tile displaying a labeled metric value, change indicator, and icon.
-- **`views/partials/analytics/chart-legend.ejs`**: Legend explaining the view count line and publication update marker styles on the analytics plot.
-
----
-
-## 12. Mock & Reference Data (`data/mock/`)
-
-- **`data/mock/pages/`**: Static JSON data payloads mirroring view-model structures for local testing, rendering experiments, and prototype templates.
-- **`data/mock/shared/`**: Shared mock assets.

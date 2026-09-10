@@ -71,9 +71,10 @@ models/                   Model layer
   Analytics.js            Hourly view buckets
 controllers/              Controller layer
   authController.js       Sign in, sign out, current identity
+  userController.js       Staff accounts (editors only)
   articleController.js    Feed, drafts, state transitions, deletion
-  commentController.js    Comments
-  analyticsController.js  Chart data
+  commentController.js    Comments and editor moderation
+  analyticsController.js  Chart data, resetting view data
   weatherController.js    External service with caching
   pageController.js       EJS page rendering
 routes/                   REST routes and view routes
@@ -89,14 +90,14 @@ views/                    View layer (EJS)
   error.ejs               Generic error page
   pages/public/           Home, article page, search results, category page
   pages/reporter/         Reporter workspace
-  pages/editor/           Review queue, version comparison, analytics
+  pages/editor/           Review queue, version comparison, analytics, staff directory
   pages/auth/             Staff login
   partials/               Shared components
 public/
   css/                    Design system (variables, base, utilities, components, layouts, pages)
   js/                     Client-side JavaScript (vanilla, no framework)
 logs/app.log              Error and operational event log
-styles/DESIGN.md          Design system documentation
+styles.md                 Design system documentation
 ```
 
 ## Core functionality
@@ -151,6 +152,22 @@ currently public and what would replace it. The editor can approve and publish, 
 changes with a note (a note is required), and delete an article along with its comments and
 view data.
 
+The pending pane on the review page is **editable**, so an editor can correct the copy
+himself while comparing it against what readers currently see. Saving there reuses
+`PUT /api/articles/:id`, which leaves a `pending` article pending, so the approve and
+return actions stay valid immediately afterwards.
+
+Editors also moderate comments in place on the public article page — editing the text or
+deleting the comment — and can reset an article's recorded view data from the analytics page.
+
+### Staff directory
+`/editor/staff` is an editor-only area for managing reporter and editor accounts: create,
+search by username or display name, rename, change role, replace the password, and delete.
+Updates go through `doc.save()` so the `pre('save')` hashing hook always runs and a password
+is never stored in plain text. An editor cannot delete their own account, and the last
+remaining editor can be neither deleted nor demoted, so the system always has an
+administrator.
+
 ### Impact Analytics
 `public/js/analyticsChart.js` draws on a plain `<canvas>` with no external library: a time
 axis, view counts along it, and dashed vertical lines at every point where an editor approved
@@ -185,6 +202,10 @@ current.
 - Rate limits: up to 3 comments per minute per device, and up to 20 sign-in attempts per
   5 minutes.
 - User input is truncated to allowed lengths and categories are validated against a fixed list.
+- Errors are handled on both sides. The client marks the four required fields on the reporter
+  form and names the missing one before submitting for review; the server rejects the same
+  submission independently in `Article.isDraftComplete()`. Autosave deliberately skips that
+  check so a partial draft is still saved and no work is lost.
 
 ## REST endpoints
 
@@ -193,6 +214,10 @@ current.
 | POST | `/api/auth/login` | public | Sign in |
 | POST | `/api/auth/logout` | public | Sign out |
 | GET | `/api/auth/me` | public | Current user |
+| GET | `/api/users` | Editor | Staff directory, `?search=` on username/display name |
+| POST | `/api/users` | Editor | Create a staff account |
+| PUT | `/api/users/:id` | Editor | Update name, role, password |
+| DELETE | `/api/users/:id` | Editor | Delete a staff account |
 | GET | `/api/articles/feed` | public | Feed with paging, search, filter and sort |
 | GET | `/api/articles/mine` | Reporter | Own articles |
 | GET | `/api/articles/manage` | Editor | All articles |
@@ -203,17 +228,35 @@ current.
 | DELETE | `/api/articles/:id` | Editor | Delete article |
 | GET | `/api/comments/article/:id` | public | Comments for an article |
 | POST | `/api/comments/article/:id` | public | Add comment (rate limited) |
+| PUT | `/api/comments/:id` | Editor | Edit comment text |
 | DELETE | `/api/comments/:id` | Editor | Delete comment |
 | GET | `/api/analytics/articles` | Editor | Articles selectable in the chart |
 | GET | `/api/analytics/article/:id` | Editor | Timeline, views and publish events |
+| DELETE | `/api/analytics/article/:id` | Editor | Reset an article's view data |
 | GET | `/api/weather` | public | Cached weather |
+
+### CRUD coverage per model
+
+Every model supports the full set of operations through the REST API.
+
+| Model | Create | Read (list / search) | Update | Delete |
+|---|---|---|---|---|
+| `User` | `POST /api/users` | `GET /api/users`, `GET /api/users?search=` | `PUT /api/users/:id` | `DELETE /api/users/:id` |
+| `Article` | `POST /api/articles` | `GET /api/articles/feed?search=&category=`, `/mine`, `/manage?status=`, `GET /api/articles/:id` | `PUT /api/articles/:id`, `PATCH /api/articles/:id/status` | `DELETE /api/articles/:id` |
+| `Comment` | `POST /api/comments/article/:id` | `GET /api/comments/article/:id` | `PUT /api/comments/:id` | `DELETE /api/comments/:id` |
+| `Analytics` | one atomic `upsert` + `$inc` per article view (`pageController.articlePage`) | `GET /api/analytics/articles`, `GET /api/analytics/article/:id` | the same `$inc` increments the existing hourly bucket | `DELETE /api/analytics/article/:id`, and cascaded on article deletion |
+
+`Analytics` deliberately has no separate create and update path: a view is one atomic
+`updateOne` with `upsert`, which creates the hourly bucket the first time and increments it
+afterwards. That is what keeps the counter correct under concurrent readers.
 
 ### View routes
 
 `/` home · `/category/:category` category · `/search` search · `/articles/:id` article page ·
 `/staff/login` sign in · `/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
 `/reporter/articles/:id/edit` edit · `/editor/reviews` review queue ·
-`/editor/reviews/:id` version comparison · `/editor/articles/:id/analytics` analytics
+`/editor/reviews/:id` version comparison · `/editor/staff` staff directory ·
+`/editor/analytics` and `/editor/articles/:id/analytics` analytics
 
 ## Models and indexes
 
@@ -242,13 +285,49 @@ thousands of articles.
 7. **Weather** — first request hits the service, the second is served from cache.
 8. **Impact Analytics** — pick an article with several updates and identify the view spike
    around each update point.
+9. **Staff management** — as `editor1`, open `/editor/staff`, create a reporter, search for
+   them, rename them, sign in as them to prove the password was hashed, then delete them. Try
+   deleting your own account and demoting the last editor; both are refused by the server.
+10. **Editor edits a story** — open a pending article in the review queue, change the headline
+    in the pending pane, reload to confirm it persisted, then approve and see it go public.
 
-## Team contributions and AI usage
+## Team contributions
 
-To be completed before submission:
+Repository: <https://github.com/Talko77/web-apps-final-project> (open for viewing).
 
-- Contribution table: each student's name, the components they worked on and the branches
-  they opened.
-- Link to the Git repository (open for viewing) and documentation of the pull requests.
-- Description of AI tool usage: which parts were produced with assistance, and how they were
-  verified and understood.
+| Student | Commits | Main areas | Branches opened |
+|---|---|---|---|
+| Adir Avraham | 25 | CSS design system (`variables`/`base`/`utilities`/`components`/`layouts`/`pages`), the EJS/BEM migration of the page templates, the dynamic category page, project documentation | `adir`, `adir-documentation`, `adir-dynamic_category_page` |
+| Tal Naor | 13 | Backend (models, controllers, routes, middleware, sessions), client-side JavaScript, database seeding, translation to English, and later fixes | `feat/ejs-migration`, `tal_branch` |
+
+Commit counts come from `git shortlog -sne --all`; both students committed under more than one
+Git identity, and the counts above are the totals per person.
+
+### Pull requests
+
+| PR | Branch | Content |
+|---|---|---|
+| #1 | `adir` | Initial page templates and styling |
+| #2 | `feat/ejs-migration` | Migration to EJS with Express, MongoDB and the REST API |
+| #3 | `tal_branch` | Article card rework, search page improvements, English translation |
+| #4 | `adir-documentation` | File-level documentation, EJS formatting, project structure notes |
+| #5 | `adir-dynamic_category_page` | Dynamic category route and its BEM migration |
+
+### AI tool usage
+
+Claude Code was used as an assistant on parts of this project. What it produced was reviewed
+line by line and then verified by running it, not accepted on trust:
+
+- **Where it helped:** the initial Express/Mongoose scaffolding, the EJS migration of the
+  prototype HTML, the staff directory, seeding, and documentation.
+- **How it was verified:** every REST endpoint was exercised with `curl` and the status code
+  recorded; the role and workflow rules were tested from the wrong role and from the wrong
+  state to confirm the server rejects them; the pages were driven in a real browser to confirm
+  the client-side JavaScript paths; and the seeded database was restored afterwards.
+- **What was written or corrected by hand:** the workflow rules themselves (which transition
+  is legal for which role), the separation of `draftVersion` from `publishedVersion`, and the
+  decision to pre-aggregate analytics into hourly buckets.
+
+One dependency was not chosen by the team: `bcryptjs` replaced `bcrypt` because `bcrypt`
+needs a native build step that failed on macOS. Both implement the same one-way hashing;
+`bcryptjs` is pure JavaScript, so the same `node_modules` works on every machine.
