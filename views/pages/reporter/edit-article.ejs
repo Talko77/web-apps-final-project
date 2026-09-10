@@ -74,6 +74,7 @@
                   name="articleTitle"
                   maxlength="200"
                   placeholder="Write a clear, concise headline"
+                  required
                   type="text"
                   value="<%= article.title %>"
                   <% if (article.locked) { %>disabled<% } %>
@@ -92,6 +93,7 @@
                   name="articleSubtitle"
                   maxlength="500"
                   placeholder="Two lines explaining what the story is about"
+                  required
                   rows="3"
                   <% if (article.locked) { %>disabled<% } %>
                 ><%= article.subtitle %></textarea>
@@ -142,6 +144,7 @@
                   id="articleBody"
                   name="articleBody"
                   placeholder="Write the article here"
+                  required
                   rows="16"
                   <% if (article.locked) { %>disabled<% } %>
                 ><%= article.body %></textarea>
@@ -161,6 +164,7 @@
                       class="control-input article-editor__input article-editor__input--category"
                       id="articleCategory"
                       name="articleCategory"
+                      required
                       <% if (article.locked) { %>disabled<% } %>
                     >
                       <option value="">Select a category</option>
