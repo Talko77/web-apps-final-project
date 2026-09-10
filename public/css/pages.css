@@ -5099,11 +5099,22 @@ textarea.comparison-pane__input {
   line-height: var(--line-1);
 }
 
+/* The form is a scroll container (max-height: --workspace-review-max-height), and the
+   body textarea alone is taller than that, so the save action is pinned to the bottom
+   edge. Without this it renders below the fold inside the scroll and is never seen. */
 .comparison-pane__actions {
+  position: sticky;
+  bottom: calc(var(--space-5) * -1);
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: var(--space-3);
   flex-wrap: wrap;
+  margin-inline: calc(var(--space-5) * -1);
+  margin-bottom: calc(var(--space-5) * -1);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface-container-lowest);
+  box-shadow: 0 -1px 0 var(--color-surface-container-high);
 }
 
 .comparison-pane__status {

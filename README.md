@@ -297,8 +297,8 @@ Repository: <https://github.com/Talko77/web-apps-final-project> (open for viewin
 
 | Student | Commits | Main areas | Branches opened |
 |---|---|---|---|
-| Adir Avraham | 25 | CSS design system (`variables`/`base`/`utilities`/`components`/`layouts`/`pages`), the EJS/BEM migration of the page templates, the dynamic category page, project documentation | `adir`, `adir-documentation`, `adir-dynamic_category_page` |
-| Tal Naor | 13 | Backend (models, controllers, routes, middleware, sessions), client-side JavaScript, database seeding, translation to English, and later fixes | `feat/ejs-migration`, `tal_branch` |
+| Adir Avraham | 29 | CSS design system (`variables`/`base`/`utilities`/`components`/`layouts`/`pages`), the EJS/BEM migration of the page templates, the dynamic category page, the review-comparison redesign, project documentation | `adir`, `adir-documentation`, `adir-dynamic_category_page` |
+| Tal Naor | 21 | Backend (models, controllers, routes, middleware, sessions), client-side JavaScript, database seeding, translation to English, staff directory and full CRUD, later fixes | `feat/ejs-migration`, `tal_branch`, `tal_branch_final` |
 
 Commit counts come from `git shortlog -sne --all`; both students committed under more than one
 Git identity, and the counts above are the totals per person.
