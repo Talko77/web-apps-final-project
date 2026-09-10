@@ -6,6 +6,7 @@ const { isEditor } = require('../middleware/auth');
 
 router.get('/article/:articleId', c.listByArticle);
 router.post('/article/:articleId', commentLimiter, c.create);
+router.put('/:id', isEditor, c.update);
 router.delete('/:id', isEditor, c.remove);
 
 module.exports = router;

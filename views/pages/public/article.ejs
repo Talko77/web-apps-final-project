@@ -119,7 +119,8 @@
               </div>
             </form>
 
-            <div class="article-comments__list" id="comments-list">
+            <%# The flag only decides whether the moderation controls are drawn; the API re-checks the role %>
+            <div class="article-comments__list" id="comments-list" data-can-moderate="<%= currentUser && currentUser.role === 'Editor' ? 'true' : 'false' %>">
               <% (locals.comments || []).forEach(function (comment) { %>
               <%- include('../../partials/comments/comment-item', { item: comment }) %>
               <% }) %>

@@ -170,6 +170,25 @@
   }
   if (rangeEl) rangeEl.addEventListener('change', () => load(articleId(), rangeEl.value));
 
+  // Deleting the recorded view data for this article: the hourly buckets and the
+  // cumulative counter go together, so the chart and the popularity sort stay in step.
+  const resetBtn = document.getElementById('resetViewData');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', async () => {
+      if (!window.confirm('Delete all recorded view data for this article? The chart and the view count reset to zero and this cannot be undone.')) return;
+      resetBtn.disabled = true;
+      try {
+        await window.api.sendJSON(`/api/analytics/article/${articleId()}`, 'DELETE');
+        await load(articleId(), rangeEl && rangeEl.value);
+        window.api.flash(statusEl, 'View data reset for this article.', false);
+      } catch (err) {
+        window.api.flash(statusEl, err.message, true);
+      } finally {
+        resetBtn.disabled = false;
+      }
+    });
+  }
+
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
