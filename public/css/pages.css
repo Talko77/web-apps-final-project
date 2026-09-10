@@ -4395,6 +4395,7 @@ main table {
 }
 
 .analytics-card__field { display: flex; flex-direction: column; gap: var(--space-2); }
+.analytics-card__reset-icon { font-size: var(--text-2); }
 
 .analytics-card__select {
   padding: var(--space-2) var(--space-3);
@@ -4685,6 +4686,43 @@ main table {
 .comparison-pane__summary { color: var(--color-on-surface); font-family: var(--font-display); font-size: var(--text-body-lead); line-height: var(--text-body-lead-line); font-weight: 600; font-style: italic; }
 .comparison-pane__body { color: var(--color-secondary); font-family: var(--font-interface); font-size: var(--text-2); line-height: var(--line-2); }
 .comparison-pane__body > :not([hidden]) ~ :not([hidden]) { margin-top: var(--space-3); }
+
+/* The pending pane is an editable form, so an editor can correct copy while comparing versions. */
+.comparison-pane__field { display: flex; flex-direction: column; gap: var(--space-2); }
+.comparison-pane__label { color: var(--color-secondary); font-family: var(--font-interface); font-size: var(--text-1); line-height: var(--line-1); font-weight: 600; }
+.comparison-pane__hint { color: var(--color-outline); font-family: var(--font-interface); font-size: var(--text-1); line-height: var(--line-1); }
+
+.comparison-pane__input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-interface);
+  font-size: var(--text-2);
+  line-height: var(--line-2);
+}
+
+/* The display face at --text-5 clips the headline inside the narrower pane, so the
+   editable title sits one step down the scale and still reads as a headline. */
+.comparison-pane__input--title { font-family: var(--font-display); font-size: var(--text-4); line-height: var(--line-4); font-weight: 600; }
+.comparison-pane__input--body { resize: vertical; }
+
+/* The pane is a scroll container (--workspace-review-max-height), so the save action
+   is pinned to its bottom edge instead of sitting below the fold inside the scroll. */
+.comparison-pane__actions {
+  position: sticky;
+  bottom: calc(var(--space-5) * -1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-inline: calc(var(--space-5) * -1);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface-container-lowest);
+  box-shadow: 0 -1px 0 var(--color-surface-container-high);
+}
+
+.comparison-pane__status { color: var(--color-secondary); font-family: var(--font-interface); font-size: var(--text-1); line-height: var(--line-1); }
 
 .review-article__sidebar { display: flex; flex-direction: column; gap: var(--space-4); }
 
@@ -5107,8 +5145,178 @@ main table {
   .review-queue__filter-controls { width: 100%; flex-wrap: wrap; }
 }
 
+/* STAFF DIRECTORY: editor-only account management, sharing the editor workspace shell. */
+.staff-directory__main {
+  flex-grow: 1;
+  width: 100%;
+  padding-top: var(--site-header-height);
+  background: var(--color-background);
+}
+
+.staff-directory__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: min(100%, var(--max-content-width));
+  margin-inline: auto;
+  padding: var(--space-4) var(--space-5);
+}
+
+.staff-directory__intro,
+.staff-directory__card,
+.staff-directory__table-card {
+  padding: var(--space-5);
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.staff-directory__table-card { overflow: hidden; padding: 0; }
+
+.staff-directory__eyebrow {
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-1);
+  line-height: var(--line-1);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.staff-directory__title {
+  margin-top: var(--space-2);
+  color: var(--color-on-surface);
+  font-family: var(--font-display);
+  font-size: var(--text-headline-lg);
+  line-height: var(--text-headline-lg-line);
+  font-weight: 700;
+}
+
+.staff-directory__description,
+.staff-directory__empty,
+.staff-directory__status {
+  margin-top: var(--space-2);
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-2);
+  line-height: var(--line-2);
+}
+
+.staff-directory__card-title {
+  margin-bottom: var(--space-4);
+  color: var(--color-on-surface);
+  font-family: var(--font-display);
+  font-size: var(--text-5);
+  line-height: var(--line-5);
+  font-weight: 600;
+}
+
+.staff-directory__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.staff-directory__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1 1 180px;
+}
+
+.staff-directory__label {
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-1);
+  line-height: var(--line-1);
+  font-weight: 600;
+}
+
+.staff-directory__input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-interface);
+  font-size: var(--text-2);
+  line-height: var(--line-2);
+}
+
+.staff-directory__submit { flex: 0 0 auto; }
+.staff-directory__status { padding: var(--space-3); background: var(--color-surface-container-low); border-radius: var(--radius-lg); }
+
+.staff-directory__table-scroll { overflow-x: auto; }
+.staff-directory__table { width: 100%; min-width: 880px; text-align: left; }
+
+.staff-directory__table-heading {
+  background: var(--color-surface-container-high);
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-1);
+  line-height: var(--line-1);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.staff-directory__table th { padding: var(--space-3) var(--space-4); }
+.staff-directory__table td { padding: var(--space-3) var(--space-4); }
+.staff-directory__action-heading,
+.staff-directory__action-cell { text-align: right; white-space: nowrap; }
+.staff-directory__row:hover { background: var(--color-surface-container-low); }
+.staff-directory__actions { display: inline-flex; gap: var(--space-2); }
+
+.staff-directory__action {
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-default);
+  font-family: var(--font-interface);
+  font-size: var(--text-1);
+  line-height: var(--line-1);
+  font-weight: 600;
+  transition: all 150ms ease;
+}
+
+.staff-directory__action--save { background: var(--color-primary); color: var(--color-on-primary); box-shadow: var(--shadow-sm); }
+.staff-directory__action--save:hover { background: var(--color-primary-container); }
+.staff-directory__action--delete { background: var(--color-error-container); color: var(--color-error); }
+.staff-directory__action--delete:hover { background: var(--color-error); color: var(--color-on-error); }
+/* The editor's own row cannot be deleted, so it must not look clickable. */
+.staff-directory__action:disabled { background: var(--color-surface-container); color: var(--color-outline); }
+.staff-directory__action:disabled:hover { background: var(--color-surface-container); color: var(--color-outline); }
+
+.staff-directory__empty-container { padding: var(--space-4); background: var(--color-surface-container-low); }
+.staff-directory__empty { margin-top: 0; text-align: center; }
+
+.staff-directory__footer {
+  width: 100%;
+  margin-top: auto;
+  padding-block: var(--space-3);
+  background: var(--color-surface-container-low);
+}
+
+.staff-directory__footer-content {
+  width: min(100%, var(--max-content-width));
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+  color: var(--color-secondary);
+  font-family: var(--font-interface);
+  font-size: var(--text-1);
+  line-height: var(--line-1);
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .staff-directory__content { padding-right: var(--gutter-mobile); padding-left: var(--gutter-mobile); }
+  .staff-directory__intro,
+  .staff-directory__card { padding: var(--space-4); }
+  .staff-directory__field { flex-basis: 100%; }
+  .staff-directory__submit { width: 100%; }
+}
+
 .analytics-page,
-.review-queue {
+.review-queue,
+.staff-directory {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
