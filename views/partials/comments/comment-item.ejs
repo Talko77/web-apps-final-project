@@ -1,1 +1,13 @@
-<% const comment = typeof item !== 'undefined' && item ? item : {}; %><article class="comment-item"><div class="comment-item__header"><div class="comment-item__avatar"><%= comment.initials || 'GU' %></div><div class="comment-item__content"><div class="comment-item__meta"><strong class="comment-item__author"><%= comment.author || 'Guest' %></strong><time class="comment-item__date" datetime="<%= comment.datetime || '' %>"><%= comment.dateLabel || 'Just now' %></time></div><p class="comment-item__text"><%= comment.text || '' %></p></div></div></article>
+<% const comment = typeof item !== 'undefined' && item ? item : {}; %>
+<article class="comment-item">
+  <div class="comment-item__header">
+    <div class="comment-item__avatar"><%= comment.initials || 'GU' %></div>
+    <div class="comment-item__content">
+      <div class="comment-item__meta">
+        <strong class="comment-item__author"><%= comment.author || 'Guest' %></strong>
+        <time class="comment-item__date" datetime="<%= comment.datetime || '' %>"><%= comment.dateLabel || 'Just now' %></time>
+      </div>
+      <p class="comment-item__text"><%= comment.text || '' %></p>
+    </div>
+  </div>
+</article>

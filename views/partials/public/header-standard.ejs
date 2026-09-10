@@ -1,9 +1,16 @@
 <header class="site-header site-header--standard">
   <div class="site-header__bar page-shell">
     <%- include('../shared/site-logo', { logoHref: '/', publicationName: 'The Daily Web', editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null }) %>
-    <nav class="site-header__nav" aria-label="Main navigation"><a class="site-header__nav-link" href="/">Home</a><a class="site-header__nav-link" href="/search">Search</a></nav>
+    <nav class="site-header__nav" aria-label="Main navigation">
+      <a class="site-header__nav-link" href="/">Home</a>
+      <a class="site-header__nav-link" href="/search">Search</a>
+    </nav>
     <div class="site-header__actions">
-      <form class="site-search" action="/search" method="get"><label class="state-hidden" for="siteSearch">Search articles</label><span class="site-search__icon icon">search</span><input class="site-search__input" id="siteSearch" name="q" placeholder="Search the site" type="search" value="<%= typeof searchQuery !== 'undefined' && searchQuery ? searchQuery : '' %>"></form>
+      <form class="site-search" action="/search" method="get">
+        <label class="state-hidden" for="siteSearch">Search articles</label>
+        <span class="site-search__icon icon">search</span>
+        <input class="site-search__input" id="siteSearch" name="q" placeholder="Search the site" type="search" value="<%= typeof searchQuery !== 'undefined' && searchQuery ? searchQuery : '' %>">
+      </form>
       <% if (typeof currentUser !== 'undefined' && currentUser) { %>
         <a class="button button--secondary site-header__action" href="<%= currentUser.role === 'Editor' ? '/editor/reviews' : '/reporter/articles' %>">Newsroom</a>
         <button class="button button--secondary site-header__action" id="logoutBtn" type="button">Sign Out</button>
@@ -12,9 +19,17 @@
       <% } %>
     </div>
     <details class="site-mobile-menu">
-      <summary class="site-mobile-menu__button" aria-label="Open navigation menu"><span class="icon" aria-hidden="true">menu</span></summary>
-      <nav class="site-mobile-menu__panel" aria-label="Mobile navigation"><a class="site-mobile-menu__link" href="/">Home</a><a class="site-mobile-menu__link" href="/search">Search</a><a class="site-mobile-menu__link" href="/staff/login">Staff Login</a></nav>
+      <summary class="site-mobile-menu__button" aria-label="Open navigation menu">
+        <span class="icon" aria-hidden="true">menu</span>
+      </summary>
+      <nav class="site-mobile-menu__panel" aria-label="Mobile navigation">
+        <a class="site-mobile-menu__link" href="/">Home</a>
+        <a class="site-mobile-menu__link" href="/search">Search</a>
+        <a class="site-mobile-menu__link" href="/staff/login">Staff Login</a>
+      </nav>
     </details>
   </div>
-  <% if (typeof showBreaking !== 'undefined' && showBreaking) { %><%- include('./breaking-strip', { breakingText: typeof breakingText !== 'undefined' ? breakingText : null }) %><% } %>
+  <% if (typeof showBreaking !== 'undefined' && showBreaking) { %>
+    <%- include('./breaking-strip', { breakingText: typeof breakingText !== 'undefined' ? breakingText : null }) %>
+  <% } %>
 </header>

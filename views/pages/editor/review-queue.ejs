@@ -61,7 +61,13 @@
             <table class="review-queue__table" id="queueTable">
               <thead>
                 <tr class="review-queue__table-heading">
-                  <th>Reporter</th><th>Headline</th><th>Category</th><th>Status</th><th>Version</th><th>Submitted</th><th class="review-queue__action-heading">Action</th>
+                  <th>Reporter</th>
+                  <th>Headline</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Version</th>
+                  <th>Submitted</th>
+                  <th class="review-queue__action-heading">Action</th>
                 </tr>
               </thead>
               <tbody class="review-queue__table-body">
@@ -85,9 +91,16 @@
                     <span class="review-queue__read-time"><%= a.readLabel %></span>
                   </td>
                   <td class="review-queue__category-cell"><span class="review-queue__category"><%= a.category %></span></td>
-                  <td class="review-queue__status-cell"><span class="review-queue__status" data-status="<%= a.statusCode %>"><%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %></span></td>
+                  <td class="review-queue__status-cell">
+                    <span class="review-queue__status" data-status="<%= a.statusCode %>">
+                      <%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %>
+                    </span>
+                  </td>
                   <td class="review-queue__version-cell"><span class="review-queue__version"><%= a.version %></span></td>
-                  <td class="review-queue__submitted-cell"><div class="review-queue__submitted-date"><%= a.submittedLabel %></div><div class="review-queue__relative-date"><%= a.relativeDate %></div></td>
+                  <td class="review-queue__submitted-cell">
+                    <div class="review-queue__submitted-date"><%= a.submittedLabel %></div>
+                    <div class="review-queue__relative-date"><%= a.relativeDate %></div>
+                  </td>
                   <td class="review-queue__action-cell"><a class="review-queue__review-link" href="<%= a.url %>">Review</a></td>
                 </tr>
                 <% }); %>

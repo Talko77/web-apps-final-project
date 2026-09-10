@@ -73,7 +73,11 @@
                   </div>
                   <% } %>
                   <p class="comparison-pane__summary"><%= pane.summary %></p>
-                  <div class="comparison-pane__body"><% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %></div>
+                  <div class="comparison-pane__body">
+                    <% (pane.paragraphs || []).forEach(p => { %>
+                      <p><%= p %></p>
+                    <% }) %>
+                  </div>
                 </article>
                 <% } %>
               </div>
@@ -99,7 +103,11 @@
                   </div>
                   <% } %>
                   <p class="comparison-pane__summary"><%= pane.summary %></p>
-                  <div class="comparison-pane__body"><% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %></div>
+                  <div class="comparison-pane__body">
+                    <% (pane.paragraphs || []).forEach(p => { %>
+                      <p><%= p %></p>
+                    <% }) %>
+                  </div>
                 </article>
                 <% } %>
               </div>
@@ -136,11 +144,26 @@
 
             <div class="review-article__details">
               <span class="review-article__details-title">Article Details</span>
-              <div class="review-article__detail"><span class="review-article__detail-label">Reporter</span><span class="review-article__detail-value"><%= page.article.reporter %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Desk</span><span class="review-article__detail-value"><%= page.article.desk %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Submitted</span><span class="review-article__detail-value"><%= page.article.submittedLabel %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Views</span><span class="review-article__detail-value"><%= page.article.views %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Status</span><span class="review-article__detail-status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span></div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Reporter</span>
+                <span class="review-article__detail-value"><%= page.article.reporter %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Desk</span>
+                <span class="review-article__detail-value"><%= page.article.desk %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Submitted</span>
+                <span class="review-article__detail-value"><%= page.article.submittedLabel %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Views</span>
+                <span class="review-article__detail-value"><%= page.article.views %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Status</span>
+                <span class="review-article__detail-status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span>
+              </div>
             </div>
           </aside>
         </div>
