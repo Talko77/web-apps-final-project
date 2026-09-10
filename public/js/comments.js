@@ -27,13 +27,17 @@
   }
 
   function commentHtml(c) {
-    return `<article class="comment-item surface-paper radius-card pad-4 margin-top-3">
-  <div class="flex align-center gap-2">
-    <span class="avatar-initials surface-ink color-inverse">${esc(c.initials || '')}</span>
-    <span class="text-label text-1 color-body">${esc(c.author)}</span>
-    <time class="text-caption text-1 color-muted" datetime="${esc(c.datetime)}">${esc(c.dateLabel)}</time>
+    return `<article class="comment-item">
+  <div class="comment-item__header">
+    <div class="comment-item__avatar">${esc(c.initials || 'GU')}</div>
+    <div class="comment-item__content">
+      <div class="comment-item__meta">
+        <strong class="comment-item__author">${esc(c.author || 'Guest')}</strong>
+        <time class="comment-item__date" datetime="${esc(c.datetime || '')}">${esc(c.dateLabel || 'Just now')}</time>
+      </div>
+      <p class="comment-item__text">${esc(c.text || '')}</p>
+    </div>
   </div>
-  <p class="text-body text-1 color-body margin-top-2">${esc(c.text)}</p>
 </article>`;
   }
 

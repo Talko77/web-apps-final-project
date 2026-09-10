@@ -76,7 +76,7 @@
 }
 
 .editorial-home-main,
-.technology-main {
+.category-page__main {
   padding-top: var(--public-standard-offset);
 }
 
@@ -101,24 +101,14 @@
 
   .publication-primary,
   .search-results-list,
-  .editorial-lead-story,
-  .technology-articles {
+  .editorial-lead-story {
     grid-column: span 8;
   }
 
   .publication-sidebar,
   .search-filters,
-  .editorial-live-sidebar,
-  .technology-sidebar {
+  .editorial-live-sidebar {
     grid-column: span 4;
-  }
-
-  .technology-feature-media {
-    grid-column: span 7;
-  }
-
-  .technology-feature-media + div {
-    grid-column: span 5;
   }
 
   .editorial-telemetry > .grid > :first-child {
@@ -141,13 +131,11 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .editorial-footer > div > .grid,
-  .technology-footer > div > .grid {
+  .editorial-footer > div > .grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .editorial-footer > div > .grid > :first-child,
-  .technology-footer > div > .grid > :first-child {
+  .editorial-footer > div > .grid > :first-child {
     grid-column: span 2;
   }
 }

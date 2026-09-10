@@ -70,8 +70,8 @@ used by only one page belongs in `pages.css`.
 
 Page-family rules, preferably scoped by these roots:
 
-- Public: `.public-page`, `.publication-page`, `.article-page`, `.search-page`;
-  `.editorial-home-page` and `.technology-page` belong to non-routed references.
+- Public: `.public-page`, `.publication-page`, `.article-page`, `.search-page`,
+  `.category-page`; `.editorial-home-page` belongs to non-routed reference.
 - Reporter: `.reporter-articles*` and `.article-editor*`.
 - Auth: `.staff-login*`.
 - Editor: `.review-queue*`, `.review-article*`, `.analytics-page*`, plus

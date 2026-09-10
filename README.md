@@ -87,7 +87,7 @@ utils/
   viewMappers.js          Maps DB documents onto view fields
 views/                    View layer (EJS)
   error.ejs               Generic error page
-  pages/public/           Home, article page, search results
+  pages/public/           Home, article page, search results, category page
   pages/reporter/         Reporter workspace
   pages/editor/           Review queue, version comparison, analytics
   pages/auth/             Staff login
@@ -132,8 +132,17 @@ update to it is awaiting approval, and the new content replaces it only once an 
 approves.
 
 ### Work continuity
-Reporters explicitly save drafts from the article action card. Drafts are stored in MongoDB
-when **Save Draft** is selected.
+Drafts persist two ways, and both write to MongoDB:
+
+- **Background autosave** — `public/js/article-editor.js` saves five seconds after the
+  reporter stops typing, and immediately if the tab is hidden or closed. It only sends a
+  request when the content actually changed, so idle pauses do not generate traffic. This
+  satisfies the requirement that work is kept without a deliberate click on a Save button,
+  and that refreshing, closing the browser or moving to another computer loses nothing.
+- **Save Draft** — an explicit action for reporters who want to confirm the save themselves.
+
+Because drafts live in MongoDB rather than the browser, returning to the editor always
+restores the last version the reporter worked on, from any machine.
 
 ### Editor workspace
 All articles with filtering by state, category and search. The review page shows the
@@ -201,8 +210,8 @@ current.
 
 ### View routes
 
-`/` home · `/search` search · `/articles/:id` article page · `/staff/login` sign in ·
-`/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
+`/` home · `/category/:category` category · `/search` search · `/articles/:id` article page ·
+`/staff/login` sign in · `/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
 `/reporter/articles/:id/edit` edit · `/editor/reviews` review queue ·
 `/editor/reviews/:id` version comparison · `/editor/articles/:id/analytics` analytics
 

@@ -1,94 +1,107 @@
-<%# Public search results view: renders search input console, category/sort sidebar filters, and article results list. %>
+<%# Public search results view: renders search input console, category/sort sidebar filters, and article results list.
+    Follows BEM component conventions (.search-page). %>
 <!doctype html>
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
-<body class="public-page search-page surface-page text-body color-body height-screen flex flex-column">
+<body class="public-page search-page">
 <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery }) %>
-<main class="search-page-main width-full surface-page flex-grow">
-  <div class="width-content page-shell pad-inline-5 pad-5">
-    <div class="flex flex-column width-full">
-      <%# Search console bar %>
-      <section class="search-console surface-paper pad-5 radius-panel shadow-subtle margin-bottom-6" aria-labelledby="search-heading">
-        <div class="width-reading page-shell flex flex-column gap-4">
-          <h1 class="text-headline text-5 color-body" id="search-heading">Search the Archive</h1>
-          <form class="flex flex-column sm-row gap-2 align-start" id="searchForm" action="/search" method="get">
-            <div class="relative flex-grow">
-              <span class="icon absolute color-muted text-5">search</span>
-              <label class="state-hidden" for="searchInput">Search terms</label>
-              <input class="width-full pad-block-3 surface-muted radius-standard text-body text-3 color-body motion-colors control-input" id="searchInput" name="q" type="search" placeholder="Search by headline" value="<%= searchQuery %>">
-            </div>
-            <button class="inline-flex align-center justify-center gap-2 pad-inline-5 pad-block-3 surface-ink color-inverse text-label text-2 radius-standard shadow-subtle motion-transform" type="submit">
-              <span class="icon text-4">manage_search</span><span>Search</span>
-            </button>
-          </form>
-        </div>
-      </section>
-
-      <div class="search-layout grid grid-single lg-editorial-grid gap-6 align-start">
-        <%# Category and sort filters sidebar %>
-        <aside class="search-filters lg-sidebar-span flex flex-column gap-5">
-          <div class="surface-paper pad-5 radius-panel shadow-subtle stack-5 sticky">
-            <div class="flex align-center justify-between pad-block-2">
-              <h2 class="text-headline text-4 color-primary flex align-center gap-2"><span class="icon color-muted text-5">tune</span>Filter by Category</h2>
-            </div>
-            <fieldset class="stack-2">
-              <legend class="block text-kicker text-1 text-uppercase color-muted">Section</legend>
-              <div class="stack-2 surface-muted pad-2 radius-standard">
-                <% (locals.categories || []).forEach(function (category) { %>
-                <label class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors<% if (category.checked) { %> surface-paper shadow-subtle<% } %>">
-                  <span class="flex align-center gap-2 text-body text-1 color-body">
-                    <input class="control-pointer" form="searchForm" name="category" type="radio" value="<%= category.value %>" <% if (category.checked) { %>checked<% } %>>
-                    <span><%= category.label %></span>
-                  </span>
-                  <span class="text-caption text-1 color-muted"><%= category.count %></span>
-                </label>
-                <% }) %>
-              </div>
-            </fieldset>
-            <fieldset class="stack-2">
-              <legend class="block text-kicker text-1 text-uppercase color-muted">Sort by</legend>
-              <div class="stack-2 surface-muted pad-2 radius-standard">
-                <% [
-                  { label: 'Newest First', value: 'publishedAt' },
-                  { label: 'Most Popular', value: 'popularity' }
-                ].forEach(function (option) { %>
-                <label class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors<% if (sort === option.value) { %> surface-paper shadow-subtle<% } %>">
-                  <span class="flex align-center gap-2 text-body text-1 color-body">
-                    <input class="control-pointer" form="searchForm" name="sort" type="radio" value="<%= option.value %>" <% if (sort === option.value) { %>checked<% } %>>
-                    <span><%= option.label %></span>
-                  </span>
-                </label>
-                <% }) %>
-              </div>
-            </fieldset>
-            <button class="width-full pad-block-2 surface-ink color-inverse text-label text-1 radius-standard text-center motion-colors" form="searchForm" type="submit">Apply Filters</button>
+<main class="search-page__main">
+  <div class="search-page__container page-shell">
+    <%# Search console bar %>
+    <section class="search-page__console" aria-labelledby="search-heading">
+      <div class="search-page__console-inner">
+        <h1 class="search-page__title" id="search-heading">Search the Archive</h1>
+        <form class="search-page__form" id="searchForm" action="/search" method="get">
+          <div class="search-page__input-wrapper">
+            <span class="icon search-page__input-icon" aria-hidden="true">search</span>
+            <label class="state-hidden" for="searchInput">Search terms</label>
+            <input class="search-page__input" id="searchInput" name="q" type="search" placeholder="Search by headline" value="<%= searchQuery %>">
           </div>
-        </aside>
+          <button class="search-page__submit-btn" type="submit">
+            <span class="icon" aria-hidden="true">manage_search</span>
+            <span>Search</span>
+          </button>
+        </form>
+      </div>
+    </section>
 
-        <%# Search results list %>
-        <section class="search-results-list lg-content-span flex flex-column gap-4" aria-label="Search results">
-          <% if (searchQuery) { %>
-          <header class="stack-1 margin-bottom-2">
-            <h2 class="text-headline text-5 color-body">Search results for: "<%= searchQuery %>"</h2>
-            <p class="text-body text-1 color-muted"><%= resultCount %> articles found</p>
-          </header>
-          <% } %>
+    <div class="search-page__layout">
+      <%# Category and sort filters sidebar %>
+      <aside class="search-page__sidebar" aria-label="Search filters">
+        <div class="search-page__filters">
+          <div class="search-page__filters-header">
+            <h2 class="search-page__filters-title">
+              <span class="icon search-page__filters-icon" aria-hidden="true">tune</span>
+              Filter by Category
+            </h2>
+          </div>
+          <fieldset class="search-page__fieldset">
+            <legend class="search-page__legend">Section</legend>
+            <div class="search-page__options">
+              <% (locals.categories || []).forEach(function (category) { %>
+              <label class="search-page__option<%= category.checked ? ' search-page__option--active' : '' %>">
+                <span class="search-page__option-label">
+                  <input class="search-page__radio" form="searchForm" name="category" type="radio" value="<%= category.value %>" <% if (category.checked) { %>checked<% } %>>
+                  <span><%= category.label %></span>
+                </span>
+                <span class="search-page__option-count"><%= category.count %></span>
+              </label>
+              <% }) %>
+            </div>
+          </fieldset>
+          <fieldset class="search-page__fieldset">
+            <legend class="search-page__legend">Sort by</legend>
+            <div class="search-page__options">
+              <% [
+                { label: 'Newest First', value: 'publishedAt' },
+                { label: 'Most Popular', value: 'popularity' }
+              ].forEach(function (option) { %>
+              <label class="search-page__option<%= sort === option.value ? ' search-page__option--active' : '' %>">
+                <span class="search-page__option-label">
+                  <input class="search-page__radio" form="searchForm" name="sort" type="radio" value="<%= option.value %>" <% if (sort === option.value) { %>checked<% } %>>
+                  <span><%= option.label %></span>
+                </span>
+              </label>
+              <% }) %>
+            </div>
+          </fieldset>
+          <button class="search-page__apply-btn" form="searchForm" type="submit">Apply Filters</button>
+        </div>
+      </aside>
+
+      <%# Search results list %>
+      <section class="search-page__results" aria-label="Search results">
+        <% if (searchQuery) { %>
+        <header class="search-page__results-header">
+          <h2 class="search-page__results-title">Search results for: "<%= searchQuery %>"</h2>
+          <p class="search-page__results-count"><%= resultCount %> articles found</p>
+        </header>
+        <% } %>
+        <%# The first page is server-rendered so results work without JavaScript.
+            public/js/feed.js appends further pages on scroll via /api/articles/feed.
+            These hidden inputs pin the feed to the current query, category and sort. %>
+        <input id="feedSearch" type="hidden" value="<%= searchQuery %>">
+        <input id="feedCategory" type="hidden" value="<%= (locals.categories || []).filter(function (c) { return c.checked && c.value; }).map(function (c) { return c.value; })[0] || '' %>">
+        <input id="feedSort" type="hidden" value="<%= locals.sort === 'popularity' ? 'popularity' : 'publishedAt' %>">
+        <div class="search-page__results-list" id="feedGrid" data-page="1" data-has-more="<%= locals.hasMore ? 'true' : 'false' %>">
           <% (locals.results || []).forEach(function (item) { %>
           <%- include('../../partials/public/article-card', { article: item }) %>
           <% }) %>
-          <% if (!(locals.results || []).length) { %>
-          <div class="surface-paper pad-6 radius-panel shadow-subtle flex flex-column align-center gap-3 text-center">
-            <span class="icon color-muted text-7">search_off</span>
-            <h2 class="text-headline text-5 color-body">No articles found</h2>
-            <p class="text-body text-1 color-muted">Try different search terms, or pick another category.</p>
-          </div>
-          <% } %>
-        </section>
-      </div>
+        </div>
+        <p class="search-page__results-status state-hidden" id="feedStatus" aria-live="polite"></p>
+        <div id="feedSentinel" aria-hidden="true"></div>
+        <% if (!(locals.results || []).length) { %>
+        <div class="search-page__empty">
+          <span class="icon search-page__empty-icon" aria-hidden="true">search_off</span>
+          <h2 class="search-page__empty-title">No articles found</h2>
+          <p class="search-page__empty-text">Try different search terms, or pick another category.</p>
+        </div>
+        <% } %>
+      </section>
     </div>
   </div>
 </main>
-<%# Public footer %>
 <%- include('../../partials/public/footer') %>
+<script src="/js/feed.js" defer></script>
 </body>
 </html>

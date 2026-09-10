@@ -2,7 +2,8 @@
 const mongoose = require('mongoose');
 const { CATEGORIES, STATUS } = require('../config/constants');
 
-// The content fields are not required so reporters can explicitly save a partial draft.
+// The content fields are not required so a partial draft can be saved, whether by
+// the explicit Save Draft action or by autosave.
 // The completeness check happens when the draft is submitted for review
 // (articleController.changeStatus)
 const contentSchema = new mongoose.Schema({

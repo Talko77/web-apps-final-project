@@ -1,0 +1,65 @@
+<%# Public category page: displays category headline/intro, article count, and published article grid.
+    Follows BEM component conventions (.category-page). %>
+<!doctype html>
+<html lang="en">
+  <head>
+    <%- include('../../partials/shared/head', { pageTitle }) %>
+  </head>
+  <body class="category-page">
+    <%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
+
+    <main class="category-page__main">
+      <div class="category-page__container page-shell">
+        <header class="category-page__header">
+          <nav class="category-page__breadcrumb" aria-label="Breadcrumb">
+            <a class="category-page__breadcrumb-link" href="/">Home</a>
+            <span class="category-page__breadcrumb-separator icon" aria-hidden="true">chevron_right</span>
+            <span class="category-page__breadcrumb-current"><%= category %></span>
+          </nav>
+
+          <div class="category-page__heading-row">
+            <div class="category-page__heading-group">
+              <span class="category-page__kicker">Category Beat</span>
+              <h1 class="category-page__title"><%= category %></h1>
+              <p class="category-page__description">
+                <%= typeof categoryDescription !== 'undefined' && categoryDescription ? categoryDescription : `Latest reporting, analysis, and dispatches in ${category}.` %>
+              </p>
+            </div>
+            <div class="category-page__stats">
+              <span class="icon category-page__stats-icon" aria-hidden="true">article</span>
+              <span class="category-page__stats-text"><%= articleCount %> <%= articleCount === 1 ? 'article' : 'articles' %></span>
+            </div>
+          </div>
+        </header>
+
+        <% if ((locals.articles || []).length) { %>
+        <section class="category-page__feed" aria-label="<%= category %> articles">
+          <%# The first page is server-rendered for SEO; public/js/feed.js appends
+              the rest on scroll using the shared /api/articles/feed endpoint.
+              feedCategory is hidden and pins the feed to this category. %>
+          <input id="feedCategory" type="hidden" value="<%= category %>">
+          <div class="category-page__grid" id="feedGrid" data-page="1" data-has-more="<%= locals.hasMore ? 'true' : 'false' %>">
+            <% (locals.articles || []).forEach(function (item) { %>
+            <%- include('../../partials/public/article-card', { article: item }) %>
+            <% }) %>
+          </div>
+          <p class="category-page__feed-status state-hidden" id="feedStatus" aria-live="polite"></p>
+          <div id="feedSentinel" aria-hidden="true"></div>
+        </section>
+        <% } else { %>
+        <section class="category-page__empty" aria-label="No articles">
+          <span class="icon category-page__empty-icon" aria-hidden="true">feed</span>
+          <h2 class="category-page__empty-title">No articles found</h2>
+          <p class="category-page__empty-description">There are currently no published articles in <%= category %>.</p>
+          <div class="category-page__empty-action">
+            <a class="button button--secondary" href="/">Return to Home</a>
+          </div>
+        </section>
+        <% } %>
+      </div>
+    </main>
+
+    <%- include('../../partials/public/footer') %>
+    <script src="/js/feed.js" defer></script>
+  </body>
+</html>

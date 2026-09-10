@@ -34,19 +34,20 @@ runtime CSS to top-level `styles/`; its current file is documentation only.
 
 ## Active views and routes
 
-- Public: `views/pages/public/home.ejs` (`/`), `article.ejs`
-  (`/articles/:id`), and `search-results.ejs` (`/search`).
+- Public: `views/pages/public/home.ejs` (`/`), `category.ejs`
+  (`/category/:category`), `article.ejs` (`/articles/:id`), and
+  `search-results.ejs` (`/search`).
 - Auth: `views/pages/auth/staff-login.ejs` (`/staff/login`).
 - Reporter: `views/pages/reporter/articles.ejs` and `edit-article.ejs`.
 - Editor: `views/pages/editor/review-queue.ejs`, `review-article.ejs`, and
   `analytics.ejs`.
 - Errors: `views/error.ejs`.
 
-`views/pages/public/editorial-home.ejs` and `technology.ejs` contain large
-hard-coded reference/prototype markup but are not rendered. `/editorial`
-redirects to `/`; `/technology` redirects to Technology-filtered search. Do
-not copy their sample content into active pages or treat them as another public
-implementation unless a requested feature deliberately changes that contract.
+`views/pages/public/editorial-home.ejs` contains large hard-coded
+reference/prototype markup but is not rendered. `/editorial` redirects to `/`;
+`/technology` redirects to `/category/technology`. Do not copy sample content
+into active pages or treat it as another public implementation unless a
+requested feature deliberately changes that contract.
 
 ## EJS composition and reuse
 

@@ -7,12 +7,14 @@ const { isReporter, isEditor } = require('../middleware/auth');
 router.get('/', p.home);
 router.get('/search', p.search);
 router.get('/articles/:id', p.articlePage);
+router.get('/category/:category', p.category);
 router.get('/staff/login', p.staffLogin);
 
-// editorial-home.ejs and technology.ejs are prototypes with content hard-coded in the markup.
-// The paths are kept, but they redirect to real data-driven views instead of serving made-up content.
+// editorial-home.ejs is a prototype with content hard-coded in the markup.
+// The path is kept, but it redirects to the real data-driven view.
+// /technology redirects to the new dynamic category route for backward compatibility.
 router.get('/editorial', (req, res) => res.redirect('/'));
-router.get('/technology', (req, res) => res.redirect('/search?category=Technology'));
+router.get('/technology', (req, res) => res.redirect('/category/technology'));
 
 // Reporter area
 router.get('/reporter/articles', isReporter, p.reporterArticles);

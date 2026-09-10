@@ -168,7 +168,9 @@ exports.search = asyncHandler(async (req, res) => {
     : { publishedAt: -1 };
 
   const [results, resultCount, categoryCounts] = await Promise.all([
-    Article.find(query).sort(sort)
+    // Bounded by FEED_PAGE_SIZE: without a limit this renders every published
+    // article into one page, which does not stay usable on a large database.
+    Article.find(query).sort(sort).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
     Article.countDocuments(query),
     // A grouped count in a single query instead of a separate query per category
@@ -184,12 +186,63 @@ exports.search = asyncHandler(async (req, res) => {
     pageTitle: q ? `Search results: ${q}` : 'Search Articles',
     searchQuery: q,
     resultCount,
+    hasMore: results.length === FEED_PAGE_SIZE,
     sort: req.query.sort === 'popularity' ? 'popularity' : 'publishedAt',
     categories: [
       { label: 'All Categories', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0), checked: !category },
       ...CATEGORIES.map(c => ({ label: c, value: c, count: counts[c] || 0, checked: c === category }))
     ],
     results: results.map(toCard)
+  }));
+});
+
+const CATEGORY_DESCRIPTIONS = {
+  World: 'International coverage, global diplomacy, and dispatches from correspondents around the world.',
+  Business: 'Markets, finance, corporate strategy, and economic analysis.',
+  Technology: 'In-depth reporting on artificial intelligence, computing, cybersecurity, and digital policy.',
+  Science: 'Discoveries, space exploration, environment, and scientific research.',
+  Culture: 'Arts, literature, entertainment, society, and cultural commentary.',
+  Sports: 'Coverage, scores, profiles, and reporting across global sports.',
+  Opinion: 'Columns, perspectives, and editorial commentary from our writers and contributors.'
+};
+
+// GET /category/:category - server-rendered category page
+exports.category = asyncHandler(async (req, res, next) => {
+  const rawCategory = String(req.params.category || '').trim();
+  const matchedCategory = CATEGORIES.find(
+    c => c.toLowerCase() === rawCategory.toLowerCase()
+  );
+
+  if (!matchedCategory) return next();
+
+  const categoryQuery = { ...PUBLISHED, 'publishedVersion.category': matchedCategory };
+
+  // Bounded for the same reason as the search page: a category can hold
+  // thousands of articles and they must not all be rendered at once.
+  // The first page is server-rendered; feed.js loads the rest on scroll.
+  const [articles, articleCount] = await Promise.all([
+    Article.find(categoryQuery)
+      .sort({ publishedAt: -1 })
+      .limit(FEED_PAGE_SIZE)
+      .populate('reporter', 'username displayName')
+      .lean(),
+    Article.countDocuments(categoryQuery)
+  ]);
+
+  const viewedIds = new Set(req.session.viewedArticles || []);
+  const cards = articles.map(a => ({
+    ...toCard(a),
+    seen: viewedIds.has(String(a._id))
+  }));
+
+  res.render('pages/public/category', publicChrome({
+    pageTitle: `${matchedCategory} — The Daily Web`,
+    category: matchedCategory,
+    categoryDescription: CATEGORY_DESCRIPTIONS[matchedCategory] || `Latest reporting, analysis, and dispatches in ${matchedCategory}.`,
+    articles: cards,
+    // The true total for the whole category, not just the rendered first page
+    articleCount,
+    hasMore: articles.length === FEED_PAGE_SIZE
   }));
 });
 
