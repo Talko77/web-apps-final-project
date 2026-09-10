@@ -167,7 +167,7 @@ exports.search = asyncHandler(async (req, res) => {
     : { publishedAt: -1 };
 
   const [results, resultCount, categoryCounts] = await Promise.all([
-    Article.find(query).sort(sort).limit(FEED_PAGE_SIZE)
+    Article.find(query).sort(sort)
       .populate('reporter', 'username displayName').lean(),
     Article.countDocuments(query),
     // A grouped count in a single query instead of a separate query per category

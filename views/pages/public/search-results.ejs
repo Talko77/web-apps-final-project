@@ -15,24 +15,10 @@
               <label class="state-hidden" for="searchInput">Search terms</label>
               <input class="width-full pad-block-3 surface-muted radius-standard text-body text-3 color-body motion-colors control-input" id="searchInput" name="q" type="search" placeholder="Search by headline" value="<%= searchQuery %>">
             </div>
-            <div class="stack-2">
-              <label class="state-hidden" for="sortSelect">Sort results</label>
-              <select class="width-full surface-muted radius-standard pad-block-3 pad-inline-3 text-body text-1 color-body" id="sortSelect" name="sort">
-                <option value="publishedAt"<% if (sort !== 'popularity') { %> selected<% } %>>Newest First</option>
-                <option value="popularity"<% if (sort === 'popularity') { %> selected<% } %>>Most Popular</option>
-              </select>
-            </div>
             <button class="inline-flex align-center justify-center gap-2 pad-inline-5 pad-block-3 surface-ink color-inverse text-label text-2 radius-standard shadow-subtle motion-transform" type="submit">
               <span class="icon text-4">manage_search</span><span>Search</span>
             </button>
           </form>
-          <div class="flex flex-wrap align-center gap-2 pad-block-2 text-body text-1 color-body">
-            <span class="text-bold color-body"><%= resultCount %> articles found</span>
-            <% if (searchQuery) { %>
-            <span class="color-muted">for</span>
-            <span class="text-headline text-4 color-primary text-italic">"<%= searchQuery %>"</span>
-            <% } %>
-          </div>
         </div>
       </section>
 
@@ -56,11 +42,33 @@
                 <% }) %>
               </div>
             </fieldset>
+            <fieldset class="stack-2">
+              <legend class="block text-kicker text-1 text-uppercase color-muted">Sort by</legend>
+              <div class="stack-2 surface-muted pad-2 radius-standard">
+                <% [
+                  { label: 'Newest First', value: 'publishedAt' },
+                  { label: 'Most Popular', value: 'popularity' }
+                ].forEach(function (option) { %>
+                <label class="flex align-center justify-between pad-inline-3 pad-block-2 radius-standard control-pointer motion-colors<% if (sort === option.value) { %> surface-paper shadow-subtle<% } %>">
+                  <span class="flex align-center gap-2 text-body text-1 color-body">
+                    <input class="control-pointer" form="searchForm" name="sort" type="radio" value="<%= option.value %>" <% if (sort === option.value) { %>checked<% } %>>
+                    <span><%= option.label %></span>
+                  </span>
+                </label>
+                <% }) %>
+              </div>
+            </fieldset>
             <button class="width-full pad-block-2 surface-ink color-inverse text-label text-1 radius-standard text-center motion-colors" form="searchForm" type="submit">Apply Filters</button>
           </div>
         </aside>
 
         <section class="search-results-list lg-content-span flex flex-column gap-4" aria-label="Search results">
+          <% if (searchQuery) { %>
+          <header class="stack-1 margin-bottom-2">
+            <h2 class="text-headline text-5 color-body">Search results for: "<%= searchQuery %>"</h2>
+            <p class="text-body text-1 color-muted"><%= resultCount %> articles found</p>
+          </header>
+          <% } %>
           <% (locals.results || []).forEach(function (item) { %>
           <%- include('../../partials/public/article-card', { article: item }) %>
           <% }) %>

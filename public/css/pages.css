@@ -357,18 +357,6 @@ main table {
   background: var(--color-surface-container);
 }
 
-.search-filters .relative > .icon.absolute {
-  top: 50%;
-  right: var(--space-2);
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.search-filters select {
-  padding-right: var(--space-6);
-  padding-left: var(--space-3);
-}
-
 .search-result-card {
   min-width: 0;
   padding: var(--space-5);
