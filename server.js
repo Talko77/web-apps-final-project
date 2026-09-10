@@ -1,58 +1,72 @@
+require('dotenv').config();
+
 const express = require('express');
-const fs = require('fs');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const path = require('path');
 
+const { connectDB, MONGO_URI } = require('./config/db');
+const logger = require('./utils/logger');
+const { notFound, errorHandler } = require('./middleware/errorHandler');
+
 const app = express();
-const mockPagesDirectory = path.join(__dirname, 'data', 'mock', 'pages');
+
+connectDB();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.use(express.static(path.join(__dirname, 'public'), {
+  // Avoid stale CSS and JavaScript while developing locally.
+  maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0
+}));
 
-function loadMockPage(filename) {
-  const filePath = path.join(mockPagesDirectory, filename);
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-}
+// The session store is MongoDB rather than the process memory,
+// so a signed-in user stays signed in even after the server restarts.
+app.set('trust proxy', 1);
+app.use(session({
+  name: 'connect.sid',
+  secret: process.env.SESSION_SECRET || 'daily_web_dev_secret_change_me',
+  resave: false,
+  saveUninitialized: true, // needed to track read/unread articles for guests too
+  store: MongoStore.create({ mongoUrl: MONGO_URI, ttl: 14 * 24 * 60 * 60 }),
+  cookie: {
+    httpOnly: true,
+    maxAge: 14 * 24 * 60 * 60 * 1000,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production'
+  }
+}));
 
-function renderWithMock(view, filename, options = {}) {
-  return (req, res, next) => {
-    try {
-      const mockData = loadMockPage(filename);
-      const locals = options.wrapAsPage ? { page: mockData } : mockData;
-      res.render(view, locals);
-    } catch (error) {
-      next(error);
-    }
-  };
-}
-
-app.get('/', renderWithMock('pages/public/home', 'home.json'));
-app.get('/editorial', renderWithMock('pages/public/editorial-home', 'editorial-home.json', { wrapAsPage: true }));
-app.get('/technology', renderWithMock('pages/public/technology', 'technology.json', { wrapAsPage: true }));
-app.get('/search', renderWithMock('pages/public/search-results', 'search-results.json'));
-app.get('/articles/:id', renderWithMock('pages/public/article', 'article.json'));
-app.get('/staff/login', renderWithMock('pages/auth/staff-login', 'staff-login.json'));
-app.get('/reporter/articles', renderWithMock('pages/reporter/articles', 'reporter-articles.json'));
-app.get('/reporter/articles/:id/edit', renderWithMock('pages/reporter/edit-article', 'reporter-edit-article.json'));
-app.get('/editor/reviews', renderWithMock('pages/editor/review-queue', 'editor-review-queue.json', { wrapAsPage: true }));
-app.get('/editor/reviews/:id', renderWithMock('pages/editor/review-article', 'editor-review-article.json', { wrapAsPage: true }));
-app.get('/editor/articles/:id/analytics', renderWithMock('pages/editor/analytics', 'editor-analytics.json', { wrapAsPage: true }));
-
-// TODO: Mount the authentication, article, comment, analytics, weather, session,
-// and database layers when the backend phase supplies their complete modules.
-
-app.use((error, req, res, next) => {
-  console.error(error);
-  res.status(500).send('Unable to render this page.');
+// Available to every EJS template
+app.use((req, res, next) => {
+  res.locals.currentUser = (req.session && req.session.user) || null;
+  next();
 });
 
-const PORT = process.env.PORT || 3000;
+// REST API
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/articles', require('./routes/articles'));
+app.use('/api/comments', require('./routes/comments'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/weather', require('./routes/weather'));
 
-if (require.main === module) {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+// View pages (EJS) - keeps the path structure established during the EJS migration
+app.use('/', require('./routes/pages'));
+
+app.use(notFound);
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`));
+
+// An unhandled error is written to the log and does not kill the process silently
+process.on('unhandledRejection', err => logger.error('unhandledRejection', err));
+process.on('uncaughtException', err => {
+  logger.error('uncaughtException', err);
+  server.close(() => process.exit(1));
+});
 
 module.exports = app;

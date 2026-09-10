@@ -1,339 +1,106 @@
 <!doctype html>
-
 <html lang="en">
-  <head><%- include('../../partials/shared/head', { pageTitle: 'The Daily Web - Editorial Workspace' }) %></head>
-  <body
-    class="editor-queue-page surface-page text-body text-2 color-body height-screen flex flex-column"
-  >
-    <header class="site-header fixed width-full surface-paper shadow-subtle">
-      <div
-        class="site-header-inner width-content pad-inline-5 flex align-center justify-between gap-4"
-      >
-        <div class="flex align-center gap-4">
-          <a class="flex align-center gap-2" href="/reporter/articles"
-            ><span class="text-headline text-5 color-primary"
-              >The Daily Web</span
-            ></a
-          ><span
-            class="pad-inline-3 pad-block-2 radius-standard surface-info color-info text-label text-1 text-uppercase text-semibold"
-            >Editor</span
-          >
-        </div>
-        <nav
-          class="site-primary-nav state-hidden flex align-center gap-5"
-          data-active-classes="color-primary text-bold"
-        >
-          <a
-            class="text-label text-2 color-muted motion-colors"
-            data-path="articles"
-            href="#"
-            >Articles</a
-          ><a
-            aria-current="page"
-            class="motion-colors color-primary text-bold"
-            data-path="review-queue"
-            href="#"
-            >Review Queue</a
-          >
-        </nav>
-        <div class="flex align-center gap-4">
-          <a
-            class="text-label text-1 color-muted flex align-center gap-1 motion-colors"
-            data-path="home"
-            href="#"
-            ><span class="icon text-2">open_in_new</span
-            >View Public Site</a
-          ><a
-            class="text-label text-1 color-muted motion-colors"
-            data-path="login"
-            href="#"
-            >Logout</a
-          >
-          <div
-            class="avatar-small radius-pill surface-ink flex align-center justify-center"
-          >
-            <span class="icon color-inverse text-4"
-              >person</span
-            >
-          </div>
-        </div>
-      </div>
-    </header>
-    <main class="site-header-offset width-full surface-page flex-grow">
-      <div class="editor-page-content width-content pad-inline-5 pad-block-3">
-        <div
-          class="flex align-center gap-2 text-body text-1 color-muted margin-bottom-4"
-        >
-          <a class="" href="/reporter/articles">Newsroom CMS</a
-          ><span class="color-subtle">/</span
-          ><span class="color-body text-semibold">Desk Console</span>
-        </div>
-        <div class="flex flex-column width-full">
-          <section
-            class="queue-intro-card surface-paper radius-panel pad-5 shadow-subtle margin-bottom-5"
-          >
-            <div
-              class="queue-console-strip flex flex-column md-row sm-align-center justify-between gap-4 margin-bottom-4 surface-muted pad-5 radius-panel"
-            >
-              <div class="flex align-center gap-3">
-                <span class="icon color-primary text-6"
-                  >assignment_turned_in</span
-                >
-                <div>
-                  <span class="text-label text-1 text-uppercase color-muted"
-                    >Editorial Desk Portal</span
-                  >
-                  <h2 class="text-headline text-4 color-body">
-                    The Daily Web | Editor Desk
-                  </h2>
-                </div>
-              </div>
-              <div class="flex flex-wrap align-center gap-4">
-                <nav class="flex align-center gap-2 text-label text-1">
-                  <span
-                    class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-semibold"
-                    >Review Queue</span
-                  >
-                  <a
-                    class="pad-inline-3 pad-block-2 radius-standard color-muted motion-colors"
-                    data-path="articles"
-                    href="#"
-                    >All Articles</a
-                  >
-                  <a
-                    class="pad-inline-3 pad-block-2 radius-standard color-alert motion-colors"
-                    data-path="login"
-                    href="#"
-                    >Log Out</a
-                  >
-                </nav>
-                <div
-                  class="flex align-center gap-2 pad-inline-3 surface-raised pad-block-2 radius-pill"
-                >
-                  <div
-                    class="avatar-small radius-pill surface-ink flex align-center justify-center color-inverse text-1 text-bold"
-                  >
-                    MK
-                  </div>
-                  <div class="text-left text-tight">
-                    <p class="text-label text-1 color-body text-medium">
-                      Marcus Keller
-                    </p>
-                    <p class="text-caption text-1 color-muted">Senior Editor</p>
-                  </div>
-                </div>
-              </div>
+  <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
+  <body class="review-queue editor-queue-page">
+    <%- include('../../partials/newsroom/header', { newsroomRole }) %>
+    <main class="review-queue__main">
+      <div class="review-queue__content">
+        <section class="review-queue__intro">
+          <div class="review-queue__heading-row">
+            <div>
+              <span class="review-queue__eyebrow">Newsroom</span>
+              <h1 class="review-queue__title">Review Queue</h1>
+              <p class="review-queue__description">Stories submitted by reporters and waiting on an editor to review, approve and publish them.</p>
+              <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <%= page.articles.length %> articles.</p>
             </div>
-            <div
-              class="queue-heading-row flex flex-column flex-row align-end justify-between gap-4 margin-top-2"
-            >
-              <div>
-                <div class="flex align-center gap-2 margin-bottom-2">
-                  <span
-                    class="avatar-small radius-pill surface-alert state-loading"
-                  ></span>
-                  <span
-                    class="text-label text-1 text-uppercase color-alert text-bold"
-                    >Dispatch Workflow</span
-                  >
-                </div>
-                <h1 class="text-headline text-6 color-body">
-                  Editor Review Queue
-                </h1>
-                <p class="text-body text-2 color-muted margin-top-2">
-                  Articles submitted by reporters awaiting review, revision
-                  check, or publication.
-                </p>
-              </div>
-              <div class="flex flex-wrap align-center gap-2">
-                <div
-                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-raised color-body text-label text-1"
-                >
-                  <span class="avatar-small radius-pill surface-warning"></span>
-                  <span class="text-semibold">3</span> Pending Review
-                </div>
-                <div
-                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-info color-info text-label text-1"
-                >
-                  <span class="avatar-small radius-pill surface-warning"></span>
-                  <span class="text-semibold">2</span> Changes Requested
-                </div>
-                <div
-                  class="flex align-center gap-2 pad-inline-3 pad-block-2 radius-pill surface-panel color-muted text-label text-1"
-                >
-                  <span class="avatar-small radius-pill surface-success"></span>
-                  <span class="text-semibold">8</span> Published Today
-                </div>
-              </div>
-            </div>
-          </section>
-          <section
-            class="queue-filters surface-paper radius-panel pad-4 shadow-subtle margin-bottom-4"
-          >
-            <div
-              class="flex flex-column sm-row align-start sm-align-center justify-between gap-3"
-            >
-              <div class="queue-search relative flex-grow width-reading">
-                <span
-                  class="icon absolute color-subtle text-4"
-                  >search</span
-                >
-                <input
-                  class="width-full pad-inline-5 pad-inline-4 pad-block-2 text-1 text-body surface-paper color-body radius-card control-input motion-all"
-                  id="queueSearch"
-                  placeholder="Search by article title or reporter name..."
-                  type="text"
-                />
-              </div>
-              <div class="flex align-center gap-2">
-                <div class="queue-select relative">
-                  <select
-                    class="surface-paper text-label text-1 color-body pad-inline-3 pad-inline-5 pad-block-2 radius-card control-pointer control-input shadow-subtle"
-                    id="categoryFilter"
-                  >
-                    <option value="ALL">All Categories</option>
-                    <option value="CAMPUS">Campus &amp; Life</option>
-                    <option value="INVESTIGATION">Investigation</option>
-                    <option value="TECH">Technology</option>
-                    <option value="CULTURE">Arts &amp; Culture</option>
-                    <option value="OPINION">Opinion Desk</option>
-                  </select>
-                  <span
-                    class="icon absolute color-subtle text-4"
-                    >expand_more</span
-                  >
-                </div>
-                <button
-                  class="pad-inline-3 pad-block-2 text-1 text-label color-muted radius-card motion-colors flex align-center gap-1"
-                  id="resetFilters"
-                  type="button"
-                >
-                  <span class="icon text-2">refresh</span>
-                  Reset
-                </button>
-              </div>
-            </div>
-          </section>
-          <div
-            class="queue-table-card surface-paper radius-panel shadow-subtle overflow-hidden margin-bottom-5"
-          >
-            <div class="overflow-scroll">
-              <table class="width-full text-left" id="queueTable">
-                <thead>
-                  <tr
-                    class="surface-raised color-muted text-label text-1 text-uppercase"
-                  >
-                    <th class="pad-block-3 pad-inline-4">Article Title</th>
-                    <th class="pad-block-3 pad-inline-4">Reporter Name</th>
-                    <th class="pad-block-3 pad-inline-4">Submission Date</th>
-                    <th class="pad-block-3 pad-inline-4">Version</th>
-                    <th class="pad-block-3 pad-inline-4">Status</th>
-                    <th class="pad-block-3 pad-inline-4 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody class="text-body text-1 color-body">
-<% page.articles.forEach(function(article) { %>
-<tr class="motion-colors" data-category="<%= article.categoryCode %>" data-status="<%= article.statusCode %>"><td class="pad-block-3 pad-inline-4 width-reading"><div class="flex align-center gap-2 margin-bottom-2"><span class="pad-inline-3 pad-block-2 radius-standard surface-raised color-body text-label text-1 text-uppercase"><%= article.category %></span><span class="text-caption text-1 color-muted"><%= article.readLabel %></span></div><a class="text-headline text-4 color-body motion-colors text-bold block truncate" href="<%= article.url %>"><%= article.title %></a><p class="color-muted truncate margin-top-2 text-caption text-1"><%= article.summary %></p></td><td class="pad-block-3 pad-inline-4 no-wrap"><div class="flex align-center gap-2"><div class="avatar-small radius-pill surface-info color-info flex align-center justify-center text-bold text-1"><%= article.initials %></div><div><span class="text-semibold color-body block"><%= article.reporterName %></span><span class="text-caption text-1 color-muted"><%= article.beat %></span></div></div></td><td class="pad-block-3 pad-inline-4 no-wrap"><div class="color-body text-medium"><%= article.submittedLabel %></div><div class="text-caption text-1 color-muted"><%= article.relativeDate %></div></td><td class="pad-block-3 pad-inline-4 no-wrap"><span class="pad-inline-3 pad-block-2 radius-standard surface-raised color-muted text-label text-1"><%= article.version %></span></td><td class="pad-block-3 pad-inline-4 no-wrap"><%- include('../../partials/newsroom/editor-status-badge', { statusLabel: article.statusLabel }) %></td><td class="pad-block-3 pad-inline-4 text-right no-wrap"><a class="inline-flex align-center gap-1 pad-inline-3 pad-block-2 surface-ink color-inverse text-label text-1 radius-standard shadow-subtle motion-all" href="<%= article.url %>">Review Article <span class="icon text-2">arrow_forward</span></a></td></tr>
-<% }); %>
-</tbody>
-              </table>
-            </div>
-            <div
-              class="pad-4 surface-muted flex flex-column sm-row sm-align-center justify-between gap-3"
-            >
-              <div class="text-caption text-1 color-muted">
-                Showing <span class="text-semibold color-body">1-5</span> of
-                <span class="text-semibold color-body">5</span> pending
-                submissions
-              </div>
-              <div class="flex align-center gap-1">
-                <button
-                  class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled"
-                  disabled=""
-                  type="button"
-                >
-                  Previous
-                </button>
-                <button
-                  class="pad-inline-3 pad-block-2 radius-standard surface-ink color-inverse text-label text-1 text-semibold"
-                  type="button"
-                >
-                  1
-                </button>
-                <button
-                  class="pad-inline-3 pad-block-2 radius-standard surface-panel color-subtle text-label text-1 control-disabled"
-                  disabled=""
-                  type="button"
-                >
-                  Next
-                </button>
-              </div>
+            <div class="review-queue__status-summary">
+              <% page.statusFilters.forEach(function (filter) { %>
+              <span class="review-queue__status-total">
+                <span class="review-queue__status-count"><%= filter.count %></span>
+                <%= filter.label %>
+              </span>
+              <% }); %>
             </div>
           </div>
-          <section
-            class="queue-metrics grid grid-single md-grid-triple gap-4 margin-bottom-6"
-          >
-            <div class="surface-paper pad-4 radius-panel shadow-subtle">
-              <div class="flex align-center justify-between margin-bottom-2">
-                <span class="text-label text-1 text-uppercase color-muted"
-                  >Dispatch Cadence</span
-                >
-                <span class="icon color-muted text-4"
-                  >speed</span
-                >
-              </div>
-              <div class="text-headline text-5 color-body text-semibold">
-                1h 42m
-              </div>
-              <p class="text-caption text-1 color-muted margin-top-2">
-                Average editor turnaround time for incoming draft submissions.
-              </p>
-            </div>
-            <div class="surface-paper pad-4 radius-panel shadow-subtle">
-              <div class="flex align-center justify-between margin-bottom-2">
-                <span class="text-label text-1 text-uppercase color-muted"
-                  >Live Reporters</span
-                >
-                <span class="icon color-muted text-4"
-                  >group</span
-                >
-              </div>
-              <div class="text-headline text-5 color-body text-semibold">
-                14 Active
-              </div>
-              <p class="text-caption text-1 color-muted margin-top-2">
-                Reporters currently working on filed and assigned stories.
-              </p>
-            </div>
-            <div class="surface-paper pad-4 radius-panel shadow-subtle">
-              <div class="flex align-center justify-between margin-bottom-2">
-                <span class="text-label text-1 text-uppercase color-muted"
-                  >Evening Print Lock</span
-                >
-                <span class="icon color-alert text-4"
-                  >lock_clock</span
-                >
-              </div>
-              <div class="text-headline text-5 color-body text-semibold">
-                05:30 PM
-              </div>
-              <p class="text-caption text-1 color-muted margin-top-2">
-                Hard deadline for final digital layout sync and print press
-                dispatch.
-              </p>
-            </div>
-          </section>
+        </section>
 
+        <section class="review-queue__filters">
+          <div class="review-queue__filter-layout">
+            <div class="review-queue__search-field">
+              <label class="review-queue__field-label" for="queueSearch">Search by headline or reporter name</label>
+              <input class="review-queue__search-input control-input" id="queueSearch" placeholder="For example: elections, or a reporter name" type="search" />
+            </div>
+            <div class="review-queue__filter-controls">
+              <div class="review-queue__select-field">
+                <label class="review-queue__field-label" for="categoryFilter">Category</label>
+                <select class="review-queue__select control-input" id="categoryFilter">
+                  <option value="">All Categories</option>
+                  <% page.categories.forEach(function (category) { %>
+                  <option value="<%= category %>"><%= category %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="review-queue__select-field">
+                <label class="review-queue__field-label" for="statusFilter">Status</label>
+                <select class="review-queue__select control-input" id="statusFilter">
+                  <% page.statusFilters.forEach(function (filter) { %>
+                  <option value="<%= filter.value %>" <% if (filter.value === page.activeStatus) { %>selected<% } %>><%= filter.label %> (<%= filter.count %>)</option>
+                  <% }); %>
+                </select>
+              </div>
+              <button class="review-queue__reset" id="resetFilters" type="button">
+                <span class="icon review-queue__reset-icon">refresh</span>
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="review-queue__table-card">
+          <div class="review-queue__table-scroll">
+            <table class="review-queue__table" id="queueTable">
+              <thead>
+                <tr class="review-queue__table-heading">
+                  <th>Reporter</th><th>Headline</th><th>Category</th><th>Status</th><th>Version</th><th>Submitted</th><th class="review-queue__action-heading">Action</th>
+                </tr>
+              </thead>
+              <tbody class="review-queue__table-body">
+                <% page.articles.forEach(function (a) { %>
+                <tr class="review-queue__row" data-status="<%= a.statusCode %>" data-category="<%= a.categoryCode %>" data-title="<%= a.title %>" data-reporter="<%= a.reporterName %>">
+                  <td class="review-queue__reporter-cell">
+                    <div class="review-queue__reporter">
+                      <div class="review-queue__avatar"><%= a.initials %></div>
+                      <div>
+                        <span class="review-queue__reporter-name"><%= a.reporterName %></span>
+                        <span class="review-queue__reporter-beat"><%= a.beat %></span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="review-queue__headline-cell">
+                    <% if (a.isUpdate) { %>
+                    <span class="review-queue__update-label"><span class="icon review-queue__update-icon">update</span>Update to a published story - not a new article</span>
+                    <% } %>
+                    <a class="review-queue__headline" href="<%= a.url %>"><%= a.title %></a>
+                    <p class="review-queue__summary"><%= a.summary %></p>
+                    <span class="review-queue__read-time"><%= a.readLabel %></span>
+                  </td>
+                  <td class="review-queue__category-cell"><span class="review-queue__category"><%= a.category %></span></td>
+                  <td class="review-queue__status-cell"><span class="review-queue__status" data-status="<%= a.statusCode %>"><%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %></span></td>
+                  <td class="review-queue__version-cell"><span class="review-queue__version"><%= a.version %></span></td>
+                  <td class="review-queue__submitted-cell"><div class="review-queue__submitted-date"><%= a.submittedLabel %></div><div class="review-queue__relative-date"><%= a.relativeDate %></div></td>
+                  <td class="review-queue__action-cell"><a class="review-queue__review-link" href="<%= a.url %>">Review</a></td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <div class="review-queue__empty-container">
+            <p class="review-queue__empty state-hidden" id="queueEmptyState">No articles match the selected filters.</p>
+          </div>
         </div>
       </div>
     </main>
-    <footer class="width-full surface-muted pad-block-3">
-      <div
-        class="width-content pad-inline-5 text-center text-caption text-1 color-muted"
-      >
-        The Daily Web Student Newsroom CMS • Internal Editorial Dispatch •
-        v1.2.0
-      </div>
-    </footer>
+    <footer class="review-queue__footer"><div class="review-queue__footer-content">The Daily Web · Newsroom · Editor's Desk</div></footer>
+    <script src="/js/editorQueue.js" defer></script>
   </body>
 </html>

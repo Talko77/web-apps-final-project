@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/shared/head', { pageTitle: typeof title !== 'undefined' ? title : 'Error' }) %>
+</head>
+<body class="surface-canvas">
+  <%- include('partials/public/header-standard', { editionLabel: null, showBreaking: false, searchQuery: '' }) %>
+  <main class="page-shell width-content pad-inline-5 pad-block-6">
+    <section class="surface-paper radius-card shadow-subtle pad-6 text-center">
+      <h1 class="text-headline text-6 color-body"><%= typeof title !== 'undefined' ? title : 'Error' %></h1>
+      <p class="text-body text-2 color-muted margin-top-3"><%= typeof message !== 'undefined' ? message : 'Something went wrong on our end.' %></p>
+      <a class="inline-flex align-center pad-inline-4 pad-block-3 radius-standard surface-ink color-inverse text-label text-1 margin-top-4" href="/">Back to Home</a>
+    </section>
+  </main>
+</body>
+</html>

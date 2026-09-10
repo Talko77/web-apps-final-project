@@ -1,23 +1,45 @@
+// Staff login. Authentication happens on the server only -
+// the client just sends the credentials and receives the redirect target.
 (function () {
+  'use strict';
+
   const form = document.getElementById('loginForm');
-  const statusMessage = document.getElementById('statusMessage');
+  if (!form) return;
 
-  if (!form || !statusMessage) return;
+  const usernameEl = document.getElementById('staffUsername');
+  const passwordEl = document.getElementById('staffPassword');
+  const statusEl = document.getElementById('statusMessage');
+  const submitEl = form.querySelector('button[type="submit"]');
+  const nextUrl = form.dataset.next || '';
 
-  form.addEventListener('submit', function (event) {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
 
-    const email = document.getElementById('staffEmail').value.trim().toLowerCase();
-    const password = document.getElementById('staffPassword').value;
+    const username = usernameEl.value.trim();
+    const password = passwordEl.value;
 
-    if (password === 'pass123' && email === 'reporter@dailyweb.org') {
-      window.location.href = '/reporter/articles';
-    } else if (password === 'pass123' && email === 'editor@dailyweb.org') {
-      window.location.href = '/editor/reviews';
-    } else {
-      statusMessage.classList.remove('state-hidden');
-      statusMessage.classList.add('login-feedback-error');
-      statusMessage.textContent = 'Invalid credentials. Please use one of the demo accounts shown above.';
+    if (!username || !password) {
+      window.api.flash(statusEl, 'Enter a username and password.', true);
+      statusEl.classList.add('login-feedback-error');
+      return;
+    }
+
+    submitEl.disabled = true;
+    form.classList.add('is-authenticating');
+
+    try {
+      const data = await window.api.sendJSON('/api/auth/login', 'POST', { username, password });
+      statusEl.classList.remove('login-feedback-error');
+      // The target is decided on the server based on the role stored in the session
+      window.location.assign(nextUrl || data.redirect);
+    } catch (err) {
+      window.api.flash(statusEl, err.message, true);
+      statusEl.classList.add('login-feedback-error');
+      passwordEl.value = '';
+      passwordEl.focus();
+    } finally {
+      submitEl.disabled = false;
+      form.classList.remove('is-authenticating');
     }
   });
 })();
