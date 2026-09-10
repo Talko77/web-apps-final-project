@@ -80,8 +80,17 @@
 
         <%# Summary metric cards %>
         <section class="analytics-page__metrics" aria-label="Summary metrics">
-          <% page.metrics.forEach(function (metric) { %>
-          <%- include('../../partials/analytics/summary-metric', { item: metric }) %>
+          <% (page.metrics || []).forEach(function (metric) { %>
+          <div class="analytics-summary-metric">
+            <div class="analytics-summary-metric__content">
+              <span class="analytics-summary-metric__label"><%= metric.label || 'Metric' %></span>
+              <strong class="analytics-summary-metric__value"><%= metric.value || '—' %></strong>
+              <span class="analytics-summary-metric__comparison"><%= metric.comparison || '' %></span>
+            </div>
+            <div class="analytics-summary-metric__icon">
+              <span class="icon"><%= metric.icon || 'analytics' %></span>
+            </div>
+          </div>
           <% }); %>
         </section>
       </div>

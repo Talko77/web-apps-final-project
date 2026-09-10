@@ -71,7 +71,7 @@ used by only one page belongs in `pages.css`.
 Page-family rules, preferably scoped by these roots:
 
 - Public: `.public-page`, `.publication-page`, `.article-page`, `.search-page`,
-  `.category-page`.
+  `.category-page`, `.error-page*`.
 - Reporter: `.reporter-articles*` and `.article-editor*`.
 - Auth: `.staff-login*`.
 - Editor: `.review-queue*`, `.review-article*`, `.analytics-page*`,
@@ -87,7 +87,7 @@ The code intentionally combines:
 - lowercase role-based utilities such as `.surface-paper`, `.color-muted`,
   `.text-headline`, and `.pad-inline-5`;
 - BEM-like semantic names such as `.article-card__media`,
-  `.article-editor__sidebar`, and `.review-article__action--approve`.
+  `.article-editor__sidebar`, `.error-page__card`, and `.review-article__action--approve`.
 
 State hooks such as `.state-hidden`, `.state-loading`, `.filter-btn.active`,
 and `.is-authenticating` may be toggled by JavaScript. IDs and `data-*` are
@@ -96,11 +96,14 @@ the convention of their component, and do not introduce a third naming style.
 
 ## Shared markup relationships
 
-The standard/newsroom mastheads, article card, comment item, editor status, and
-analytics metric have EJS partials. Their shared semantic selectors belong in
-`components.css`.
+The standard/newsroom mastheads, article card, and comment item have dedicated
+EJS partials. Their shared semantic selectors belong in `components.css`.
+Cross-page component styles for status badges (`.status-badge*`), breaking bars
+(`.breaking-strip*`), and analytics summary cards (`.analytics-summary-metric*`)
+remain in `components.css`, while their markup is inlined directly in their
+owning templates.
 
-Two structures also have browser renderers:
+Three structures also have browser renderers:
 
 - `partials/public/article-card.ejs` matches `public/js/feed.js`.
 - `partials/comments/comment-item.ejs` matches `public/js/comments.js`.

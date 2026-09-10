@@ -2,20 +2,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('partials/shared/head', { pageTitle: typeof title !== 'undefined' ? title : 'Error' }) %>
+  <%- include('partials/shared/head', { pageTitle: typeof pageTitle !== 'undefined' ? pageTitle : (typeof title !== 'undefined' ? title : 'Error') }) %>
 </head>
 <body class="public-page error-page surface-canvas flex flex-column height-screen">
-  <%- include('partials/public/header-standard', { editionLabel: null, showBreaking: false, searchQuery: '' }) %>
-  <main class="page-shell width-content pad-inline-5 pad-block-6 flex-grow flex align-center justify-center">
-    <section class="surface-paper radius-card shadow-subtle pad-6 text-center width-full" style="max-width: 640px;">
-      <h1 class="text-headline text-6 color-body"><%= typeof title !== 'undefined' ? title : 'Error' %></h1>
-      <p class="text-body text-2 color-muted margin-top-3"><%= typeof message !== 'undefined' ? message : 'Something went wrong on our end.' %></p>
-      <div class="flex flex-wrap align-center justify-center gap-3 margin-top-5">
-        <a class="button button--primary inline-flex align-center gap-2 pad-inline-4 pad-block-3 radius-standard surface-ink color-inverse text-label text-1" href="/">
-          <span class="icon text-3" aria-hidden="true">home</span>
-          <span>Back to Home</span>
-        </a>
-      </div>
+  <%- include('partials/public/header-standard', { editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null, showBreaking: false, searchQuery: '' }) %>
+  <main class="error-page__main page-shell width-content pad-inline-5 pad-block-6 flex-grow flex align-center justify-center">
+    <section class="error-page__card surface-paper radius-card shadow-subtle pad-6 text-center width-full" style="max-width: 640px;">
+      <% if (typeof statusCode !== 'undefined' && statusCode === 404) { %>
+        <span class="error-page__kicker text-label text-1 text-uppercase text-bold color-primary">Error 404 · <%= typeof statusMessage !== 'undefined' && statusMessage ? statusMessage : 'Dispatch Missing' %></span>
+        <h1 class="error-page__title text-headline text-6 color-body margin-top-2">Page Not Found</h1>
+        <p class="error-page__description text-body text-2 color-muted margin-top-3">
+          <%= typeof message !== 'undefined' && message ? message : 'The story, edition, or workspace you were looking for does not exist or has been moved to another desk.' %>
+        </p>
+        <div class="error-page__actions flex flex-wrap align-center justify-center gap-3 margin-top-5">
+          <a class="error-page__button button button--primary" href="/">
+            <span class="error-page__button-icon icon text-3" aria-hidden="true">home</span>
+            <span class="error-page__button-text">Return to Front Page</span>
+          </a>
+          <a class="error-page__button button button--secondary" href="/search">
+            <span class="error-page__button-icon icon text-3" aria-hidden="true">search</span>
+            <span class="error-page__button-text">Search the Publication</span>
+          </a>
+          <a class="error-page__button button button--secondary" href="/staff/login">
+            <span class="error-page__button-icon icon text-3" aria-hidden="true">lock</span>
+            <span class="error-page__button-text">Staff Login</span>
+          </a>
+        </div>
+      <% } else { %>
+        <h1 class="error-page__title text-headline text-6 color-body"><%= typeof title !== 'undefined' ? title : 'Error' %></h1>
+        <p class="error-page__description text-body text-2 color-muted margin-top-3"><%= typeof message !== 'undefined' ? message : 'Something went wrong on our end.' %></p>
+        <div class="error-page__actions flex flex-wrap align-center justify-center gap-3 margin-top-5">
+          <a class="error-page__button button button--primary" href="/">
+            <span class="error-page__button-icon icon text-3" aria-hidden="true">home</span>
+            <span class="error-page__button-text">Back to Home</span>
+          </a>
+        </div>
+      <% } %>
     </section>
   </main>
   <%- include('partials/public/footer') %>

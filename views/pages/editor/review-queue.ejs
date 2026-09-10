@@ -97,7 +97,10 @@
                   <td class="review-queue__category-cell"><span class="review-queue__category"><%= a.category %></span></td>
                   <td class="review-queue__status-cell">
                     <span class="review-queue__status" data-status="<%= a.statusCode %>">
-                      <%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %>
+                      <span class="status-badge status-badge--pending">
+                        <span class="status-badge__indicator state-loading"></span>
+                        <%= a.statusLabel || 'Pending Review' %>
+                      </span>
                     </span>
                   </td>
                   <td class="review-queue__version-cell"><span class="review-queue__version"><%= a.version %></span></td>

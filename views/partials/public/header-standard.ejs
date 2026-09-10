@@ -31,6 +31,11 @@
     </details>
   </div>
   <% if (typeof showBreaking !== 'undefined' && showBreaking) { %>
-    <%- include('./breaking-strip', { breakingText: typeof breakingText !== 'undefined' ? breakingText : null }) %>
+    <div class="breaking-strip site-breaking-bar">
+      <div class="breaking-strip__inner page-shell">
+        <span class="breaking-strip__badge">Breaking</span>
+        <span class="breaking-strip__text"><%= typeof breakingText !== 'undefined' && breakingText ? breakingText : 'Rolling updates from The Daily Web newsroom' %></span>
+      </div>
+    </div>
   <% } %>
 </header>

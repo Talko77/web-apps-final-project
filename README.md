@@ -97,7 +97,7 @@ public/
   css/                    Design system (variables, base, utilities, components, layouts, pages)
   js/                     Client-side JavaScript (vanilla, no framework)
 logs/app.log              Error and operational event log
-styles.md                 Design system documentation
+DESIGN.md                 Design system documentation
 ```
 
 ## Core functionality
