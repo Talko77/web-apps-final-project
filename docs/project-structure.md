@@ -140,6 +140,7 @@ Modular EJS fragments grouped by domain for consistent rendering across pages.
 - **`views/partials/public/header-desk.ejs`**: Reference desktop header partial used in non-routed prototype templates.
 - **`views/partials/public/article-card.ejs`**: Universal article preview card displaying image, category, headline, excerpt, author, date, and reading time.
 - **`views/partials/public/breaking-strip.ejs`**: High-visibility banner displayed beneath the header for breaking news alerts.
+- **`views/partials/public/footer.ejs`**: Shared publication footer displaying brand title, course project disclaimer, and demo data notice across all active public pages.
 
 ### Newsroom Partials (`views/partials/newsroom/`)
 - **`views/partials/newsroom/header.ejs`**: Internal newsroom navigation bar with role badge, desk links, staff identity, and quick link to public site.
