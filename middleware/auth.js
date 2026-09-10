@@ -1,3 +1,4 @@
+// Authentication and role-authorization middleware enforcing server-side session permissions.
 const { ROLES } = require('../config/constants');
 const logger = require('../utils/logger');
 
@@ -16,11 +17,13 @@ function deny(req, res, code, message) {
   return res.status(403).render('error', { title: 'Access Denied', message });
 }
 
+// Ensures the user has an active authenticated session; rejects with 401 otherwise.
 exports.isAuthenticated = (req, res, next) => {
   if (req.session && req.session.user) return next();
   return deny(req, res, 401, 'You must be signed in to access this area');
 };
 
+// Enforces that the session user holds one of the required roles (Reporter, Editor).
 exports.requireRole = (...roles) => (req, res, next) => {
   const user = req.session && req.session.user;
   if (!user) return deny(req, res, 401, 'You must be signed in to access this area');

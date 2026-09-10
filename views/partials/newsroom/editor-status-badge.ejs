@@ -1,1 +1,5 @@
-<span class="status-badge status-badge--pending"><span class="status-badge__indicator state-loading"></span><%= typeof statusLabel !== 'undefined' && statusLabel ? statusLabel : 'Pending Review' %></span>
+<%# Status badge with pulse indicator for review queue items. %>
+<span class="status-badge status-badge--pending">
+  <span class="status-badge__indicator state-loading"></span>
+  <%= typeof statusLabel !== 'undefined' && statusLabel ? statusLabel : 'Pending Review' %>
+</span>

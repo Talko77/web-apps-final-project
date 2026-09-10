@@ -1,3 +1,4 @@
+<%# Editor review view: side-by-side comparison of live vs draft versions with editorial approve, return, and delete actions. %>
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -5,6 +6,7 @@
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
     <main class="review-article__main">
       <div class="review-article__content">
+        <%# Review command summary bar %>
         <section class="review-command-card">
           <div class="review-command-card__content">
             <div class="review-command-card__summary">
@@ -47,6 +49,7 @@
           </div>
         </section>
 
+        <%# Side-by-side live vs draft version comparison panes %>
         <div class="review-article__layout">
           <div class="review-article__comparison">
             <div class="review-article__panes">
@@ -73,7 +76,11 @@
                   </div>
                   <% } %>
                   <p class="comparison-pane__summary"><%= pane.summary %></p>
-                  <div class="comparison-pane__body"><% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %></div>
+                  <div class="comparison-pane__body">
+                    <% (pane.paragraphs || []).forEach(p => { %>
+                      <p><%= p %></p>
+                    <% }) %>
+                  </div>
                 </article>
                 <% } %>
               </div>
@@ -99,13 +106,18 @@
                   </div>
                   <% } %>
                   <p class="comparison-pane__summary"><%= pane.summary %></p>
-                  <div class="comparison-pane__body"><% (pane.paragraphs || []).forEach(p => { %><p><%= p %></p><% }) %></div>
+                  <div class="comparison-pane__body">
+                    <% (pane.paragraphs || []).forEach(p => { %>
+                      <p><%= p %></p>
+                    <% }) %>
+                  </div>
                 </article>
                 <% } %>
               </div>
             </div>
           </div>
 
+          <%# Editorial decision actions and metadata sidebar %>
           <aside class="review-article__sidebar">
             <div class="decision-card" id="reviewActions" data-article-id="<%= page.article.id %>">
               <div>
@@ -136,11 +148,26 @@
 
             <div class="review-article__details">
               <span class="review-article__details-title">Article Details</span>
-              <div class="review-article__detail"><span class="review-article__detail-label">Reporter</span><span class="review-article__detail-value"><%= page.article.reporter %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Desk</span><span class="review-article__detail-value"><%= page.article.desk %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Submitted</span><span class="review-article__detail-value"><%= page.article.submittedLabel %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Views</span><span class="review-article__detail-value"><%= page.article.views %></span></div>
-              <div class="review-article__detail"><span class="review-article__detail-label">Status</span><span class="review-article__detail-status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span></div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Reporter</span>
+                <span class="review-article__detail-value"><%= page.article.reporter %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Desk</span>
+                <span class="review-article__detail-value"><%= page.article.desk %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Submitted</span>
+                <span class="review-article__detail-value"><%= page.article.submittedLabel %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Views</span>
+                <span class="review-article__detail-value"><%= page.article.views %></span>
+              </div>
+              <div class="review-article__detail">
+                <span class="review-article__detail-label">Status</span>
+                <span class="review-article__detail-status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span>
+              </div>
             </div>
           </aside>
         </div>

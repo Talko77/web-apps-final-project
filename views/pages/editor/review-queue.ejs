@@ -1,3 +1,4 @@
+<%# Editor review queue: displays submitted articles with client-side status/category filtering and review links. %>
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -5,6 +6,7 @@
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
     <main class="review-queue__main">
       <div class="review-queue__content">
+        <%# Queue intro and status summary %>
         <section class="review-queue__intro">
           <div class="review-queue__heading-row">
             <div>
@@ -24,6 +26,7 @@
           </div>
         </section>
 
+        <%# Search and category/status filters %>
         <section class="review-queue__filters">
           <div class="review-queue__filter-layout">
             <div class="review-queue__search-field">
@@ -56,12 +59,19 @@
           </div>
         </section>
 
+        <%# Review queue table %>
         <div class="review-queue__table-card">
           <div class="review-queue__table-scroll">
             <table class="review-queue__table" id="queueTable">
               <thead>
                 <tr class="review-queue__table-heading">
-                  <th>Reporter</th><th>Headline</th><th>Category</th><th>Status</th><th>Version</th><th>Submitted</th><th class="review-queue__action-heading">Action</th>
+                  <th>Reporter</th>
+                  <th>Headline</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Version</th>
+                  <th>Submitted</th>
+                  <th class="review-queue__action-heading">Action</th>
                 </tr>
               </thead>
               <tbody class="review-queue__table-body">
@@ -85,9 +95,16 @@
                     <span class="review-queue__read-time"><%= a.readLabel %></span>
                   </td>
                   <td class="review-queue__category-cell"><span class="review-queue__category"><%= a.category %></span></td>
-                  <td class="review-queue__status-cell"><span class="review-queue__status" data-status="<%= a.statusCode %>"><%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %></span></td>
+                  <td class="review-queue__status-cell">
+                    <span class="review-queue__status" data-status="<%= a.statusCode %>">
+                      <%- include('../../partials/newsroom/editor-status-badge', { statusLabel: a.statusLabel }) %>
+                    </span>
+                  </td>
                   <td class="review-queue__version-cell"><span class="review-queue__version"><%= a.version %></span></td>
-                  <td class="review-queue__submitted-cell"><div class="review-queue__submitted-date"><%= a.submittedLabel %></div><div class="review-queue__relative-date"><%= a.relativeDate %></div></td>
+                  <td class="review-queue__submitted-cell">
+                    <div class="review-queue__submitted-date"><%= a.submittedLabel %></div>
+                    <div class="review-queue__relative-date"><%= a.relativeDate %></div>
+                  </td>
                   <td class="review-queue__action-cell"><a class="review-queue__review-link" href="<%= a.url %>">Review</a></td>
                 </tr>
                 <% }); %>

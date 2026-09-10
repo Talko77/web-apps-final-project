@@ -1,3 +1,4 @@
+// Database seeding script: populates demo newsroom staff, categorized articles across workflow states, comments, and analytics buckets.
 require('dotenv').config();
 
 const mongoose = require('mongoose');

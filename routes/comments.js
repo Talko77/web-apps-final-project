@@ -1,3 +1,4 @@
+// API routes for public guest comments and editor comment moderation.
 const router = require('express').Router();
 const c = require('../controllers/commentController');
 const { commentLimiter } = require('../middleware/rateLimit');

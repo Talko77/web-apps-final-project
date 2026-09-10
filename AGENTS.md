@@ -60,6 +60,7 @@ Partials are grouped into `shared/`, `public/`, `newsroom/`, `comments/`, and
 - `shared/head` is universal; `shared/site-logo` is used by headers and login.
 - `public/header-standard` serves active public/error pages and includes the
   optional `breaking-strip`.
+- `public/footer` serves all active public pages.
 - `newsroom/header` serves all active reporter/editor pages.
 - `public/article-card` serves home, search, and related articles.
 - `comments/comment-item`, `newsroom/editor-status-badge`, and

@@ -1,4 +1,4 @@
-<%# The reporter's "My Articles" page. Data comes from pageController.reporterArticles %>
+<%# Reporter articles workspace: displays author's articles with status/category filters, draft editing, and submission actions. %>
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,26 +14,22 @@
           <span class="reporter-articles__breadcrumb-current">My Articles</span>
         </nav>
         <div class="reporter-articles__content">
-          <!-- Context bar: who is signed in and which desk they belong to -->
-          <div
-            class="reporter-articles__context"
-          >
+          <%# Context bar: who is signed in and which desk they belong to %>
+          <div class="reporter-articles__context">
             <div class="reporter-articles__context-title">
               <span class="reporter-articles__context-heading">Reporter Workspace</span>
               <span class="reporter-articles__desk"><%= reporter.desk %></span>
             </div>
             <div class="reporter-articles__reporter">
               <div class="reporter-articles__avatar"><%= reporter.initials %></div>
-              <span class="reporter-articles__reporter-name"
-                ><%= reporter.name %>
-                <span class="reporter-articles__reporter-role">(<%= newsroomRole %>)</span></span
-              >
+              <span class="reporter-articles__reporter-name">
+                <%= reporter.name %>
+                <span class="reporter-articles__reporter-role">(<%= newsroomRole %>)</span>
+              </span>
             </div>
           </div>
-          <!-- Page heading and the create action -->
-          <div
-            class="reporter-articles__heading"
-          >
+          <%# Page heading and the create action %>
+          <div class="reporter-articles__heading">
             <div>
               <h1 class="reporter-articles__title">My Articles</h1>
               <p class="reporter-articles__description">
@@ -42,16 +38,13 @@
               </p>
             </div>
             <div class="reporter-articles__heading-actions">
-              <a
-                class="button button--primary reporter-articles__create-action"
-                href="/reporter/articles/new/edit"
-              >
+              <a class="button button--primary reporter-articles__create-action" href="/reporter/articles/new/edit">
                 <span class="icon reporter-articles__create-icon">add_circle</span>
                 New Article
               </a>
             </div>
           </div>
-          <!-- Filter by status, category and free-text search. Filtering runs in the browser -->
+          <%# Filter by status, category, and free-text search %>
           <div
             class="article-filter-strip reporter-articles__filters"
           >
@@ -94,7 +87,7 @@
               </div>
             </div>
           </div>
-          <!-- The articles table -->
+          <%# The articles table %>
           <div
             class="reporter-articles__table-card"
           >
@@ -146,14 +139,8 @@
                         </div>
                         <% } %>
                         <div class="reporter-articles__article-details">
-                          <a
-                            class="reporter-articles__article-title"
-                            href="<%= a.editUrl %>"
-                            ><%= a.title %></a
-                          >
-                          <span class="reporter-articles__article-detail<%= a.status === 'Changes Requested' || a.status === 'Rejected' ? ' reporter-articles__article-detail--alert' : '' %>"
-                            ><%= a.detail %></span
-                          >
+                          <a class="reporter-articles__article-title" href="<%= a.editUrl %>"><%= a.title %></a>
+                          <span class="reporter-articles__article-detail<%= a.status === 'Changes Requested' || a.status === 'Rejected' ? ' reporter-articles__article-detail--alert' : '' %>"><%= a.detail %></span>
                         </div>
                       </div>
                     </td>
@@ -161,22 +148,16 @@
                       <span class="reporter-articles__category"><%= a.category %></span>
                     </td>
                     <td class="reporter-articles__status-cell">
-                      <span
-                        class="status-badge reporter-articles__status"
-                        ><span class="status-dot reporter-articles__status-dot"></span><%= a.status %></span
-                      >
+                      <span class="status-badge reporter-articles__status">
+                        <span class="status-dot reporter-articles__status-dot"></span><%= a.status %>
+                      </span>
                     </td>
                     <td class="reporter-articles__updated"><%= a.updated %></td>
-                    <td
-                      class="reporter-articles__views<%= a.views === '-' ? ' reporter-articles__views--empty' : '' %>"
-                    ><%= a.views %></td>
+                    <td class="reporter-articles__views<%= a.views === '-' ? ' reporter-articles__views--empty' : '' %>"><%= a.views %></td>
                     <td class="reporter-articles__actions-cell">
                       <div class="reporter-articles__actions" role="group">
-                        <a
-                          class="reporter-articles__action reporter-articles__action--edit"
-                          href="<%= a.editUrl %>"
-                          >Edit</a
-                        ><button
+                        <a class="reporter-articles__action reporter-articles__action--edit" href="<%= a.editUrl %>">Edit</a>
+                        <button
                           class="reporter-articles__action reporter-articles__action--submit"
                           data-submit-id="<%= a.id %>"
                           type="button"
@@ -197,15 +178,11 @@
               category, or clear the search.
             </p>
           </div>
-          <!-- Result counter and system messages -->
-          <div
-            class="reporter-articles__pagination"
-          >
+          <%# Result counter and system messages %>
+          <div class="reporter-articles__pagination">
             <div class="reporter-articles__results">
               Showing
-              <span class="reporter-articles__results-count" id="displayedCount"
-                ><%= articles.length %></span
-              >
+              <span class="reporter-articles__results-count" id="displayedCount"><%= articles.length %></span>
               of
               <span class="reporter-articles__results-count"><%= totalArticles %></span>
               articles

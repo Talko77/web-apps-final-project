@@ -1,4 +1,4 @@
-// Converts Mongoose documents into the fields the views expect.
+// View-model mapping utilities: transforms raw Mongoose documents into UI presentation models matching design tokens.
 // The views are built on the design system tokens (surface-*, color-*),
 // so the job here is mapping article state onto those existing tokens
 // rather than inventing new class names.

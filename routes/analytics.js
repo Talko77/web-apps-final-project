@@ -1,3 +1,4 @@
+// API routes for editor impact analytics and article traffic timeline queries.
 const router = require('express').Router();
 const c = require('../controllers/analyticsController');
 const { isEditor } = require('../middleware/auth');

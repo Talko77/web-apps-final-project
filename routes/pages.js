@@ -1,3 +1,4 @@
+// Server-rendered page routes mapping public, auth, reporter, and editor views.
 const router = require('express').Router();
 const p = require('../controllers/pageController');
 const { isReporter, isEditor } = require('../middleware/auth');

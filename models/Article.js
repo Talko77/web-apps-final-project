@@ -1,3 +1,4 @@
+// Model representing articles with separate draft and published revisions, workflow statuses, and view metrics.
 const mongoose = require('mongoose');
 const { CATEGORIES, STATUS } = require('../config/constants');
 

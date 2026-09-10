@@ -1,1 +1,11 @@
-<% const filterStatuses = typeof statuses !== 'undefined' && statuses ? statuses : ['All', 'Draft', 'Pending Review', 'Published', 'Returned']; const selectedStatus = typeof activeStatus !== 'undefined' && activeStatus ? activeStatus : 'All'; %><div class="article-filter-strip"><div class="article-filter-strip__options" id="statusFilterPills"><% filterStatuses.forEach(function(status) { %><button class="filter-btn article-filter-strip__option <%= status === selectedStatus ? 'active' : '' %>" aria-pressed="<%= status === selectedStatus %>" data-status="<%= status %>" type="button"><%= status %></button><% }) %></div></div>
+<%
+  const filterStatuses = typeof statuses !== 'undefined' && statuses ? statuses : ['All', 'Draft', 'Pending Review', 'Published', 'Returned'];
+  const selectedStatus = typeof activeStatus !== 'undefined' && activeStatus ? activeStatus : 'All';
+%>
+<div class="article-filter-strip">
+  <div class="article-filter-strip__options" id="statusFilterPills">
+    <% filterStatuses.forEach(function(status) { %>
+      <button class="filter-btn article-filter-strip__option <%= status === selectedStatus ? 'active' : '' %>" aria-pressed="<%= status === selectedStatus %>" data-status="<%= status %>" type="button"><%= status %></button>
+    <% }) %>
+  </div>
+</div>

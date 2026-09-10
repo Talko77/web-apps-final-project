@@ -1,3 +1,4 @@
+// Model representing newsroom staff users (reporters and editors) with password hashing and role verification.
 const mongoose = require('mongoose');
 // bcryptjs rather than bcrypt: a pure JavaScript implementation with no native
 // compilation step, so the same node_modules works on macOS, Windows and Linux

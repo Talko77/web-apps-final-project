@@ -11,13 +11,11 @@
         <nav class="article-editor__breadcrumb" aria-label="Breadcrumb">
           <a class="article-editor__breadcrumb-link" href="/reporter/articles">My Articles</a>
           <span class="article-editor__breadcrumb-separator">/</span>
-          <span class="article-editor__breadcrumb-current"
-            ><%= article.isNew ? 'New Article' : 'Edit Article' %></span
-          >
+          <span class="article-editor__breadcrumb-current"><%= article.isNew ? 'New Article' : 'Edit Article' %></span>
         </nav>
         <div class="article-editor__content">
           <% if (article.locked) { %>
-          <!-- The article is under editorial review and therefore locked for editing -->
+          <%# The article is under editorial review and therefore locked for editing %>
           <div
             class="article-editor__notice article-editor__notice--locked"
             role="status"
@@ -31,7 +29,7 @@
           </div>
           <% } %>
           <% if (article.isPublished) { %>
-          <!-- A published version exists. This update replaces it only once approved -->
+          <%# A published version exists. This update replaces it only once approved %>
           <div
             class="article-editor__notice article-editor__notice--published"
             role="status"
@@ -45,7 +43,7 @@
           </div>
           <% } %>
           <% if (article.deskNotes) { %>
-          <!-- Editor note: the changes requested from the reporter -->
+          <%# Editor note: the changes requested from the reporter %>
           <div
             class="article-editor__notice article-editor__notice--feedback"
           >
@@ -59,7 +57,7 @@
             </div>
           </div>
           <% } %>
-          <!-- The editing form. Values are saved over Ajax, so there is no submit -->
+          <%# The editing form. Values are saved over Ajax, so there is no submit %>
           <form
             class="article-editor__form"
             id="articleForm"
@@ -67,15 +65,9 @@
             data-locked="<%= article.locked %>"
           >
             <div class="article-editor__main-column">
-              <!-- Headline -->
-              <div
-                class="article-editor__card article-editor__card--headline"
-              >
-                <label
-                  class="article-editor__label"
-                  for="articleTitle"
-                  >Headline</label
-                >
+              <%# Headline %>
+              <div class="article-editor__card article-editor__card--headline">
+                <label class="article-editor__label" for="articleTitle">Headline</label>
                 <input
                   class="control-input article-editor__input article-editor__input--headline"
                   id="articleTitle"
@@ -86,20 +78,12 @@
                   value="<%= article.title %>"
                   <% if (article.locked) { %>disabled<% } %>
                 />
-                <span class="article-editor__hint"
-                  >Up to 200 characters. The headline appears in article lists and on the article page.</span
-                >
+                <span class="article-editor__hint">Up to 200 characters. The headline appears in article lists and on the article page.</span>
               </div>
-              <!-- Summary -->
-              <div
-                class="article-editor__card article-editor__card--summary"
-              >
+              <%# Summary %>
+              <div class="article-editor__card article-editor__card--summary">
                 <div class="article-editor__field-header">
-                  <label
-                    class="article-editor__label"
-                    for="articleSubtitle"
-                    >Summary</label
-                  >
+                  <label class="article-editor__label" for="articleSubtitle">Summary</label>
                   <p class="article-editor__counter" id="charCounter"></p>
                 </div>
                 <textarea
@@ -112,16 +96,10 @@
                   <% if (article.locked) { %>disabled<% } %>
                 ><%= article.subtitle %></textarea>
               </div>
-              <!-- Lead image -->
-              <div
-                class="article-editor__card article-editor__card--image"
-              >
+              <%# Lead image %>
+              <div class="article-editor__card article-editor__card--image">
                 <div class="article-editor__image-field">
-                  <label
-                    class="article-editor__label"
-                    for="articleImageUrl"
-                    >Lead image URL</label
-                  >
+                  <label class="article-editor__label" for="articleImageUrl">Lead image URL</label>
                   <input
                     class="control-input article-editor__input article-editor__input--image"
                     id="articleImageUrl"
@@ -131,9 +109,7 @@
                     value="<%= article.image %>"
                     <% if (article.locked) { %>disabled<% } %>
                   />
-                  <span class="article-editor__hint"
-                    >A 16:9 ratio works best. This field is optional.</span
-                  >
+                  <span class="article-editor__hint">A 16:9 ratio works best. This field is optional.</span>
                 </div>
                 <% if (article.image) { %>
                 <div class="article-editor__image-preview">
@@ -155,19 +131,11 @@
                 </div>
                 <% } %>
               </div>
-              <!-- Article body -->
-              <div
-                class="article-editor__card article-editor__card--body"
-              >
+              <%# Article body %>
+              <div class="article-editor__card article-editor__card--body">
                 <div class="article-editor__field-header">
-                  <label
-                    class="article-editor__label"
-                    for="articleBody"
-                    >Body</label
-                  >
-                  <span class="article-editor__hint"
-                    >A blank line between paragraphs splits them on the public page.</span
-                  >
+                  <label class="article-editor__label" for="articleBody">Body</label>
+                  <span class="article-editor__hint">A blank line between paragraphs splits them on the public page.</span>
                 </div>
                 <textarea
                   class="article-editor__input article-editor__input--body article-body-input control-input"
@@ -179,21 +147,15 @@
                 ><%= article.body %></textarea>
               </div>
             </div>
-            <!-- Sidebar: category and version details -->
+            <%# Sidebar: category and version details %>
             <div class="article-editor__sidebar">
-              <div
-                class="article-editor__card article-editor__card--category"
-              >
+              <div class="article-editor__card article-editor__card--category">
                 <div class="article-editor__card-heading">
                   <span class="icon article-editor__card-icon">category</span>
                   <h2 class="article-editor__card-title">Category</h2>
                 </div>
                 <div class="article-editor__category-field">
-                  <label
-                    class="article-editor__label"
-                    for="articleCategory"
-                    >Article category</label
-                  >
+                  <label class="article-editor__label" for="articleCategory">Article category</label>
                   <div class="select-control article-editor__select-wrap">
                     <select
                       class="control-input article-editor__input article-editor__input--category"
@@ -226,14 +188,9 @@
                   <div><dt>Draft version</dt><dd><%= article.draftVersion %></dd></div>
                   <div><dt>Last saved</dt><dd><%= article.savedAt %></dd></div>
                 </dl>
-                <p
-                  class="article-editor__revision-note revision-note"
-                >
+                <p class="article-editor__revision-note revision-note">
                   <span class="icon article-editor__revision-note-icon">policy</span>
-                  <span
-                    >Submitting moves the article into the editor's review queue.
-                    From that point it stays locked until a decision comes back.</span
-                  >
+                  <span>Submitting moves the article into the editor's review queue. From that point it stays locked until a decision comes back.</span>
                 </p>
               </section>
               <section class="article-editor__card article-editor__actions-card" aria-labelledby="articleActionsTitle">
@@ -247,7 +204,10 @@
                 </div>
                 <div class="article-editor__actions-buttons">
                   <button class="button button--secondary article-editor__save-action" id="saveDraftBtn" type="button" <% if (article.locked) { %>disabled<% } %>>Save Draft</button>
-                  <button class="button button--primary article-editor__submit-action" id="submitForReviewBtn" type="button" <% if (article.locked) { %>disabled<% } %>><span class="icon article-editor__submit-icon">send</span>Submit for Review</button>
+                  <button class="button button--primary article-editor__submit-action" id="submitForReviewBtn" type="button" <% if (article.locked) { %>disabled<% } %>>
+                    <span class="icon article-editor__submit-icon">send</span>
+                    Submit for Review
+                  </button>
                 </div>
                 <p class="article-editor__action-message state-hidden" id="articleActionMessage" role="status" aria-live="polite"></p>
               </section>

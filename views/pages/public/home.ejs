@@ -1,3 +1,4 @@
+<%# Public homepage: renders lead story, featured grid, dispatches, sidebar weather/most-read, and infinite scroll feed. %>
 <!doctype html>
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -8,6 +9,7 @@
     <div class="flex flex-column width-full">
       <div class="publication-grid grid grid-single lg-editorial-grid gap-6">
         <div class="publication-primary lg-content-span flex flex-column gap-6">
+          <%# Lead story %>
           <% const lead = (locals.featured || [])[0]; %>
           <% if (lead) { %>
           <article class="publication-lead surface-paper radius-panel overflow-hidden shadow-subtle motion-shadow flex flex-column">
@@ -36,6 +38,7 @@
           </article>
           <% } %>
 
+          <%# Featured stories %>
           <% const secondary = (locals.featured || []).slice(1); %>
           <% if (secondary.length) { %>
           <section aria-labelledby="featured-heading">
@@ -51,6 +54,7 @@
           </section>
           <% } %>
 
+          <%# Latest dispatches %>
           <section class="publication-dispatches surface-paper radius-panel pad-5 shadow-subtle" aria-labelledby="dispatches-heading">
             <div class="flex align-center justify-between margin-bottom-4">
               <div class="flex align-center gap-2">
@@ -73,6 +77,7 @@
             </div>
           </section>
 
+          <%# Infinite scroll feed with search and filters %>
           <section aria-labelledby="feed-heading" class="flex flex-column gap-4">
             <div class="flex align-center justify-between">
               <h2 class="text-headline text-5 color-body" id="feed-heading">All Articles</h2>
@@ -118,6 +123,7 @@
           </section>
         </div>
 
+        <%# Sidebar with weather and most-read articles %>
         <aside class="publication-sidebar span-sidebar flex flex-column gap-5">
           <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="Weather">
             <div id="weatherWidget"></div>
@@ -151,13 +157,8 @@
     </div>
   </div>
 </main>
-<footer class="public-footer width-full surface-muted">
-  <div class="width-content pad-inline-5 pad-block-3">
-    <span class="text-headline text-4 color-primary">The Daily Web</span>
-    <p class="text-body text-1 color-muted">A sample news site, built as the final project for a web application development course.</p>
-    <div class="margin-top-6 text-center text-caption text-1 color-subtle">All content on this site is demo data for illustration purposes only.</div>
-  </div>
-</footer>
+<%# Public footer %>
+<%- include('../../partials/public/footer') %>
 <script src="/js/feed.js" defer></script>
 <script src="/js/weather.js" defer></script>
 </body>

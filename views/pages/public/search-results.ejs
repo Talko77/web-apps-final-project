@@ -1,3 +1,4 @@
+<%# Public search results view: renders search input console, category/sort sidebar filters, and article results list. %>
 <!doctype html>
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -6,6 +7,7 @@
 <main class="search-page-main width-full surface-page flex-grow">
   <div class="width-content page-shell pad-inline-5 pad-5">
     <div class="flex flex-column width-full">
+      <%# Search console bar %>
       <section class="search-console surface-paper pad-5 radius-panel shadow-subtle margin-bottom-6" aria-labelledby="search-heading">
         <div class="width-reading page-shell flex flex-column gap-4">
           <h1 class="text-headline text-5 color-body" id="search-heading">Search the Archive</h1>
@@ -23,6 +25,7 @@
       </section>
 
       <div class="search-layout grid grid-single lg-editorial-grid gap-6 align-start">
+        <%# Category and sort filters sidebar %>
         <aside class="search-filters lg-sidebar-span flex flex-column gap-5">
           <div class="surface-paper pad-5 radius-panel shadow-subtle stack-5 sticky">
             <div class="flex align-center justify-between pad-block-2">
@@ -62,6 +65,7 @@
           </div>
         </aside>
 
+        <%# Search results list %>
         <section class="search-results-list lg-content-span flex flex-column gap-4" aria-label="Search results">
           <% if (searchQuery) { %>
           <header class="stack-1 margin-bottom-2">
@@ -84,12 +88,7 @@
     </div>
   </div>
 </main>
-<footer class="public-footer width-full surface-muted">
-  <div class="width-content page-shell pad-inline-5 pad-6">
-    <p class="text-headline text-4 color-primary">The Daily Web</p>
-    <p class="text-body text-1 color-muted">A sample news site, built as the final project for a web application development course.</p>
-    <div class="margin-top-6 pad-5 text-center text-caption text-1 color-subtle">All content on this site is demo data for illustration purposes only.</div>
-  </div>
-</footer>
+<%# Public footer %>
+<%- include('../../partials/public/footer') %>
 </body>
 </html>

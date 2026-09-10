@@ -1,3 +1,4 @@
+// API routes for staff authentication sessions (login, logout, current user).
 const router = require('express').Router();
 const authController = require('../controllers/authController');
 const { loginLimiter } = require('../middleware/rateLimit');

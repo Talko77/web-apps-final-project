@@ -1,3 +1,4 @@
+// API routes for article feed querying, reporter draft authoring, and editor review workflows.
 const router = require('express').Router();
 const c = require('../controllers/articleController');
 const { isAuthenticated, isReporter, isEditor, isStaff } = require('../middleware/auth');

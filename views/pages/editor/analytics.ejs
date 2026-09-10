@@ -1,3 +1,4 @@
+<%# Editor impact analytics view: renders article header, canvas traffic timeline with publication event markers, and summary metrics. %>
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -5,6 +6,7 @@
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
     <main class="analytics-page__main">
       <div class="analytics-page__content">
+        <%# Article summary header %>
         <section class="analytics-page__article-summary">
           <span class="analytics-page__eyebrow">Impact Analytics</span>
           <h1 class="analytics-page__title"><%= page.article.title %></h1>
@@ -16,6 +18,8 @@
             </span>
           </div>
         </section>
+
+        <%# Chart controls, canvas, and legend %>
         <section class="analytics-card">
           <div class="analytics-card__header">
             <div>
@@ -66,6 +70,8 @@
             </span>
           </div>
         </section>
+
+        <%# Summary metric cards %>
         <section class="analytics-page__metrics" aria-label="Summary metrics">
           <% page.metrics.forEach(function (metric) { %>
           <%- include('../../partials/analytics/summary-metric', { item: metric }) %>

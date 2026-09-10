@@ -1,3 +1,4 @@
+// Handles staff authentication requests: credential validation, session creation, and logout.
 const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');

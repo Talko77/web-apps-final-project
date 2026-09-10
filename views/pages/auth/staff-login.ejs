@@ -21,15 +21,9 @@
             <p class="staff-login__description"><%= page.intro %></p>
           </div>
 
-          <form
-            class="staff-login__form"
-            id="loginForm"
-            data-next="<%= page.next %>"
-          >
+          <form class="staff-login__form" id="loginForm" data-next="<%= page.next %>">
             <div class="form-field staff-login__field">
-              <label class="form-field__label staff-login__label" for="staffUsername"
-                ><%= page.form.usernameLabel %></label
-              >
+              <label class="form-field__label staff-login__label" for="staffUsername"><%= page.form.usernameLabel %></label>
               <input
                 class="form-field__control staff-login__control"
                 id="staffUsername"
@@ -41,9 +35,7 @@
               />
             </div>
             <div class="form-field staff-login__field">
-              <label class="form-field__label staff-login__label" for="staffPassword"
-                ><%= page.form.passwordLabel %></label
-              >
+              <label class="form-field__label staff-login__label" for="staffPassword"><%= page.form.passwordLabel %></label>
               <input
                 class="form-field__control staff-login__control"
                 id="staffPassword"
@@ -54,24 +46,14 @@
                 required
               />
             </div>
-            <button
-              class="button button--primary login-submit"
-              type="submit"
-            >
+            <button class="button button--primary login-submit" type="submit">
               <%= page.form.submitLabel %>
             </button>
-            <p
-              class="login-feedback staff-login__status state-hidden"
-              id="statusMessage"
-              role="status"
-              aria-live="polite"
-            ></p>
+            <p class="login-feedback staff-login__status state-hidden" id="statusMessage" role="status" aria-live="polite"></p>
           </form>
 
           <div class="staff-login__return">
-            <a class="staff-login__return-link"
-              href="<%= page.publicWebsiteHref %>"
-            >
+            <a class="staff-login__return-link" href="<%= page.publicWebsiteHref %>">
               <span aria-hidden="true">←</span>
               <span><%= page.returnLabel %></span>
             </a>
