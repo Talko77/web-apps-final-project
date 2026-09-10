@@ -378,12 +378,22 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
   } : null;
 
   const approved = (article.publishEvents || []).length;
+  const formatPubDate = d => {
+    if (!d) return null;
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+  const pubDate = article.publishedAt || (article.publishEvents && article.publishEvents[0]);
+  const submittedFormatted = m.formatDateTime(article.updatedAt);
+  const submittedLabelLower = submittedFormatted
+    ? (submittedFormatted.charAt(0).toLowerCase() + submittedFormatted.slice(1))
+    : '';
 
   res.render('pages/editor/review-article', {
     pageTitle: `Review: ${draft.title || pub && pub.title || 'Article'}`,
     newsroomRole: 'Editor',
+    categories: CATEGORIES,
     page: {
-      // For the category select in the editable pending pane
       categories: CATEGORIES,
       article: {
         id: String(article._id),
@@ -393,12 +403,17 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         reporter: reporterName,
         initials: m.initials(reporterName),
         desk: draft.category || (pub && pub.category) || 'Uncategorised',
-        submittedLabel: m.formatDateTime(article.updatedAt),
+        category: draft.category || (pub && pub.category) || 'Uncategorised',
+        submittedLabel: submittedFormatted,
+        submittedLabelLower,
         views: m.formatViews(article.totalViews),
         editorNote: article.editorNote || '',
         // Whether this is an update to a published article or a brand new one
         isUpdate: Boolean(article.isPublished && article.status === STATUS.PENDING),
         canDecide: article.status === STATUS.PENDING,
+        liveVersion: approved ? `v${approved}.0` : (article.isPublished ? 'v1.0' : null),
+        proposedVersion: article.isPublished ? `v${approved + 1}.0` : 'v1.0',
+        publishedDateLabel: formatPubDate(pubDate),
         published: asPane(pub, approved ? `v${approved}.0 — currently live` : 'Not yet published'),
         draft: asPane(draft, article.isPublished ? `v${approved + 1}.0 — pending approval` : 'New version')
       }

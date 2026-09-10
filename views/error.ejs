@@ -4,14 +4,20 @@
 <head>
   <%- include('partials/shared/head', { pageTitle: typeof title !== 'undefined' ? title : 'Error' }) %>
 </head>
-<body class="surface-canvas">
+<body class="public-page error-page surface-canvas flex flex-column height-screen">
   <%- include('partials/public/header-standard', { editionLabel: null, showBreaking: false, searchQuery: '' }) %>
-  <main class="page-shell width-content pad-inline-5 pad-block-6">
-    <section class="surface-paper radius-card shadow-subtle pad-6 text-center">
+  <main class="page-shell width-content pad-inline-5 pad-block-6 flex-grow flex align-center justify-center">
+    <section class="surface-paper radius-card shadow-subtle pad-6 text-center width-full" style="max-width: 640px;">
       <h1 class="text-headline text-6 color-body"><%= typeof title !== 'undefined' ? title : 'Error' %></h1>
       <p class="text-body text-2 color-muted margin-top-3"><%= typeof message !== 'undefined' ? message : 'Something went wrong on our end.' %></p>
-      <a class="inline-flex align-center pad-inline-4 pad-block-3 radius-standard surface-ink color-inverse text-label text-1 margin-top-4" href="/">Back to Home</a>
+      <div class="flex flex-wrap align-center justify-center gap-3 margin-top-5">
+        <a class="button button--primary inline-flex align-center gap-2 pad-inline-4 pad-block-3 radius-standard surface-ink color-inverse text-label text-1" href="/">
+          <span class="icon text-3" aria-hidden="true">home</span>
+          <span>Back to Home</span>
+        </a>
+      </div>
     </section>
   </main>
+  <%- include('partials/public/footer') %>
 </body>
 </html>

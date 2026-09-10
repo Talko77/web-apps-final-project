@@ -18,5 +18,6 @@ router.delete('/:id', isEditor, c.remove);
 router.get('/:id', isStaff, c.getOne);
 router.put('/:id', isStaff, c.saveDraft);
 router.patch('/:id/status', isStaff, c.changeStatus);
+router.post('/:id/status', isStaff, c.changeStatus);
 
 module.exports = router;

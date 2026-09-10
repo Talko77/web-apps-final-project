@@ -205,7 +205,9 @@ exports.changeStatus = asyncHandler(async (req, res) => {
 
     if (newStatus === STATUS.PUBLISHED) {
       // Approving the update makes the draft the version shown to readers
-      article.publishedVersion = article.draftVersion.toObject();
+      article.publishedVersion = (article.draftVersion && typeof article.draftVersion.toObject === 'function')
+        ? article.draftVersion.toObject()
+        : { ...article.draftVersion };
       article.status = STATUS.PUBLISHED;
       article.isPublished = true;
       article.publishedAt = article.publishedAt || new Date();

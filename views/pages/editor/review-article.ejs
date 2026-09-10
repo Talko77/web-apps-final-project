@@ -7,45 +7,117 @@
     <main class="review-article__main">
       <div class="review-article__content">
         <%# Review command summary bar %>
-        <section class="review-command-card">
-          <div class="review-command-card__content">
-            <div class="review-command-card__summary">
-              <span class="review-command-card__eyebrow">Editor's Desk · Article Review</span>
-              <div class="review-command-card__metadata">
-                <span class="review-command-card__status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span>
-                <span class="review-command-card__reporter">
-                  <span class="review-command-card__avatar"><%= page.article.initials %></span>
-                  <%= page.article.reporter %>
-                </span>
-                <span class="review-command-card__separator">•</span>
-                <span class="review-command-card__desk">Desk: <%= page.article.desk %></span>
-                <span class="review-command-card__separator">•</span>
-                <span class="review-command-card__meta-item">
-                  <span class="icon review-command-card__meta-icon">schedule</span>
-                  Submitted: <%= page.article.submittedLabel %>
-                </span>
-                <span class="review-command-card__separator">•</span>
-                <span class="review-command-card__meta-item">
-                  <span class="icon review-command-card__meta-icon">visibility</span>
-                  <%= page.article.views %> views
+        <%# Article review header and update notice %>
+        <header class="review-article-header">
+          <div class="review-article-header__intro">
+            <h1 class="review-article-header__title"><%= page.article.isUpdate ? 'Article Update Review' : 'Article Review' %></h1>
+            <p class="review-article-header__subtitle">
+              <%= page.article.isUpdate ? 'Compare the currently published version with the proposed update before approving.' : 'Review the submitted draft before publishing.' %>
+            </p>
+          </div>
+          <% if (page.article.isUpdate) { %>
+          <div class="review-article-header__notice" role="status">
+            <span class="icon review-article-header__notice-icon" aria-hidden="true">update</span>
+            <div class="review-article-header__notice-content">
+              <span class="review-article-header__notice-title">This is an update to an already published article</span>
+              <span class="review-article-header__notice-text">Readers continue to see the published version until this update is approved. Approving it will replace the content shown to the public.</span>
+            </div>
+          </div>
+          <% } %>
+        </header>
+
+        <% if (page.article.editorNote) { %>
+        <div class="review-command-card__editor-note">
+          <span class="review-command-card__note-label">Latest Editor Note</span>
+          <p class="review-command-card__note-text"><%= page.article.editorNote %></p>
+        </div>
+        <% } %>
+
+        <%# Compact version comparison and info strip %>
+        <section class="review-version-strip" aria-label="Version and article metadata">
+          <div class="review-version-strip__flow">
+            <%# Current live version %>
+            <div class="review-version-strip__version review-version-strip__version--live">
+              <div class="review-version-strip__version-main">
+                <span class="review-version-strip__dot review-version-strip__dot--live" aria-hidden="true"></span>
+                <span class="review-version-strip__version-tag"><%= page.article.liveVersion || 'v1.0' %></span>
+                <span class="review-version-strip__version-status review-version-strip__version-status--live">
+                  <%= page.article.published ? 'Currently live' : 'Not published' %>
                 </span>
               </div>
-            </div>
-            <% if (page.article.isUpdate) { %>
-            <div class="review-command-card__update-notice" role="status">
-              <span class="icon review-command-card__notice-icon">update</span>
-              <div class="review-command-card__notice-content">
-                <span class="review-command-card__notice-title">This is an update to an already published article</span>
-                <span class="review-command-card__notice-text">Readers continue to see the published version until this update is approved. Approving it will replace the content shown to the public.</span>
+              <div class="review-version-strip__version-sub">
+                <%= page.article.publishedDateLabel ? 'Published on ' + page.article.publishedDateLabel : (page.article.published ? 'Published' : 'Not yet published') %>
               </div>
             </div>
-            <% } %>
-            <% if (page.article.editorNote) { %>
-            <div class="review-command-card__editor-note">
-              <span class="review-command-card__note-label">Latest Editor Note</span>
-              <p class="review-command-card__note-text"><%= page.article.editorNote %></p>
+
+            <%# Flow arrow %>
+            <div class="review-version-strip__arrow" aria-hidden="true">
+              <span class="icon review-version-strip__arrow-icon">arrow_forward</span>
             </div>
-            <% } %>
+
+            <%# Proposed version %>
+            <div class="review-version-strip__version review-version-strip__version--proposed">
+              <div class="review-version-strip__version-main">
+                <span class="review-version-strip__dot review-version-strip__dot--proposed" aria-hidden="true"></span>
+                <span class="review-version-strip__version-tag"><%= page.article.proposedVersion || 'v1.0' %></span>
+                <span class="review-version-strip__version-status review-version-strip__version-status--proposed">
+                  <%= page.article.status === 'pending' ? 'Pending approval' : page.article.statusLabel %>
+                </span>
+              </div>
+              <div class="review-version-strip__version-sub">
+                Submitted <%= page.article.submittedLabelLower || page.article.submittedLabel.toLowerCase() %>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-version-strip__divider" aria-hidden="true"></div>
+
+          <%# Metadata: Desk, Category, Reporter %>
+          <div class="review-version-strip__meta-group">
+            <div class="review-version-strip__meta">
+              <span class="icon review-version-strip__meta-icon" aria-hidden="true">folder</span>
+              <div class="review-version-strip__meta-text">
+                <span class="review-version-strip__meta-label">Desk</span>
+                <span class="review-version-strip__meta-value"><%= page.article.desk %></span>
+              </div>
+            </div>
+
+            <div class="review-version-strip__meta">
+              <span class="icon review-version-strip__meta-icon" aria-hidden="true">local_offer</span>
+              <div class="review-version-strip__meta-text">
+                <span class="review-version-strip__meta-label">Category</span>
+                <span class="review-version-strip__meta-value"><%= page.article.category || page.article.desk %></span>
+              </div>
+            </div>
+
+            <div class="review-version-strip__meta">
+              <span class="icon review-version-strip__meta-icon" aria-hidden="true">person</span>
+              <div class="review-version-strip__meta-text">
+                <span class="review-version-strip__meta-label">Reporter</span>
+                <span class="review-version-strip__meta-value"><%= page.article.reporter %></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-version-strip__divider" aria-hidden="true"></div>
+
+          <%# Metadata: Submitted & Current views %>
+          <div class="review-version-strip__meta-group">
+            <div class="review-version-strip__meta">
+              <span class="icon review-version-strip__meta-icon" aria-hidden="true">schedule</span>
+              <div class="review-version-strip__meta-text">
+                <span class="review-version-strip__meta-label">Submitted</span>
+                <span class="review-version-strip__meta-value"><%= page.article.submittedLabel %></span>
+              </div>
+            </div>
+
+            <div class="review-version-strip__meta">
+              <span class="icon review-version-strip__meta-icon" aria-hidden="true">visibility</span>
+              <div class="review-version-strip__meta-text">
+                <span class="review-version-strip__meta-label">Current views</span>
+                <span class="review-version-strip__meta-value"><%= page.article.views %></span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -53,89 +125,111 @@
         <div class="review-article__layout">
           <div class="review-article__comparison">
             <div class="review-article__panes">
+              <%# Currently Live Pane %>
               <div class="comparison-pane comparison-pane--live">
-                <div class="comparison-pane__header">
-                  <span class="comparison-pane__version comparison-pane__version--live">
-                    <span class="icon comparison-pane__version-icon">public</span>
-                    <%= page.article.published ? page.article.published.label : 'Not yet published' %>
-                  </span>
-                  <span class="comparison-pane__description">The version readers currently see on the public site</span>
+                <div class="comparison-pane__header comparison-pane__header--live">
+                  <div class="comparison-pane__header-left">
+                    <span class="comparison-pane__dot comparison-pane__dot--live" aria-hidden="true"></span>
+                    <span class="comparison-pane__header-title">Currently Live <%= page.article.liveVersion ? '(' + page.article.liveVersion + ')' : '' %></span>
+                  </div>
+                  <div class="comparison-pane__header-right">
+                    <span class="comparison-pane__header-date">
+                      <%= page.article.publishedDateLabel ? 'Published ' + page.article.publishedDateLabel : (page.article.published ? 'Published' : 'Not yet published') %>
+                    </span>
+                  </div>
                 </div>
                 <% if (!page.article.published) { %>
                 <div class="comparison-pane__empty">
                   <p>This article has never been published, so there is no version visible to readers. Approving the version shown alongside will publish it for the first time.</p>
                 </div>
+                <div class="comparison-pane__footer">
+                  <div class="comparison-pane__footer-views">
+                    <span class="icon comparison-pane__footer-icon" aria-hidden="true">visibility</span>
+                    <span>0 views</span>
+                  </div>
+                </div>
                 <% } else { %>
                 <% const pane = page.article.published; %>
                 <article class="comparison-pane__article">
-                  <span class="comparison-pane__category"><%= pane.category %></span>
+                  <div class="comparison-pane__meta-bar">
+                    <span class="comparison-pane__category"><%= pane.category %></span>
+                  </div>
                   <h1 class="comparison-pane__title"><%= pane.title %></h1>
                   <% if (pane.imageUrl) { %>
                   <div class="comparison-media">
                     <img class="comparison-media__image" alt="<%= pane.imageAlt %>" src="<%= pane.imageUrl %>" />
                   </div>
                   <% } %>
+                  <% if (pane.summary) { %>
                   <p class="comparison-pane__summary"><%= pane.summary %></p>
+                  <% } %>
                   <div class="comparison-pane__body">
                     <% (pane.paragraphs || []).forEach(p => { %>
                       <p><%= p %></p>
                     <% }) %>
                   </div>
                 </article>
+                <div class="comparison-pane__footer">
+                  <div class="comparison-pane__footer-views">
+                    <span class="icon comparison-pane__footer-icon" aria-hidden="true">visibility</span>
+                    <span><%= page.article.views %> views</span>
+                  </div>
+                  <a class="comparison-pane__footer-link" href="/articles/<%= page.article.id %>" target="_blank" rel="noopener noreferrer">
+                    <span>View on public site</span>
+                    <span class="icon comparison-pane__link-icon" aria-hidden="true">open_in_new</span>
+                  </a>
+                </div>
                 <% } %>
               </div>
 
+              <%# Proposed Update / Draft Pane %>
               <div class="comparison-pane comparison-pane--draft">
-                <div class="comparison-pane__header">
-                  <span class="comparison-pane__version comparison-pane__version--draft">
-                    <span class="icon comparison-pane__version-icon">edit_note</span>
-                    <%= page.article.draft ? page.article.draft.label : 'No pending version' %>
-                  </span>
-                  <span class="comparison-pane__description">The version submitted by the reporter. The editor can edit it here before deciding.</span>
+                <div class="comparison-pane__header comparison-pane__header--proposed">
+                  <div class="comparison-pane__header-left">
+                    <span class="comparison-pane__dot comparison-pane__dot--proposed" aria-hidden="true"></span>
+                    <span class="comparison-pane__header-title">
+                      <%= page.article.isUpdate ? 'Proposed Update' : 'Proposed Version' %> (<%= page.article.proposedVersion || 'v1.0' %>)
+                    </span>
+                  </div>
+                  <div class="comparison-pane__header-right">
+                    <span class="comparison-pane__header-date">
+                      Submitted <%= page.article.submittedLabelLower || page.article.submittedLabel.toLowerCase() %>
+                    </span>
+                  </div>
                 </div>
                 <% if (!page.article.draft) { %>
                 <div class="comparison-pane__empty"><p>There is no version currently awaiting approval for this article.</p></div>
                 <% } else { %>
-                <%# Editable in place, so the editor can correct the copy while comparing it
-                    against the version that is currently live in the pane alongside. %>
                 <% const pane = page.article.draft; %>
-                <form class="comparison-pane__article comparison-pane__form" id="editorDraftForm">
-                  <div class="comparison-pane__field">
-                    <label class="comparison-pane__label" for="editorDraftCategory">Category</label>
-                    <select class="control-input comparison-pane__input" id="editorDraftCategory">
-                      <option value="">Select a category</option>
-                      <% page.categories.forEach(function (category) { %>
-                      <option value="<%= category %>" <% if (category === pane.category) { %>selected<% } %>><%= category %></option>
-                      <% }); %>
-                    </select>
+                <article class="comparison-pane__article">
+                  <div class="comparison-pane__meta-bar">
+                    <span class="comparison-pane__category"><%= pane.category %></span>
                   </div>
-                  <div class="comparison-pane__field">
-                    <label class="comparison-pane__label" for="editorDraftTitle">Headline</label>
-                    <input class="control-input comparison-pane__input comparison-pane__input--title" id="editorDraftTitle" maxlength="200" type="text" value="<%= pane.title %>" />
-                  </div>
-                  <div class="comparison-pane__field">
-                    <label class="comparison-pane__label" for="editorDraftImageUrl">Lead image URL</label>
-                    <input class="control-input comparison-pane__input" id="editorDraftImageUrl" placeholder="https://..." type="url" value="<%= pane.imageUrl %>" />
-                  </div>
+                  <h1 class="comparison-pane__title"><%= pane.title %></h1>
                   <% if (pane.imageUrl) { %>
                   <div class="comparison-media">
                     <img class="comparison-media__image" alt="<%= pane.imageAlt %>" src="<%= pane.imageUrl %>" />
                   </div>
                   <% } %>
-                  <div class="comparison-pane__field">
-                    <label class="comparison-pane__label" for="editorDraftSummary">Summary</label>
-                    <textarea class="control-input comparison-pane__input" id="editorDraftSummary" maxlength="500" rows="3"><%= pane.summary %></textarea>
+                  <% if (pane.summary) { %>
+                  <p class="comparison-pane__summary"><%= pane.summary %></p>
+                  <% } %>
+                  <div class="comparison-pane__body">
+                    <% (pane.paragraphs || []).forEach(p => { %>
+                      <p><%= p %></p>
+                    <% }) %>
                   </div>
-                  <div class="comparison-pane__field">
-                    <label class="comparison-pane__label" for="editorDraftBody">Body</label>
-                    <textarea class="control-input comparison-pane__input comparison-pane__input--body" id="editorDraftBody" rows="10"><%= pane.content %></textarea>
-                    <span class="comparison-pane__hint">A blank line between paragraphs splits them on the public page.</span>
+                </article>
+                <div class="comparison-pane__footer">
+                  <div class="comparison-pane__footer-views">
+                    <span class="icon comparison-pane__footer-icon" aria-hidden="true">visibility</span>
+                    <span><%= page.article.views %> views <% if (page.article.isUpdate) { %>(from current version)<% } %></span>
                   </div>
-                  <div class="comparison-pane__actions">
-                    <button class="button button--secondary" id="btn-save-draft-edits" type="submit">Save my edits</button>
-                    <p class="comparison-pane__status state-hidden" id="editorDraftStatus" role="status" aria-live="polite"></p>
-                  </div>
-                </form>
+                  <a class="comparison-pane__footer-link" href="<%= page.article.published ? '/articles/' + page.article.id : '#' %>" target="_blank" rel="noopener noreferrer">
+                    <span>Preview as it will appear</span>
+                    <span class="icon comparison-pane__link-icon" aria-hidden="true">open_in_new</span>
+                  </a>
+                </div>
                 <% } %>
               </div>
             </div>
@@ -168,30 +262,6 @@
                 </button>
               </div>
               <p class="decision-card__status state-hidden" id="statusAlert" role="status" aria-live="polite"></p>
-            </div>
-
-            <div class="review-article__details">
-              <span class="review-article__details-title">Article Details</span>
-              <div class="review-article__detail">
-                <span class="review-article__detail-label">Reporter</span>
-                <span class="review-article__detail-value"><%= page.article.reporter %></span>
-              </div>
-              <div class="review-article__detail">
-                <span class="review-article__detail-label">Desk</span>
-                <span class="review-article__detail-value"><%= page.article.desk %></span>
-              </div>
-              <div class="review-article__detail">
-                <span class="review-article__detail-label">Submitted</span>
-                <span class="review-article__detail-value"><%= page.article.submittedLabel %></span>
-              </div>
-              <div class="review-article__detail">
-                <span class="review-article__detail-label">Views</span>
-                <span class="review-article__detail-value"><%= page.article.views %></span>
-              </div>
-              <div class="review-article__detail">
-                <span class="review-article__detail-label">Status</span>
-                <span class="review-article__detail-status" data-status="<%= page.article.status %>"><%= page.article.statusLabel %></span>
-              </div>
             </div>
           </aside>
         </div>

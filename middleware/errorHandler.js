@@ -9,7 +9,12 @@ function wantsJson(req) {
 // 404 - a path that did not match any route
 exports.notFound = (req, res) => {
   if (wantsJson(req)) return res.status(404).json({ error: 'The requested resource was not found' });
-  res.status(404).render('error', { title: 'Page Not Found', message: 'The page you were looking for does not exist.' });
+  res.status(404).render('404', {
+    pageTitle: 'Page Not Found — The Daily Web',
+    title: 'Page Not Found',
+    statusCode: 404,
+    message: 'The page or article you were looking for does not exist or has been moved.'
+  });
 };
 
 // Central error handler - every error reaches here through asyncHandler

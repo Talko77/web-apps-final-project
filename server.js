@@ -62,13 +62,18 @@ app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`));
+let server;
 
-// An unhandled error is written to the log and does not kill the process silently
-process.on('unhandledRejection', err => logger.error('unhandledRejection', err));
-process.on('uncaughtException', err => {
-  logger.error('uncaughtException', err);
-  server.close(() => process.exit(1));
-});
+if (require.main === module) {
+  server = app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`));
+
+  // An unhandled error is written to the log and does not kill the process silently
+  process.on('unhandledRejection', err => logger.error('unhandledRejection', err));
+  process.on('uncaughtException', err => {
+    logger.error('uncaughtException', err);
+    if (server) server.close(() => process.exit(1));
+    else process.exit(1);
+  });
+}
 
 module.exports = app;

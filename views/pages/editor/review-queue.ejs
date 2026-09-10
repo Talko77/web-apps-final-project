@@ -16,7 +16,7 @@
               <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <%= page.articles.length %> articles.</p>
             </div>
             <div class="review-queue__status-summary">
-              <% page.statusFilters.forEach(function (filter) { %>
+              <% (page.statusFilters || []).forEach(function (filter) { %>
               <span class="review-queue__status-total">
                 <span class="review-queue__status-count"><%= filter.count %></span>
                 <%= filter.label %>
@@ -38,7 +38,7 @@
                 <label class="review-queue__field-label" for="categoryFilter">Category</label>
                 <select class="review-queue__select control-input" id="categoryFilter">
                   <option value="">All Categories</option>
-                  <% page.categories.forEach(function (category) { %>
+                  <% (page.categories || []).forEach(function (category) { %>
                   <option value="<%= category %>"><%= category %></option>
                   <% }); %>
                 </select>
@@ -46,7 +46,7 @@
               <div class="review-queue__select-field">
                 <label class="review-queue__field-label" for="statusFilter">Status</label>
                 <select class="review-queue__select control-input" id="statusFilter">
-                  <% page.statusFilters.forEach(function (filter) { %>
+                  <% (page.statusFilters || []).forEach(function (filter) { %>
                   <option value="<%= filter.value %>" <% if (filter.value === page.activeStatus) { %>selected<% } %>><%= filter.label %> (<%= filter.count %>)</option>
                   <% }); %>
                 </select>
@@ -75,7 +75,7 @@
                 </tr>
               </thead>
               <tbody class="review-queue__table-body">
-                <% page.articles.forEach(function (a) { %>
+                <% (page.articles || []).forEach(function (a) { %>
                 <tr class="review-queue__row" data-status="<%= a.statusCode %>" data-category="<%= a.categoryCode %>" data-title="<%= a.title %>" data-reporter="<%= a.reporterName %>">
                   <td class="review-queue__reporter-cell">
                     <div class="review-queue__reporter">

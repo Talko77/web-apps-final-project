@@ -22,6 +22,7 @@ coverage/
 dist/
 build/
 .cache/
+.playwright-mcp/
 
 # Local OS files
 .DS_Store

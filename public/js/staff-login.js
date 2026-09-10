@@ -31,7 +31,14 @@
       const data = await window.api.sendJSON('/api/auth/login', 'POST', { username, password });
       statusEl.classList.remove('login-feedback-error');
       // The target is decided on the server based on the role stored in the session
-      window.location.assign(nextUrl || data.redirect);
+      let target = nextUrl || data.redirect;
+      if (target === '/editor' || target === '/editor/') target = '/editor/reviews';
+      if (target === '/reporter' || target === '/reporter/') target = '/reporter/articles';
+      if (target === '/login' || target === '/staff/login' || target === '/staff/login/') target = data.redirect;
+      if (data.user && data.user.role === 'Reporter' && target.startsWith('/editor')) {
+        target = '/reporter/articles';
+      }
+      window.location.assign(target || data.redirect);
     } catch (err) {
       window.api.flash(statusEl, err.message, true);
       statusEl.classList.add('login-feedback-error');
