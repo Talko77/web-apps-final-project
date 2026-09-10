@@ -13,7 +13,8 @@ function wantsJson(req) {
 function deny(req, res, code, message) {
   logger.warn(`Access denied ${code} for ${req.method} ${req.originalUrl}`);
   if (wantsJson(req)) return res.status(code).json({ error: message });
-  if (code === 401) return res.redirect('/login?next=' + encodeURIComponent(req.originalUrl));
+  // The staff sign-in page is /staff/login; /login does not exist and would 404
+  if (code === 401) return res.redirect('/staff/login?next=' + encodeURIComponent(req.originalUrl));
   return res.status(403).render('error', { title: 'Access Denied', message });
 }
 

@@ -168,7 +168,9 @@ exports.search = asyncHandler(async (req, res) => {
     : { publishedAt: -1 };
 
   const [results, resultCount, categoryCounts] = await Promise.all([
-    Article.find(query).sort(sort)
+    // Bounded by FEED_PAGE_SIZE: without a limit this renders every published
+    // article into one page, which does not stay usable on a large database.
+    Article.find(query).sort(sort).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
     Article.countDocuments(query),
     // A grouped count in a single query instead of a separate query per category
@@ -184,6 +186,7 @@ exports.search = asyncHandler(async (req, res) => {
     pageTitle: q ? `Search results: ${q}` : 'Search Articles',
     searchQuery: q,
     resultCount,
+    hasMore: results.length === FEED_PAGE_SIZE,
     sort: req.query.sort === 'popularity' ? 'popularity' : 'publishedAt',
     categories: [
       { label: 'All Categories', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0), checked: !category },
@@ -212,13 +215,19 @@ exports.category = asyncHandler(async (req, res, next) => {
 
   if (!matchedCategory) return next();
 
-  const articles = await Article.find({
-    ...PUBLISHED,
-    'publishedVersion.category': matchedCategory
-  })
-    .sort({ publishedAt: -1 })
-    .populate('reporter', 'username displayName')
-    .lean();
+  const categoryQuery = { ...PUBLISHED, 'publishedVersion.category': matchedCategory };
+
+  // Bounded for the same reason as the search page: a category can hold
+  // thousands of articles and they must not all be rendered at once.
+  // The first page is server-rendered; feed.js loads the rest on scroll.
+  const [articles, articleCount] = await Promise.all([
+    Article.find(categoryQuery)
+      .sort({ publishedAt: -1 })
+      .limit(FEED_PAGE_SIZE)
+      .populate('reporter', 'username displayName')
+      .lean(),
+    Article.countDocuments(categoryQuery)
+  ]);
 
   const viewedIds = new Set(req.session.viewedArticles || []);
   const cards = articles.map(a => ({
@@ -231,7 +240,9 @@ exports.category = asyncHandler(async (req, res, next) => {
     category: matchedCategory,
     categoryDescription: CATEGORY_DESCRIPTIONS[matchedCategory] || `Latest reporting, analysis, and dispatches in ${matchedCategory}.`,
     articles: cards,
-    articleCount: cards.length
+    // The true total for the whole category, not just the rendered first page
+    articleCount,
+    hasMore: articles.length === FEED_PAGE_SIZE
   }));
 });
 

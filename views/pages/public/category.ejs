@@ -34,11 +34,17 @@
 
         <% if ((locals.articles || []).length) { %>
         <section class="category-page__feed" aria-label="<%= category %> articles">
-          <div class="category-page__grid">
+          <%# The first page is server-rendered for SEO; public/js/feed.js appends
+              the rest on scroll using the shared /api/articles/feed endpoint.
+              feedCategory is hidden and pins the feed to this category. %>
+          <input id="feedCategory" type="hidden" value="<%= category %>">
+          <div class="category-page__grid" id="feedGrid" data-page="1" data-has-more="<%= locals.hasMore ? 'true' : 'false' %>">
             <% (locals.articles || []).forEach(function (item) { %>
             <%- include('../../partials/public/article-card', { article: item }) %>
             <% }) %>
           </div>
+          <p class="category-page__feed-status state-hidden" id="feedStatus" aria-live="polite"></p>
+          <div id="feedSentinel" aria-hidden="true"></div>
         </section>
         <% } else { %>
         <section class="category-page__empty" aria-label="No articles">
@@ -54,5 +60,6 @@
     </main>
 
     <%- include('../../partials/public/footer') %>
+    <script src="/js/feed.js" defer></script>
   </body>
 </html>

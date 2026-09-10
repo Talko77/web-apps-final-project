@@ -77,11 +77,19 @@
           <p class="search-page__results-count"><%= resultCount %> articles found</p>
         </header>
         <% } %>
-        <div class="search-page__results-list">
+        <%# The first page is server-rendered so results work without JavaScript.
+            public/js/feed.js appends further pages on scroll via /api/articles/feed.
+            These hidden inputs pin the feed to the current query, category and sort. %>
+        <input id="feedSearch" type="hidden" value="<%= searchQuery %>">
+        <input id="feedCategory" type="hidden" value="<%= (locals.categories || []).filter(function (c) { return c.checked && c.value; }).map(function (c) { return c.value; })[0] || '' %>">
+        <input id="feedSort" type="hidden" value="<%= locals.sort === 'popularity' ? 'popularity' : 'publishedAt' %>">
+        <div class="search-page__results-list" id="feedGrid" data-page="1" data-has-more="<%= locals.hasMore ? 'true' : 'false' %>">
           <% (locals.results || []).forEach(function (item) { %>
           <%- include('../../partials/public/article-card', { article: item }) %>
           <% }) %>
         </div>
+        <p class="search-page__results-status state-hidden" id="feedStatus" aria-live="polite"></p>
+        <div id="feedSentinel" aria-hidden="true"></div>
         <% if (!(locals.results || []).length) { %>
         <div class="search-page__empty">
           <span class="icon search-page__empty-icon" aria-hidden="true">search_off</span>
@@ -94,5 +102,6 @@
   </div>
 </main>
 <%- include('../../partials/public/footer') %>
+<script src="/js/feed.js" defer></script>
 </body>
 </html>
