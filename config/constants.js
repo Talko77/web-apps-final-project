@@ -23,4 +23,8 @@ const ROLES = {
 
 const FEED_PAGE_SIZE = 20;
 
-module.exports = { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE };
+// Upper bound on the rows the editor review queue returns in one request, so the
+// queue stays fast when the database holds thousands of articles.
+const QUEUE_PAGE_SIZE = 200;
+
+module.exports = { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE };

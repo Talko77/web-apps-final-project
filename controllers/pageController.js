@@ -6,7 +6,7 @@ const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const m = require('../utils/viewMappers');
-const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE } = require('../config/constants');
+const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 const MAX_TRACKED_VIEWS = 500;
 const PUBLISHED = { isPublished: true };
@@ -357,10 +357,14 @@ exports.editorQueue = asyncHandler(async (req, res) => {
     }
   }
 
-  const [articles, grouped] = await Promise.all([
+  // Same bound as GET /api/articles/manage: at most one page of rows, plus the true
+  // number of articles the filters match.
+  const [articles, grouped, matchingCount] = await Promise.all([
     Article.find(query).sort({ updatedAt: -1 })
+      .limit(QUEUE_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
-    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }])
+    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
+    Article.countDocuments(query)
   ]);
 
   const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
@@ -373,7 +377,8 @@ exports.editorQueue = asyncHandler(async (req, res) => {
       activeStatus: status,
       activeCategory: req.query.category || '',
       searchQuery: req.query.search || '',
-      totalCount: status ? (counts[status] || 0) : totalCount,
+      totalCount: matchingCount,
+      hasMore: matchingCount > articles.length,
       articles: articles.map(m.toQueueRow),
       statusFilters: [
         { label: 'All', value: '', count: totalCount },

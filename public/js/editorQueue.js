@@ -16,6 +16,7 @@
   const emptyEl = document.getElementById('queueEmptyState');
   const countEl = document.getElementById('queueCount');
   const totalEl = document.getElementById('queueTotal');
+  const capNoteEl = document.getElementById('queueCapNote');
 
   const esc = window.api.escapeHtml;
 
@@ -89,6 +90,8 @@
       render(articles);
       if (countEl) countEl.textContent = String(articles.length);
       if (totalEl && data.total != null) totalEl.textContent = String(data.total);
+      // The server caps the rows it returns, so say when the list is only part of the matches.
+      if (capNoteEl) capNoteEl.classList.toggle('state-hidden', !data.hasMore);
 
       window.history.replaceState(null, '', pageUrl);
     } catch (err) {

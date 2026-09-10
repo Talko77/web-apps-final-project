@@ -17,6 +17,7 @@ npm install
 cp .env.example .env
 npm run seed
 npm start
+npm run verify
 ```
 
 1. `npm install` — installs dependencies. All dependencies are pure JavaScript, so there is
@@ -26,8 +27,35 @@ npm start
    starts without the file, using defaults.
 3. `npm run seed` — seeds 500 articles, 6 users, comments and view history.
 4. `npm start` — starts the server. Use `npm run dev` for automatic reload.
+5. `npm run verify` — optional. Re-checks the project against the course requirements.
 
 The site runs at <http://localhost:3000>.
+
+### Verifying the requirements
+
+`npm run verify` runs `verify.js`, which starts a server of its own on port 3101 (so a
+running development server on 3000 is not disturbed), works through the requirements over
+HTTP, and shuts the server down again. Every line of output names the clause it checks — the
+number in brackets is the line number of that requirement in
+`דרישות פרויקט מסכם - סמסטר קיץ.pdf` — and the run ends with a pass/fail count:
+
+```
+PASS  [195] the editor queue API is bounded to one page of rows  :: 200 rows (cap 200) in 11ms
+PASS  [206] articles unchanged by the verification run  :: 500 -> 500
+
+103/103 checks passed, 0 failures
+```
+
+It covers the feed and paging, search, filtering and sorting, the article page HTML, the full
+state machine including every forbidden transition, the CRUD matrix for all four models, the
+permission rules, the comment limit, the weather cache, continuity across a server restart,
+and the demo data of clauses 204-214. Run `npm run seed` first: the checks assume the seeded
+demo state, and they finish by asserting the database is exactly as they found it, so the
+harness can be run repeatedly before the defence.
+
+Two things are deliberately left to the live demonstration because they need a browser:
+infinite scroll firing on scroll, and a new comment appearing without the list reloading.
+Adding a headless browser would mean a dependency the course did not cover.
 
 ### Environment variables
 
@@ -61,8 +89,9 @@ The password for every seeded user is `123456`. These accounts are created by
 ```
 server.js                 Entry point: middleware, session, route mounting
 seed.js                   Demo data seeding
+verify.js                 Requirement checks, clause by clause (npm run verify)
 config/
-  constants.js            Categories, article states, roles, page size
+  constants.js            Categories, article states, roles, feed and queue page sizes
   db.js                   MongoDB connection
 models/                   Model layer
   User.js                 Users, one-way password hashing
@@ -156,6 +185,12 @@ The pending pane on the review page is **editable**, so an editor can correct th
 himself while comparing it against what readers currently see. Saving there reuses
 `PUT /api/articles/:id`, which leaves a `pending` article pending, so the approve and
 return actions stay valid immediately afterwards.
+
+The queue is paged: a request returns at most `QUEUE_PAGE_SIZE` (200) rows, and the
+"Showing N of M" line reports the true number of articles the current filters match, counted
+by `Article.countDocuments()` rather than inferred from the rows on screen. When the matches
+exceed one page the response sets `hasMore` and the page says so, so the queue stays fast with
+thousands of articles instead of rendering every row.
 
 Editors also moderate comments in place on the public article page — editing the text or
 deleting the comment — and can reset an article's recorded view data from the analytics page.

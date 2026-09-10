@@ -13,7 +13,7 @@
               <span class="review-queue__eyebrow">Newsroom</span>
               <h1 class="review-queue__title">Review Queue</h1>
               <p class="review-queue__description">Stories submitted by reporters and waiting on an editor to review, approve and publish them.</p>
-              <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <span id="queueTotal"><%= page.totalCount %></span> articles.</p>
+              <p class="review-queue__count-copy">Showing <span class="review-queue__count" id="queueCount"><%= page.articles.length %></span> of <span id="queueTotal"><%= page.totalCount %></span> articles.<span class="review-queue__cap-note <%= page.hasMore ? '' : 'state-hidden' %>" id="queueCapNote"> Narrow the filters to reach the rest.</span></p>
             </div>
             <div class="review-queue__status-summary">
               <% (page.statusFilters || []).forEach(function (filter) { %>

@@ -6,7 +6,7 @@ const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const { formatDateTime, formatViews, toQueueRow } = require('../utils/viewMappers');
-const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE } = require('../config/constants');
+const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 // Escapes special characters so free-text input is not interpreted as a regular expression
 const escapeRegex = str => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -126,20 +126,26 @@ exports.getAllForEditor = asyncHandler(async (req, res) => {
     }
   }
 
-  const [articles, grouped] = await Promise.all([
+  // The rows are capped so the queue stays responsive with thousands of articles,
+  // while matchingCount reports how many articles the filters actually match and the
+  // aggregate keeps feeding the system-wide per-status counters.
+  const [articles, grouped, matchingCount] = await Promise.all([
     Article.find(query)
       .populate('reporter', 'username displayName')
       .sort({ updatedAt: -1 })
+      .limit(QUEUE_PAGE_SIZE)
       .lean(),
-    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }])
+    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
+    Article.countDocuments(query)
   ]);
 
   const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
   const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
 
   res.json({
-    total: req.query.status ? (counts[req.query.status] || 0) : totalCount,
+    total: matchingCount,
     totalInSystem: totalCount,
+    hasMore: matchingCount > articles.length,
     articles: articles.map(a => ({
       ...a,
       ...toQueueRow(a),

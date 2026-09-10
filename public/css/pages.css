@@ -5326,6 +5326,7 @@ textarea.comparison-pane__input {
 .review-queue__description { color: var(--color-secondary); }
 .review-queue__count-copy { color: var(--color-on-surface); }
 .review-queue__count { font-weight: 600; }
+.review-queue__cap-note { color: var(--color-on-surface-variant); }
 .review-queue__status-summary { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
 
 .review-queue__status-total {
