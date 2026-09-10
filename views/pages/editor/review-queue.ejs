@@ -102,7 +102,7 @@
                   </td>
                   <td class="review-queue__version-cell"><span class="review-queue__version"><%= a.version %></span></td>
                   <td class="review-queue__submitted-cell">
-                    <div class="review-queue__submitted-date"><%= a.submittedLabel %></div>
+                    <div class="review-queue__submitted-date"><time datetime="<%= a.submittedAt %>"><%= a.submittedLabel %></time></div>
                     <div class="review-queue__relative-date"><%= a.relativeDate %></div>
                   </td>
                   <td class="review-queue__action-cell"><a class="review-queue__review-link" href="<%= a.url %>">Review</a></td>

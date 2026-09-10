@@ -10,7 +10,7 @@
     <div class="article-card__body">
       <div class="article-card__meta">
         <span class="article-card__category"><%= card.category || 'News' %></span>
-        <span class="article-card__date"><%= card.dateLabel || '' %></span>
+        <time class="article-card__date" datetime="<%= card.datetime || '' %>"><%= card.dateLabel || '' %></time>
       </div>
       <h2 class="article-card__title"><%= card.title || 'Untitled article' %></h2>
       <% if (card.summary) { %><p class="article-card__summary"><%= card.summary %></p><% } %>

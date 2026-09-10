@@ -114,6 +114,8 @@ function toReporterRow(article) {
     status: STATUS_LABELS[status],
     statusClass: STATUS_STYLE[status],
     updated: formatDateTime(article.updatedAt),
+    // Machine-readable form for the <time datetime="..."> attribute in the table
+    updatedAt: article.updatedAt ? new Date(article.updatedAt).toISOString() : '',
     // Unpublished articles show a dash, which the view renders as muted.
     views: article.isPublished ? formatViews(article.totalViews) : '-',
     rowClass: article.isPublished ? 'surface-muted' : 'surface-paper',
@@ -143,6 +145,8 @@ function toQueueRow(article) {
     initials: initials(reporterName),
     beat: version.category ? `${version.category} Desk` : 'Newsroom',
     submittedLabel: formatDateTime(article.updatedAt),
+    // Machine-readable form for the <time datetime="..."> attribute in the queue
+    submittedAt: article.updatedAt ? new Date(article.updatedAt).toISOString() : '',
     relativeDate: formatRelative(article.updatedAt),
     statusLabel: STATUS_LABELS[article.status],
     statusCode: article.status,

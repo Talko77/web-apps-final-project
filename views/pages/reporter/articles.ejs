@@ -152,7 +152,7 @@
                         <span class="status-dot reporter-articles__status-dot"></span><%= a.status %>
                       </span>
                     </td>
-                    <td class="reporter-articles__updated"><%= a.updated %></td>
+                    <td class="reporter-articles__updated"><time datetime="<%= a.updatedAt %>"><%= a.updated %></time></td>
                     <td class="reporter-articles__views<%= a.views === '-' ? ' reporter-articles__views--empty' : '' %>"><%= a.views %></td>
                     <td class="reporter-articles__actions-cell">
                       <div class="reporter-articles__actions" role="group">

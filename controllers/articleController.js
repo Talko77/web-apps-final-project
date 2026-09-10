@@ -72,6 +72,8 @@ exports.getFeed = asyncHandler(async (req, res) => {
       imageUrl: a.publishedVersion.imageUrl,
       imageAlt: a.publishedVersion.title,
       dateLabel: formatDateTime(a.publishedAt),
+      // Machine-readable form for the <time datetime="..."> attribute on the card
+      datetime: a.publishedAt ? new Date(a.publishedAt).toISOString() : '',
       views: formatViews(a.totalViews),
       reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
       seen: seen.has(String(a._id))
