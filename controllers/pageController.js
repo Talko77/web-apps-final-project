@@ -1,3 +1,4 @@
+// Page controller: prepares view-models and renders server-side HTML pages for public, staff auth, reporter, and editor views.
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');

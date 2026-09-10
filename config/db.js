@@ -1,3 +1,4 @@
+// Initializes and manages the MongoDB database connection via Mongoose.
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 

@@ -1,3 +1,4 @@
+// Rate limiting middleware to prevent guest comment spam and staff login brute-force attacks.
 const rateLimit = require('express-rate-limit');
 const logger = require('../utils/logger');
 

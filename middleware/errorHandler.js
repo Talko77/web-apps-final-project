@@ -1,3 +1,4 @@
+// Centralized error handling and 404 middleware with JSON vs HTML content negotiation.
 const logger = require('../utils/logger');
 
 function wantsJson(req) {

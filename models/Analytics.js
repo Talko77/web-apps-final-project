@@ -1,3 +1,4 @@
+// Model representing hourly aggregated article view counts for analytics charts.
 const mongoose = require('mongoose');
 
 // Pre-aggregate into hourly buckets instead of writing one row per view.

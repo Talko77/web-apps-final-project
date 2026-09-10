@@ -1,3 +1,4 @@
+// Handles article operations: feed pagination, reporter draft management, status transitions, and editor deletion.
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');

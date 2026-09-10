@@ -1,3 +1,4 @@
+<%# Newsroom header: shared top navigation bar for reporter and editor workspace pages. %>
 <% const role = typeof newsroomRole !== 'undefined' && newsroomRole ? newsroomRole : 'Staff'; %>
 <% const isEditor = typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'Editor'; %>
 <header class="site-header fixed width-full surface-paper shadow-subtle">

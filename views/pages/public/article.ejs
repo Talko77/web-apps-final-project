@@ -1,3 +1,4 @@
+<%# Public article reading view: renders article header, media, body paragraphs, tags, related articles, comment thread, and weather sidebar. %>
 <!doctype html>
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -14,6 +15,7 @@
             <a class="motion-colors" href="/search?category=<%= article.category %>"><%= article.category %></a>
           </nav>
 
+          <%# Article header and byline %>
           <header class="article-heading margin-bottom-6">
             <div class="flex align-center gap-3 margin-bottom-2">
               <span class="surface-raised color-primary text-kicker text-1 pad-block-2 radius-standard text-uppercase text-bold"><%= article.category %></span>
@@ -41,6 +43,7 @@
             </div>
           </header>
 
+          <%# Featured media %>
           <% if (article.imageUrl) { %>
           <figure class="margin-bottom-6">
             <div class="article-feature-media width-full height-feature radius-card overflow-hidden surface-panel shadow-raised">
@@ -49,6 +52,7 @@
           </figure>
           <% } %>
 
+          <%# Article body copy %>
           <div class="article-copy stack-5 text-article color-body text-relaxed text-normal">
             <% (article.paragraphs || []).forEach(function (p) { %>
             <p class="text-body text-2 color-body text-relaxed"><%= p %></p>
@@ -64,6 +68,7 @@
           </div>
           <% } %>
 
+          <%# Related stories %>
           <% if ((locals.related || []).length) { %>
           <section aria-labelledby="related-heading" class="related-dispatches margin-top-6 margin-bottom-6">
             <div class="flex align-center justify-between margin-bottom-5">
@@ -77,6 +82,7 @@
           </section>
           <% } %>
 
+          <%# Comments section and submission form %>
           <section aria-labelledby="comments-title" class="comment-thread surface-paper pad-6 radius-panel shadow-subtle">
             <div class="flex align-center justify-between pad-block-3 margin-bottom-5">
               <div class="flex align-center gap-2">
@@ -120,6 +126,7 @@
         </article>
       </div>
 
+      <%# Weather sidebar %>
       <aside class="publication-sidebar lg-sidebar-span flex flex-column gap-5">
         <section class="surface-paper radius-panel pad-5 shadow-subtle" aria-label="Weather">
           <div id="weatherWidget"></div>
@@ -128,6 +135,7 @@
     </div>
   </div>
 </main>
+<%# Public footer %>
 <footer class="public-footer width-full surface-muted">
   <div class="width-content page-shell pad-inline-5 pad-6">
     <p class="text-headline text-4 color-primary">The Daily Web</p>

@@ -1,3 +1,4 @@
+// Model representing public guest comments associated with published articles.
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({

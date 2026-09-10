@@ -1,3 +1,4 @@
+// Handles analytics API requests: aggregated view timeline and analyzable article listings.
 const Analytics = require('../models/Analytics');
 const Article = require('../models/Article');
 const asyncHandler = require('../utils/asyncHandler');

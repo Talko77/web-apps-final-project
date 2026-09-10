@@ -1,3 +1,4 @@
+// Handles external weather API integration with in-memory caching and graceful fallbacks.
 const logger = require('../utils/logger');
 
 const CACHE_TTL = 15 * 60 * 1000; // The value shown to the user may be up to 15 minutes behind

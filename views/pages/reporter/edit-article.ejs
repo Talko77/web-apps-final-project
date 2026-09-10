@@ -15,7 +15,7 @@
         </nav>
         <div class="article-editor__content">
           <% if (article.locked) { %>
-          <!-- The article is under editorial review and therefore locked for editing -->
+          <%# The article is under editorial review and therefore locked for editing %>
           <div
             class="article-editor__notice article-editor__notice--locked"
             role="status"
@@ -29,7 +29,7 @@
           </div>
           <% } %>
           <% if (article.isPublished) { %>
-          <!-- A published version exists. This update replaces it only once approved -->
+          <%# A published version exists. This update replaces it only once approved %>
           <div
             class="article-editor__notice article-editor__notice--published"
             role="status"
@@ -43,7 +43,7 @@
           </div>
           <% } %>
           <% if (article.deskNotes) { %>
-          <!-- Editor note: the changes requested from the reporter -->
+          <%# Editor note: the changes requested from the reporter %>
           <div
             class="article-editor__notice article-editor__notice--feedback"
           >
@@ -57,7 +57,7 @@
             </div>
           </div>
           <% } %>
-          <!-- The editing form. Values are saved over Ajax, so there is no submit -->
+          <%# The editing form. Values are saved over Ajax, so there is no submit %>
           <form
             class="article-editor__form"
             id="articleForm"
@@ -65,7 +65,7 @@
             data-locked="<%= article.locked %>"
           >
             <div class="article-editor__main-column">
-              <!-- Headline -->
+              <%# Headline %>
               <div class="article-editor__card article-editor__card--headline">
                 <label class="article-editor__label" for="articleTitle">Headline</label>
                 <input
@@ -80,7 +80,7 @@
                 />
                 <span class="article-editor__hint">Up to 200 characters. The headline appears in article lists and on the article page.</span>
               </div>
-              <!-- Summary -->
+              <%# Summary %>
               <div class="article-editor__card article-editor__card--summary">
                 <div class="article-editor__field-header">
                   <label class="article-editor__label" for="articleSubtitle">Summary</label>
@@ -96,7 +96,7 @@
                   <% if (article.locked) { %>disabled<% } %>
                 ><%= article.subtitle %></textarea>
               </div>
-              <!-- Lead image -->
+              <%# Lead image %>
               <div class="article-editor__card article-editor__card--image">
                 <div class="article-editor__image-field">
                   <label class="article-editor__label" for="articleImageUrl">Lead image URL</label>
@@ -131,7 +131,7 @@
                 </div>
                 <% } %>
               </div>
-              <!-- Article body -->
+              <%# Article body %>
               <div class="article-editor__card article-editor__card--body">
                 <div class="article-editor__field-header">
                   <label class="article-editor__label" for="articleBody">Body</label>
@@ -147,7 +147,7 @@
                 ><%= article.body %></textarea>
               </div>
             </div>
-            <!-- Sidebar: category and version details -->
+            <%# Sidebar: category and version details %>
             <div class="article-editor__sidebar">
               <div class="article-editor__card article-editor__card--category">
                 <div class="article-editor__card-heading">

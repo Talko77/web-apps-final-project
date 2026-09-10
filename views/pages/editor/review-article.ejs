@@ -1,3 +1,4 @@
+<%# Editor review view: side-by-side comparison of live vs draft versions with editorial approve, return, and delete actions. %>
 <!doctype html>
 <html lang="en">
   <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
@@ -5,6 +6,7 @@
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
     <main class="review-article__main">
       <div class="review-article__content">
+        <%# Review command summary bar %>
         <section class="review-command-card">
           <div class="review-command-card__content">
             <div class="review-command-card__summary">
@@ -47,6 +49,7 @@
           </div>
         </section>
 
+        <%# Side-by-side live vs draft version comparison panes %>
         <div class="review-article__layout">
           <div class="review-article__comparison">
             <div class="review-article__panes">
@@ -114,6 +117,7 @@
             </div>
           </div>
 
+          <%# Editorial decision actions and metadata sidebar %>
           <aside class="review-article__sidebar">
             <div class="decision-card" id="reviewActions" data-article-id="<%= page.article.id %>">
               <div>

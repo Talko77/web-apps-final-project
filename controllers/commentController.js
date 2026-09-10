@@ -1,3 +1,4 @@
+// Handles public comment submissions, comment listings, and editor comment moderation.
 const Comment = require('../models/Comment');
 const Article = require('../models/Article');
 const asyncHandler = require('../utils/asyncHandler');

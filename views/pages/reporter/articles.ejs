@@ -1,4 +1,4 @@
-<%# The reporter's "My Articles" page. Data comes from pageController.reporterArticles %>
+<%# Reporter articles workspace: displays author's articles with status/category filters, draft editing, and submission actions. %>
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,7 +14,7 @@
           <span class="reporter-articles__breadcrumb-current">My Articles</span>
         </nav>
         <div class="reporter-articles__content">
-          <!-- Context bar: who is signed in and which desk they belong to -->
+          <%# Context bar: who is signed in and which desk they belong to %>
           <div class="reporter-articles__context">
             <div class="reporter-articles__context-title">
               <span class="reporter-articles__context-heading">Reporter Workspace</span>
@@ -28,7 +28,7 @@
               </span>
             </div>
           </div>
-          <!-- Page heading and the create action -->
+          <%# Page heading and the create action %>
           <div class="reporter-articles__heading">
             <div>
               <h1 class="reporter-articles__title">My Articles</h1>
@@ -44,7 +44,7 @@
               </a>
             </div>
           </div>
-          <!-- Filter by status, category and free-text search. Filtering runs in the browser -->
+          <%# Filter by status, category, and free-text search %>
           <div
             class="article-filter-strip reporter-articles__filters"
           >
@@ -87,7 +87,7 @@
               </div>
             </div>
           </div>
-          <!-- The articles table -->
+          <%# The articles table %>
           <div
             class="reporter-articles__table-card"
           >
@@ -178,7 +178,7 @@
               category, or clear the search.
             </p>
           </div>
-          <!-- Result counter and system messages -->
+          <%# Result counter and system messages %>
           <div class="reporter-articles__pagination">
             <div class="reporter-articles__results">
               Showing

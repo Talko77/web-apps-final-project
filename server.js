@@ -1,3 +1,4 @@
+// Application composition root: configures Express, database connection, sessions, static assets, routes, and centralized error handling.
 require('dotenv').config();
 
 const express = require('express');

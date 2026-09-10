@@ -1,3 +1,4 @@
+// File and console logging utility with structured timestamps and severity levels.
 const fs = require('fs');
 const path = require('path');
 
