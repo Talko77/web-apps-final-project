@@ -200,26 +200,46 @@
                 <% if (!page.article.draft) { %>
                 <div class="comparison-pane__empty"><p>There is no version currently awaiting approval for this article.</p></div>
                 <% } else { %>
+                <%# Editable in place, so the editor can correct the copy while comparing it
+                    against the version that is currently live in the pane alongside. %>
                 <% const pane = page.article.draft; %>
-                <article class="comparison-pane__article">
-                  <div class="comparison-pane__meta-bar">
-                    <span class="comparison-pane__category"><%= pane.category %></span>
+                <form class="comparison-pane__article comparison-pane__form" id="editorDraftForm">
+                  <div class="comparison-pane__field">
+                    <label class="comparison-pane__label" for="editorDraftCategory">Category</label>
+                    <select class="control-input comparison-pane__input" id="editorDraftCategory">
+                      <option value="">Select a category</option>
+                      <% page.categories.forEach(function (category) { %>
+                      <option value="<%= category %>" <% if (category === pane.category) { %>selected<% } %>><%= category %></option>
+                      <% }); %>
+                    </select>
                   </div>
-                  <h1 class="comparison-pane__title"><%= pane.title %></h1>
+                  <div class="comparison-pane__field">
+                    <label class="comparison-pane__label" for="editorDraftTitle">Headline</label>
+                    <input class="control-input comparison-pane__input comparison-pane__input--title" id="editorDraftTitle" maxlength="200" type="text" value="<%= pane.title %>" />
+                  </div>
+                  <div class="comparison-pane__field">
+                    <label class="comparison-pane__label" for="editorDraftImageUrl">Lead image URL</label>
+                    <input class="control-input comparison-pane__input" id="editorDraftImageUrl" placeholder="https://..." type="url" value="<%= pane.imageUrl %>" />
+                  </div>
                   <% if (pane.imageUrl) { %>
                   <div class="comparison-media">
                     <img class="comparison-media__image" alt="<%= pane.imageAlt %>" src="<%= pane.imageUrl %>" />
                   </div>
                   <% } %>
-                  <% if (pane.summary) { %>
-                  <p class="comparison-pane__summary"><%= pane.summary %></p>
-                  <% } %>
-                  <div class="comparison-pane__body">
-                    <% (pane.paragraphs || []).forEach(p => { %>
-                      <p><%= p %></p>
-                    <% }) %>
+                  <div class="comparison-pane__field">
+                    <label class="comparison-pane__label" for="editorDraftSummary">Summary</label>
+                    <textarea class="control-input comparison-pane__input" id="editorDraftSummary" maxlength="500" rows="3"><%= pane.summary %></textarea>
                   </div>
-                </article>
+                  <div class="comparison-pane__field">
+                    <label class="comparison-pane__label" for="editorDraftBody">Body</label>
+                    <textarea class="control-input comparison-pane__input comparison-pane__input--body" id="editorDraftBody" rows="10"><%= pane.content %></textarea>
+                    <span class="comparison-pane__hint">A blank line between paragraphs splits them on the public page.</span>
+                  </div>
+                  <div class="comparison-pane__actions">
+                    <button class="button button--secondary" id="btn-save-draft-edits" type="submit">Save my edits</button>
+                    <p class="comparison-pane__status state-hidden" id="editorDraftStatus" role="status" aria-live="polite"></p>
+                  </div>
+                </form>
                 <div class="comparison-pane__footer">
                   <div class="comparison-pane__footer-views">
                     <span class="icon comparison-pane__footer-icon" aria-hidden="true">visibility</span>
