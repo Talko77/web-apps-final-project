@@ -2,6 +2,7 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');
+const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const m = require('../utils/viewMappers');
@@ -369,6 +370,8 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
     title: v.title || '(Untitled article)',
     summary: v.summary || '',
     paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
+    // The raw body as well, so the editor can edit the pending version in place
+    content: String(v.content || ''),
     category: v.category || 'Uncategorised',
     imageUrl: v.imageUrl || '',
     imageAlt: v.title || ''
@@ -380,6 +383,8 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
     pageTitle: `Review: ${draft.title || pub && pub.title || 'Article'}`,
     newsroomRole: 'Editor',
     page: {
+      // For the category select in the editable pending pane
+      categories: CATEGORIES,
       article: {
         id: String(article._id),
         status: article.status,
@@ -397,6 +402,22 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         published: asPane(pub, approved ? `v${approved}.0 — currently live` : 'Not yet published'),
         draft: asPane(draft, article.isPublished ? `v${approved + 1}.0 — pending approval` : 'New version')
       }
+    }
+  });
+});
+
+// GET /editor/staff - the staff directory. The first page is server-rendered and
+// staffDirectory.js handles create, search, rename and delete over Ajax.
+exports.staffDirectory = asyncHandler(async (req, res) => {
+  const users = await User.find({}).sort({ role: 1, username: 1 });
+
+  res.render('pages/editor/staff', {
+    pageTitle: 'Staff Directory',
+    newsroomRole: 'Editor',
+    page: {
+      currentUserId: String(req.session.user._id),
+      roles: Object.values(ROLES),
+      users: users.map(u => ({ ...u.toPublic(), _id: String(u._id) }))
     }
   });
 });
