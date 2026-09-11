@@ -2,10 +2,11 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');
+const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const m = require('../utils/viewMappers');
-const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE } = require('../config/constants');
+const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 const MAX_TRACKED_VIEWS = 500;
 const PUBLISHED = { isPublished: true };
@@ -320,27 +321,67 @@ exports.reporterEdit = asyncHandler(async (req, res, next) => {
 
 // ---------- Editor area ----------
 
-// GET /editor/reviews - the review queue, with filtering by status
+// GET /editor/reviews - the review queue, with filtering by status, category and search
 exports.editorQueue = asyncHandler(async (req, res) => {
   const status = Object.values(STATUS).includes(req.query.status) ? req.query.status : '';
   const query = status ? { status } : {};
 
-  const [articles, grouped] = await Promise.all([
-    Article.find(query).sort({ updatedAt: -1 }).limit(200)
+  if (req.query.category && CATEGORIES.includes(req.query.category)) {
+    query.$or = [
+      { 'draftVersion.category': req.query.category },
+      { 'publishedVersion.category': req.query.category }
+    ];
+  }
+
+  if (req.query.search && String(req.query.search).trim()) {
+    const term = String(req.query.search).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = { $regex: term, $options: 'i' };
+    const matchingUsers = await User.find({
+      $or: [{ displayName: regex }, { username: regex }]
+    }).select('_id').lean();
+    const reporterIds = matchingUsers.map(u => u._id);
+
+    const searchCondition = [
+      { 'draftVersion.title': regex },
+      { 'publishedVersion.title': regex }
+    ];
+    if (reporterIds.length > 0) {
+      searchCondition.push({ reporter: { $in: reporterIds } });
+    }
+
+    if (query.$or) {
+      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
+      delete query.$or;
+    } else {
+      query.$or = searchCondition;
+    }
+  }
+
+  // Same bound as GET /api/articles/manage: at most one page of rows, plus the true
+  // number of articles the filters match.
+  const [articles, grouped, matchingCount] = await Promise.all([
+    Article.find(query).sort({ updatedAt: -1 })
+      .limit(QUEUE_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
-    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }])
+    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
+    Article.countDocuments(query)
   ]);
 
   const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
+  const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
 
   res.render('pages/editor/review-queue', {
     pageTitle: 'Review Queue',
     newsroomRole: 'Editor',
     page: {
       activeStatus: status,
+      activeCategory: req.query.category || '',
+      searchQuery: req.query.search || '',
+      totalCount: matchingCount,
+      hasMore: matchingCount > articles.length,
       articles: articles.map(m.toQueueRow),
       statusFilters: [
-        { label: 'All', value: '', count: Object.values(counts).reduce((a, b) => a + b, 0) },
+        { label: 'All', value: '', count: totalCount },
         ...Object.values(STATUS).map(s => ({ label: STATUS_LABELS[s], value: s, count: counts[s] || 0 }))
       ],
       categories: CATEGORIES
@@ -369,17 +410,31 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
     title: v.title || '(Untitled article)',
     summary: v.summary || '',
     paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
+    // The raw body as well, so the editor can edit the pending version in place
+    content: String(v.content || ''),
     category: v.category || 'Uncategorised',
     imageUrl: v.imageUrl || '',
     imageAlt: v.title || ''
   } : null;
 
   const approved = (article.publishEvents || []).length;
+  const formatPubDate = d => {
+    if (!d) return null;
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+  const pubDate = article.publishedAt || (article.publishEvents && article.publishEvents[0]);
+  const submittedFormatted = m.formatDateTime(article.updatedAt);
+  const submittedLabelLower = submittedFormatted
+    ? (submittedFormatted.charAt(0).toLowerCase() + submittedFormatted.slice(1))
+    : '';
 
   res.render('pages/editor/review-article', {
     pageTitle: `Review: ${draft.title || pub && pub.title || 'Article'}`,
     newsroomRole: 'Editor',
+    categories: CATEGORIES,
     page: {
+      categories: CATEGORIES,
       article: {
         id: String(article._id),
         status: article.status,
@@ -388,15 +443,36 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         reporter: reporterName,
         initials: m.initials(reporterName),
         desk: draft.category || (pub && pub.category) || 'Uncategorised',
-        submittedLabel: m.formatDateTime(article.updatedAt),
+        category: draft.category || (pub && pub.category) || 'Uncategorised',
+        submittedLabel: submittedFormatted,
+        submittedLabelLower,
         views: m.formatViews(article.totalViews),
         editorNote: article.editorNote || '',
         // Whether this is an update to a published article or a brand new one
         isUpdate: Boolean(article.isPublished && article.status === STATUS.PENDING),
         canDecide: article.status === STATUS.PENDING,
+        liveVersion: approved ? `v${approved}.0` : (article.isPublished ? 'v1.0' : null),
+        proposedVersion: article.isPublished ? `v${approved + 1}.0` : 'v1.0',
+        publishedDateLabel: formatPubDate(pubDate),
         published: asPane(pub, approved ? `v${approved}.0 — currently live` : 'Not yet published'),
         draft: asPane(draft, article.isPublished ? `v${approved + 1}.0 — pending approval` : 'New version')
       }
+    }
+  });
+});
+
+// GET /editor/staff - the staff directory. The first page is server-rendered and
+// staffDirectory.js handles create, search, rename and delete over Ajax.
+exports.staffDirectory = asyncHandler(async (req, res) => {
+  const users = await User.find({}).sort({ role: 1, username: 1 });
+
+  res.render('pages/editor/staff', {
+    pageTitle: 'Staff Directory',
+    newsroomRole: 'Editor',
+    page: {
+      currentUserId: String(req.session.user._id),
+      roles: Object.values(ROLES),
+      users: users.map(u => ({ ...u.toPublic(), _id: String(u._id) }))
     }
   });
 });

@@ -1,12 +1,20 @@
 <%# Single comment item card matching client-side template in public/js/comments.js. %>
 <% const comment = typeof item !== 'undefined' && item ? item : {}; %>
-<article class="comment-item">
+<% const canModerate = typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'Editor'; %>
+<article class="comment-item" data-comment-id="<%= comment.id || '' %>">
   <div class="comment-item__header">
     <div class="comment-item__avatar"><%= comment.initials || 'GU' %></div>
     <div class="comment-item__content">
       <div class="comment-item__meta">
         <strong class="comment-item__author"><%= comment.author || 'Guest' %></strong>
         <time class="comment-item__date" datetime="<%= comment.datetime || '' %>"><%= comment.dateLabel || 'Just now' %></time>
+        <% if (canModerate) { %>
+        <%# Moderation is offered in the interface only to an editor, and enforced again on the server %>
+        <div class="comment-item__actions" role="group">
+          <button class="comment-item__action" data-action="edit-comment" type="button">Edit</button>
+          <button class="comment-item__action comment-item__action--delete" data-action="delete-comment" type="button">Delete</button>
+        </div>
+        <% } %>
       </div>
       <p class="comment-item__text"><%= comment.text || '' %></p>
     </div>

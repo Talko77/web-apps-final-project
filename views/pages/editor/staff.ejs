@@ -1,0 +1,103 @@
+<%# Editor staff directory: full create/read/search/update/delete management of newsroom user accounts. %>
+<!doctype html>
+<html lang="en">
+  <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
+  <body class="staff-directory">
+    <%- include('../../partials/newsroom/header', { newsroomRole }) %>
+    <main class="staff-directory__main">
+      <div class="staff-directory__content">
+        <%# Directory intro %>
+        <section class="staff-directory__intro">
+          <span class="staff-directory__eyebrow">Newsroom</span>
+          <h1 class="staff-directory__title">Staff Directory</h1>
+          <p class="staff-directory__description">
+            Reporter and editor accounts. Passwords are stored only as one-way hashes, so an
+            existing password can be replaced here but never read back.
+          </p>
+        </section>
+
+        <%# Create a new staff account %>
+        <section class="staff-directory__card" aria-labelledby="staffCreateTitle">
+          <h2 class="staff-directory__card-title" id="staffCreateTitle">Add a staff member</h2>
+          <form class="staff-directory__form" id="staffCreateForm">
+            <div class="staff-directory__field">
+              <label class="staff-directory__label" for="newUsername">Username</label>
+              <input class="control-input staff-directory__input" id="newUsername" name="username" minlength="3" maxlength="30" required type="text" />
+            </div>
+            <div class="staff-directory__field">
+              <label class="staff-directory__label" for="newDisplayName">Display name</label>
+              <input class="control-input staff-directory__input" id="newDisplayName" name="displayName" maxlength="60" type="text" />
+            </div>
+            <div class="staff-directory__field">
+              <label class="staff-directory__label" for="newPassword">Password</label>
+              <input class="control-input staff-directory__input" id="newPassword" name="password" minlength="6" required type="password" />
+            </div>
+            <div class="staff-directory__field">
+              <label class="staff-directory__label" for="newRole">Role</label>
+              <select class="control-input staff-directory__input" id="newRole" name="role">
+                <% page.roles.forEach(function (role) { %>
+                <option value="<%= role %>"><%= role %></option>
+                <% }); %>
+              </select>
+            </div>
+            <button class="button button--primary staff-directory__submit" id="staffCreateBtn" type="submit">Create account</button>
+          </form>
+        </section>
+
+        <%# Search the directory %>
+        <section class="staff-directory__card staff-directory__card--search">
+          <div class="staff-directory__field">
+            <label class="staff-directory__label" for="staffSearch">Search by username or display name</label>
+            <input class="control-input staff-directory__input" id="staffSearch" placeholder="For example: reporter, or Elena" type="search" />
+          </div>
+        </section>
+
+        <p class="staff-directory__status state-hidden" id="staffStatus" role="status" aria-live="polite"></p>
+
+        <%# Directory table. Every row is editable in place. %>
+        <div class="staff-directory__table-card">
+          <div class="staff-directory__table-scroll">
+            <table class="staff-directory__table">
+              <thead>
+                <tr class="staff-directory__table-heading">
+                  <th scope="col">Username</th>
+                  <th scope="col">Display name</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">New password</th>
+                  <th class="staff-directory__action-heading" scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="staff-directory__table-body" id="staffTableBody" data-current-user-id="<%= page.currentUserId %>" data-roles="<%= page.roles.join(',') %>">
+                <% page.users.forEach(function (user) { %>
+                <tr class="staff-directory__row" data-user-id="<%= user._id %>">
+                  <td><input class="control-input staff-directory__input" data-field="username" maxlength="30" type="text" value="<%= user.username %>" /></td>
+                  <td><input class="control-input staff-directory__input" data-field="displayName" maxlength="60" type="text" value="<%= user.displayName %>" /></td>
+                  <td>
+                    <select class="control-input staff-directory__input" data-field="role">
+                      <% page.roles.forEach(function (role) { %>
+                      <option value="<%= role %>" <% if (role === user.role) { %>selected<% } %>><%= role %></option>
+                      <% }); %>
+                    </select>
+                  </td>
+                  <td><input class="control-input staff-directory__input" data-field="password" placeholder="Leave blank to keep" type="password" /></td>
+                  <td class="staff-directory__action-cell">
+                    <div class="staff-directory__actions" role="group">
+                      <button class="staff-directory__action staff-directory__action--save" data-action="save" type="button">Save</button>
+                      <button class="staff-directory__action staff-directory__action--delete" data-action="delete" type="button" <% if (user._id === page.currentUserId) { %>disabled title="You cannot delete your own account"<% } %>>Delete</button>
+                    </div>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <div class="staff-directory__empty-container">
+            <p class="staff-directory__empty state-hidden" id="staffEmptyState">No staff accounts match the search.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="staff-directory__footer"><div class="staff-directory__footer-content">The Daily Web · Newsroom · Editor's Desk</div></footer>
+    <script src="/js/staffDirectory.js" defer></script>
+  </body>
+</html>

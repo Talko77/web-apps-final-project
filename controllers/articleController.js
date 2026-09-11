@@ -2,10 +2,11 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');
+const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
-const { formatDateTime, formatViews } = require('../utils/viewMappers');
-const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE } = require('../config/constants');
+const { formatDateTime, formatViews, toQueueRow } = require('../utils/viewMappers');
+const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 // Escapes special characters so free-text input is not interpreted as a regular expression
 const escapeRegex = str => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -72,6 +73,8 @@ exports.getFeed = asyncHandler(async (req, res) => {
       imageUrl: a.publishedVersion.imageUrl,
       imageAlt: a.publishedVersion.title,
       dateLabel: formatDateTime(a.publishedAt),
+      // Machine-readable form for the <time datetime="..."> attribute on the card
+      datetime: a.publishedAt ? new Date(a.publishedAt).toISOString() : '',
       views: formatViews(a.totalViews),
       reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
       seen: seen.has(String(a._id))
@@ -87,22 +90,65 @@ exports.getMyArticles = asyncHandler(async (req, res) => {
   res.json({ articles });
 });
 
-// GET /api/articles/manage - every article in the system, editors only, with filtering by status
+// GET /api/articles/manage - every article in the system, editors only, with filtering by status, category and search
 exports.getAllForEditor = asyncHandler(async (req, res) => {
   const query = {};
   if (req.query.status && Object.values(STATUS).includes(req.query.status)) {
     query.status = req.query.status;
   }
+  if (req.query.category && CATEGORIES.includes(req.query.category)) {
+    query.$or = [
+      { 'draftVersion.category': req.query.category },
+      { 'publishedVersion.category': req.query.category }
+    ];
+  }
+  if (req.query.search && String(req.query.search).trim()) {
+    const term = escapeRegex(String(req.query.search).trim());
+    const regex = { $regex: term, $options: 'i' };
+    const matchingUsers = await User.find({
+      $or: [{ displayName: regex }, { username: regex }]
+    }).select('_id').lean();
+    const reporterIds = matchingUsers.map(u => u._id);
 
-  const articles = await Article.find(query)
-    .populate('reporter', 'username displayName')
-    .sort({ updatedAt: -1 })
-    .limit(200)
-    .lean();
+    const searchCondition = [
+      { 'draftVersion.title': regex },
+      { 'publishedVersion.title': regex }
+    ];
+    if (reporterIds.length > 0) {
+      searchCondition.push({ reporter: { $in: reporterIds } });
+    }
+
+    if (query.$or) {
+      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
+      delete query.$or;
+    } else {
+      query.$or = searchCondition;
+    }
+  }
+
+  // The rows are capped so the queue stays responsive with thousands of articles,
+  // while matchingCount reports how many articles the filters actually match and the
+  // aggregate keeps feeding the system-wide per-status counters.
+  const [articles, grouped, matchingCount] = await Promise.all([
+    Article.find(query)
+      .populate('reporter', 'username displayName')
+      .sort({ updatedAt: -1 })
+      .limit(QUEUE_PAGE_SIZE)
+      .lean(),
+    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
+    Article.countDocuments(query)
+  ]);
+
+  const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
+  const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
 
   res.json({
+    total: matchingCount,
+    totalInSystem: totalCount,
+    hasMore: matchingCount > articles.length,
     articles: articles.map(a => ({
       ...a,
+      ...toQueueRow(a),
       reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
       hasPendingUpdate: a.isPublished && a.status === STATUS.PENDING
     }))
@@ -203,7 +249,9 @@ exports.changeStatus = asyncHandler(async (req, res) => {
 
     if (newStatus === STATUS.PUBLISHED) {
       // Approving the update makes the draft the version shown to readers
-      article.publishedVersion = article.draftVersion.toObject();
+      article.publishedVersion = (article.draftVersion && typeof article.draftVersion.toObject === 'function')
+        ? article.draftVersion.toObject()
+        : { ...article.draftVersion };
       article.status = STATUS.PUBLISHED;
       article.isPublished = true;
       article.publishedAt = article.publishedAt || new Date();

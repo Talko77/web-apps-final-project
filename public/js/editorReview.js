@@ -48,6 +48,38 @@
     });
   }
 
+  // The editor may edit the pending version himself before deciding on it.
+  // This reuses PUT /api/articles/:id, which leaves a pending article pending,
+  // so the approve and return actions stay valid straight after a save.
+  const draftForm = document.getElementById('editorDraftForm');
+  if (draftForm) {
+    const draftStatusEl = document.getElementById('editorDraftStatus');
+    const saveEditsBtn = document.getElementById('btn-save-draft-edits');
+    const value = id => {
+      const el = document.getElementById(id);
+      return el ? el.value : '';
+    };
+
+    draftForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      saveEditsBtn.disabled = true;
+      try {
+        await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', {
+          title: value('editorDraftTitle'),
+          summary: value('editorDraftSummary'),
+          content: value('editorDraftBody'),
+          category: value('editorDraftCategory'),
+          imageUrl: value('editorDraftImageUrl')
+        });
+        window.api.flash(draftStatusEl, 'Your edits are saved to the pending version.', false);
+      } catch (err) {
+        window.api.flash(draftStatusEl, err.message, true);
+      } finally {
+        saveEditsBtn.disabled = false;
+      }
+    });
+  }
+
   const deleteBtn = document.getElementById('btn-delete');
   if (deleteBtn) {
     deleteBtn.addEventListener('click', () => {

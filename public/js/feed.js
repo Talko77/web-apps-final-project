@@ -47,7 +47,7 @@
     <div class="article-card__body">
       <div class="article-card__meta">
         <span class="article-card__category">${esc(a.category || 'News')}</span>
-        <span class="article-card__date">${esc(a.dateLabel || '')}</span>
+        <time class="article-card__date" datetime="${esc(a.datetime || '')}">${esc(a.dateLabel || '')}</time>
       </div>
       <h2 class="article-card__title">${esc(a.title || 'Untitled article')}</h2>
       ${summary}

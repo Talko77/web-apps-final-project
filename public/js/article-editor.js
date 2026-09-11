@@ -92,6 +92,22 @@
 
   const saveDraft = () => persist(false);
 
+  // Only submitting for review requires a complete article. Autosave and Save Draft
+  // deliberately accept a partial draft, so work in progress is never lost.
+  // The same rule is enforced again on the server in Article.isDraftComplete().
+  const REQUIRED_FIELDS = [
+    ['title', 'a headline'],
+    ['summary', 'a summary'],
+    ['content', 'the article body'],
+    ['category', 'a category']
+  ];
+
+  // Returns [fieldKey, label] for the first empty required field, or undefined
+  function missingField() {
+    const values = collect();
+    return REQUIRED_FIELDS.find(([key]) => !values[key].trim());
+  }
+
   function hasUnsavedChanges() {
     return JSON.stringify(collect()) !== lastPersisted;
   }
@@ -138,6 +154,15 @@
   if (submitBtn) {
     submitBtn.addEventListener('click', async () => {
       clearTimeout(autosaveTimer);
+
+      const missing = missingField();
+      if (missing) {
+        const [key, label] = missing;
+        showMessage(`Add ${label} before submitting for review.`, true);
+        if (fields[key]) fields[key].focus();
+        return;
+      }
+
       const saved = await saveDraft();
       if (!saved || !articleId) return;
 

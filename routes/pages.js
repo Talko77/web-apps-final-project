@@ -10,9 +10,28 @@ router.get('/articles/:id', p.articlePage);
 router.get('/category/:category', p.category);
 router.get('/staff/login', p.staffLogin);
 
-// editorial-home.ejs is a prototype with content hard-coded in the markup.
-// The path is kept, but it redirects to the real data-driven view.
-// /technology redirects to the new dynamic category route for backward compatibility.
+// Convenience aliases and login redirects
+router.get('/login', (req, res) => {
+  const query = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  res.redirect('/staff/login' + query);
+});
+
+router.get('/editor', (req, res) => {
+  if (req.session && req.session.user) {
+    return res.redirect(req.session.user.role === 'Editor' ? '/editor/reviews' : '/reporter/articles');
+  }
+  return res.redirect('/staff/login?next=' + encodeURIComponent('/editor/reviews'));
+});
+
+router.get('/reporter', (req, res) => {
+  if (req.session && req.session.user) {
+    return res.redirect(req.session.user.role === 'Reporter' ? '/reporter/articles' : '/editor/reviews');
+  }
+  return res.redirect('/staff/login?next=' + encodeURIComponent('/reporter/articles'));
+});
+
+// Paths kept from the early prototypes, now redirecting to the real data-driven views
+// so any existing link or bookmark still lands somewhere useful.
 router.get('/editorial', (req, res) => res.redirect('/'));
 router.get('/technology', (req, res) => res.redirect('/category/technology'));
 
@@ -24,6 +43,7 @@ router.get('/reporter/articles/:id/edit', isReporter, p.reporterEdit);
 // Editor area
 router.get('/editor/reviews', isEditor, p.editorQueue);
 router.get('/editor/reviews/:id', isEditor, p.editorReview);
+router.get('/editor/staff', isEditor, p.staffDirectory);
 router.get('/editor/analytics', isEditor, p.editorAnalyticsIndex);
 router.get('/editor/articles/:id/analytics', isEditor, p.editorAnalytics);
 
