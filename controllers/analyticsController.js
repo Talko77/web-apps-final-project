@@ -3,10 +3,12 @@ const Analytics = require('../models/Analytics');
 const Article = require('../models/Article');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
+const { analyzableArticles } = require('../utils/queries');
 
 // GET /api/analytics/article/:articleId - chart data: timeline, views and publish markers
 exports.getArticleTimeline = asyncHandler(async (req, res) => {
-  const hours = Math.min(720, Math.max(6, parseInt(req.query.hours, 10) || 96));
+  // Three weeks by default, matching the selected option on the analytics page
+  const hours = Math.min(720, Math.max(6, parseInt(req.query.hours, 10) || 504));
 
   const article = await Article.findById(req.params.articleId)
     .select('publishedVersion draftVersion publishEvents totalViews')
@@ -38,7 +40,7 @@ exports.resetArticleViews = asyncHandler(async (req, res) => {
 
   const [removed] = await Promise.all([
     Analytics.deleteMany({ article: article._id }),
-    Article.updateOne({ _id: article._id }, { $set: { totalViews: 0 } })
+    Article.updateOne({ _id: article._id }, { $set: { totalViews: 0 } }, { timestamps: false })
   ]);
 
   logger.info(`View data for article ${article._id} reset by ${req.session.user.username}`);
@@ -47,11 +49,7 @@ exports.resetArticleViews = asyncHandler(async (req, res) => {
 
 // GET /api/analytics/articles - the list of articles to choose from in the chart menu
 exports.listAnalyzableArticles = asyncHandler(async (req, res) => {
-  const articles = await Article.find({ isPublished: true })
-    .sort({ totalViews: -1 })
-    .limit(100)
-    .select('publishedVersion.title totalViews publishEvents')
-    .lean();
+  const articles = await analyzableArticles();
 
   res.json({
     articles: articles.map(a => ({

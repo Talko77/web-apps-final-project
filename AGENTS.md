@@ -23,7 +23,7 @@ under `/api`, mounts page routes at `/`, and finishes with centralized errors.
 - `controllers/`: data access, workflow rules, view-model mapping, renders/JSON.
 - `models/`: Mongoose users, articles, comments, and hourly analytics buckets.
 - `middleware/`: role checks, rate limits, and error handling.
-- `utils/`: async, logging, validation, and view-formatting helpers.
+- `utils/`: async, logging, shared query, and view-formatting helpers.
 - `config/`: database setup and shared constants.
 - `views/`: the only active EJS view tree.
 - `public/css/` and `public/js/`: assets served by Express.
@@ -43,10 +43,10 @@ runtime CSS to `DESIGN.md`; it is documentation only.
   `analytics.ejs`, and `staff.ejs` (`/editor/staff`, editor-only user CRUD).
 - Errors: `views/error.ejs`.
 
-The prototype templates and their unused partials have been removed. `/editorial`
-redirects to `/` and `/technology` redirects to `/category/technology`; both
-paths are kept only so old links still resolve. Every template under `views/` is
-now reachable from a route — do not add prototype markup that is not.
+The prototype templates, their unused partials, the legacy `/editorial` and
+`/technology` redirects, and the CSS rules no markup used have been removed.
+Every template under `views/` is reachable from a route — do not add prototype
+markup that is not.
 
 ## EJS composition and reuse
 
@@ -115,9 +115,7 @@ Use the existing 640px, 768px, 1024px, and 1280px boundaries and matching
 narrow `max-width` queries; do not create a second scale.
 
 - `page-shell` centers content and supplies gutters.
-- `reading-column` limits long-form measure.
-- `editorial-grid` has 4 columns by default, 8 at 768px, and 12 at 1024px.
-- Responsive utilities use `sm-`, `md-`, and `lg-` prefixes.
+- Page-specific grids live in `pages.css` under their page root class.
 - Shared layout rules own fixed public/newsroom header offsets.
 - Reporter/editor workspaces become desktop grids at 1024px; tables stack or
   scroll on narrow screens.

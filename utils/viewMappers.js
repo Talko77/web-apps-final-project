@@ -79,6 +79,12 @@ function initials(name) {
     .toUpperCase();
 }
 
+// The reporter's display name; "Unknown" when the reporter account was deleted.
+function reporterName(article) {
+  const r = article && article.reporter;
+  return r ? (r.displayName || r.username) : 'Unknown';
+}
+
 // Version label derived from the number of approved publications,
 // noting whether an update is currently under review.
 function versionLabel(article) {
@@ -133,9 +139,7 @@ function toQueueRow(article) {
   const version = (article.draftVersion && article.draftVersion.title)
     ? article.draftVersion
     : (article.publishedVersion || article.draftVersion || {});
-  const reporterName = article.reporter
-    ? (article.reporter.displayName || article.reporter.username)
-    : 'Unknown';
+  const name = reporterName(article);
 
   return {
     id: String(article._id),
@@ -143,8 +147,8 @@ function toQueueRow(article) {
     summary: version.summary || '',
     category: version.category || 'Uncategorised',
     categoryCode: version.category || 'Uncategorised',
-    reporterName,
-    initials: initials(reporterName),
+    reporterName: name,
+    initials: initials(name),
     beat: version.category ? `${version.category} Desk` : 'Newsroom',
     submittedLabel: formatDateTime(article.updatedAt),
     // Machine-readable form for the <time datetime="..."> attribute in the queue
@@ -168,6 +172,7 @@ module.exports = {
   formatViews,
   readingLabel,
   initials,
+  reporterName,
   versionLabel,
   toReporterRow,
   toQueueRow

@@ -9,6 +9,10 @@ const CITY = process.env.WEATHER_CITY || 'Tel Aviv';
 let cache = null;
 let cachedAt = 0;
 let inFlight = null;
+// After a failed call the external service is not retried for a minute,
+// so an outage does not turn every page view into another failing request.
+const RETRY_AFTER = 60 * 1000;
+let failedAt = 0;
 
 const FALLBACK = { city: 'Tel Aviv', temp: null, condition: 'Weather data is unavailable right now', icon: '01d' };
 
@@ -47,6 +51,10 @@ exports.getWeather = async (req, res) => {
     return res.json({ source: 'cache', ageSeconds: Math.round((now - cachedAt) / 1000), data: cache });
   }
 
+  if (now - failedAt < RETRY_AFTER) {
+    return res.json({ source: cache ? 'stale-cache' : 'fallback', data: cache || FALLBACK });
+  }
+
   try {
     if (!inFlight) {
       inFlight = fetchFromApi().finally(() => { inFlight = null; });
@@ -55,6 +63,7 @@ exports.getWeather = async (req, res) => {
     cachedAt = Date.now();
     res.json({ source: 'api', ageSeconds: 0, data: cache });
   } catch (err) {
+    failedAt = Date.now();
     logger.warn(`Weather lookup failed: ${err.message}`);
     // Return the stale cache if there is one, otherwise the fallback - the widget must not break the page
     res.json({ source: cache ? 'stale-cache' : 'fallback', data: cache || FALLBACK });

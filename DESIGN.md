@@ -37,12 +37,11 @@ affects every page and should change rarely.
 
 A finite hand-written vocabulary, not Tailwind:
 
-- display/position, flex alignment, and editorial grid presets;
+- display/position and flex alignment;
 - `.gap-*`, `.stack-*`, `.pad-*`, and `.margin-*` spacing;
 - `.text-1`–`.text-8`, font roles/weights, and semantic editorial text;
 - `.surface-*`, `.color-*`, `.rule*`, `.radius-*`, `.shadow-*`;
-- widths, heights, media, avatars, state, motion, and interaction;
-- responsive `sm-`, `md-`, and `lg-` helpers.
+- widths, heights, media, state, motion, and interaction.
 
 Numbers are named scale steps, not arbitrary values. Do not add one-off pixel
 utilities or a parallel spacing/type/color system.
@@ -61,7 +60,7 @@ EJS usage before removing or consolidating them.
 
 ### `layouts.css`
 
-Reusable geometry: `.page-shell`, `.reading-column`, `.editorial-grid`,
+Reusable geometry: `.page-shell`,
 newsroom sidebar/content, public main/footer offsets, reporter workspaces,
 newsroom footer, editor header offsets, and workspace composition. Geometry
 used by only one page belongs in `pages.css`.
@@ -126,9 +125,7 @@ Matching 639px, 767px, and 1023px maximums and bounded tablet queries already
 exist. Preserve them rather than inventing nearby breakpoints.
 
 - `.page-shell` uses shared gutters and a 1280px maximum.
-- `.reading-column` limits prose to 680px; article layout also uses the named
-  820px content token where appropriate.
-- `.editorial-grid` is 4 columns by default, 8 at 768px, 12 at 1024px.
+- The article layout uses the named 820px content token for its reading measure.
 - Shared tokens/rules reserve fixed public header and breaking-strip space.
 - Reporter/editor multi-column workspaces begin at 1024px.
 - Tables retain structure inside overflow wrappers on narrow screens.

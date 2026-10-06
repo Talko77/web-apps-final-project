@@ -6,6 +6,7 @@ const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const m = require('../utils/viewMappers');
+const { escapeRegex, buildQueueQuery, analyzableArticles } = require('../utils/queries');
 const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 const MAX_TRACKED_VIEWS = 500;
@@ -39,8 +40,8 @@ function toCard(article) {
     views: m.formatViews(article.totalViews),
     reads: `${m.formatViews(article.totalViews)} views`,
     readLabel: m.readingLabel(v.content),
-    author: article.reporter ? (article.reporter.displayName || article.reporter.username) : 'Unknown',
-    initials: m.initials(article.reporter ? (article.reporter.displayName || article.reporter.username) : ''),
+    author: m.reporterName(article),
+    initials: m.initials(m.reporterName(article)),
     role: v.category ? `${v.category} Reporter` : 'Reporter'
   };
 }
@@ -50,16 +51,16 @@ function toCard(article) {
 // GET / - the home screen. The top headlines are rendered on the server,
 // and the feed below them loads and updates over Ajax without a full refresh.
 exports.home = asyncHandler(async (req, res) => {
-  const [top, feed, mostRead] = await Promise.all([
-    Article.find(PUBLISHED).sort({ publishedAt: -1 }).limit(11)
-      .populate('reporter', 'username displayName').lean(),
-    Article.find(PUBLISHED).sort({ publishedAt: -1 }).limit(FEED_PAGE_SIZE)
+  // One query serves both the headline blocks (the newest 11) and the first feed page (the newest 20)
+  const [feed, mostRead] = await Promise.all([
+    Article.find(PUBLISHED).sort({ publishedAt: -1, _id: -1 }).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
     Article.find(PUBLISHED).sort({ totalViews: -1 }).limit(5)
       .select('publishedVersion.title publishedVersion.category totalViews').lean()
   ]);
 
-  const cards = top.map(toCard);
+  const seen = new Set(req.session.viewedArticles || []);
+  const cards = feed.map(a => ({ ...toCard(a), seen: seen.has(String(a._id)) }));
 
   res.render('pages/public/home', publicChrome({
     pageTitle: 'The Daily Web — News',
@@ -73,7 +74,7 @@ exports.home = asyncHandler(async (req, res) => {
       category: a.publishedVersion.category,
       views: m.formatViews(a.totalViews)
     })),
-    feed: feed.map(toCard),
+    feed: cards,
     hasMore: feed.length === FEED_PAGE_SIZE
   }));
 });
@@ -89,9 +90,7 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
   if (!article) return next();
 
   const v = article.publishedVersion;
-  const reporterName = article.reporter
-    ? (article.reporter.displayName || article.reporter.username)
-    : 'Unknown';
+  const reporterName = m.reporterName(article);
 
   const [comments, related] = await Promise.all([
     Comment.find({ article: article._id }).sort({ createdAt: -1 }).limit(50).lean(),
@@ -110,7 +109,9 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
       { $inc: { viewsCount: 1 } },
       { upsert: true }
     ),
-    Article.updateOne({ _id: article._id }, { $inc: { totalViews: 1 } })
+    // timestamps: false - a reader's visit is not an edit, so updatedAt (the queue order
+    // and the reporter's "last updated" time) must not change
+    Article.updateOne({ _id: article._id }, { $inc: { totalViews: 1 } }, { timestamps: false })
   ]).catch(err => logger.error(`Recording a view failed for article ${article._id}`, err));
 
   // Marking the article as seen, for the "seen / unseen" filter in the feed
@@ -158,10 +159,9 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
 exports.search = asyncHandler(async (req, res) => {
   const q = String(req.query.q || '').trim();
   const category = CATEGORIES.includes(req.query.category) ? req.query.category : '';
-  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   const query = { ...PUBLISHED };
-  if (q) query['publishedVersion.title'] = { $regex: escaped, $options: 'i' };
+  if (q) query['publishedVersion.title'] = { $regex: escapeRegex(q), $options: 'i' };
   if (category) query['publishedVersion.category'] = category;
 
   const sort = req.query.sort === 'popularity'
@@ -324,38 +324,7 @@ exports.reporterEdit = asyncHandler(async (req, res, next) => {
 // GET /editor/reviews - the review queue, with filtering by status, category and search
 exports.editorQueue = asyncHandler(async (req, res) => {
   const status = Object.values(STATUS).includes(req.query.status) ? req.query.status : '';
-  const query = status ? { status } : {};
-
-  if (req.query.category && CATEGORIES.includes(req.query.category)) {
-    query.$or = [
-      { 'draftVersion.category': req.query.category },
-      { 'publishedVersion.category': req.query.category }
-    ];
-  }
-
-  if (req.query.search && String(req.query.search).trim()) {
-    const term = String(req.query.search).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = { $regex: term, $options: 'i' };
-    const matchingUsers = await User.find({
-      $or: [{ displayName: regex }, { username: regex }]
-    }).select('_id').lean();
-    const reporterIds = matchingUsers.map(u => u._id);
-
-    const searchCondition = [
-      { 'draftVersion.title': regex },
-      { 'publishedVersion.title': regex }
-    ];
-    if (reporterIds.length > 0) {
-      searchCondition.push({ reporter: { $in: reporterIds } });
-    }
-
-    if (query.$or) {
-      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
-      delete query.$or;
-    } else {
-      query.$or = searchCondition;
-    }
-  }
+  const query = await buildQueueQuery(req.query);
 
   // Same bound as GET /api/articles/manage: at most one page of rows, plus the true
   // number of articles the filters match.
@@ -401,9 +370,7 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
 
   const pub = article.publishedVersion;
   const draft = article.draftVersion || {};
-  const reporterName = article.reporter
-    ? (article.reporter.displayName || article.reporter.username)
-    : 'Unknown';
+  const reporterName = m.reporterName(article);
 
   const asPane = (v, label) => v ? {
     label,
@@ -432,7 +399,6 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
   res.render('pages/editor/review-article', {
     pageTitle: `Review: ${draft.title || pub && pub.title || 'Article'}`,
     newsroomRole: 'Editor',
-    categories: CATEGORIES,
     page: {
       categories: CATEGORIES,
       article: {
@@ -442,7 +408,6 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         statusClass: m.STATUS_STYLE[article.status],
         reporter: reporterName,
         initials: m.initials(reporterName),
-        desk: draft.category || (pub && pub.category) || 'Uncategorised',
         category: draft.category || (pub && pub.category) || 'Uncategorised',
         submittedLabel: submittedFormatted,
         submittedLabelLower,
@@ -486,9 +451,7 @@ exports.editorAnalytics = asyncHandler(async (req, res, next) => {
   if (!article) return next();
 
   const v = article.publishedVersion || article.draftVersion || {};
-  const reporterName = article.reporter
-    ? (article.reporter.displayName || article.reporter.username)
-    : 'Unknown';
+  const reporterName = m.reporterName(article);
 
   const events = article.publishEvents || [];
   const since = Analytics.hourBucket(Date.now() - 7 * 24 * 3600 * 1000);
@@ -498,9 +461,7 @@ exports.editorAnalytics = asyncHandler(async (req, res, next) => {
   ]);
 
   // The list of articles to choose from in the menu
-  const options = await Article.find({ isPublished: true })
-    .sort({ totalViews: -1 }).limit(50)
-    .select('publishedVersion.title totalViews').lean();
+  const options = await analyzableArticles();
 
   res.render('pages/editor/analytics', {
     pageTitle: `Analytics: ${v.title || 'Article'}`,

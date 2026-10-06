@@ -57,9 +57,4 @@ articleSchema.methods.isDraftComplete = function () {
   return Boolean(d.title && d.summary && d.content && CATEGORIES.includes(d.category));
 };
 
-// Whether an update is waiting for approval on an article that is already published
-articleSchema.methods.hasPendingUpdate = function () {
-  return this.isPublished && this.status === STATUS.PENDING;
-};
-
 module.exports = mongoose.model('Article', articleSchema);

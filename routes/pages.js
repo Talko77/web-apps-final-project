@@ -30,11 +30,6 @@ router.get('/reporter', (req, res) => {
   return res.redirect('/staff/login?next=' + encodeURIComponent('/reporter/articles'));
 });
 
-// Paths kept from the early prototypes, now redirecting to the real data-driven views
-// so any existing link or bookmark still lands somewhere useful.
-router.get('/editorial', (req, res) => res.redirect('/'));
-router.get('/technology', (req, res) => res.redirect('/category/technology'));
-
 // Reporter area
 router.get('/reporter/articles', isReporter, p.reporterArticles);
 router.get('/reporter/articles/new/edit', isReporter, p.reporterEdit);

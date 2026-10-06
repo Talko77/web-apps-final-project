@@ -64,7 +64,9 @@ const ANGLES = {
 };
 
 function buildContent(i, category, revision) {
-  const angle = pick(ANGLES[category] || ['newsroom update']);
+  // Fixed per article, so every revision of a story keeps the same headline
+  const angles = ANGLES[category] || ['newsroom update'];
+  const angle = angles[i % angles.length];
   const suffix = revision > 1 ? ` (Update ${revision - 1})` : '';
   return {
     title: `${category}: ${angle} — report ${i}${suffix}`,
@@ -132,16 +134,24 @@ async function seed() {
     };
 
     if (isPublished) {
-      const firstPublish = new Date(Date.now() - rand(2, 30) * DAY);
+      // Every tenth article received several post-publication updates
+      const hasUpdates = i % 10 === 0;
+
+      // Updated articles are first published inside the 3-week analytics window,
+      // so the chart shows the original publication and every update marker.
+      const firstPublish = new Date(Date.now() - (hasUpdates ? rand(5, 20) : rand(2, 30)) * DAY);
       doc.publishedAt = firstPublish;
       doc.publishEvents = [firstPublish];
 
-      // Every tenth article received several post-publication updates
       let revision = 1;
-      if (i % 10 === 0) {
+      if (hasUpdates) {
+        // Updates are spread evenly between the first publication and a recent last
+        // update (2-48 hours ago), so no approval point lies in the future.
         const updates = rand(1, 3);
+        const lastUpdate = Date.now() - rand(2, 48) * HOUR;
+        const step = (lastUpdate - firstPublish.getTime()) / updates;
         for (let u = 1; u <= updates; u++) {
-          doc.publishEvents.push(new Date(firstPublish.getTime() + u * rand(12, 48) * HOUR));
+          doc.publishEvents.push(new Date(firstPublish.getTime() + u * step));
         }
         revision = updates + 1;
       }
@@ -175,7 +185,8 @@ async function seed() {
         article: article._id,
         authorName: pick(COMMENTER_NAMES),
         content: pick(COMMENT_TEXTS),
-        createdAt: new Date(article.publishedAt.getTime() + rand(1, 200) * HOUR)
+        // Never later than now, so no comment is dated in the future
+        createdAt: new Date(Math.min(article.publishedAt.getTime() + rand(1, 200) * HOUR, Date.now()))
       });
     }
   });
@@ -216,7 +227,7 @@ async function seed() {
 
     // The running counter must agree with the sum of the buckets,
     // otherwise sorting by popularity would be wrong.
-    await Article.updateOne({ _id: article._id }, { $set: { totalViews: total } });
+    await Article.updateOne({ _id: article._id }, { $set: { totalViews: total } }, { timestamps: false });
   }
 
   await Analytics.insertMany(buckets);
