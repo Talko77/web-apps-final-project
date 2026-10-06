@@ -15,7 +15,11 @@ function readContent(body) {
 
 // GET /api/comments/article/:articleId - the list of comments on an article
 exports.listByArticle = asyncHandler(async (req, res) => {
-  const comments = await Comment.find({ article: req.params.articleId })
+  // Same rule as posting: only a published article exposes its discussion
+  const article = await Article.findOne({ _id: req.params.articleId, isPublished: true }).select('_id');
+  if (!article) return res.status(404).json({ error: 'Article not found' });
+
+  const comments = await Comment.find({ article: article._id })
     .sort({ createdAt: -1 })
     .limit(200)
     .lean();

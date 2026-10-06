@@ -4,8 +4,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const { ROLES } = require('../config/constants');
 
-// Escapes special characters so free-text input is not interpreted as a regular expression
-const escapeRegex = str => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const { escapeRegex } = require('../utils/queries');
 
 const isRole = value => Object.values(ROLES).includes(value);
 

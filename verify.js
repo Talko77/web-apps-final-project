@@ -2,7 +2,7 @@
 // automatically checkable requirement from "דרישות פרויקט מסכם - סמסטר קיץ".
 //
 // The number in brackets on each line is the line number of that requirement in the
-// requirements file at the root of this repository, so a failure names the clause it breaks.
+// requirements file at the root of this repository (the .txt file), so a failure names the clause it breaks.
 //
 //   npm run seed     # restore the demo state first
 //   npm run verify
@@ -259,7 +259,7 @@ async function runChecks() {
   const mine = await rq('/api/articles/mine', { as: 'rp' });
   const myIds = new Set(mine.json.articles.map(a => String(a._id)));
   const foreignId = (await rq('/api/articles/manage', { as: 'ed' })).json.articles
-    .find(a => !myIds.has(String(a._id)))._id;
+    .find(a => !myIds.has(String(a.id))).id;
   ck('184', "a reporter cannot read another reporter's article",
     (await rq('/api/articles/' + foreignId, { as: 'rp' })).status === 403, '403');
   ck('184', "a reporter cannot edit another reporter's article",
@@ -303,6 +303,8 @@ async function runChecks() {
   ck('138', 'the editor can edit the submitted article and it stays pending',
     editorEdit.status === 200 && editorEdit.json.status === 'pending', `200, status "${editorEdit.json.status}"`);
 
+  ck('141', 'the server refuses to return an article without a note',
+    (await setStatus(aid, 'returned', 'ed', '  ')).status === 400, '400');
   ck('115/141', 'the editor returns the article with a note',
     (await setStatus(aid, 'returned', 'ed', 'Fix the lede.')).status === 200, '200');
   ck('108', 'the reporter can read the editor note',
@@ -334,6 +336,16 @@ async function runChecks() {
   ck('133', 'only the editor approval makes the new version public',
     afterApproval.text.includes('UNAPPROVED REWRITE'), 'the new title is public now');
 
+  // An editor editing a live article must be able to approve that edit afterwards
+  const liveEdit = await rq('/api/articles/' + aid, {
+    method: 'PUT', as: 'ed',
+    body: { title: 'UNAPPROVED REWRITE', summary: 'Editor touch-up.', content: LONG_BODY, category: 'World' }
+  });
+  ck('138', 'an editor edit of a published article goes to review, not back to draft',
+    liveEdit.status === 200 && liveEdit.json.status === 'pending', `status "${liveEdit.json.status}"`);
+  ck('138', 'and the editor can approve it straight away',
+    (await setStatus(aid, 'published', 'ed')).status === 200, '200');
+
   const partial = await rq('/api/articles', { method: 'POST', as: 'rp', body: {} });
   const partialId = partial.json.articleId;
   created.articles.push(partialId);
@@ -341,6 +353,8 @@ async function runChecks() {
     (await setStatus(partialId, 'pending', 'rp')).status === 400, '400');
   ck('126', 'the incomplete draft was still saved (work continuity)',
     (await rq('/api/articles/' + partialId, { as: 'rp' })).status === 200, 'the draft exists');
+  ck('183', 'the comments of an unpublished article are not exposed',
+    (await rq('/api/comments/article/' + partialId)).status === 404, '404');
 
   section('Article page (clauses 85-89, 166-170)');
   const page = await rq('/articles/' + aid, { as: 'guest', html: true });
@@ -431,10 +445,19 @@ async function runChecks() {
     (await rq('/api/users/' + uid, { method: 'PUT', as: 'ed', body: { displayName: 'Renamed Probe' } })).status === 200, '200');
   ck('182', 'a password set through the API is hashed and verifies on sign-in',
     (await login('probe', 'verifyprobe', 'verifypass1')).status === 200, '200');
+  // The role is re-read on every request, so a change applies to a live session at once
+  await rq('/api/users/' + uid, { method: 'PUT', as: 'ed', body: { role: 'Editor' } });
+  ck('99/187', 'a promoted account gains editor access without signing in again',
+    (await rq('/api/users', { as: 'probe' })).status === 200, '200');
+  await rq('/api/users/' + uid, { method: 'PUT', as: 'ed', body: { role: 'Reporter' } });
+  ck('99/187', 'a demoted account loses editor access without signing in again',
+    (await rq('/api/users', { as: 'probe' })).status === 403, '403');
   const storedHash = await User.findById(uid).select('password').lean();
   ck('182', 'the stored value is a bcrypt hash, not the password',
     /^\$2[aby]\$/.test(storedHash.password) && !storedHash.password.includes('verifypass1'), 'bcrypt hash');
   ck('177', 'User: delete', (await rq('/api/users/' + uid, { method: 'DELETE', as: 'ed' })).status === 200, '200');
+  ck('99/187', 'a deleted account is signed out of its open session',
+    (await rq('/api/articles/mine', { as: 'probe' })).status === 401, '401');
 
   section('Review queue at scale (clauses 194-195)');
   const queueStart = Date.now();
@@ -457,14 +480,12 @@ async function runChecks() {
 
   const queuePending = await rq('/api/articles/manage?status=pending', { as: 'ed' });
   ck('194', 'a queue status filter returns that status only',
-    queuePending.json.articles.length > 0 && queuePending.json.articles.every(a => a.status === 'pending'),
+    queuePending.json.articles.length > 0 && queuePending.json.articles.every(a => a.statusCode === 'pending'),
     `${queuePending.json.articles.length} rows, all pending`);
 
   const queueCategory = await rq('/api/articles/manage?category=Sports', { as: 'ed' });
   ck('194', 'a queue category filter returns that category only',
-    queueCategory.json.articles.length > 0 && queueCategory.json.articles.every(a =>
-      (a.draftVersion && a.draftVersion.category === 'Sports') ||
-      (a.publishedVersion && a.publishedVersion.category === 'Sports')),
+    queueCategory.json.articles.length > 0 && queueCategory.json.articles.every(a => a.categoryCode === 'Sports'),
     `${queueCategory.json.articles.length} rows`);
 
   const queuePageStart = Date.now();

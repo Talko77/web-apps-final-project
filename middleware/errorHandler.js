@@ -1,10 +1,13 @@
 // Centralized error handling and 404 middleware with JSON vs HTML content negotiation.
 const logger = require('../utils/logger');
 
+// API and Ajax callers get JSON errors; browser navigation gets the error page
 function wantsJson(req) {
   return req.originalUrl.startsWith('/api/') || req.xhr ||
     (req.headers.accept || '').includes('application/json');
 }
+
+exports.wantsJson = wantsJson;
 
 // 404 - a path that did not match any route
 exports.notFound = (req, res) => {

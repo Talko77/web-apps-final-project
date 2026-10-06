@@ -2,14 +2,11 @@
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Analytics = require('../models/Analytics');
-const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
-const { formatDateTime, formatViews, toQueueRow } = require('../utils/viewMappers');
+const { formatDateTime, formatViews, readingLabel, reporterName, toQueueRow } = require('../utils/viewMappers');
+const { escapeRegex, buildQueueQuery } = require('../utils/queries');
 const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
-
-// Escapes special characters so free-text input is not interpreted as a regular expression
-const escapeRegex = str => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function sanitizeContent(body) {
   return {
@@ -46,8 +43,8 @@ exports.getFeed = asyncHandler(async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
   const query = buildFeedQuery(req);
   const sort = req.query.sortBy === 'popularity'
-    ? { totalViews: -1, publishedAt: -1 }
-    : { publishedAt: -1 };
+    ? { totalViews: -1, publishedAt: -1, _id: -1 }
+    : { publishedAt: -1, _id: -1 };
 
   // Only the fields the feed card displays are fetched, not the full article body
   const articles = await Article.find(query)
@@ -55,7 +52,7 @@ exports.getFeed = asyncHandler(async (req, res) => {
     .sort(sort)
     .skip((page - 1) * FEED_PAGE_SIZE)
     .limit(FEED_PAGE_SIZE)
-    .select('publishedVersion.title publishedVersion.summary publishedVersion.category publishedVersion.imageUrl publishedAt totalViews reporter')
+    .select('publishedVersion.title publishedVersion.summary publishedVersion.category publishedVersion.imageUrl publishedVersion.content publishedAt totalViews reporter')
     .lean();
 
   const seen = new Set((req.session.viewedArticles || []).map(String));
@@ -76,7 +73,8 @@ exports.getFeed = asyncHandler(async (req, res) => {
       // Machine-readable form for the <time datetime="..."> attribute on the card
       datetime: a.publishedAt ? new Date(a.publishedAt).toISOString() : '',
       views: formatViews(a.totalViews),
-      reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
+      readLabel: readingLabel(a.publishedVersion.content),
+      reporterName: reporterName(a),
       seen: seen.has(String(a._id))
     }))
   });
@@ -92,39 +90,7 @@ exports.getMyArticles = asyncHandler(async (req, res) => {
 
 // GET /api/articles/manage - every article in the system, editors only, with filtering by status, category and search
 exports.getAllForEditor = asyncHandler(async (req, res) => {
-  const query = {};
-  if (req.query.status && Object.values(STATUS).includes(req.query.status)) {
-    query.status = req.query.status;
-  }
-  if (req.query.category && CATEGORIES.includes(req.query.category)) {
-    query.$or = [
-      { 'draftVersion.category': req.query.category },
-      { 'publishedVersion.category': req.query.category }
-    ];
-  }
-  if (req.query.search && String(req.query.search).trim()) {
-    const term = escapeRegex(String(req.query.search).trim());
-    const regex = { $regex: term, $options: 'i' };
-    const matchingUsers = await User.find({
-      $or: [{ displayName: regex }, { username: regex }]
-    }).select('_id').lean();
-    const reporterIds = matchingUsers.map(u => u._id);
-
-    const searchCondition = [
-      { 'draftVersion.title': regex },
-      { 'publishedVersion.title': regex }
-    ];
-    if (reporterIds.length > 0) {
-      searchCondition.push({ reporter: { $in: reporterIds } });
-    }
-
-    if (query.$or) {
-      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
-      delete query.$or;
-    } else {
-      query.$or = searchCondition;
-    }
-  }
+  const query = await buildQueueQuery(req.query);
 
   // The rows are capped so the queue stays responsive with thousands of articles,
   // while matchingCount reports how many articles the filters actually match and the
@@ -146,12 +112,7 @@ exports.getAllForEditor = asyncHandler(async (req, res) => {
     total: matchingCount,
     totalInSystem: totalCount,
     hasMore: matchingCount > articles.length,
-    articles: articles.map(a => ({
-      ...a,
-      ...toQueueRow(a),
-      reporterName: a.reporter ? (a.reporter.displayName || a.reporter.username) : 'Unknown',
-      hasPendingUpdate: a.isPublished && a.status === STATUS.PENDING
-    }))
+    articles: articles.map(toQueueRow)
   });
 });
 
@@ -165,7 +126,7 @@ exports.getOne = asyncHandler(async (req, res) => {
 
   const user = req.session.user;
   // A reporter may access only their own articles; an editor may access all of them
-  if (user.role === ROLES.REPORTER && String(article.reporter._id) !== String(user._id)) {
+  if (user.role === ROLES.REPORTER && String(article.reporter && article.reporter._id) !== String(user._id)) {
     return res.status(403).json({ error: 'You do not have permission to view this article' });
   }
 
@@ -204,9 +165,13 @@ exports.saveDraft = asyncHandler(async (req, res) => {
 
   article.draftVersion = sanitizeContent(req.body || {});
 
-  // Editing a published article returns the draft to "draft" status.
-  // The approved version stays in publishedVersion and keeps being shown to the public.
-  if (article.status === STATUS.PUBLISHED) article.status = STATUS.DRAFT;
+  // Editing a published article starts a new draft; the approved version stays in
+  // publishedVersion and keeps being shown to the public. An editor's own edit goes
+  // straight to "pending review" so the editor can approve it, instead of leaving it
+  // as a draft only the reporter could submit.
+  if (article.status === STATUS.PUBLISHED) {
+    article.status = user.role === ROLES.EDITOR ? STATUS.PENDING : STATUS.DRAFT;
+  }
 
   await article.save();
 
@@ -259,8 +224,11 @@ exports.changeStatus = asyncHandler(async (req, res) => {
       article.editorNote = '';
 
     } else if (newStatus === STATUS.RETURNED) {
+      // The note is required by the workflow, so it is enforced here and not only in the form
+      const note = String(editorNote || '').trim();
+      if (!note) return res.status(400).json({ error: 'Add a note explaining what changes are needed' });
       article.status = STATUS.RETURNED;
-      article.editorNote = String(editorNote || '').slice(0, 1000);
+      article.editorNote = note.slice(0, 1000);
 
     } else {
       return res.status(400).json({ error: 'This status change is not allowed for an editor' });

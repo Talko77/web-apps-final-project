@@ -62,7 +62,8 @@
   }
 
   async function load(nextPage, replace) {
-    if (loading) return;
+    // A filter change (replace) always runs; requestId discards the older response
+    if (loading && !replace) return;
     loading = true;
     const myRequest = ++requestId;
 

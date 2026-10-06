@@ -37,7 +37,7 @@ The site runs at <http://localhost:3000>.
 running development server on 3000 is not disturbed), works through the requirements over
 HTTP, and shuts the server down again. Every line of output names the clause it checks — the
 number in brackets is the line number of that requirement in
-`דרישות פרויקט מסכם - סמסטר קיץ.pdf` — and the run ends with a pass/fail count:
+`דרישות פרויקט מסכם - סמסטר קיץ.txt` — and the run ends with a pass/fail count:
 
 ```
 PASS  [195] the editor queue API is bounded to one page of rows  :: 200 rows (cap 200) in 11ms
@@ -115,6 +115,7 @@ utils/
   logger.js               Writes logs to file and console
   asyncHandler.js         Forwards async errors to the error handler
   viewMappers.js          Maps DB documents onto view fields
+  queries.js              Query builders shared by the pages and the API
 views/                    View layer (EJS)
   error.ejs               Generic error page
   pages/public/           Home, article page, search results, category page
@@ -184,7 +185,10 @@ view data.
 The pending pane on the review page is **editable**, so an editor can correct the copy
 himself while comparing it against what readers currently see. Saving there reuses
 `PUT /api/articles/:id`, which leaves a `pending` article pending, so the approve and
-return actions stay valid immediately afterwards.
+return actions stay valid immediately afterwards. When an editor edits an article that is
+already published, the edit goes straight to `pending` (a reporter's edit goes to `draft`),
+so the editor can approve their own correction. The return note is required on the server
+as well, not only in the form.
 
 The queue is paged: a request returns at most `QUEUE_PAGE_SIZE` (200) rows, and the
 "Showing N of M" line reports the true number of articles the current filters match, counted
@@ -207,11 +211,13 @@ administrator.
 `public/js/analyticsChart.js` draws on a plain `<canvas>` with no external library: a time
 axis, view counts along it, and dashed vertical lines at every point where an editor approved
 and published an update. This makes it possible to see how the view count changed before and
-after each update.
+after each update. The page opens on a three-week range so the original publication and
+the seeded update markers are all visible.
 
 Views are pre-aggregated into hourly buckets (`models/Analytics.js`) rather than one row per
 view. Each view is a single atomic `$inc` with `upsert`, so thousands of concurrent readers
-neither lose counts nor create write pressure. `Article.totalViews` is maintained alongside so
+neither lose counts nor create write pressure. Counting a view does not touch `updatedAt`, so
+reader traffic never reorders the review queue or changes the reporter's "last updated" time. `Article.totalViews` is maintained alongside so
 that sorting by popularity is a single query with no aggregation.
 
 ### External service — weather
@@ -219,7 +225,8 @@ that sorting by popularity is a single query with no aggregation.
 and caches the result for 15 minutes. An `inFlight` guard prevents parallel calls when the
 cache expires, so thousands of visitors translate into one external call per 15 minutes. On
 failure it returns a stale cache or fallback data, and the widget marks the value as not
-current.
+current; the external service is then not retried for a minute, so an outage does not turn
+every page view into another failing call.
 
 ## Security and permissions
 
@@ -228,6 +235,9 @@ current.
 - Permissions are derived from the server-side session, never from data sent by the browser.
 - Every protected route is checked on the server (`middleware/auth.js`). Hiding a button in
   the client is not authorisation.
+- The role is re-read from the database on every staff request, so demoting or deleting an
+  account takes effect immediately, even for a session that is already signed in.
+- Comments are listed only for published articles.
 - A reporter can edit only their own articles and cannot publish. An editor can view, edit,
   approve, return and delete.
 - Sessions are stored in MongoDB (`connect-mongo`), so a signed-in user stays signed in
