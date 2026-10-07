@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="A component-by-component walkthrough of The Daily Web search page: GET forms, server-rendered results, category counts, and API-based infinite scroll." name="description"/>
+<title>The Daily Web — Search Flow Walkthrough</title>
+<style>
+    /* Standalone documentation styles; these do not change the application. */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: #192b35; background: #f5f4f0; font: 17px/1.65 system-ui, sans-serif; }
+    a { color: #174f76; text-underline-offset: 3px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #9f253c; outline-offset: 4px; }
+    .skip { position: absolute; top: -100px; left: 16px; background: white; padding: 12px; z-index: 2; }
+    .skip:focus { top: 16px; }
+    header, main, footer { max-width: 1180px; margin: auto; padding: 32px 24px; }
+    header { padding-top: 48px; }
+    .eyebrow { color: #8c2337; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; }
+    h1 { font: 700 clamp(32px, 5vw, 54px)/1.12 Georgia, serif; margin: 12px 0 20px; }
+    h2 { font: 700 30px/1.25 Georgia, serif; margin: 8px 0 20px; }
+    h3 { font-size: 20px; line-height: 1.4; margin-top: 28px; }
+    p { margin: 12px 0; }
+    .intro { max-width: 78ch; font-size: 19px; }
+    .meta, .sources { font-size: 14px; color: #415460; }
+    main { padding-top: 0; }
+    nav, section { background: white; border: 1px solid #d5dddd; border-radius: 8px; padding: 28px; margin-bottom: 24px; }
+    section { scroll-margin-top: 20px; }
+    nav ol { columns: 2; padding-left: 24px; margin-bottom: 0; }
+    nav li { break-inside: avoid; margin: 8px 0; padding-right: 20px; }
+    .type { display: inline-block; color: #354e5b; font-size: 13px; font-weight: 750; text-transform: uppercase; letter-spacing: .04em; }
+    .rule, .note { padding: 16px 20px; margin: 20px 0; border-left: 4px solid #174f76; background: #edf4f8; }
+    .note { border-color: #95671c; background: #fcf6e9; }
+    code { font: .9em/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+    p code, li code, td code { background: #edf1f3; padding: 2px 4px; border-radius: 3px; }
+    pre { padding: 20px; background: #142d3a; color: #f2f7fa; border-radius: 6px; overflow-x: auto; font-size: 15px; }
+    pre code { background: transparent; overflow-wrap: normal; }
+    figure { margin: 24px 0; padding: 24px; background: #f6f8f8; border: 1px solid #d5dddd; border-radius: 6px; }
+    figcaption { font-weight: 750; margin-bottom: 18px; font-size: 17px; }
+    .flow { list-style: none; padding: 0; margin: 0; display: grid; gap: 38px; }
+    .flow > li { position: relative; background: white; border: 1px solid #b7c7cf; border-radius: 6px; padding: 18px; min-width: 0; }
+    .flow > li:not(:last-child)::after { content: '↓'; position: absolute; left: 50%; bottom: -35px; transform: translateX(-50%); font-size: 25px; color: #174f76; line-height: 30px; }
+    .flow .lane { color: #405561; display: block; font-size: 13px; font-weight: 750; letter-spacing: .03em; text-transform: uppercase; }
+    .flow strong { display: block; font-size: 18px; margin: 6px 0; line-height: 1.4; }
+    .flow p { margin: 6px 0 0; font-size: 16px; }
+    .table-wrap { overflow-x: auto; margin: 22px 0; border: 1px solid #d5dddd; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 16px; min-width: 570px; }
+    caption { text-align: left; font-weight: 750; padding: 14px; background: #f6f8f8; }
+    th, td { text-align: left; padding: 14px; vertical-align: top; border-bottom: 1px solid #d5dddd; }
+    th { background: #edf1f3; }
+    tr:last-child td { border-bottom: 0; }
+    details { margin: 20px 0; border: 1px solid #d5dddd; border-radius: 6px; padding: 16px 20px; }
+    summary { cursor: pointer; font-weight: 700; }
+    .file-tree { background: #f6f8f8; color: #192b35; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .sources { border-top: 1px solid #d5dddd; padding-top: 16px; }
+    .next { font-size: 16px; }
+    @media (min-width: 1024px) {
+      .flow--across { display: flex; gap: 30px; align-items: stretch; }
+      .flow--across > li { flex: 1; }
+      .flow--across > li:not(:last-child)::after { content: '→'; left: auto; bottom: auto; top: 50%; right: -27px; transform: translateY(-50%); }
+    }
+    @media (max-width: 767px) { nav ol { columns: 1; } h2 { font-size: 27px; } }
+    @media (max-width: 639px) {
+      header, main, footer { padding: 24px 16px; }
+      main { padding-top: 0; }
+      nav, section { padding: 20px 16px; }
+      figure { padding: 16px; }
+      .flow > li { padding: 16px; }
+      pre { padding: 16px; font-size: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: white; font-size: 11pt; }
+      header, main, footer { max-width: none; padding: 12px 0; }
+      nav, .skip { display: none; }
+      section { border: 0; border-bottom: 1px solid #aaa; padding: 20px 0; }
+      h2, h3, figcaption { break-after: avoid; }
+      .flow > li, tr { break-inside: avoid; }
+      .table-wrap { overflow: visible; }
+      table { min-width: 0; font-size: 10pt; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #eee; color: black; }
+      details > :not(summary) { display: block !important; }
+    }
+  </style>
+</head>
+<body id="top">
+<a class="skip" href="#search-request">Skip to the search walkthrough</a>
+<header>
+<p class="eyebrow">The Daily Web · Learn the app page by page</p>
+<h1>Search: from query to HTML to more results</h1>
+<p class="intro">The search page lives at <code>/search</code>. Follow each component separately to see which inputs are sent, what the server returns, and when the whole page or just the results list changes.</p>
+<p class="meta">Chapter 2 · Source checked on 7 October 2026 · Open directly in a browser; the diagrams work offline.</p>
+<p class="meta"><a href="homepage-flow-walkthrough.html">Chapter 1: Homepage</a></p>
+<p class="meta"><a href="article-flow-walkthrough.html">Chapter 3: Article</a></p>
+<p class="next"><a href="login-flow-walkthrough.html">Staff login walkthrough →</a></p>
+<p class="next"><a href="reporter-flow-walkthrough.html">Reporter dashboard walkthrough →</a></p>
+<p class="next"><a href="editor-flow-walkthrough.html">Editor dashboard walkthrough →</a></p>
+<p class="next"><a href="reporter-create-flow-walkthrough.html">Reporter create article walkthrough →</a></p>
+<p class="next"><a href="editor-review-flow-walkthrough.html">Editor article review walkthrough →</a></p>
+<p><a href="walkthrough-index.html">All page walkthroughs</a></p></header>
+<main>
+<nav aria-label="Search walkthrough contents">
+<h2>Follow a component</h2>
+<ol>
+<li><a href="#search-request">The first request: GET /search</a></li>
+<li><a href="#loaded-files">What loads into this page</a></li>
+<li><a href="#header">Header, logo, and navigation</a></li>
+<li><a href="#header-search">Header search</a></li>
+<li><a href="#search-console">Search the Archive: input and Search button</a></li>
+<li><a href="#category">Category radios</a></li>
+<li><a href="#category-counts">Category count numbers</a></li>
+<li><a href="#sort">Sort radios</a></li>
+<li><a href="#apply">Apply Filters</a></li>
+<li><a href="#results-heading">Results heading and total count</a></li>
+<li><a href="#initial-cards">Initial result cards</a></li>
+<li><a href="#hidden-state">Hidden inputs: bridge to the feed script</a></li>
+<li><a href="#scroll">Infinite scroll and the feed API</a></li>
+<li><a href="#json-cards">JSON response → new cards</a></li>
+<li><a href="#empty-status">Empty state and loading/error status</a></li>
+<li><a href="#breaking">Breaking strip</a></li>
+<li><a href="#logout">Staff controls and Sign Out</a></li>
+<li><a href="#footer">Footer</a></li>
+<li><a href="#article-click">Opening a result</a></li>
+<li><a href="#practice">Trace it yourself</a></li>
+</ol>
+</nav>
+<section id="search-request">
+<span class="type">Start here · HTML response</span>
+<h2>1. The user enters /search</h2>
+<p>A plain <code>/search</code> lists published articles, newest first. A URL such as <code>/search?q=climate&amp;category=Science&amp;sort=popularity</code> adds title search, category filtering, and popularity sorting.</p>
+<figure>
+<figcaption>URL → page route → three database queries → rendered HTML</figcaption>
+<ol class="flow">
+<li><span class="lane">Browser → server</span><strong>1. GET /search?...</strong><p>Send query parameters in the URL and the session cookie, if present. This is a document request with no body.</p></li>
+<li><span class="lane">server.js → routes/pages.js</span><strong>2. Prepare session and select the page controller</strong><p>Express loads the Mongo-backed session and exposes <code>currentUser</code>. <code>router.get('/search', p.search)</code> selects the public <code>pageController.search</code> handler.</p></li>
+<li><span class="lane">pageController.search</span><strong>3. Read and normalize inputs</strong><p>Trim <code>q</code>, accept a category from <code>CATEGORIES</code>, and choose popularity only for <code>sort=popularity</code>. Require <code>isPublished: true</code>.</p></li>
+<li><span class="lane">Mongoose → MongoDB</span><strong>4. Run three queries in parallel</strong><p>Find up to 20 matching articles; count all matching articles; group all published articles by category for the sidebar numbers.</p></li>
+<li><span class="lane">Controller → EJS → browser</span><strong>5. Return a complete HTML page</strong><p>Map stories through <code>toCard()</code>, build the selected radio options, and call <code>res.render('pages/public/search-results', ...)</code>. The browser receives rendered HTML, then loads its assets.</p></li>
+</ol>
+</figure>
+<div class="rule"><strong>Search and Apply Filters reload the page; infinite scroll appends through JSON.</strong> The visible form is not intercepted by JavaScript. A controller comment says filtering updates over Ajax, but the active template and scripts use native GET form submission.</div>
+<div class="table-wrap"><table>
+<caption>Inputs to the page route</caption>
+<thead><tr><th scope="col">Parameter</th><th scope="col">Example</th><th scope="col">Server behavior</th></tr></thead>
+<tbody>
+<tr><td><code>q</code></td><td><code>climate</code></td><td>Trim whitespace and search published titles, ignoring case. Regex special characters are escaped by shared <code>escapeRegex()</code> in <code>utils/queries.js</code>, so input is treated as text. Blank means no title filter.</td></tr>
+<tr><td><code>category</code></td><td><code>Science</code></td><td>Exact, case-sensitive match to a configured category. Empty or unrecognized values mean All Categories.</td></tr>
+<tr><td><code>sort</code></td><td><code>popularity</code></td><td>Popularity sorts by <code>totalViews</code> descending, then <code>publishedAt</code> descending. Everything else uses publication date descending.</td></tr>
+</tbody>
+</table></div>
+<p>Valid categories: World, Business, Technology, Science, Culture, Sports, Opinion. The query reads <code>publishedVersion</code>, so approved content stays searchable while an updated draft is under review.</p>
+<p class="note">The page controller does not read <code>page</code>, <code>search</code>, <code>sortBy</code>, or <code>seen</code>. Those belong to the feed API contract, not the search-page form. Even <code>/search?page=2</code> renders the first batch.</p>
+<details>
+<summary>What exactly does the controller pass into search-results.ejs?</summary>
+<pre><code>// Illustrative values: 43 total matches, first 20 rendered.
+res.locals.currentUser = req.session.user || null
+
+res.render('pages/public/search-results', {
+  pageTitle: 'Search results: climate',
+  editionLabel: /* formatted server date */,
+  showBreaking: true,
+  breakingText: 'Demo edition — all content on this site is sample data for the course project',
+  searchQuery: 'climate',
+  resultCount: 43,
+  hasMore: true, // results.length === 20
+  sort: 'popularity',
+  categories: [
+    { label: 'All Categories', value: '', count: 500, checked: false },
+    // One object for each configured category:
+    { label: 'Science', value: 'Science', count: 70, checked: true }
+    // ...remaining categories
+  ],
+  results: /* up to 20 display-ready card objects */
+})</code></pre>
+<p>These are server-side template locals, not a JSON response to the browser. With a blank query, the document title is “Search Articles”.</p>
+</details>
+<p class="sources">Sources: <a href="../../server.js">server.js</a> · <a href="../../routes/pages.js">page routes</a> · <a href="../../controllers/pageController.js">search, publicChrome, toCard</a> · <a href="../../config/constants.js">categories and page size</a> · <a href="../../models/Article.js">Article model</a> · <a href="../../utils/queries.js">shared escapeRegex</a></p>
+</section>
+<section id="loaded-files">
+<span class="type">Page composition · Assets</span>
+<h2>2. What loads into this HTML page?</h2>
+<pre class="file-tree"><code>views/pages/public/search-results.ejs
+├─ partials/shared/head.ejs
+│  ├─ charset, viewport, title, description
+│  ├─ /css/style.css
+│  └─ /js/api.js [defer]
+├─ partials/public/header-standard.ejs
+│  └─ partials/shared/site-logo.ejs
+├─ main
+│  ├─ searchForm + searchInput + Search button
+│  ├─ category/sort radio groups + Apply Filters
+│  └─ results heading, hidden feed state, feedGrid, status, sentinel
+│     └─ partials/public/article-card.ejs [one per initial result]
+├─ partials/public/footer.ejs
+└─ /js/feed.js [defer]</code></pre>
+<figure>
+<figcaption>Server includes create HTML; browser references load assets</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">EJS on server</span><strong>Include the shared markup</strong><p>Head, header/logo, result-card partials, and footer become one HTML document.</p></li>
+<li><span class="lane">Browser</span><strong>Request CSS, scripts, and images</strong><p>Express serves <code>/css/</code> and <code>/js/</code> from <code>public/</code>. Card images load lazily from their stored URLs.</p></li>
+<li><span class="lane">Deferred scripts</span><strong>api.js runs before feed.js</strong><p>After HTML parsing, define shared request/escaping/logout helpers, then initialize the result-list observer.</p></li>
+</ol>
+</figure>
+<p><code>style.css</code> imports Google Fonts/Material Symbols, then <code>variables → base → utilities → components → layouts → pages</code>. Search-specific styling belongs to <code>.search-page*</code> rules in <code>pages.css</code>. The form stacks below 640px and becomes a row at 640px; the sidebar and results stack below 1024px and become a 4:8 grid at 1024px. The console padding increases at 768px.</p>
+<p>This page loads no <code>weather.js</code>, contains no weather widget, and has no separate <code>search.js</code>. The initial results come from the page controller directly, not a startup feed API call. The observer can request more results on startup if the sentinel is already nearby.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">search-results.ejs</a> · <a href="../../views/partials/shared/head.ejs">head.ejs</a> · <a href="../../public/css/style.css">style.css</a> · <a href="../../public/css/pages.css">search layout rules</a> · <a href="../../public/js/api.js">api.js</a> · <a href="../../public/js/feed.js">feed.js</a></p>
+</section>
+<section id="header">
+<span class="type">Server-rendered component · Native navigation</span>
+<h2>3. Header, logo, and navigation</h2>
+<figure>
+<figcaption>The same public header uses this page’s search query</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller / session</span><strong>Supply header values</strong><p><code>searchQuery</code> comes from trimmed <code>q</code>; <code>currentUser</code> comes from the session.</p></li>
+<li><span class="lane">Header partial</span><strong>Render shared navigation</strong><p>Logo/Home link to <code>/</code>; Search links to <code>/search</code>. Populate the header search input with the query.</p></li>
+<li><span class="lane">Browser</span><strong>Follow links as page requests</strong><p>Clicking the Search navigation link opens plain <code>/search</code>, dropping the current query/filter URL. The mobile menu opens with native <code>&lt;details&gt;</code>.</p></li>
+</ol>
+</figure>
+<p>Guests see Staff Login; signed-in staff see Newsroom and Sign Out. The mobile menu always includes Home, Search, and Staff Login. Destination newsroom routes enforce roles server-side: <code>requireRole()</code> looks up the session user’s current database role on each protected request. Deleted accounts lose access and their session is destroyed; a role mismatch is denied. Public search does not run this role refresh, so the header can show an older session role until protected navigation checks it.</p>
+<p><code>editionLabel</code> is passed along but is not displayed by the current header/logo markup. There is no <code>/api/auth/me</code> call to choose these controls.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/header-standard.ejs">header-standard.ejs</a> · <a href="../../views/partials/shared/site-logo.ejs">site-logo.ejs</a> · <a href="../../middleware/auth.js">role middleware</a></p>
+</section>
+<section id="header-search">
+<span class="type">Header component · Separate GET form</span>
+<h2>4. Header search</h2>
+<figure>
+<figcaption>The small header form submits only its own query</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#siteSearch</span><strong>Edit the header input and press Enter</strong><p>This belongs to the header’s own <code>action="/search" method="get"</code> form. Its only named field is <code>q</code>.</p></li>
+<li><span class="lane">Browser → page route</span><strong>GET /search?q=climate</strong><p>The category/sort radios belong to the other form, so this request does not include them.</p></li>
+<li><span class="lane">HTML response</span><strong>Load a new search page</strong><p>Show results for the new query with All Categories and Newest First. Both query inputs are populated from the new server value.</p></li>
+</ol>
+</figure>
+<p>The header input and main search input are separate elements. Typing in one does not automatically synchronize the other; the next page render does.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/header-standard.ejs">header form</a> · <a href="../../controllers/pageController.js">search defaults</a></p>
+</section>
+<section id="search-console">
+<span class="type">Search console · Native GET form</span>
+<h2>5. Search the Archive: input and Search button</h2>
+<figure>
+<figcaption>Typing edits the input; submitting requests fresh HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#searchInput</span><strong>Enter a headline term</strong><p>The visible input has <code>name="q"</code> inside <code>#searchForm</code>. Typing alone causes no API request or result update.</p></li>
+<li><span class="lane">Form submit</span><strong>Click Search or press Enter</strong><p>The browser serializes <code>q</code> plus the checked category and sort radios associated with this form.</p></li>
+<li><span class="lane">Page controller → HTML</span><strong>Replace the whole search page</strong><p>Run the three database queries again. Update both inputs, cards, result count, selected sidebar styles, and hidden feed state.</p></li>
+</ol>
+</figure>
+<p>Example with the default radios:</p>
+<pre><code>GET /search?q=climate&amp;category=&amp;sort=publishedAt</code></pre>
+<p>With Science and Most Popular already selected, the same button instead sends:</p>
+<pre><code>GET /search?q=climate&amp;category=Science&amp;sort=popularity</code></pre>
+<div class="rule"><strong>No debounce or live search belongs to this input.</strong> <code>feed.js</code> attaches its search listener to <code>#feedSearch</code>, a different hidden input. It does not listen to <code>#searchInput</code> or intercept <code>#searchForm</code>.</div>
+<p>“Search the Archive” searches the published headline field, not the summary, article body, reporter, or unpublished drafts. The form works without JavaScript.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">search console and form</a> · <a href="../../controllers/pageController.js">title query</a> · <a href="../../public/js/feed.js">input listeners</a></p>
+</section>
+<section id="category">
+<span class="type">Sidebar component · Radio selection → form submission</span>
+<h2>6. Category radios</h2>
+<figure>
+<figcaption>Choosing a category stages the next document request</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Sidebar radio</span><strong>Select Science</strong><p>The browser checks <code>name="category" value="Science"</code> and unchecks the previous radio in that group.</p></li>
+<li><span class="lane">Search / Apply Filters</span><strong>Submit the associated searchForm</strong><p>Each radio has <code>form="searchForm"</code> even though it appears outside the form element. Include its checked value with <code>q</code> and <code>sort</code>.</p></li>
+<li><span class="lane">Server → HTML</span><strong>Render the chosen category’s matches</strong><p>Add <code>publishedVersion.category: 'Science'</code> to the published/title query; mark the matching category <code>checked</code> and its label active.</p></li>
+</ol>
+</figure>
+<p>All Categories uses an empty value, meaning no category constraint. Invalid or differently cased category URL values are ignored and the next render selects All Categories.</p>
+<p class="note">Changing a radio does not immediately fetch anything or update the result list. Its checked indicator changes natively, but <code>.search-page__option--active</code> is assigned by EJS and remains on the previous label until the next page render.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">category radios</a> · <a href="../../controllers/pageController.js">category validation and option mapping</a></p>
+</section>
+<section id="category-counts">
+<span class="type">Sidebar component · Database aggregation</span>
+<h2>7. Category count numbers</h2>
+<figure>
+<figcaption>Sidebar counts describe the whole published archive</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">MongoDB aggregate</span><strong>Group all published articles</strong><p><code>$match: { isPublished: true }</code>, then <code>$group</code> by <code>publishedVersion.category</code> with <code>$sum: 1</code>.</p></li>
+<li><span class="lane">Controller</span><strong>Build count values</strong><p>Each configured category gets its grouped count or 0. All Categories gets the sum of all grouped counts.</p></li>
+<li><span class="lane">EJS → browser</span><strong>Display the numbers beside labels</strong><p>Render <code>category.count</code> in each option. These values are refreshed only by another search-page render.</p></li>
+</ol>
+</figure>
+<p class="rule"><strong>These are not counts for the current search term.</strong> For example, Science can show 70 beside its radio while “climate” in Science finds only 8 results. The aggregation does not use the title query or selected category.</p>
+<p>These counts come from a single grouped query, not one database query per category. The All Categories number is also not the number of result cards currently loaded.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">categoryCounts aggregation and categories locals</a> · <a href="../../views/pages/public/search-results.ejs">option-count markup</a></p>
+</section>
+<section id="sort">
+<span class="type">Sidebar component · Radio selection → form submission</span>
+<h2>8. Sort radios</h2>
+<figure>
+<figcaption>The server returns the selected order</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Sidebar radio</span><strong>Select Most Popular</strong><p>Check <code>name="sort" value="popularity"</code>. Selection alone does not reorder the displayed cards.</p></li>
+<li><span class="lane">GET form → controller</span><strong>Submit sort=popularity</strong><p>Sort matching stories by cumulative <code>totalViews</code> descending, then <code>publishedAt</code> descending as a tie-breaker.</p></li>
+<li><span class="lane">HTML response</span><strong>Render the first batch in that order</strong><p>Mark Most Popular checked/active. Set hidden <code>#feedSort</code> to <code>popularity</code> so subsequent API batches keep this order.</p></li>
+</ol>
+</figure>
+<p>Newest First sends <code>sort=publishedAt</code> and sorts by publication date descending. Missing or unknown sort values use Newest First. Sorting changes order, not the total number of matching articles.</p>
+<p>Like category labels, the sort group’s active label styling is server-rendered and updates on submission. The browser does not sort the current result cards locally.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">sort radios and hidden sort value</a> · <a href="../../controllers/pageController.js">search sort rules</a></p>
+</section>
+<section id="apply">
+<span class="type">Sidebar component · Submit button outside the form</span>
+<h2>9. Apply Filters</h2>
+<figure>
+<figcaption>Apply Filters and Search submit the same form</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Apply Filters button</span><strong>Submit #searchForm</strong><p>The sidebar button has <code>form="searchForm" type="submit"</code>. Its location outside the form does not change its behavior.</p></li>
+<li><span class="lane">Browser</span><strong>Build the URL from all selected values</strong><p>Example: <code>/search?q=climate&amp;category=Science&amp;sort=popularity</code>. No JSON request body and no feed API call.</p></li>
+<li><span class="lane">Server → browser</span><strong>Restart at the first batch</strong><p>Render a new page with the selected filters. Previous appended cards disappear with the old document; pagination starts at 1.</p></li>
+</ol>
+</figure>
+<p>The button submits the current main search input, including any edits since the last render. Search and Apply Filters do not send a distinct action parameter; both use the same three named fields.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">form ownership and submit buttons</a> · <a href="../../routes/pages.js">GET /search</a></p>
+</section>
+<section id="results-heading">
+<span class="type">Server-rendered component · Matching total</span>
+<h2>10. Results heading and total count</h2>
+<figure>
+<figcaption>The heading uses q; the total counts the complete filtered query</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">MongoDB</span><strong>Count every matching article</strong><p><code>Article.countDocuments(query)</code> applies the same published/title/category query used to fetch cards, without the 20-card limit.</p></li>
+<li><span class="lane">Controller → EJS</span><strong>Pass searchQuery and resultCount</strong><p>When <code>searchQuery</code> is nonempty, render “Search results for: …” and “N articles found”. The query text is escaped.</p></li>
+<li><span class="lane">Browser</span><strong>Display a stable total</strong><p>The count can exceed the number of visible cards. Infinite scroll adds cards without changing this heading or count.</p></li>
+</ol>
+</figure>
+<p>If <code>q</code> is blank, the entire results-heading block is omitted, even if a category is selected and results exist. The controller still runs the count query.</p>
+<div class="table-wrap"><table>
+<caption>Three different numbers on the same page — illustrative example</caption>
+<thead><tr><th scope="col">Number</th><th scope="col">Example</th><th scope="col">Meaning</th></tr></thead>
+<tbody>
+<tr><td>“43 articles found”</td><td>43</td><td>All articles matching this query and selected category.</td></tr>
+<tr><td>Initial cards</td><td>20</td><td>The limited first batch of those matches.</td></tr>
+<tr><td>Science radio count</td><td>70</td><td>All published Science articles, across every title.</td></tr>
+</tbody>
+</table></div>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">resultCount query</a> · <a href="../../views/pages/public/search-results.ejs">conditional results header</a></p>
+</section>
+<section id="initial-cards">
+<span class="type">Server-rendered component · Shared article cards</span>
+<h2>11. Initial result cards</h2>
+<figure>
+<figcaption>The first batch is readable before any feed request</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Database → controller</span><strong>Get up to 20 matches</strong><p><code>find(query).sort(sort).limit(20)</code>; populate reporter username/displayName and convert documents to plain objects.</p></li>
+<li><span class="lane">toCard() → EJS</span><strong>Render each article-card partial</strong><p>Prepare title, summary, category, image, date, author, formatted views, estimated reading time, ID, and article URL.</p></li>
+<li><span class="lane">#feedGrid</span><strong>Show linked result cards</strong><p>Initial markup has <code>data-page="1"</code> and a boolean-string <code>data-has-more</code>. Cards link to <code>/articles/:id</code>.</p></li>
+</ol>
+</figure>
+<p>Headlines and summaries are in the document response. No client framework or second rendering system is involved. EJS escapes data; images and summaries appear only when their values exist.</p>
+<p class="note"><strong>Search has a remaining read-state difference:</strong> <code>toCard()</code> includes <code>readLabel</code> but omits <code>seen</code>, and search maps results directly through it. Initial search cards show reading time and no “Read” badge; later feed API cards include both reading time and session-based <code>seen</code>. The homepage now explicitly adds seen state to its initial cards, so this distinction does not apply to that page.</p>
+<p>Both card paths use shared <code>reporterName()</code> from <code>utils/viewMappers.js</code>: displayName, otherwise username, or “Unknown” when the populated reporter account is missing. Reading time uses <code>readingLabel()</code>, approximately 200 words per minute, rounded with a minimum of one minute.</p>
+<p>The page’s result list uses the shared card markup, with search-page CSS controlling its presentation. It is not a separate type of data card.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">search and toCard</a> · <a href="../../utils/viewMappers.js">reporterName and readingLabel</a> · <a href="../../views/partials/public/article-card.ejs">article-card.ejs</a> · <a href="../../public/css/pages.css">search result styles</a></p>
+</section>
+<section id="hidden-state">
+<span class="type">Hidden component · Server state → browser state</span>
+<h2>12. Hidden inputs: bridge to the feed script</h2>
+<p>These elements do not appear as controls. They let the reused homepage feed script load additional search results with the filters from the current HTML render.</p>
+<figure>
+<figcaption>Rendered values translate the page contract into API parameters</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">EJS</span><strong>Write three hidden values</strong><p><code>#feedSearch</code> = normalized searchQuery; <code>#feedCategory</code> = selected nonempty category or blank; <code>#feedSort</code> = normalized sort.</p></li>
+<li><span class="lane">feed.js initialization</span><strong>Read those elements</strong><p>The script also reads page/hasMore from the grid and starts with <code>loading=false</code>. There is no <code>#feedSeen</code> on this page.</p></li>
+<li><span class="lane">Next feed API request</span><strong>Send search, category, and sortBy</strong><p><code>params(nextPage)</code> translates hidden values into API query names. The visible main input/radios are not its data source.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>The contract bridge</caption>
+<thead><tr><th scope="col">Page request</th><th scope="col">Hidden DOM value</th><th scope="col">Feed API request</th></tr></thead>
+<tbody>
+<tr><td><code>q=climate</code></td><td><code>#feedSearch.value = 'climate'</code></td><td><code>search=climate</code></td></tr>
+<tr><td><code>category=Science</code></td><td><code>#feedCategory.value = 'Science'</code></td><td><code>category=Science</code></td></tr>
+<tr><td><code>sort=popularity</code></td><td><code>#feedSort.value = 'popularity'</code></td><td><code>sortBy=popularity</code></td></tr>
+<tr><td>Initial first batch</td><td><code>#feedGrid.dataset.page = '1'</code></td><td>Next observer request uses <code>page=2</code>.</td></tr>
+</tbody>
+</table></div>
+<p class="rule"><strong>Unsubmitted visible edits do not change scrolling results.</strong> If you type a new query or select a different category without submitting, the hidden values still describe the previous server render. Infinite scroll continues that previous search.</p>
+<p>The hidden inputs have no <code>name</code> and no form association, so they are not submitted with <code>#searchForm</code>. <code>feed.js</code> attaches listeners to them, but ordinary typing/clicking in the visible controls does not fire those hidden inputs’ events.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">hidden inputs and grid data</a> · <a href="../../public/js/feed.js">element lookups, params, listeners</a></p>
+</section>
+<section id="scroll">
+<span class="type">Browser observer · JSON API · Append results</span>
+<h2>13. Infinite scroll and the feed API</h2>
+<figure>
+<figcaption>Sentinel nearby → page 2 → append matching cards</figcaption>
+<ol class="flow">
+<li><span class="lane">IntersectionObserver</span><strong>1. Observe #feedSentinel</strong><p>The sentinel follows the grid and status. <code>rootMargin: '400px'</code> expands the observation area. Load only if it intersects, hasMore is true, and no request is active.</p></li>
+<li><span class="lane">feed.js → api.js</span><strong>2. load(page + 1, false)</strong><p>For the example search: <code>GET /api/articles/feed?page=2&amp;search=climate&amp;category=Science&amp;sortBy=popularity</code>. The shared helper sends <code>Accept: application/json</code> and the same-origin session cookie.</p></li>
+<li><span class="lane">routes/articles.js → articleController.getFeed</span><strong>3. Query the next matching batch</strong><p><code>buildFeedQuery</code> requires publication and applies title/category filters. Sort by the API’s <code>sortBy</code>, with descending <code>_id</code> as a final tie-breaker; skip <code>(page - 1) * 20</code>, limit 20, and populate reporter names.</p></li>
+<li><span class="lane">Server → browser</span><strong>4. Receive { page, hasMore, articles }</strong><p>Page 2 skips 20; page 3 skips 40. <code>hasMore</code> is whether this batch has exactly 20 articles.</p></li>
+<li><span class="lane">feed.js → DOM</span><strong>5. Append instead of replacing</strong><p>Build card HTML and insert it at the end of <code>#feedGrid</code>. Save the returned page/hasMore in JavaScript variables; leave heading, sidebar counts, and URL unchanged.</p></li>
+</ol>
+</figure>
+<p class="note">The API now uses deterministic tie-breakers: newest sorts by <code>{ publishedAt: -1, _id: -1 }</code>, and popularity by <code>{ totalViews: -1, publishedAt: -1, _id: -1 }</code>. The search page’s initial query still omits the <code>_id</code> tie-breaker. Tied initial results may therefore disagree with the API order across the page-1/page-2 boundary, causing repeats or omissions. Offset pagination also does not freeze changing data or view totals.</p>
+<p>No read/unread filter is sent from this page. The shared feed API still returns each card’s <code>seen</code> state from the session.</p>
+<p class="note">A full 20-result batch does not prove another page exists. If there are exactly 20 matches, the page still starts with <code>hasMore=true</code>; page 2 returns an empty array and ends the feed. Although the page controller knows the matching count, it does not use that count to calculate hasMore.</p>
+<p>The observer may load on startup if the sentinel is already within its expanded viewport. Without <code>IntersectionObserver</code> or JavaScript, only the initial batch is available: there is no numbered pagination or Load More fallback. Updated pagination state lives in script variables, not rewritten grid data attributes.</p>
+<p class="sources">Sources: <a href="../../public/js/feed.js">observer, params, load</a> · <a href="../../public/js/api.js">getJSON and request</a> · <a href="../../routes/articles.js">public feed route</a> · <a href="../../controllers/articleController.js">getFeed and buildFeedQuery</a></p>
+</section>
+<section id="json-cards">
+<span class="type">API response contract · Browser-rendered cards</span>
+<h2>14. JSON response → new cards</h2>
+<p>Illustrative final batch with one result; these are sample values, not a live database capture:</p>
+<pre><code>{
+  "page": 2,
+  "hasMore": false,
+  "articles": [
+    {
+      "_id": "507f1f77bcf86cd799439011",
+      "title": "Climate research reaches a new milestone",
+      "summary": "A sample summary for this result.",
+      "category": "Science",
+      "imageUrl": "https://example.com/story.jpg",
+      "imageAlt": "Climate research reaches a new milestone",
+      "dateLabel": "Today, 10:42",
+      "datetime": "2026-10-06T07:42:00.000Z",
+      "views": "1.2k",
+      "readLabel": "3 min read",
+      "reporterName": "Elena Vasquez",
+      "seen": true
+    }
+  ]
+}</code></pre>
+<figure>
+<figcaption>Response fields become one new result card</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">api.js</span><strong>Parse the response JSON</strong><p>Return the object for a successful HTTP response. For a non-success status, throw the JSON error message or a status-based fallback.</p></li>
+<li><span class="lane">feed.js cardHtml()</span><strong>Escape data and construct card markup</strong><p>Use <code>_id</code> for the link/data ID, <code>reporterName</code> for the author, formatted fields for metadata, and <code>seen</code> for the Read badge.</p></li>
+<li><span class="lane">Browser DOM</span><strong>insertAdjacentHTML at the end</strong><p>Append to the existing EJS cards with <code>replace=false</code>. EJS does not run in the browser; the script generates the added card markup.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>What differs between the first batch and later batches?</caption>
+<thead><tr><th scope="col">Field / display</th><th scope="col">Initial EJS cards</th><th scope="col">API cards</th></tr></thead>
+<tbody>
+<tr><td>ID / URL</td><td><code>id</code> and prepared <code>url</code>.</td><td><code>_id</code>; browser constructs <code>/articles/:id</code>.</td></tr>
+<tr><td>Author</td><td><code>author</code>.</td><td><code>reporterName</code>.</td></tr>
+<tr><td>Reading time</td><td><code>readLabel</code>, estimated from full content.</td><td><code>readLabel</code> from the same content-based helper; reading time is displayed.</td></tr>
+<tr><td>Read badge</td><td>No <code>seen</code> field; badge absent.</td><td><code>seen</code> derived from session history; badge present when true.</td></tr>
+</tbody>
+</table></div>
+<p>The API query now also selects <code>publishedVersion.content</code> to calculate <code>readLabel</code> on the server, but does not send the story body in JSON. It returns no total matching count or sidebar category counts. The result header’s count therefore comes from the original page response.</p>
+<p class="sources">Sources: <a href="../../controllers/articleController.js">getFeed response mapping</a> · <a href="../../utils/viewMappers.js">shared card formatting helpers</a> · <a href="../../controllers/pageController.js">toCard</a> · <a href="../../public/js/feed.js">cardHtml and insertion</a> · <a href="../../views/partials/public/article-card.ejs">EJS card structure</a></p>
+</section>
+<section id="empty-status">
+<span class="type">Separate components · Server empty state and browser status</span>
+<h2>15. Empty state and loading/error status</h2>
+<figure>
+<figcaption>Initial empty results are handled by EJS</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Page controller</span><strong>Return results = []</strong><p>No published articles match the title/category query. Matching resultCount is 0; hasMore is false.</p></li>
+<li><span class="lane">search-results.ejs</span><strong>Render the empty-state component</strong><p>Output the search_off icon, “No articles found”, and “Try different search terms, or pick another category.”</p></li>
+<li><span class="lane">Browser</span><strong>Show the message immediately</strong><p>It works without JavaScript. The observer does not load another batch when hasMore is false.</p></li>
+</ol>
+</figure>
+<figure>
+<figcaption>Later feed requests use a different status element</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Before API request</span><strong>Show “Loading articles...”</strong><p><code>api.flash(#feedStatus, ...)</code> sets text and removes <code>.state-hidden</code>. Existing cards remain visible.</p></li>
+<li><span class="lane">API result</span><strong>Append cards or catch an error</strong><p>Successful load updates pagination; unsuccessful HTTP/network responses reach the catch handler.</p></li>
+<li><span class="lane">#feedStatus</span><strong>Update the message</strong><p>More pages → hide. End → “You have reached the end of the feed.” Empty grid → “No articles match your search.” Error → error text.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Failures and progressive enhancement</caption>
+<thead><tr><th scope="col">Situation</th><th scope="col">What the user receives</th></tr></thead>
+<tbody>
+<tr><td>Initial /search query fails</td><td><code>asyncHandler → errorHandler</code>; a normal document request normally gets HTTP 500 and the error HTML page.</td></tr>
+<tr><td>Feed API query fails</td><td>HTTP 500 JSON <code>{ error: 'Something went wrong on our side. Please try again later.' }</code>. Show the message in the status; keep existing cards.</td></tr>
+<tr><td>API network/HTTP failure</td><td>The shared request helper throws. The feed shows the error; no automatic timer retry or retry button is implemented.</td></tr>
+<tr><td>End reached after scrolling</td><td>Keep all previously loaded cards; set hasMore false and show the end-of-feed message.</td></tr>
+<tr><td>JavaScript disabled</td><td>Both search forms, category/sort radios, Apply Filters, the first batch, heading/count, empty state, ordinary links, and native mobile menu work. Infinite scroll and Sign Out do not run.</td></tr>
+</tbody>
+</table></div>
+<p>The status element has <code>aria-live="polite"</code> for announcements. It starts hidden, even when the initial batch is already the last one. <code>api.flash()</code> does not clear its message on a timer.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/search-results.ejs">empty state and feedStatus</a> · <a href="../../public/js/feed.js">load outcomes</a> · <a href="../../public/js/api.js">request and flash</a> · <a href="../../utils/asyncHandler.js">asyncHandler</a> · <a href="../../middleware/errorHandler.js">errorHandler</a></p>
+</section>
+<section id="breaking">
+<span class="type">Server-rendered shared component</span>
+<h2>16. Breaking strip</h2>
+<figure>
+<figcaption>The demo notice is included with every search-page render</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">publicChrome()</span><strong>Supply showBreaking and breakingText</strong><p>Search uses the default true flag and the fixed course-project demo notice.</p></li>
+<li><span class="lane">Header partial</span><strong>Render the badge and escaped text</strong><p>“Breaking” accompanies “Demo edition — all content on this site is sample data for the course project”.</p></li>
+<li><span class="lane">Browser</span><strong>Display unchanged notice text</strong><p>No database query, JSON API, or polling is attached to this component.</p></li>
+</ol>
+</figure>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">publicChrome</a> · <a href="../../views/partials/public/header-standard.ejs">breaking strip</a></p>
+</section>
+<section id="logout">
+<span class="type">Shared session controls · JSON API + navigation</span>
+<h2>17. Staff controls and Sign Out</h2>
+<p>The server renders Staff Login for guests. Staff receive Newsroom (Editor → <code>/editor/reviews</code>, Reporter → <code>/reporter/articles</code>) and Sign Out. Newsroom is ordinary page navigation; destination middleware checks the session role.</p>
+<figure>
+<figcaption>Sign Out uses the shared api.js handler</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Browser click</span><strong>Disable #logoutBtn</strong><p><code>api.js</code> sends <code>POST /api/auth/logout</code> with the session cookie and no request body.</p></li>
+<li><span class="lane">authController.logout</span><strong>Destroy session and clear connect.sid</strong><p>Return JSON <code>{ success: true, redirect: '/' }</code>. Destroying the session also clears its stored reading history.</p></li>
+<li><span class="lane">Browser</span><strong>Navigate to the homepage</strong><p><code>window.location.assign(data.redirect || '/')</code> requests a new document. The search page and its query are left behind.</p></li>
+</ol>
+</figure>
+<p>If logout fails, the shared handler re-enables the button without showing an error message.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/header-standard.ejs">staff controls</a> · <a href="../../public/js/api.js">logout handler</a> · <a href="../../routes/auth.js">logout route</a> · <a href="../../controllers/authController.js">logout controller</a></p>
+</section>
+<section id="footer">
+<span class="type">Static included component</span>
+<h2>18. Footer</h2>
+<figure>
+<figcaption>Publication and demo information arrives in the HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">search-results.ejs</span><strong>Include public/footer.ejs</strong><p>The same public footer used on the homepage appears after the main search content.</p></li>
+<li><span class="lane">Server HTML</span><strong>Output fixed text</strong><p>Publication name, web-development course-project description, and demo-content disclaimer.</p></li>
+<li><span class="lane">Browser</span><strong>Show the footer</strong><p>No data fetching or browser updates belong to the footer. Further cards append above it.</p></li>
+</ol>
+</figure>
+<p class="sources">Sources: <a href="../../views/partials/public/footer.ejs">footer.ejs</a> · <a href="../../views/pages/public/search-results.ejs">footer inclusion</a></p>
+</section>
+<section id="article-click">
+<span class="type">Result interaction · Next-page boundary</span>
+<h2>19. Opening a result</h2>
+<figure>
+<figcaption>A result link opens the published article as another document</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Card link</span><strong>GET /articles/:id</strong><p>Both EJS cards and API-added cards use this page route. They do not call the staff <code>GET /api/articles/:id</code> API.</p></li>
+<li><span class="lane">articlePage controller</span><strong>Load the article and record the visit</strong><p>Read approved content, track its ID in session.viewedArticles, and start atomic increments for the article’s total and hourly Analytics bucket. The article increment uses <code>timestamps: false</code>, so reader visits do not change its editorial <code>updatedAt</code>.</p></li>
+<li><span class="lane">HTML response</span><strong>Replace search with the article page</strong><p>Render the story. Later feed API responses can mark that ID <code>seen: true</code>; initial EJS cards still omit the read badge.</p></li>
+</ol>
+</figure>
+<p>Loading a search page or appending result cards does not count as reading those articles. Popularity uses previously recorded article visits. View increments are asynchronous and do not delay article rendering.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/article-card.ejs">story link</a> · <a href="../../public/js/feed.js">API card link</a> · <a href="../../controllers/pageController.js">articlePage tracking</a></p>
+</section>
+<section id="practice">
+<span class="type">Learning checkpoint</span>
+<h2>20. Trace it yourself in the browser</h2>
+<ol>
+<li>Open <code>/search</code>. In DevTools → Network, inspect the document response: the first cards are already HTML. With blank <code>q</code>, no results-count heading is displayed.</li>
+<li>Type “climate” in the main input. Confirm no request occurs just from typing. Click Search: the browser requests a new <code>/search?q=...</code> document and changes the URL.</li>
+<li>Select Science and Most Popular. The radio indicators change, but the cards do not. Click Apply Filters and inspect <code>q</code>, <code>category</code>, and <code>sort</code> in the document URL.</li>
+<li>Compare the matching result count, the initial card count (at most 20), and the global Science sidebar count. They describe different sets.</li>
+<li>Inspect <code>#feedSearch</code>, <code>#feedCategory</code>, and <code>#feedSort</code> in Elements. They contain the server-rendered search values.</li>
+<li>For a search with more than 20 matches, scroll near the bottom. Inspect the Fetch/XHR request for <code>/api/articles/feed?page=2...</code>: the API uses <code>search</code> and <code>sortBy</code>, whereas the document used <code>q</code> and <code>sort</code>.</li>
+<li>Edit the visible query or radio selection without submitting. Scroll again: appended results still follow the hidden values from the previous page render.</li>
+<li>Use the header search. Its separate form submits only <code>q</code>, so the category and sort return to their defaults.</li>
+<li>Search for a title that does not exist. The returned HTML includes the “No articles found” component. Disable JavaScript and submit again: the first-page search still works.</li>
+</ol>
+<div class="rule"><strong>The search-page mental model:</strong> native GET forms choose the search; the server renders its first batch and counts; hidden inputs preserve that search for JSON-based infinite scroll.</div>
+<details>
+<summary>How this walkthrough was verified</summary>
+<p>This update compared <code>adir-dynamic_category_page</code> with the current implementation and statically traced the page route, controller queries, Article model, shared query/view helpers, EJS includes, feed/API scripts, role middleware, centralized errors, and CSS rules. Relative file links and in-document fragment targets were checked against this checkout.</p>
+<p>The examples above are illustrative. These checks did not run a browser, query a live MongoDB instance, or verify narrow/wide layouts visually. The browser exercise list remains a manual validation guide; the SSR/API tie-breaker and read-state differences are documented from current source.</p>
+</details>
+<p class="next">Search chapter complete. Continue building the page-by-page walkthroughs in this folder.</p>
+<p><a href="homepage-flow-walkthrough.html">Return to the homepage walkthrough</a> · <a href="#top">Back to the component list ↑</a></p>
+</section>
+</main>
+<footer>Documentation only · Diagrams use selectable HTML text and work offline · Source links are relative to this repository checkout.</footer>
+</body>
+</html>

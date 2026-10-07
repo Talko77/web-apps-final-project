@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="A component-by-component walkthrough of The Daily Web homepage, from the first HTML request to API responses and browser updates." name="description"/>
+<title>The Daily Web — Page Flow Walkthrough</title>
+<style>
+    /* Standalone documentation styles; these do not change the application. */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: #192b35; background: #f5f4f0; font: 17px/1.65 system-ui, sans-serif; }
+    a { color: #174f76; text-underline-offset: 3px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #9f253c; outline-offset: 4px; }
+    .skip { position: absolute; top: -100px; left: 16px; background: white; padding: 12px; z-index: 2; }
+    .skip:focus { top: 16px; }
+    header, main, footer { max-width: 1180px; margin: auto; padding: 32px 24px; }
+    header { padding-top: 48px; }
+    .eyebrow { color: #8c2337; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; }
+    h1 { font: 700 clamp(32px, 5vw, 54px)/1.12 Georgia, serif; margin: 12px 0 20px; }
+    h2 { font: 700 30px/1.25 Georgia, serif; margin: 8px 0 20px; }
+    h3 { font-size: 20px; line-height: 1.4; margin-top: 28px; }
+    p { margin: 12px 0; }
+    .intro { max-width: 78ch; font-size: 19px; }
+    .meta, .sources { font-size: 14px; color: #415460; }
+    main { padding-top: 0; }
+    nav, section { background: white; border: 1px solid #d5dddd; border-radius: 8px; padding: 28px; margin-bottom: 24px; }
+    section { scroll-margin-top: 20px; }
+    nav ol { columns: 2; padding-left: 24px; margin-bottom: 0; }
+    nav li { break-inside: avoid; margin: 8px 0; padding-right: 20px; }
+    .type { display: inline-block; color: #354e5b; font-size: 13px; font-weight: 750; text-transform: uppercase; letter-spacing: .04em; }
+    .rule, .note { padding: 16px 20px; margin: 20px 0; border-left: 4px solid #174f76; background: #edf4f8; }
+    .note { border-color: #95671c; background: #fcf6e9; }
+    code { font: .9em/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+    p code, li code, td code { background: #edf1f3; padding: 2px 4px; border-radius: 3px; }
+    pre { padding: 20px; background: #142d3a; color: #f2f7fa; border-radius: 6px; overflow-x: auto; font-size: 15px; }
+    pre code { background: transparent; overflow-wrap: normal; }
+    figure { margin: 24px 0; padding: 24px; background: #f6f8f8; border: 1px solid #d5dddd; border-radius: 6px; }
+    figcaption { font-weight: 750; margin-bottom: 18px; font-size: 17px; }
+    .flow { list-style: none; padding: 0; margin: 0; display: grid; gap: 38px; }
+    .flow > li { position: relative; background: white; border: 1px solid #b7c7cf; border-radius: 6px; padding: 18px; min-width: 0; }
+    .flow > li:not(:last-child)::after { content: '↓'; position: absolute; left: 50%; bottom: -35px; transform: translateX(-50%); font-size: 25px; color: #174f76; line-height: 30px; }
+    .flow .lane { color: #405561; display: block; font-size: 13px; font-weight: 750; letter-spacing: .03em; text-transform: uppercase; }
+    .flow strong { display: block; font-size: 18px; margin: 6px 0; line-height: 1.4; }
+    .flow p { margin: 6px 0 0; font-size: 16px; }
+    .table-wrap { overflow-x: auto; margin: 22px 0; border: 1px solid #d5dddd; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 16px; min-width: 570px; }
+    caption { text-align: left; font-weight: 750; padding: 14px; background: #f6f8f8; }
+    th, td { text-align: left; padding: 14px; vertical-align: top; border-bottom: 1px solid #d5dddd; }
+    th { background: #edf1f3; }
+    tr:last-child td { border-bottom: 0; }
+    details { margin: 20px 0; border: 1px solid #d5dddd; border-radius: 6px; padding: 16px 20px; }
+    summary { cursor: pointer; font-weight: 700; }
+    .file-tree { background: #f6f8f8; color: #192b35; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .sources { border-top: 1px solid #d5dddd; padding-top: 16px; }
+    .next { font-size: 16px; }
+    @media (min-width: 1024px) {
+      .flow--across { display: flex; gap: 30px; align-items: stretch; }
+      .flow--across > li { flex: 1; }
+      .flow--across > li:not(:last-child)::after { content: '→'; left: auto; bottom: auto; top: 50%; right: -27px; transform: translateY(-50%); }
+    }
+    @media (max-width: 767px) { nav ol { columns: 1; } h2 { font-size: 27px; } }
+    @media (max-width: 639px) {
+      header, main, footer { padding: 24px 16px; }
+      main { padding-top: 0; }
+      nav, section { padding: 20px 16px; }
+      figure { padding: 16px; }
+      .flow > li { padding: 16px; }
+      pre { padding: 16px; font-size: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: white; font-size: 11pt; }
+      header, main, footer { max-width: none; padding: 12px 0; }
+      nav, .skip { display: none; }
+      section { border: 0; border-bottom: 1px solid #aaa; padding: 20px 0; }
+      h2, h3, figcaption { break-after: avoid; }
+      .flow > li, tr { break-inside: avoid; }
+      .table-wrap { overflow: visible; }
+      table { min-width: 0; font-size: 10pt; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #eee; color: black; }
+      details > :not(summary) { display: block !important; }
+    }
+  </style>
+</head>
+<body id="top">
+<a class="skip" href="#homepage">Skip to the homepage walkthrough</a>
+<header>
+<p class="eyebrow">The Daily Web · Learn the app page by page</p>
+<h1>Homepage: from URL to HTML to updates</h1>
+<p class="intro">Yes, <code>/</code> is the homepage. This chapter follows each component separately: what starts it, which code runs, what data comes back, and what changes on the screen.</p>
+<p class="meta">Chapter 1 · <a href="search-flow-walkthrough.html">Chapter 2: Search</a> · Source checked on 7 October 2026 · Open this file directly in a browser; no server or internet required for the diagrams.</p>
+<p class="meta">Verification: statically compared <code>adir-dynamic_category_page</code> with the current implementation and traced routes, controllers, models, helpers, EJS, browser scripts, and stylesheet references. No live database, external weather, or browser integration run is claimed.</p>
+<p class="meta">This page-by-page walkthrough follows the active application sources; use the walkthrough index to explore the other pages.</p>
+<p class="meta"><a href="article-flow-walkthrough.html">Chapter 3: Article</a></p>
+<p class="next"><a href="login-flow-walkthrough.html">Staff login walkthrough →</a></p>
+<p class="next"><a href="reporter-flow-walkthrough.html">Reporter dashboard walkthrough →</a></p>
+<p class="next"><a href="editor-flow-walkthrough.html">Editor dashboard walkthrough →</a></p>
+<p class="next"><a href="reporter-create-flow-walkthrough.html">Reporter create article walkthrough →</a></p>
+<p class="next"><a href="editor-review-flow-walkthrough.html">Editor article review walkthrough →</a></p>
+<p><a href="walkthrough-index.html">All page walkthroughs</a></p></header>
+<main>
+<nav aria-label="Homepage walkthrough contents">
+<h2>Follow a component</h2>
+<ol>
+<li><a href="#homepage">The first request: GET /</a></li>
+<li><a href="#loaded-files">What loads into the page</a></li>
+<li><a href="#header">Header, navigation, and staff controls</a></li>
+<li><a href="#site-search">Header search</a></li>
+<li><a href="#logout">Sign Out</a></li>
+<li><a href="#breaking">Breaking strip</a></li>
+<li><a href="#lead">Lead story</a></li>
+<li><a href="#featured">Featured Stories</a></li>
+<li><a href="#dispatches">Latest Dispatches</a></li>
+<li><a href="#feed-initial">All Articles: initial cards</a></li>
+<li><a href="#feed-filters">All Articles: search, filters, and sorting</a></li>
+<li><a href="#feed-scroll">All Articles: infinite scroll</a></li>
+<li><a href="#feed-response">Feed JSON → card HTML</a></li>
+<li><a href="#weather">Weather widget</a></li>
+<li><a href="#most-read">Most Read</a></li>
+<li><a href="#footer">Footer</a></li>
+<li><a href="#article-click">What happens when a story opens</a></li>
+<li><a href="#errors">Loading, empty, and error outcomes</a></li>
+<li><a href="#practice">Trace it yourself in the browser</a></li>
+</ol>
+</nav>
+<section id="homepage">
+<span class="type">Start here · HTML response</span>
+<h2>1. The user enters /</h2>
+<p>The browser asks the server for a page. The server reads MongoDB, prepares data, and renders <code>views/pages/public/home.ejs</code>. EJS is a template that produces HTML; the browser receives its rendered result, not the EJS source.</p>
+<figure>
+<figcaption>The complete first-page request — read downward</figcaption>
+<ol class="flow">
+<li><span class="lane">Browser → server</span><strong>1. GET /</strong><p>For example, opening <code>http://localhost:3000/</code>. The browser includes its <code>connect.sid</code> cookie if it has one.</p></li>
+<li><span class="lane">server.js</span><strong>2. Express prepares the request</strong><p>Static-file middleware finds no homepage file to serve. Session middleware loads or creates the Mongo-backed session. <code>res.locals.currentUser</code> becomes the session user or <code>null</code>.</p></li>
+<li><span class="lane">routes/pages.js → controllers/pageController.js</span><strong>3. The homepage controller runs</strong><p><code>router.get('/', p.home)</code> selects <code>pageController.home</code>. There is no login requirement for this route.</p></li>
+<li><span class="lane">Mongoose → MongoDB</span><strong>4. Two article queries run in parallel</strong><p>Get the newest 20 stories for both the headline blocks and the initial feed, plus the 5 stories with the highest view counts. Both queries require <code>isPublished: true</code>.</p></li>
+<li><span class="lane">Controller → EJS</span><strong>5. Prepare locals and render the template</strong><p><code>toCard()</code> formats story data. <code>publicChrome()</code> adds shared values. <code>res.render('pages/public/home', ...)</code> combines the template, its partials, and these locals.</p></li>
+<li><span class="lane">Server → browser</span><strong>6. Receive HTML, load assets, then run scripts</strong><p>Headlines and the first feed cards are already in the HTML. CSS, scripts, and images load separately. Browser scripts attach feed controls and request weather.</p></li>
+</ol>
+</figure>
+<div class="rule"><strong>The initial homepage does not call the feed API.</strong> Its controller queries the Article model directly. Later browser interactions call <code>/api/articles/feed</code> and receive JSON.</div>
+<div class="table-wrap">
+<table>
+<caption>The two initial database results</caption>
+<thead><tr><th scope="col">Result</th><th scope="col">Database operation</th><th scope="col">Used by</th></tr></thead>
+<tbody>
+<tr><td><code>feed</code></td><td>Published articles, <code>{ publishedAt: -1, _id: -1 }</code>, limit 20; populate reporter name.</td><td>All Articles grid; the same mapped cards supply the lead, next 2 Featured Stories, and next 8 Latest Dispatches.</td></tr>
+<tr><td><code>mostRead</code></td><td>Published articles, <code>totalViews</code> descending, limit 5; select title, category, and views.</td><td>Most Read sidebar.</td></tr>
+</tbody>
+</table>
+</div>
+<p>The public content comes from <code>publishedVersion</code>. An already published story can still appear while its newer draft is under review: visibility depends on <code>isPublished</code>, rather than the draft’s workflow <code>status</code>.</p>
+<details>
+<summary>What exactly does the controller pass to home.ejs?</summary>
+<pre><code>res.locals.currentUser = req.session.user || null
+
+res.render('pages/public/home', {
+  pageTitle: 'The Daily Web — News',
+  editionLabel: /* formatted server date */,
+  showBreaking: true,
+  breakingText: 'Demo edition — all content on this site is sample data for the course project',
+  searchQuery: '',
+  categories: ['World', 'Business', 'Technology', 'Science',
+               'Culture', 'Sports', 'Opinion'],
+  featured: /* up to 3 formatted cards */,
+  dispatches: /* up to 8 compact story objects */,
+  mostRead: /* up to 5 title/category/views/link objects */,
+  feed: /* up to 20 formatted cards */,
+  hasMore: feed.length === 20
+})</code></pre>
+<p><strong>Locals</strong> are named values that EJS can read while creating HTML. This object stays on the server; it is not sent to the browser as a JSON response.</p>
+</details>
+<p class="sources">Sources: <a href="../../server.js">server.js</a> · <a href="../../routes/pages.js">routes/pages.js</a> · <a href="../../controllers/pageController.js">pageController.home, publicChrome, toCard</a> · <a href="../../models/Article.js">Article model</a></p>
+</section>
+<section id="loaded-files">
+<span class="type">Page composition · Assets</span>
+<h2>2. What loads into this HTML page?</h2>
+<p>The template includes reusable fragments on the server. Their markup becomes part of one HTML response. The browser then requests the CSS and JavaScript referenced in that response.</p>
+<pre class="file-tree"><code>views/pages/public/home.ejs
+├─ partials/shared/head.ejs
+│  ├─ charset, viewport, title, description
+│  ├─ /css/style.css
+│  └─ /js/api.js [defer]
+├─ partials/public/header-standard.ejs
+│  └─ partials/shared/site-logo.ejs
+├─ main: lead + featured + dispatches + feed + sidebar
+│  └─ partials/public/article-card.ejs [featured + initial feed]
+├─ partials/public/footer.ejs
+├─ /js/feed.js [defer]
+└─ /js/weather.js [defer]</code></pre>
+<figure>
+<figcaption>HTML references → separate browser asset requests</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Browser</span><strong>Parse the HTML</strong><p>Build the DOM: the browser’s tree of elements.</p></li>
+<li><span class="lane">Asset requests</span><strong>Load styles, scripts, images</strong><p>Express serves <code>/css/</code> and <code>/js/</code> from <code>public/</code>. Story images load from their stored URLs.</p></li>
+<li><span class="lane">Deferred scripts</span><strong>api.js → feed.js → weather.js</strong><p>After HTML parsing, classic deferred scripts run in document order. <code>window.api</code> is ready before the page scripts use it.</p></li>
+</ol>
+</figure>
+<p><code>style.css</code> imports Google Fonts and Material Symbols, then <code>variables.css → base.css → utilities.css → components.css → layouts.css → pages.css</code>. The browser may request font files from Google separately. Card images use <code>loading="lazy"</code>; the lead image does not.</p>
+<p><code>api.js</code> defines <code>getJSON</code>, <code>sendJSON</code>, <code>escapeHtml</code>, and <code>flash</code>, and attaches shared logout behavior. Loading this script does not itself fetch the feed or current user.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/home.ejs">home.ejs</a> · <a href="../../views/partials/shared/head.ejs">head.ejs</a> · <a href="../../public/css/style.css">style.css</a> · <a href="../../public/js/api.js">api.js</a></p>
+</section>
+<section id="header">
+<span class="type">Server-rendered component · Native navigation</span>
+<h2>3. Header, navigation, and staff controls</h2>
+<figure>
+<figcaption>Session identity determines the header HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Server</span><strong>Read the session user</strong><p><code>server.js</code> sets <code>currentUser</code> from <code>req.session.user</code>.</p></li>
+<li><span class="lane">EJS partial</span><strong>Choose the visible controls</strong><p>Guest: Staff Login. Signed-in staff: Newsroom and Sign Out. Logo, Home, and Search are shared.</p></li>
+<li><span class="lane">Browser</span><strong>Display links and controls</strong><p>Normal links request a new HTML page. The mobile menu opens through native <code>&lt;details&gt;</code>; no API is involved.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Where each header link goes</caption>
+<thead><tr><th scope="col">Control</th><th scope="col">Request / effect</th></tr></thead>
+<tbody>
+<tr><td>Logo or Home</td><td><code>GET /</code>; render the homepage again.</td></tr>
+<tr><td>Search link</td><td><code>GET /search</code>; open the search page.</td></tr>
+<tr><td>Staff Login</td><td><code>GET /staff/login</code>; open the login page.</td></tr>
+<tr><td>Newsroom</td><td>Editor → <code>GET /editor/reviews</code>; otherwise → <code>GET /reporter/articles</code>. Destination routes enforce staff roles on the server.</td></tr>
+<tr><td>Mobile menu</td><td>Locally expand/collapse navigation. Its links are Home, Search, and Staff Login, even when signed in.</td></tr>
+</tbody>
+</table></div>
+<p class="note">The controller computes and passes <code>editionLabel</code>, but the current header/logo markup does not display it. There is no homepage <code>/api/auth/me</code> request: identity comes from the rendered session data.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/header-standard.ejs">header-standard.ejs</a> · <a href="../../views/partials/shared/site-logo.ejs">site-logo.ejs</a> · <a href="../../middleware/auth.js">role middleware</a></p>
+</section>
+<section id="site-search">
+<span class="type">Header component · New HTML page</span>
+<h2>4. Header search: leave the homepage</h2>
+<figure>
+<figcaption>Submitting “Search the site”</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Browser form</span><strong>Type and press Enter</strong><p><code>#siteSearch</code> belongs to a GET form with <code>action="/search"</code> and field name <code>q</code>.</p></li>
+<li><span class="lane">Page route</span><strong>GET /search?q=climate</strong><p><code>routes/pages.js → pageController.search</code> searches published titles and prepares search-page locals.</p></li>
+<li><span class="lane">HTML response</span><strong>Replace the entire page</strong><p>The server renders <code>search-results.ejs</code>. The URL changes; the homepage is replaced by search results.</p></li>
+</ol>
+</figure>
+<p>This form works without JavaScript. Its <code>q</code> parameter differs from the feed API’s <code>search</code> parameter. The search page’s own interactions can be traced in a later chapter.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/header-standard.ejs">header search form</a> · <a href="../../controllers/pageController.js">pageController.search</a></p>
+</section>
+<section id="logout">
+<span class="type">Header component · JSON API + navigation</span>
+<h2>5. Sign Out</h2>
+<figure>
+<figcaption>Click → destroy session → return to /</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">api.js</span><strong>Click #logoutBtn</strong><p>The shared click handler disables the button and uses <code>sendJSON</code> to send <code>POST /api/auth/logout</code>, with no request body.</p></li>
+<li><span class="lane">Server</span><strong>Destroy the stored session</strong><p><code>routes/auth.js → authController.logout</code> destroys the session and clears <code>connect.sid</code>.</p></li>
+<li><span class="lane">JSON → browser</span><strong>Navigate to /</strong><p>Receive <code>{ success: true, redirect: '/' }</code>. <code>window.location.assign('/')</code> requests fresh HTML with the guest header.</p></li>
+</ol>
+</figure>
+<p>Logout also removes this session’s reading history. If the request fails, <code>api.js</code> re-enables the button; this handler does not show an error message.</p>
+<p class="sources">Sources: <a href="../../public/js/api.js">api.js logout handler</a> · <a href="../../routes/auth.js">auth routes</a> · <a href="../../controllers/authController.js">authController.logout</a></p>
+</section>
+<section id="breaking">
+<span class="type">Server-rendered component</span>
+<h2>6. Breaking strip</h2>
+<figure>
+<figcaption>The demo notice is rendered with the header</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>publicChrome() supplies values</strong><p><code>showBreaking: true</code> and a fixed course-project demo notice.</p></li>
+<li><span class="lane">Header partial</span><strong>Render the strip</strong><p>When <code>showBreaking</code> is true, output the “Breaking” badge and escaped <code>breakingText</code>.</p></li>
+<li><span class="lane">Browser</span><strong>Show the initial text</strong><p>No story query, API call, polling, or later text update belongs to this strip.</p></li>
+</ol>
+</figure>
+<p>Current text: “Demo edition — all content on this site is sample data for the course project”.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">publicChrome</a> · <a href="../../views/partials/public/header-standard.ejs">breaking strip markup</a></p>
+</section>
+<section id="lead">
+<span class="type">Server-rendered component · Story link</span>
+<h2>7. Lead story</h2>
+<figure>
+<figcaption>The newest published story becomes the lead</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Database → controller</span><strong>Take cards[0]</strong><p>The newest published story is formatted by <code>toCard()</code> and becomes <code>featured[0]</code>.</p></li>
+<li><span class="lane">home.ejs</span><strong>Render the lead article</strong><p>Image/category if an image exists; author, date, reading time, views, headline, summary, and “Read the full story”.</p></li>
+<li><span class="lane">Browser</span><strong>Show it; follow its link on click</strong><p>The link opens <code>/articles/:id</code> as a new page. No homepage API refreshes the lead.</p></li>
+</ol>
+</figure>
+<p>The controller receives the article document and populated reporter, then creates a display object with <code>title</code>, <code>summary</code>, <code>imageUrl</code>, <code>category</code>, <code>author</code>, <code>dateLabel</code>, <code>readLabel</code>, <code>views</code>, and <code>url</code>. Reading time is estimated at 200 words per minute, rounded, with a minimum of 1 minute.</p>
+<p>If there is no published story, the entire lead block is omitted. The image is loaded from <code>imageUrl</code> by the browser, not returned as image bytes in the page controller’s data.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">home and toCard</a> · <a href="../../views/pages/public/home.ejs">lead markup</a> · <a href="../../utils/viewMappers.js">readingLabel</a></p>
+</section>
+<section id="featured">
+<span class="type">Server-rendered component · Shared cards</span>
+<h2>8. Featured Stories</h2>
+<figure>
+<figcaption>The next two newest stories become featured cards</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>Prepare featured = cards.slice(0, 3)</strong><p>The first three newest stories include the lead and up to two secondary stories.</p></li>
+<li><span class="lane">EJS</span><strong>Use featured.slice(1)</strong><p>Render each secondary story with <code>partials/public/article-card.ejs</code>.</p></li>
+<li><span class="lane">Browser</span><strong>Display linked cards</strong><p>Each card opens its article page. Feed filters below do not change this section.</p></li>
+</ol>
+</figure>
+<p>Although the heading says “Editor’s Picks”, there is no manual featured flag or separate selection query here: these are selected by publication date. If there are no secondary stories, the section is omitted.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">home</a> · <a href="../../views/pages/public/home.ejs">featured section</a> · <a href="../../views/partials/public/article-card.ejs">article-card.ejs</a></p>
+</section>
+<section id="dispatches">
+<span class="type">Server-rendered component</span>
+<h2>9. Latest Dispatches</h2>
+<figure>
+<figcaption>Stories 4–11 become compact headline rows</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>Take cards.slice(3, 11)</strong><p>Map up to eight stories into <code>{ time, category, readTime, title, url }</code>.</p></li>
+<li><span class="lane">home.ejs</span><strong>Render dispatch rows</strong><p>Each row contains the formatted publication date/time, category, reading time, and a linked headline.</p></li>
+<li><span class="lane">Browser</span><strong>Keep these rows until navigation</strong><p>Headlines open article pages. No browser script periodically fetches new dispatches.</p></li>
+</ol>
+</figure>
+<p>“Live updates from the newsroom” is a display label. The implementation is a snapshot from the initial request, with no polling, WebSocket, or live refresh. The section still renders when its list is empty.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">home dispatches mapping</a> · <a href="../../views/pages/public/home.ejs">dispatches section</a></p>
+</section>
+<section id="feed-initial">
+<span class="type">Server-rendered component → browser state</span>
+<h2>10. All Articles: the initial cards</h2>
+<figure>
+<figcaption>The first 20 cards arrive inside the HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>Query the newest 20 published stories</strong><p>Map them through <code>toCard()</code> and add session-based <code>seen</code>. Set <code>hasMore</code> to whether exactly 20 were returned.</p></li>
+<li><span class="lane">EJS</span><strong>Render #feedGrid</strong><p>Include one card partial per story; set <code>data-page="1"</code> and <code>data-has-more="true"</code> or <code>"false"</code>.</p></li>
+<li><span class="lane">feed.js</span><strong>Read state and attach behavior</strong><p>Read page/hasMore into variables, attach input/select listeners, and observe <code>#feedSentinel</code>.</p></li>
+</ol>
+</figure>
+<p>The feed and lead/featured/dispatches share one query and one mapped card array, so the headline stories also appear in the feed. Category options come from <code>config/constants.js</code>, not an API.</p>
+<p class="note"><strong>Session reading state is included immediately:</strong> the homepage wraps <code>toCard()</code> results with <code>seen</code>, using <code>req.session.viewedArticles</code>. Initial feed and secondary featured cards therefore render the same <code>data-seen</code> state and “Read” badge as API-loaded cards. The lead and dispatch markup do not display a read badge.</p>
+<p>If there are zero published stories, the grid is empty, <code>hasMore</code> is false, and the initial status message is hidden. The “No articles match your search” message is shown after an API load returns an empty grid, not during this first render.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">home and toCard</a> · <a href="../../views/pages/public/home.ejs">feed grid and controls</a> · <a href="../../public/js/feed.js">feed initialization</a> · <a href="../../config/constants.js">FEED_PAGE_SIZE and CATEGORIES</a></p>
+</section>
+<section id="feed-filters">
+<span class="type">Browser interaction · JSON API · Replace grid</span>
+<h2>11. All Articles: search, filters, and sorting</h2>
+<p>Every feed control uses the same request-and-render flow. A filter change requests page 1 and replaces the cards in <code>#feedGrid</code>. The homepage URL and the other components stay as they are.</p>
+<figure>
+<figcaption>A control change → request → database → response → DOM update</figcaption>
+<ol class="flow">
+<li><span class="lane">Browser event</span><strong>1. Read all four controls</strong><p>Search input waits 300 ms after the last input event. Category, sort, and reading-status changes call <code>load(1, true)</code> immediately.</p></li>
+<li><span class="lane">feed.js → api.js</span><strong>2. GET /api/articles/feed?...</strong><p><code>params(1)</code> builds URL query parameters. <code>getJSON()</code> calls <code>fetch</code> with GET, <code>Accept: application/json</code>, and <code>credentials: 'same-origin'</code> so the session cookie is included. No request body.</p></li>
+<li><span class="lane">Server route → controller → MongoDB</span><strong>3. Find matching published articles</strong><p><code>routes/articles.js → articleController.getFeed → buildFeedQuery</code>. Apply title/category/reading-history filters, sorting, and a 20-article limit; populate reporter names.</p></li>
+<li><span class="lane">Server → browser</span><strong>4. Receive JSON</strong><p><code>{ page: 1, hasMore: boolean, articles: [...] }</code>. <code>api.js</code> parses JSON and throws an error for an unsuccessful HTTP status.</p></li>
+<li><span class="lane">feed.js → DOM</span><strong>5. Replace the feed’s cards</strong><p>Clear <code>grid.innerHTML</code>, build cards with <code>cardHtml()</code>, and insert them. Update the in-memory <code>page</code> and <code>hasMore</code>; show or hide the feed status.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Each control’s exact request and server behavior</caption>
+<thead><tr><th scope="col">Component / hook</th><th scope="col">Query parameter</th><th scope="col">What the server does</th></tr></thead>
+<tbody>
+<tr><td>Search the feed<br/><code>#feedSearch</code></td><td><code>search=climate</code><br/>Omitted when blank.</td><td>Match <code>publishedVersion.title</code> with an escaped, case-insensitive regular expression. Searches titles, not article bodies.</td></tr>
+<tr><td>Category<br/><code>#feedCategory</code></td><td><code>category=Technology</code><br/>Omitted for All Categories.</td><td>Match <code>publishedVersion.category</code> if the category is in <code>CATEGORIES</code>. Unknown categories are ignored.</td></tr>
+<tr><td>Sort by<br/><code>#feedSort</code></td><td><code>sortBy=publishedAt</code> or <code>sortBy=popularity</code></td><td>Newest: <code>publishedAt</code> descending, then <code>_id</code> descending. Popular: <code>totalViews</code> descending, then <code>publishedAt</code> descending, then <code>_id</code> descending. The ID breaks ties deterministically. Unrecognized sort values use newest.</td></tr>
+<tr><td>Reading status<br/><code>#feedSeen</code></td><td><code>seen=seen</code> or <code>seen=unseen</code><br/>Omitted for All.</td><td>Use IDs from <code>req.session.viewedArticles</code>: <code>$in</code> for Read, <code>$nin</code> for Unread. This works for guest sessions too.</td></tr>
+</tbody>
+</table></div>
+<p>Example request with several controls selected:</p>
+<pre><code>GET /api/articles/feed?page=1&amp;search=climate&amp;category=Science&amp;sortBy=popularity&amp;seen=unseen</code></pre>
+<p>Filters combine: this asks for unread Science stories whose titles match “climate”, with the most viewed first. The server derives reading history from the session; the browser does not submit a list of read IDs.</p>
+<details>
+<summary>Search the feed — its own component flow</summary>
+<figure>
+<figcaption>Example with the other controls at their defaults</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#feedSearch</span><strong>Type “climate”</strong><p>The input event restarts a 300 ms timer, then calls <code>load(1, true)</code>.</p></li>
+<li><span class="lane">Feed API</span><strong>Search published titles</strong><p><code>GET /api/articles/feed?page=1&amp;search=climate&amp;sortBy=publishedAt</code>. Match the escaped term, ignoring case.</p></li>
+<li><span class="lane">JSON → DOM</span><strong>Replace the feed with matches</strong><p>Use <code>articles</code> for cards and <code>page/hasMore</code> for pagination. Update the feed status; keep the URL at <code>/</code>.</p></li>
+</ol>
+</figure>
+</details>
+<details>
+<summary>Category — its own component flow</summary>
+<figure>
+<figcaption>Example with the other controls at their defaults</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#feedCategory</span><strong>Select Technology</strong><p>The change event immediately calls <code>load(1, true)</code>.</p></li>
+<li><span class="lane">Feed API</span><strong>Match the published category</strong><p><code>GET /api/articles/feed?page=1&amp;category=Technology&amp;sortBy=publishedAt</code>. Validate against <code>CATEGORIES</code>, then apply equality.</p></li>
+<li><span class="lane">JSON → DOM</span><strong>Replace the feed with Technology cards</strong><p>Use the returned cards and pagination state. Selecting All Categories removes the category parameter on the next request.</p></li>
+</ol>
+</figure>
+</details>
+<details>
+<summary>Sort by — its own component flow</summary>
+<figure>
+<figcaption>Example with the other controls at their defaults</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#feedSort</span><strong>Select Most Popular</strong><p>The change event immediately calls <code>load(1, true)</code>; sorting restarts at page 1.</p></li>
+<li><span class="lane">Feed API</span><strong>Sort by stored view totals</strong><p><code>GET /api/articles/feed?page=1&amp;sortBy=popularity</code>. Order by views descending, then publication date descending, then ID descending.</p></li>
+<li><span class="lane">JSON → DOM</span><strong>Replace the feed in response order</strong><p>The browser does not sort existing cards itself. Newest First requests <code>sortBy=publishedAt</code>.</p></li>
+</ol>
+</figure>
+</details>
+<details>
+<summary>Reading status — its own component flow</summary>
+<figure>
+<figcaption>Example with the other controls at their defaults</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#feedSeen</span><strong>Select Unread</strong><p>The change event immediately calls <code>load(1, true)</code>.</p></li>
+<li><span class="lane">Feed API + session</span><strong>Exclude this session’s read IDs</strong><p><code>GET /api/articles/feed?page=1&amp;sortBy=publishedAt&amp;seen=unseen</code>. Use <code>$nin</code> on <code>session.viewedArticles</code>.</p></li>
+<li><span class="lane">JSON → DOM</span><strong>Replace the feed with unread stories</strong><p>Read instead sends <code>seen=seen</code> and uses <code>$in</code>; matching cards show their “Read” badge. All removes the parameter.</p></li>
+</ol>
+</figure>
+</details>
+<p class="note"><strong>Changing filters during a slow request:</strong> replacement loads run even while another request is loading. Each increments <code>requestId</code>; only the newest request may insert cards, show an error, or clear <code>loading</code>. Older responses are ignored, though their network requests are not aborted. Infinite-scroll append loads remain blocked while loading. Search invalidates an older request when its 300 ms debounce starts the new load.</p>
+<p class="sources">Sources: <a href="../../public/js/feed.js">params, reset, load, listeners</a> · <a href="../../public/js/api.js">getJSON and request</a> · <a href="../../routes/articles.js">GET /feed route</a> · <a href="../../controllers/articleController.js">getFeed and buildFeedQuery</a> · <a href="../../utils/queries.js">shared escapeRegex helper</a></p>
+</section>
+<section id="feed-scroll">
+<span class="type">Browser observer · JSON API · Append cards</span>
+<h2>12. All Articles: infinite scroll</h2>
+<figure>
+<figcaption>Approaching the sentinel loads the next batch</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">IntersectionObserver</span><strong>Detect #feedSentinel nearby</strong><p><code>rootMargin: '400px'</code> expands the viewport’s observation area. If it intersects, <code>hasMore</code> is true, and no request is loading, call <code>load(page + 1, false)</code>.</p></li>
+<li><span class="lane">API → MongoDB</span><strong>Get the next 20 matches</strong><p>Keep current controls in the query. Page 2 skips 20; page 3 skips 40. The server uses <code>skip((page - 1) * 20).limit(20)</code>.</p></li>
+<li><span class="lane">feed.js → DOM</span><strong>Append, then update state</strong><p>With <code>replace=false</code>, retain existing cards and insert new ones at the end. Save the returned page/hasMore in JavaScript variables.</p></li>
+</ol>
+</figure>
+<p>The sentinel can trigger soon after page load if it is already within the observation area; scrolling is not required in that situation. This is the only way the initial feed starts a feed API request without a control change.</p>
+<p><code>hasMore</code> means “this batch contained 20”, not “the server counted another page”. If there are exactly 20 matches, the next request returns an empty batch, sets <code>hasMore: false</code>, and shows “You have reached the end of the feed.”</p>
+<p class="note">Without <code>IntersectionObserver</code>, the script does not attach infinite scroll and has no “Load more” fallback. The initial cards still display. After loads, the original <code>data-page</code> / <code>data-has-more</code> HTML attributes stay unchanged; the updated state lives in the script’s variables.</p>
+<p class="sources">Sources: <a href="../../public/js/feed.js">observer and load</a> · <a href="../../controllers/articleController.js">getFeed pagination</a></p>
+</section>
+<section id="feed-response">
+<span class="type">API contract · Shared card rendering</span>
+<h2>13. What does the feed receive, and how does it become HTML?</h2>
+<p>This is an illustrative successful response, with sample values rather than a live database capture. The field names match <code>getFeed</code>:</p>
+<pre><code>{
+  "page": 1,
+  "hasMore": false,
+  "articles": [
+    {
+      "_id": "507f1f77bcf86cd799439011",
+      "title": "A sample Science headline",
+      "summary": "A short sample summary.",
+      "category": "Science",
+      "imageUrl": "https://example.com/story.jpg",
+      "imageAlt": "A sample Science headline",
+      "dateLabel": "Today, 10:42",
+      "datetime": "2026-10-06T07:42:00.000Z",
+      "views": "1.2k",
+      "readLabel": "3 min read",
+      "reporterName": "Elena Vasquez",
+      "seen": false
+    }
+  ]
+}</code></pre>
+<figure>
+<figcaption>JSON data → escaped card markup → visible card</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">API response</span><strong>Receive display-ready fields</strong><p>The server formats dates and views, resolves reporter names, and marks whether each ID was read in this session.</p></li>
+<li><span class="lane">feed.js cardHtml()</span><strong>Build one card per object</strong><p>Escape text with <code>api.escapeHtml</code>. Create the link, optional image/summary, metadata, footer, and optional “Read” badge.</p></li>
+<li><span class="lane">#feedGrid</span><strong>Insert the new DOM elements</strong><p><code>insertAdjacentHTML('beforeend', ...)</code> adds cards. No EJS runs in the browser and no full-page reload happens.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Initial EJS cards and later JavaScript cards use different data names</caption>
+<thead><tr><th scope="col">Display</th><th scope="col">Initial EJS input</th><th scope="col">API / JavaScript input</th></tr></thead>
+<tbody>
+<tr><td>ID and story link</td><td><code>id</code>, <code>url</code></td><td><code>_id</code>; script constructs <code>/articles/:id</code>.</td></tr>
+<tr><td>Reporter</td><td><code>author</code></td><td><code>reporterName</code></td></tr>
+<tr><td>Title, summary, category, image, date, views</td><td>Formatted by <code>toCard()</code>.</td><td>Same display fields, formatted by <code>getFeed()</code>.</td></tr>
+<tr><td>Reading time</td><td><code>readLabel</code> is included.</td><td><code>readLabel</code> is included, computed from published content.</td></tr>
+<tr><td>“Read” badge</td><td><code>seen</code> is added by <code>home</code> from session history.</td><td><code>seen</code> is included from session history.</td></tr>
+</tbody>
+</table></div>
+<p>The API fetches <code>publishedVersion.content</code> to calculate reading time, but does not return the body in JSON. Both paths use <code>readingLabel()</code> and <code>reporterName()</code> from <code>utils/viewMappers.js</code>; the reporter helper uses display name, then username, or “Unknown” when the populated account is missing. The EJS partial and <code>cardHtml()</code> produce the same card structure and display fields.</p>
+<p class="sources">Sources: <a href="../../controllers/articleController.js">getFeed response mapping</a> · <a href="../../controllers/pageController.js">toCard</a> · <a href="../../views/partials/public/article-card.ejs">EJS card</a> · <a href="../../public/js/feed.js">cardHtml</a> · <a href="../../utils/viewMappers.js">readingLabel and reporterName</a></p>
+</section>
+<section id="weather">
+<span class="type">Browser startup · JSON API · External service</span>
+<h2>14. Weather widget</h2>
+<p>The initial HTML contains an empty <code>&lt;div id="weatherWidget"&gt;</code>. Unlike the stories, weather content is filled after JavaScript runs.</p>
+<figure>
+<figcaption>One browser request; the server chooses fresh, cached, or fallback data</figcaption>
+<ol class="flow">
+<li><span class="lane">weather.js → api.js</span><strong>1. GET /api/weather</strong><p>On script execution, find <code>#weatherWidget</code> and request JSON using the shared helper. No query parameters or request body.</p></li>
+<li><span class="lane">routes/weather.js → weatherController.getWeather</span><strong>2. Is the in-process cache less than 15 minutes old?</strong><p>Yes → return it with <code>source: 'cache'</code> and <code>ageSeconds</code>. No → check whether the last lookup failed less than one minute ago. During that cooldown, return stale-cache/fallback immediately; otherwise attempt an external lookup.</p></li>
+<li><span class="lane">Server → OpenWeatherMap</span><strong>3. Fetch current weather, if needed</strong><p>Use <code>WEATHER_CITY</code> (default Tel Aviv), metric units, English, and server-side <code>WEATHER_API_KEY</code>. Abort after 5 seconds. Concurrent requests share the same <code>inFlight</code> promise.</p></li>
+<li><span class="lane">Server → browser</span><strong>4. Return a normalized JSON payload</strong><p>Success → store the result in memory and return <code>source: 'api'</code>. Lookup failure → record <code>failedAt</code> and return old data as <code>'stale-cache'</code>, or fixed fallback data as <code>'fallback'</code>. Subsequent requests avoid the external service for 60 seconds.</p></li>
+<li><span class="lane">weather.js → DOM</span><strong>5. Fill #weatherWidget</strong><p>Escape values and set <code>widget.innerHTML</code>: city, temperature, condition, optional feels-like/humidity, and “Data may be stale” for stale-cache/fallback.</p></li>
+</ol>
+</figure>
+<p>Illustrative fresh response:</p>
+<pre><code>{
+  "source": "api",
+  "ageSeconds": 0,
+  "data": {
+    "city": "Tel Aviv",
+    "temp": 27,
+    "feelsLike": 29,
+    "humidity": 65,
+    "condition": "clear sky",
+    "icon": "01d"
+  }
+}</code></pre>
+<div class="table-wrap"><table>
+<caption>The four weather response paths</caption>
+<thead><tr><th scope="col">source</th><th scope="col">What data is returned?</th><th scope="col">What appears?</th></tr></thead>
+<tbody>
+<tr><td><code>api</code></td><td>Fresh normalized external result; <code>ageSeconds: 0</code>.</td><td>Temperature, city, condition, feels-like, humidity.</td></tr>
+<tr><td><code>cache</code></td><td>Result younger than 15 minutes; calculated <code>ageSeconds</code>.</td><td>Same display. The script does not show the age.</td></tr>
+<tr><td><code>stale-cache</code></td><td>Old cached result after a failed lookup or during its 60-second cooldown; no <code>ageSeconds</code> field.</td><td>Same display plus “Data may be stale”.</td></tr>
+<tr><td><code>fallback</code></td><td><code>{ city: 'Tel Aviv', temp: null, condition: 'Weather data is unavailable right now', icon: '01d' }</code></td><td><code>--</code> temperature, unavailable text, and “Data may be stale”.</td></tr>
+</tbody>
+</table></div>
+<p>The external service’s API key stays on the server. Weather is not stored in MongoDB; the cache disappears when the Node process restarts. The response contains <code>icon</code>, but the widget does not render it.</p>
+<p class="note">The script makes one request per page load; it does not refresh itself every 15 minutes. That duration controls server cache freshness. External lookup failures return fallback/stale JSON successfully; a failure to reach the app’s weather endpoint instead triggers the browser catch handler and shows “Weather data is unavailable right now.”</p>
+<p class="sources">Sources: <a href="../../public/js/weather.js">weather.js</a> · <a href="../../routes/weather.js">weather route</a> · <a href="../../controllers/weatherController.js">weatherController.js</a></p>
+</section>
+<section id="most-read">
+<span class="type">Server-rendered component</span>
+<h2>15. Most Read</h2>
+<figure>
+<figcaption>Stored view totals determine the sidebar ranking</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">MongoDB</span><strong>Get the 5 highest totals</strong><p>Query published articles, sort by <code>totalViews: -1</code>, and select title/category/views.</p></li>
+<li><span class="lane">Controller → EJS</span><strong>Format and rank</strong><p>Map each story to <code>{ url, title, category, views }</code>. The template displays rank <code>index + 1</code>.</p></li>
+<li><span class="lane">Browser</span><strong>Show the ranked list</strong><p>Clicking a title opens an article. Homepage feed sorting does not reorder this sidebar.</p></li>
+</ol>
+</figure>
+<p>The totals are cumulative stored views, not a “today” or “this week” window. Opening the homepage or loading feed cards does not increment article views. The list does not update until a new homepage render.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">home mostRead query/mapping</a> · <a href="../../views/pages/public/home.ejs">Most Read list</a></p>
+</section>
+<section id="footer">
+<span class="type">Static included component</span>
+<h2>16. Footer</h2>
+<figure>
+<figcaption>Shared footer markup becomes part of the initial HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">home.ejs</span><strong>Include the footer partial</strong><p><code>partials/public/footer.ejs</code> is inserted before the page’s script tags.</p></li>
+<li><span class="lane">EJS → HTML</span><strong>Output fixed publication text</strong><p>The Daily Web title, course-project description, and demo-content disclaimer.</p></li>
+<li><span class="lane">Browser</span><strong>Display the footer</strong><p>No database data, API calls, or browser update logic belongs to this component.</p></li>
+</ol>
+</figure>
+<p class="sources">Source: <a href="../../views/partials/public/footer.ejs">footer.ejs</a></p>
+</section>
+<section id="article-click">
+<span class="type">Shared story links · Next-page boundary</span>
+<h2>17. What happens when a story opens?</h2>
+<p>The lead, featured cards, dispatches, feed cards, and Most Read titles all point to <code>/articles/:id</code>. Following a story link starts a page request, not <code>GET /api/articles/:id</code> (that API serves staff editing/review).</p>
+<figure>
+<figcaption>Reading a story supplies the feed’s later read/unread state</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Browser</span><strong>GET /articles/:id</strong><p>Follow the story link with the same session cookie.</p></li>
+<li><span class="lane">pageController.articlePage</span><strong>Load the published story and track the visit</strong><p>Add the ID to <code>session.viewedArticles</code> (up to 500 unique IDs). Start atomic increments for <code>Article.totalViews</code> and the hourly Analytics bucket.</p></li>
+<li><span class="lane">HTML response / later feed API</span><strong>Render the article; remember it as read</strong><p>The article page replaces the homepage. Later feed API calls use the stored session IDs for Read/Unread filters and badges.</p></li>
+</ol>
+</figure>
+<p>View increments run without delaying the article render; repeated article-page visits also count as views. Returning with a fresh <code>GET /</code> re-queries the homepage, subject to those asynchronous increments completing. Initial feed and secondary featured cards now reflect the saved session reading history. The article view increment uses <code>{ timestamps: false }</code>, so reading does not alter the article’s <code>updatedAt</code> or reorder newsroom lists.</p>
+<p class="sources">Sources: <a href="../../routes/pages.js">article page route</a> · <a href="../../controllers/pageController.js">articlePage</a> · <a href="../../controllers/articleController.js">session-aware feed query</a></p>
+</section>
+<section id="errors">
+<span class="type">Response branches · User-visible outcomes</span>
+<h2>18. Loading, empty, and error outcomes</h2>
+<figure>
+<figcaption>Feed status follows the API request outcome</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Before request</span><strong>Show “Loading articles...”</strong><p><code>api.flash(#feedStatus, ...)</code> sets text and removes <code>.state-hidden</code>. Existing cards remain while waiting.</p></li>
+<li><span class="lane">Response check</span><strong>Success or error?</strong><p>Success → insert returned cards and inspect grid/hasMore. Error → catch the thrown request error.</p></li>
+<li><span class="lane">Status / grid</span><strong>Show the matching outcome</strong><p>Empty grid → no matches. No more pages → end of feed. More pages → hide status. Error → show error text and keep existing cards.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Failures and their boundaries</caption>
+<thead><tr><th scope="col">Situation</th><th scope="col">Response / screen behavior</th></tr></thead>
+<tbody>
+<tr><td>Homepage database query throws</td><td><code>asyncHandler → errorHandler</code>; normally HTTP 500 with the server-rendered error page rather than the homepage.</td></tr>
+<tr><td>Feed database query throws</td><td>HTTP 500 JSON <code>{ error: 'Something went wrong on our side. Please try again later.' }</code>; message appears in <code>#feedStatus</code>.</td></tr>
+<tr><td>Feed HTTP request fails</td><td><code>api.js</code> uses the JSON <code>error</code> message, or <code>Request failed (status)</code> if unavailable. Network errors also reach the feed catch handler.</td></tr>
+<tr><td>Filter returns no cards</td><td>After a successful replacement, show “No articles match your search.”</td></tr>
+<tr><td>Feed has no next page</td><td>Show “You have reached the end of the feed.” and stop observer requests while <code>hasMore</code> is false.</td></tr>
+<tr><td>OpenWeatherMap is unavailable</td><td>Return stale-cache/fallback JSON; update the widget with a stale-data note.</td></tr>
+<tr><td>App’s weather endpoint cannot be fetched</td><td>Display the weather-unavailable message in the widget.</td></tr>
+<tr><td>JavaScript is disabled</td><td>Initial stories, Most Read, header, footer, story links, header GET search, and native mobile menu work. Feed filters, infinite scroll, and Sign Out do not run; weather stays empty.</td></tr>
+</tbody>
+</table></div>
+<p><code>api.flash()</code> does not clear its message on a timer; the feed controls its next status update. All feed updates are confined to <code>#feedGrid</code> and <code>#feedStatus</code>.</p>
+<p class="sources">Sources: <a href="../../utils/asyncHandler.js">asyncHandler</a> · <a href="../../middleware/errorHandler.js">errorHandler</a> · <a href="../../public/js/api.js">request and flash</a> · <a href="../../public/js/feed.js">load outcomes</a></p>
+</section>
+<section id="practice">
+<span class="type">Learning checkpoint</span>
+<h2>19. Trace it yourself in the browser</h2>
+<ol>
+<li>Run the app and open <code>/</code>. In DevTools → Network, reload. Find the document request for <code>/</code> and open its Response: the lead and initial article cards are already HTML.</li>
+<li>Find <code>api.js</code>, <code>feed.js</code>, <code>weather.js</code>, <code>style.css</code>, and the imported CSS/font/image requests. Filter by Fetch/XHR to find <code>/api/weather</code>.</li>
+<li>Type in <strong>Search the feed</strong>. After the debounce, inspect <code>/api/articles/feed?page=1...</code>: query parameters are the inputs; its JSON <code>articles</code> are the outputs. Watch only the All Articles cards change.</li>
+<li>Change category, sorting, and reading status one at a time. Compare their parameter names and response cards against the table above.</li>
+<li>Clear filters and scroll near the bottom. Inspect <code>page=2</code>. New cards append instead of replacing the grid.</li>
+<li>Open a story, return to the homepage, and select Read. The next feed API response should include that story with <code>seen: true</code>, and its initial homepage card should already have a Read badge.</li>
+<li>Submit the header’s <strong>Search the site</strong> form. Observe a document request for <code>/search?q=...</code> and a URL change.</li>
+</ol>
+<div class="rule"><strong>Four questions to ask for every component:</strong> What triggers it? Which route/controller/script handles it? What data does it receive? Which HTML or DOM elements change?</div>
+<p class="next">Homepage chapter complete. Future page walkthroughs can be added to this document as we work through the app.</p>
+<p><a href="#top">Back to the component list ↑</a></p>
+</section>
+</main>
+<footer>Documentation only · Diagrams use selectable HTML text and work offline · Source links are relative to this repository checkout.</footer>
+</body>
+</html>

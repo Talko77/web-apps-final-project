@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="A component-by-component walkthrough of The Daily Web article page: approved story HTML, view tracking, comment APIs, editor moderation, and weather." name="description"/>
+<title>The Daily Web — Article Flow Walkthrough</title>
+<style>
+    /* Standalone documentation styles; these do not change the application. */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: #192b35; background: #f5f4f0; font: 17px/1.65 system-ui, sans-serif; }
+    a { color: #174f76; text-underline-offset: 3px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #9f253c; outline-offset: 4px; }
+    .skip { position: absolute; top: -100px; left: 16px; background: white; padding: 12px; z-index: 2; }
+    .skip:focus { top: 16px; }
+    header, main, footer { max-width: 1180px; margin: auto; padding: 32px 24px; }
+    header { padding-top: 48px; }
+    .eyebrow { color: #8c2337; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; }
+    h1 { font: 700 clamp(32px, 5vw, 54px)/1.12 Georgia, serif; margin: 12px 0 20px; }
+    h2 { font: 700 30px/1.25 Georgia, serif; margin: 8px 0 20px; }
+    h3 { font-size: 20px; line-height: 1.4; margin-top: 28px; }
+    p { margin: 12px 0; }
+    .intro { max-width: 78ch; font-size: 19px; }
+    .meta, .sources { font-size: 14px; color: #415460; }
+    main { padding-top: 0; }
+    nav, section { background: white; border: 1px solid #d5dddd; border-radius: 8px; padding: 28px; margin-bottom: 24px; }
+    section { scroll-margin-top: 20px; }
+    nav ol { columns: 2; padding-left: 24px; margin-bottom: 0; }
+    nav li { break-inside: avoid; margin: 8px 0; padding-right: 20px; }
+    .type { display: inline-block; color: #354e5b; font-size: 13px; font-weight: 750; text-transform: uppercase; letter-spacing: .04em; }
+    .rule, .note { padding: 16px 20px; margin: 20px 0; border-left: 4px solid #174f76; background: #edf4f8; }
+    .note { border-color: #95671c; background: #fcf6e9; }
+    code { font: .9em/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+    p code, li code, td code { background: #edf1f3; padding: 2px 4px; border-radius: 3px; }
+    pre { padding: 20px; background: #142d3a; color: #f2f7fa; border-radius: 6px; overflow-x: auto; font-size: 15px; }
+    pre code { background: transparent; overflow-wrap: normal; }
+    figure { margin: 24px 0; padding: 24px; background: #f6f8f8; border: 1px solid #d5dddd; border-radius: 6px; }
+    figcaption { font-weight: 750; margin-bottom: 18px; font-size: 17px; }
+    .flow { list-style: none; padding: 0; margin: 0; display: grid; gap: 38px; }
+    .flow > li { position: relative; background: white; border: 1px solid #b7c7cf; border-radius: 6px; padding: 18px; min-width: 0; }
+    .flow > li:not(:last-child)::after { content: '↓'; position: absolute; left: 50%; bottom: -35px; transform: translateX(-50%); font-size: 25px; color: #174f76; line-height: 30px; }
+    .flow .lane { color: #405561; display: block; font-size: 13px; font-weight: 750; letter-spacing: .03em; text-transform: uppercase; }
+    .flow strong { display: block; font-size: 18px; margin: 6px 0; line-height: 1.4; overflow-wrap: anywhere; }
+    .flow p { margin: 6px 0 0; font-size: 16px; }
+    .table-wrap { overflow-x: auto; margin: 22px 0; border: 1px solid #d5dddd; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 16px; min-width: 570px; }
+    caption { text-align: left; font-weight: 750; padding: 14px; background: #f6f8f8; }
+    th, td { text-align: left; padding: 14px; vertical-align: top; border-bottom: 1px solid #d5dddd; }
+    th { background: #edf1f3; }
+    tr:last-child td { border-bottom: 0; }
+    details { margin: 20px 0; border: 1px solid #d5dddd; border-radius: 6px; padding: 16px 20px; }
+    summary { cursor: pointer; font-weight: 700; }
+    .file-tree { background: #f6f8f8; color: #192b35; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .sources { border-top: 1px solid #d5dddd; padding-top: 16px; }
+    .next { font-size: 16px; }
+    @media (min-width: 1024px) {
+      .flow--across { display: flex; gap: 30px; align-items: stretch; }
+      .flow--across > li { flex: 1; }
+      .flow--across > li:not(:last-child)::after { content: '→'; left: auto; bottom: auto; top: 50%; right: -27px; transform: translateY(-50%); }
+    }
+    @media (max-width: 767px) { nav ol { columns: 1; } h2 { font-size: 27px; } }
+    @media (max-width: 639px) {
+      header, main, footer { padding: 24px 16px; }
+      main { padding-top: 0; }
+      nav, section { padding: 20px 16px; }
+      figure { padding: 16px; }
+      .flow > li { padding: 16px; }
+      pre { padding: 16px; font-size: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: white; font-size: 11pt; }
+      header, main, footer { max-width: none; padding: 12px 0; }
+      nav, .skip { display: none; }
+      section { border: 0; border-bottom: 1px solid #aaa; padding: 20px 0; }
+      h2, h3, figcaption { break-after: avoid; }
+      .flow > li, tr { break-inside: avoid; }
+      .table-wrap { overflow: visible; }
+      table { min-width: 0; font-size: 10pt; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #eee; color: black; }
+      details > :not(summary) { display: block !important; }
+    }
+  </style>
+</head>
+<body id="top">
+<a class="skip" href="#article-request">Skip to the article walkthrough</a>
+<header>
+<p class="eyebrow">The Daily Web · Learn the app page by page</p>
+<h1>Article: read the story, follow the discussion</h1>
+<p class="intro">The public article page lives at <code>/articles/:id</code>. Follow the initial HTML request, each reading component, view tracking, comment requests and updates, editor moderation, and weather.</p>
+<p class="meta">Chapter 3 · Source checked on 7 October 2026 · Open directly in a browser; the diagrams work offline.</p>
+<p class="meta"><a href="homepage-flow-walkthrough.html">Chapter 1: Homepage</a> · <a href="search-flow-walkthrough.html">Chapter 2: Search</a> · <a href="../../README.md">Project README</a></p>
+<p class="next"><a href="login-flow-walkthrough.html">Staff login walkthrough →</a></p>
+<p class="next"><a href="reporter-flow-walkthrough.html">Reporter dashboard walkthrough →</a></p>
+<p class="next"><a href="editor-flow-walkthrough.html">Editor dashboard walkthrough →</a></p>
+<p class="next"><a href="reporter-create-flow-walkthrough.html">Reporter create article walkthrough →</a></p>
+<p class="next"><a href="editor-review-flow-walkthrough.html">Editor article review walkthrough →</a></p>
+<p><a href="walkthrough-index.html">All page walkthroughs</a></p></header>
+<main>
+<nav aria-label="Article walkthrough contents">
+<h2>Follow a component</h2>
+<ol>
+<li><a href="#article-request">The first request: GET /articles/:id</a></li>
+<li><a href="#loaded-files">What loads into this page</a></li>
+<li><a href="#header">Header, navigation, and header search</a></li>
+<li><a href="#breadcrumb">Breadcrumb links</a></li>
+<li><a href="#headline">Headline, summary, category, and update label</a></li>
+<li><a href="#byline">Byline, date, and reading time</a></li>
+<li><a href="#tracking">Views and session reading history</a></li>
+<li><a href="#media">Article image</a></li>
+<li><a href="#body-copy">Story paragraphs</a></li>
+<li><a href="#tags">Filed under links</a></li>
+<li><a href="#related">More on this story</a></li>
+<li><a href="#comments-thread">Initial comments and comment count</a></li>
+<li><a href="#comment-name">Optional name</a></li>
+<li><a href="#comment-text">Comment text and character counter</a></li>
+<li><a href="#post-comment">Post Comment: request → save → update</a></li>
+<li><a href="#comment-contract">Comment JSON and server limits</a></li>
+<li><a href="#edit-comment">Editor: Edit and Save</a></li>
+<li><a href="#delete-comment">Editor: Delete</a></li>
+<li><a href="#weather">Weather widget</a></li>
+<li><a href="#breaking">Breaking strip</a></li>
+<li><a href="#logout">Staff controls and Sign Out</a></li>
+<li><a href="#footer">Footer</a></li>
+<li><a href="#errors">Errors, empty states, and no JavaScript</a></li>
+<li><a href="#practice">Trace it yourself</a></li>
+</ol>
+</nav>
+<section id="article-request">
+<span class="type">Start here · Public HTML page</span>
+<h2>1. The user opens /articles/:id</h2>
+<p><code>:id</code> is the article’s MongoDB identifier. For example, a card link can open <code>/articles/507f1f77bcf86cd799439011</code>. Guests can read the page without signing in.</p>
+<figure>
+<figcaption>Document request → published story → comments/related queries → HTML</figcaption>
+<ol class="flow">
+<li><span class="lane">Browser → Express</span><strong>1. GET /articles/:id</strong><p>Send the URL and session cookie, if present. Session middleware prepares <code>req.session</code> and <code>res.locals.currentUser</code>.</p></li>
+<li><span class="lane">routes/pages.js → pageController.articlePage</span><strong>2. Find this published article</strong><p><code>Article.findOne({ _id: req.params.id, isPublished: true })</code>, populate the reporter name, then <code>lean()</code>. No matching published story → continue to the 404 handler.</p></li>
+<li><span class="lane">MongoDB queries in parallel</span><strong>3. Load the discussion and related stories</strong><p>Get the newest 50 comments for this article, and up to 3 other published articles in the same category, newest first.</p></li>
+<li><span class="lane">Controller side effects</span><strong>4. Start view increments; mark the ID as read</strong><p>Increment the article total and hourly Analytics bucket asynchronously, without changing the article’s <code>updatedAt</code>. Add the ID to the session’s tracked read IDs, keeping at most 500.</p></li>
+<li><span class="lane">Controller → EJS → browser</span><strong>5. Render a complete document</strong><p><code>res.render('pages/public/article', ...)</code> supplies the mapped story, paragraphs, tags, related cards, and comments. The headline, body, and discussion are already HTML before browser scripts run.</p></li>
+</ol>
+</figure>
+<div class="rule"><strong>The public page reads the Article model directly.</strong> It does not fetch <code>GET /api/articles/:id</code>; that separate API is for staff editing/review. The browser also does not fetch the initial comments through the comments API.</div>
+<p>The story comes from <code>publishedVersion</code>. A newer draft awaiting approval does not replace the approved public copy. Visibility is determined by <code>isPublished</code>, not the draft’s workflow <code>status</code>.</p>
+<details>
+<summary>Which values does article.ejs receive?</summary>
+<pre><code>res.locals.currentUser = req.session.user || null
+
+res.render('pages/public/article', {
+  pageTitle: /* published title */,
+  editionLabel: /* formatted server date */,
+  showBreaking: true,
+  breakingText: /* course-project demo notice */,
+  searchQuery: '',
+  categories: /* configured categories */,
+  article: {
+    id, title, summary, paragraphs, category,
+    imageUrl, imageAlt, reporterName, initials,
+    dateLabel, datetime, readLabel, views, updateCount
+  },
+  tags: /* category as a one-item array, or [] */,
+  related: /* up to 3 toCard() objects */,
+  commentsCount: /* loaded comments.length, at most 50 initially */,
+  comments: /* { id, initials, author, datetime, dateLabel, text }[] */
+})</code></pre>
+<p>These are template locals on the server. The browser receives their rendered HTML rather than this object as JSON.</p>
+</details>
+<p class="sources">Sources: <a href="../../server.js">server.js</a> · <a href="../../routes/pages.js">page routes</a> · <a href="../../controllers/pageController.js">articlePage and publicChrome</a> · <a href="../../models/Article.js">Article model</a></p>
+</section>
+<section id="loaded-files">
+<span class="type">Page composition · Assets and script order</span>
+<h2>2. What loads into this HTML page?</h2>
+<pre class="file-tree"><code>views/pages/public/article.ejs
+├─ partials/shared/head.ejs
+│  ├─ charset, viewport, published title, default description
+│  ├─ /css/style.css
+│  └─ /js/api.js [defer]
+├─ partials/public/header-standard.ejs
+│  └─ partials/shared/site-logo.ejs
+├─ main
+│  ├─ breadcrumbs + article header/byline + optional media
+│  ├─ escaped paragraphs + category tags
+│  ├─ related stories → partials/public/article-card.ejs
+│  ├─ comment form + counter/status + initial discussion
+│  │  └─ partials/comments/comment-item.ejs
+│  └─ weather sidebar → empty #weatherWidget
+├─ partials/public/footer.ejs
+├─ /js/comments.js [defer]
+└─ /js/weather.js [defer]</code></pre>
+<figure>
+<figcaption>One rendered document, then separate asset requests</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">EJS on server</span><strong>Combine template and partials</strong><p>Escaped data and included markup form one HTML response.</p></li>
+<li><span class="lane">Browser</span><strong>Load CSS, scripts, and images</strong><p>Express serves local assets from <code>public/</code>. Image URLs and Google font dependencies load separately.</p></li>
+<li><span class="lane">Deferred scripts</span><strong>api.js → comments.js → weather.js</strong><p>After parsing, define <code>window.api</code>; initialize comment controls/moderation; request weather.</p></li>
+</ol>
+</figure>
+<p><code>style.css</code> imports fonts, then <code>variables → base → utilities → components → layouts → pages</code>. Article-specific presentation uses <code>.article-page*</code> and <code>.article-comments*</code> rules; shared comments use <code>.comment-item*</code>.</p>
+<p>This page does not load <code>feed.js</code>. Related stories are a fixed server-rendered list. The shared head uses the published title as the document title; the controller does not supply a custom article-specific meta description.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/article.ejs">article.ejs</a> · <a href="../../views/partials/shared/head.ejs">head.ejs</a> · <a href="../../public/css/style.css">style.css</a> · <a href="../../public/js/api.js">api.js</a></p>
+</section>
+<section id="header">
+<span class="type">Shared components · Native navigation</span>
+<h2>3. Header, navigation, and header search</h2>
+<figure>
+<figcaption>Header links start another page request</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Session → EJS</span><strong>Render the public header</strong><p>Use <code>currentUser</code> for staff controls. Logo and Home link to <code>/</code>; Search links to <code>/search</code>.</p></li>
+<li><span class="lane">Browser click</span><strong>Follow an ordinary link</strong><p>The mobile menu opens through native <code>&lt;details&gt;</code> and contains Home, Search, and Staff Login.</p></li>
+<li><span class="lane">HTML navigation</span><strong>Replace the article document</strong><p>No API is involved in ordinary header navigation. Destination newsroom routes enforce session roles.</p></li>
+</ol>
+</figure>
+<figure>
+<figcaption>Header search is a separate GET form</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#siteSearch</span><strong>Type a headline term and press Enter</strong><p>The article page initializes this input to blank. The form has <code>name="q"</code>, <code>action="/search"</code>, and <code>method="get"</code>.</p></li>
+<li><span class="lane">Page route</span><strong>GET /search?q=climate</strong><p><code>pageController.search</code> searches published titles and renders the search page.</p></li>
+<li><span class="lane">Browser</span><strong>Show search results as a new document</strong><p>The article is replaced. This form works without JavaScript and does not filter the article body.</p></li>
+</ol>
+</figure>
+<p><code>editionLabel</code> is computed and passed but not displayed in the current header/logo. Identity is already in the rendered session-dependent HTML; no <code>/api/auth/me</code> request is made.</p>
+<p class="sources">Sources: <a href="../../views/partials/public/header-standard.ejs">header-standard.ejs</a> · <a href="../../views/partials/shared/site-logo.ejs">site-logo.ejs</a> · <a href="../../controllers/pageController.js">search</a></p>
+</section>
+<section id="breadcrumb">
+<span class="type">Server-rendered links</span>
+<h2>4. Breadcrumb links</h2>
+<figure>
+<figcaption>Published category → category link → category page</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>Supply article.category</strong><p>Use the approved version’s category, such as <code>Science</code>.</p></li>
+<li><span class="lane">article.ejs</span><strong>Render Home → Science</strong><p>Home points to <code>/</code>. The category label points to <code>/category/science</code>, using a lowercase path.</p></li>
+<li><span class="lane">Browser</span><strong>Navigate to a new HTML page</strong><p>Click Home for the homepage or the category for its page. The category controller matches configured category names case-insensitively.</p></li>
+</ol>
+</figure>
+<p class="sources">Sources: <a href="../../views/pages/public/article.ejs">breadcrumb markup</a> · <a href="../../controllers/pageController.js">articlePage and category</a></p>
+</section>
+<section id="headline">
+<span class="type">Server-rendered article header</span>
+<h2>5. Headline, summary, category, and update label</h2>
+<figure>
+<figcaption>Approved story data becomes the reading header</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Article document</span><strong>Read publishedVersion and publishEvents</strong><p>Use the published title/summary/category. Calculate <code>updateCount = max(0, publishEvents.length - 1)</code>.</p></li>
+<li><span class="lane">EJS</span><strong>Render escaped header text</strong><p>Category and <code>&lt;h1&gt;</code> title always render. Summary appears when nonempty. “Updated N times since publication” appears only if N is above 0.</p></li>
+<li><span class="lane">Browser</span><strong>Show a snapshot of approved content</strong><p>There is no live headline or update-label refresh. A newly approved revision appears on a later page request.</p></li>
+</ol>
+</figure>
+<p>For example, three approval timestamps mean an initial publication plus two approved updates, so the label shows 2. Draft saves do not increase this count.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">article mapping and updateCount</a> · <a href="../../views/pages/public/article.ejs">article header</a> · <a href="../../models/Article.js">publishEvents</a></p>
+</section>
+<section id="byline">
+<span class="type">Server-formatted metadata</span>
+<h2>6. Byline, date, and reading time</h2>
+<figure>
+<figcaption>Reporter and published content → formatted metadata</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Database result</span><strong>Populate the reporter</strong><p>Retrieve username/displayName with the Article query. The shared <code>m.reporterName(article)</code> helper prefers displayName, then username; it returns “Unknown” when the populated reporter is null, including a deleted account.</p></li>
+<li><span class="lane">viewMappers</span><strong>Format author, time, and reading estimate</strong><p>Initials use the first letters of up to two name parts. Format <code>publishedAt</code> and an ISO datetime. Estimate reading time at 200 words/minute, rounded, minimum 1 minute.</p></li>
+<li><span class="lane">EJS → browser</span><strong>Display avatar initials and byline</strong><p>The <code>&lt;time datetime="..."&gt;</code> has both machine-readable and visible date values. No browser request or elapsed-time updater is attached.</p></li>
+</ol>
+</figure>
+<p>The avatar is text initials, not a profile image. Reading time is computed from the approved content, not a timer tracking how long the reader stays.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">article metadata</a> · <a href="../../utils/viewMappers.js">reporterName, initials, formatDateTime, readingLabel</a> · <a href="../../views/pages/public/article.ejs">byline</a></p>
+</section>
+<section id="tracking">
+<span class="type">Page-request side effects · Database and session</span>
+<h2>7. Views and session reading history</h2>
+<figure>
+<figcaption>Every successful article page render starts two view increments</figcaption>
+<ol class="flow">
+<li><span class="lane">articlePage controller</span><strong>1. Finish loading the story, comments, and related items</strong><p>A missing article or failed earlier query does not reach this tracking block.</p></li>
+<li><span class="lane">MongoDB writes, not awaited</span><strong>2. Start two atomic $inc operations</strong><p><code>Article.updateOne</code> increments <code>totalViews</code> by 1 with <code>{ timestamps: false }</code>, preserving <code>updatedAt</code> and newsroom ordering. <code>Analytics.updateOne</code> increments <code>viewsCount</code> for this article and hour, with <code>upsert: true</code>.</p></li>
+<li><span class="lane">EJS response</span><strong>3. Render without waiting for those writes</strong><p>Display formatted <code>article.totalViews</code> from the document loaded earlier. The displayed snapshot does not include this request’s later increment.</p></li>
+<li><span class="lane">Later requests / analytics</span><strong>4. Use the stored totals and hour buckets</strong><p>Completed increments influence popularity and newsroom analytics. Failures are logged; there is no rollback transaction joining the two writes.</p></li>
+</ol>
+</figure>
+<p>The hourly key rounds minutes, seconds, and milliseconds down to zero. The Analytics model has a unique article/timestamp index. These are cumulative page-request views, not unique visitors or a client-side “finished reading” event. Reloading the article counts another view.</p>
+<figure>
+<figcaption>A separate session list remembers which article IDs were visited</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Session</span><strong>Create viewedArticles if absent</strong><p>This also works for guests because the app stores guest sessions in MongoDB.</p></li>
+<li><span class="lane">Controller</span><strong>Add this ID if not already tracked</strong><p>Keep at most 500 IDs; if a new one exceeds that cap, remove the oldest inserted ID. Repeat visits do not add duplicates or reorder the list.</p></li>
+<li><span class="lane">Later feed requests</span><strong>Use IDs for seen/unseen</strong><p>The feed API applies Read/Unread filters and returns each card’s seen flag. This history is separate from total view counts.</p></li>
+</ol>
+</figure>
+<p class="note">There is no browser analytics API call on this page. Merely loading cards elsewhere does not count as a view. The view number on the article remains a static server snapshot; comment/weather updates do not refresh it.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">articlePage tracking block</a> · <a href="../../models/Analytics.js">hourBucket and unique index</a> · <a href="../../models/Article.js">totalViews</a> · <a href="../../controllers/articleController.js">seen/unseen feed query</a></p>
+</section>
+<section id="media">
+<span class="type">Optional server-rendered component · Image request</span>
+<h2>8. Article image</h2>
+<figure>
+<figcaption>Stored image URL → img markup → browser image fetch</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Published version</span><strong>Map imageUrl and imageAlt</strong><p>Use the approved image URL or blank. Alt text is the published title.</p></li>
+<li><span class="lane">article.ejs</span><strong>Render media only if a URL exists</strong><p>Output the figure/frame and escaped <code>&lt;img src="..." alt="..."&gt;</code>. This main image has no lazy-loading attribute.</p></li>
+<li><span class="lane">Browser</span><strong>Request image bytes separately</strong><p>The image host serves the picture. The page controller supplies a URL, not the image bytes, and no script replaces it.</p></li>
+</ol>
+</figure>
+<p>No image URL means the entire figure is omitted. There is no image caption field rendered in this component.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">image mapping</a> · <a href="../../views/pages/public/article.ejs">media block</a></p>
+</section>
+<section id="body-copy">
+<span class="type">Server-rendered reading content · Escaped paragraphs</span>
+<h2>9. Story paragraphs</h2>
+<figure>
+<figcaption>Approved text → paragraph array → readable initial HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>Split publishedVersion.content</strong><p><code>String(v.content || '').split(/\n\s*\n/).filter(Boolean)</code> separates paragraphs at blank lines.</p></li>
+<li><span class="lane">EJS</span><strong>Render each paragraph as escaped text</strong><p><code>&lt;p&gt;&lt;%= p %&gt;&lt;/p&gt;</code> produces a paragraph element. Text that looks like HTML is displayed as text rather than interpreted as markup.</p></li>
+<li><span class="lane">Browser</span><strong>Read without a content API</strong><p>The full body arrives with the document and remains readable without JavaScript. No content-loading placeholder or client fetch is required.</p></li>
+</ol>
+</figure>
+<p>This is plain-text article rendering, not rich-text HTML rendering. Single newlines inside a paragraph do not create separate paragraph elements.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">paragraphs mapping</a> · <a href="../../views/pages/public/article.ejs">escaped paragraph loop</a></p>
+</section>
+<section id="tags">
+<span class="type">Server-rendered category links</span>
+<h2>10. Filed under links</h2>
+<figure>
+<figcaption>The category becomes the current page’s tag</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Controller</span><strong>Build tags = [v.category].filter(Boolean)</strong><p>Current implementation supplies one category tag, or none if it is empty.</p></li>
+<li><span class="lane">EJS</span><strong>Render “Filed under:” and tag links</strong><p>Each tag points to <code>/category/</code> plus the lowercased category.</p></li>
+<li><span class="lane">Browser click</span><strong>Open the category page</strong><p>A normal HTML navigation replaces the article document. The tag does not filter content in place.</p></li>
+</ol>
+</figure>
+<p>There is no separate freeform tag database or tagging API behind this display.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">tags local</a> · <a href="../../views/pages/public/article.ejs">Filed under markup</a></p>
+</section>
+<section id="related">
+<span class="type">Server-rendered component · Shared article cards</span>
+<h2>11. More on this story</h2>
+<figure>
+<figcaption>Same category, newest first, excluding the current story</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">MongoDB</span><strong>Find up to 3 related stories</strong><p>Require <code>isPublished: true</code>, the same published category, and <code>_id: { $ne: currentId }</code>. Sort by publication date descending.</p></li>
+<li><span class="lane">toCard() → EJS</span><strong>Render article-card partials</strong><p>Use the shared card mapper and markup. The related query does not populate reporter names. A stored reporter ObjectId is truthy but has no displayName/username, so <code>m.reporterName</code> yields undefined and the card partial renders a blank author; a missing/null reporter yields “Unknown”.</p></li>
+<li><span class="lane">Browser</span><strong>Follow another story link</strong><p>Open <code>/articles/:id</code> as a new page. There is no feed script, infinite scroll, or recommendation API in this section.</p></li>
+</ol>
+</figure>
+<p>“More on this story” means same-category selection; no topic similarity score is calculated. When the list is empty, the whole section is omitted. Card images load lazily.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">related query and toCard</a> · <a href="../../views/partials/public/article-card.ejs">shared cards</a> · <a href="../../views/pages/public/article.ejs">related section</a></p>
+</section>
+<section id="comments-thread">
+<span class="type">Server-rendered discussion · Browser-managed count</span>
+<h2>12. Initial comments and comment count</h2>
+<figure>
+<figcaption>The first discussion snapshot is part of the document</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">MongoDB</span><strong>Get newest 50 comments</strong><p><code>Comment.find({ article: article._id }).sort({ createdAt: -1 }).limit(50).lean()</code>.</p></li>
+<li><span class="lane">Controller → partial</span><strong>Map and render each comment</strong><p>Prepare ID, author initials/name, ISO creation time, relative date label, and text. Include <code>comments/comment-item.ejs</code> for each item.</p></li>
+<li><span class="lane">#comments-list</span><strong>Display the thread and editor controls</strong><p>EJS adds Edit/Delete only for session Editors. Set <code>data-can-moderate</code> for the browser’s delegated handler.</p></li>
+</ol>
+</figure>
+<figure>
+<figcaption>The number beside Comments counts loaded items</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Initial locals</span><strong>commentsCount = comments.length</strong><p>The initial badge is at most 50; there is no total-count query.</p></li>
+<li><span class="lane">Successful POST / DELETE</span><strong>Recount visible .comment-item elements</strong><p><code>comments.js</code> sets the badge from the list’s DOM after inserting or removing an item.</p></li>
+<li><span class="lane">Browser</span><strong>Show the current loaded-list count</strong><p>A page loaded with 50 can display 51 after a new post; reloading fetches only the newest 50 again.</p></li>
+</ol>
+</figure>
+<p class="note">A <code>GET /api/comments/article/:articleId</code> endpoint first requires a matching <code>isPublished: true</code> article, returning 404 for missing/unpublished articles, then returns <code>{ comments }</code> with up to 200 comments, newest first. Invalid IDs follow central 400 handling. This page never calls it. There is no Load More, polling, or full-list refresh. Other visitors’ changes appear on a later page load. Relative time labels do not update on a timer.</p>
+<p>Moderation flags only choose visible controls and browser handlers. The moderation API uses the session user ID to re-read the current database role on each protected request; changing <code>data-can-moderate</code> is not authorization.</p>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">comments query and mapping</a> · <a href="../../views/partials/comments/comment-item.ejs">comment partial</a> · <a href="../../public/js/comments.js">count and moderation initialization</a> · <a href="../../controllers/commentController.js">listByArticle</a></p>
+</section>
+<section id="comment-name">
+<span class="type">Form component · Display name rules</span>
+<h2>13. Optional name</h2>
+<figure>
+<figcaption>Input name → POST authorName → stored display name</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">#guest-name</span><strong>Enter a name or leave it blank</strong><p>The visible form field is named <code>name</code>, but comments.js reads it and sends a trimmed JSON field named <code>authorName</code>.</p></li>
+<li><span class="lane">Comment controller</span><strong>Choose the stored name</strong><p>Nonblank supplied name → trim and keep the first 40 characters. Blank → session user’s displayName if signed in, otherwise “Guest”.</p></li>
+<li><span class="lane">Response → comment markup</span><strong>Show the returned author name</strong><p>The browser derives initials from the returned name and escapes the displayed name. The name input stays filled after a successful post.</p></li>
+</ol>
+</figure>
+<p>This is a public display name, not proof of account identity. Signed-in users can also supply a different name. No role or permission comes from this text field.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/article.ejs">name input</a> · <a href="../../public/js/comments.js">POST mapping and initialsOf</a> · <a href="../../controllers/commentController.js">authorName rules</a> · <a href="../../models/Comment.js">name schema</a></p>
+</section>
+<section id="comment-text">
+<span class="type">Form components · Local validation and counter</span>
+<h2>14. Comment text and character counter</h2>
+<figure>
+<figcaption>Typing only updates the local remaining-character label</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">HTML textarea</span><strong>Require text and set maxlength=1000</strong><p><code>#comment-text</code> has a label, <code>required</code>, and a 1000-character maxlength.</p></li>
+<li><span class="lane">comments.js input event</span><strong>Calculate MAX - textEl.value.length</strong><p>Initialize the counter on script startup, then update it on every input event. No API is called while typing.</p></li>
+<li><span class="lane">#char-counter</span><strong>Show “N characters remaining”</strong><p>Successful posting clears only the comment textarea and restores “1000 characters remaining”.</p></li>
+</ol>
+</figure>
+<p>JavaScript trims text before submission. Whitespace-only content shows “Comment cannot be empty.” without a request. The server repeats blank/length checks, so browser constraints are not the only validation.</p>
+<p class="sources">Sources: <a href="../../views/pages/public/article.ejs">textarea and counter</a> · <a href="../../public/js/comments.js">MAX, input listener, validation</a> · <a href="../../controllers/commentController.js">readContent</a></p>
+</section>
+<section id="post-comment">
+<span class="type">Form submission · POST JSON · Prepend one item</span>
+<h2>15. Post Comment: request → save → update</h2>
+<figure>
+<figcaption>Posting updates the discussion without reloading the page or list</figcaption>
+<ol class="flow">
+<li><span class="lane">comments.js submit handler</span><strong>1. Stop normal form navigation</strong><p><code>event.preventDefault()</code>. Read <code>data-article-id</code> from the form, trim text/name, reject blank text, disable the button, and add <code>.is-authenticating</code>.</p></li>
+<li><span class="lane">api.sendJSON → fetch</span><strong>2. POST /api/comments/article/:articleId</strong><p>JSON body <code>{ authorName, content }</code>. Send <code>Content-Type: application/json</code>, accept JSON, and include the same-origin session cookie.</p></li>
+<li><span class="lane">Route → limiter → controller</span><strong>3. Validate and save to MongoDB</strong><p>Apply the comment rate limiter; validate text; find the published article; choose the display name; call <code>Comment.create({ article, authorName, content })</code>.</p></li>
+<li><span class="lane">Server → browser</span><strong>4. Receive HTTP 201 with the new comment</strong><p><code>{ success: true, comment: ... }</code>. Only the newly created comment is returned; the whole list is not fetched again.</p></li>
+<li><span class="lane">comments.js → DOM</span><strong>5. Prepend, recount, clear text, show success</strong><p>Build escaped comment markup with “Just now” and insert at <code>afterbegin</code>. Recount loaded items, clear the textarea/reset its counter, show “Comment posted.”, then re-enable the button.</p></li>
+</ol>
+</figure>
+<p>The new item is inserted only after the server confirms success. Guest and reporter markup has no moderation actions; editor markup includes them. The delegated editor handler also works for comments added after startup.</p>
+<p class="note">When the initial thread was empty, EJS rendered “No comments yet. Be the first to join the conversation.” outside the list. The posting script does not remove that sentence, so it remains after the first successful post.</p>
+<p>On a failed request, retain the entered text/name and existing comments, show the returned error in <code>#comment-status</code>, and restore the submit button.</p>
+<p class="sources">Sources: <a href="../../public/js/comments.js">submit handler and commentHtml</a> · <a href="../../public/js/api.js">sendJSON and request</a> · <a href="../../routes/comments.js">POST route</a> · <a href="../../controllers/commentController.js">create</a></p>
+</section>
+<section id="comment-contract">
+<span class="type">API contracts · Validation and rate limiting</span>
+<h2>16. Comment JSON and server limits</h2>
+<p>Illustrative request and response, with the response fields used by this page:</p>
+<pre><code>POST /api/comments/article/507f1f77bcf86cd799439011
+Content-Type: application/json
+
+{
+  "authorName": "Dana Reader",
+  "content": "Thanks for explaining this story."
+}
+
+HTTP 201
+{
+  "success": true,
+  "comment": {
+    "_id": "507f1f77bcf86cd799439022",
+    "article": "507f1f77bcf86cd799439011",
+    "authorName": "Dana Reader",
+    "content": "Thanks for explaining this story.",
+    "createdAt": "2026-10-06T09:00:00.000Z",
+    "updatedAt": "2026-10-06T09:00:00.000Z"
+  }
+}</code></pre>
+<p>The serialized Mongoose document can also contain its version key. Unlike initial template locals, the response has <code>_id/authorName/content/createdAt</code>; the browser maps these to <code>id/author/text/datetime</code> and generates initials plus “Just now”.</p>
+<figure>
+<figcaption>The POST route enforces limits before any browser update</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">commentLimiter</span><strong>Allow up to 3 POST attempts per minute per IP</strong><p>The shared limiter uses a 60-second window and max 3. Exceeding it returns HTTP 429 JSON before the controller runs.</p></li>
+<li><span class="lane">Controller + model</span><strong>Validate text and published article</strong><p>Trimmed content must be nonempty and at most 1000 characters. Article must be published. The Comment schema also enforces required/length rules.</p></li>
+<li><span class="lane">Browser catch / success</span><strong>Show errors or the saved comment</strong><p>Rejected requests leave the form text intact. Successful requests use the server’s returned values to render one new item.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Relevant comment responses</caption>
+<thead><tr><th scope="col">Status</th><th scope="col">Trigger</th><th scope="col">Payload / outcome</th></tr></thead>
+<tbody>
+<tr><td>201</td><td>Created</td><td><code>{ success: true, comment }</code>; prepend one item.</td></tr>
+<tr><td>400</td><td>Blank / overlong content</td><td><code>{ error: 'Comment cannot be empty' }</code> or <code>{ error: 'Comment is too long (1000 characters maximum)' }</code>.</td></tr>
+<tr><td>404</td><td>Missing or unpublished article</td><td><code>{ error: 'Article not found' }</code>.</td></tr>
+<tr><td>429</td><td>Rate limit exceeded</td><td><code>{ error: 'You have exceeded the comment limit. You can post up to 3 comments per minute. Try again shortly.' }</code>.</td></tr>
+<tr><td>500</td><td>Unexpected save/query failure</td><td>Central handler returns a generic JSON error; no new item is inserted.</td></tr>
+</tbody>
+</table></div>
+<p class="note">The policy text says “three comments per minute”, but the configured limiter counts POST attempts by IP, across articles, including controller-rejected attempts. It is not a session/account/device quota. Its default store is process memory; it is not the Mongo-backed session store. There is no client countdown or automatic retry.</p>
+<p class="sources">Sources: <a href="../../routes/comments.js">comment routes</a> · <a href="../../middleware/rateLimit.js">commentLimiter</a> · <a href="../../controllers/commentController.js">readContent and create</a> · <a href="../../models/Comment.js">Comment schema</a></p>
+</section>
+<section id="edit-comment">
+<span class="type">Editor-only interaction · PUT JSON · In-place update</span>
+<h2>17. Editor: Edit and Save</h2>
+<figure>
+<figcaption>First click starts local editing; second click saves through the API</figcaption>
+<ol class="flow">
+<li><span class="lane">Editor click, delegated on #comments-list</span><strong>1. Click Edit on a comment</strong><p>Read <code>data-comment-id</code>. Hide its text paragraph, insert/focus a 1000-character textarea containing the current text, and change the button label to “Save”. No request yet.</p></li>
+<li><span class="lane">Browser → API</span><strong>2. Click Save with nonblank trimmed text</strong><p>Disable the button. Send <code>PUT /api/comments/:id</code> with <code>{ content: 'Revised text' }</code>. Whitespace-only text is rejected locally.</p></li>
+<li><span class="lane">isEditor → commentController.update → MongoDB</span><strong>3. Authorize and save</strong><p>Check the session role; repeat text validation; find the comment; set content and <code>await comment.save()</code>. Return <code>{ success: true, comment }</code>.</p></li>
+<li><span class="lane">Browser DOM</span><strong>4. Replace the paragraph’s text</strong><p>Use <code>data.comment.content</code> with <code>textContent</code>, remove the textarea, reveal the paragraph, restore “Edit”, and show “Comment updated.”.</p></li>
+</ol>
+</figure>
+<p>Editors can moderate any comment; there is no author-ownership requirement on this route. <code>isEditor</code> resolves the session user ID through <code>User.findById(...).select('role').lean()</code> on every request. Missing sessions get HTTP 401 JSON; current Reporters get 403. Deleted accounts have their session destroyed and get 401. An allowed role is copied back into the session before the controller runs. A missing comment gets 404. Neither a supplied role nor hidden controls authorize editing.</p>
+<p class="note">The inline editor has no Cancel control or Escape handler. On a request failure, the textarea remains with the edit and the button becomes enabled again for retry. Saving does not change the comment’s position, author, creation-time label, or count.</p>
+<p class="sources">Sources: <a href="../../public/js/comments.js">delegated edit handler</a> · <a href="../../routes/comments.js">PUT route</a> · <a href="../../middleware/auth.js">isEditor</a> · <a href="../../controllers/commentController.js">update</a></p>
+</section>
+<section id="delete-comment">
+<span class="type">Editor-only interaction · DELETE JSON · Remove item</span>
+<h2>18. Editor: Delete</h2>
+<figure>
+<figcaption>Confirm → authorize/delete → remove the loaded item</figcaption>
+<ol class="flow">
+<li><span class="lane">Browser confirmation</span><strong>1. Click Delete</strong><p>Ask “Delete this comment permanently?” through <code>window.confirm</code>. Cancel → no request or change. Confirm → disable this button.</p></li>
+<li><span class="lane">Browser → API</span><strong>2. DELETE /api/comments/:id</strong><p>Use <code>sendJSON</code> with no request body and the same-origin session cookie.</p></li>
+<li><span class="lane">isEditor → controller → MongoDB</span><strong>3. Delete the comment document</strong><p><code>Comment.findByIdAndDelete</code>; missing comment → 404, otherwise HTTP 200 <code>{ success: true }</code>.</p></li>
+<li><span class="lane">Browser DOM</span><strong>4. Remove the item and recount</strong><p><code>item.remove()</code>, then count remaining loaded <code>.comment-item</code> elements. No list reload or page navigation.</p></li>
+</ol>
+</figure>
+<p>On failure, keep the item, show the error in the shared comment status, and re-enable the delete button. The server enforces Editor role for deletion just as it does for editing.</p>
+<p class="note">Deleting the last loaded comment sets the badge to 0 but does not create an empty-state sentence. The script also does not fetch an older comment to fill a slot vacated from the initial 50.</p>
+<p class="sources">Sources: <a href="../../public/js/comments.js">delete handler</a> · <a href="../../routes/comments.js">DELETE route</a> · <a href="../../controllers/commentController.js">remove</a> · <a href="../../middleware/auth.js">isEditor</a></p>
+</section>
+<section id="weather">
+<span class="type">Browser startup · JSON API · External service</span>
+<h2>19. Weather widget</h2>
+<figure>
+<figcaption>Empty container → app weather API → escaped widget markup</figcaption>
+<ol class="flow">
+<li><span class="lane">weather.js</span><strong>1. GET /api/weather on script startup</strong><p>The article HTML contains an empty <code>#weatherWidget</code>. The script makes one JSON request with no body/query parameters.</p></li>
+<li><span class="lane">weatherController.getWeather</span><strong>2. Use fresh cache or request OpenWeatherMap</strong><p>If the in-process result is less than 15 minutes old, return it. After an external failure, return stale-cache/fallback for one minute before retrying; otherwise fetch weather for <code>WEATHER_CITY</code> (default Tel Aviv), using the server-only API key, metric units, and a 5-second timeout.</p></li>
+<li><span class="lane">Server → browser</span><strong>3. Return { source, data, ageSeconds? }</strong><p>Fresh success → <code>api</code>; fresh cache → <code>cache</code>; failed external lookup → <code>stale-cache</code> if available, otherwise fixed <code>fallback</code>.</p></li>
+<li><span class="lane">weather.js → DOM</span><strong>4. Fill #weatherWidget</strong><p>Escape city/temperature/condition; show optional feels-like/humidity. Add “Data may be stale” for stale-cache/fallback. Endpoint failure instead shows unavailable text.</p></li>
+</ol>
+</figure>
+<pre><code>// Illustrative fresh response
+{
+  "source": "api",
+  "ageSeconds": 0,
+  "data": {
+    "city": "Tel Aviv", "temp": 27, "feelsLike": 29,
+    "humidity": 65, "condition": "clear sky", "icon": "01d"
+  }
+}</code></pre>
+<p>Cache responses include calculated <code>ageSeconds</code>; stale-cache/fallback omit it. Fallback uses Tel Aviv, null temperature (displayed as <code>--</code>), and an unavailable condition. The response’s icon and age are not displayed.</p>
+<p>Concurrent external lookups share an <code>inFlight</code> promise. Cache is process memory, not MongoDB, and disappears on restart. The 15 minutes controls cache freshness, not a browser refresh timer; the widget does not poll.</p>
+<p class="sources">Sources: <a href="../../public/js/weather.js">weather.js</a> · <a href="../../routes/weather.js">weather route</a> · <a href="../../controllers/weatherController.js">weather controller</a></p>
+</section>
+<section id="breaking">
+<span class="type">Shared server-rendered notice</span>
+<h2>20. Breaking strip</h2>
+<figure>
+<figcaption>A fixed demo notice renders with the header</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">publicChrome()</span><strong>Supply showBreaking=true</strong><p>Use the fixed demo-edition notice for the course project.</p></li>
+<li><span class="lane">Header partial</span><strong>Render badge and escaped breakingText</strong><p>“Demo edition — all content on this site is sample data for the course project”.</p></li>
+<li><span class="lane">Browser</span><strong>Display static notice text</strong><p>No article-specific breaking query, API, or live-update behavior belongs to this component.</p></li>
+</ol>
+</figure>
+<p class="sources">Sources: <a href="../../controllers/pageController.js">publicChrome</a> · <a href="../../views/partials/public/header-standard.ejs">breaking strip</a></p>
+</section>
+<section id="logout">
+<span class="type">Session controls · JSON API + navigation</span>
+<h2>21. Staff controls and Sign Out</h2>
+<p>Guests see Staff Login. Staff see Newsroom and Sign Out. Newsroom links to <code>/editor/reviews</code> for Editors or <code>/reporter/articles</code> for Reporters, with database role checks on those routes. The public article route uses the session snapshot for visible controls and does not refresh the user’s role; stale editor buttons still face the current-role check when their API is called.</p>
+<figure>
+<figcaption>Shared logout handler destroys the session and opens /</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">api.js click handler</span><strong>Disable #logoutBtn and POST</strong><p>Send <code>POST /api/auth/logout</code> with no body.</p></li>
+<li><span class="lane">authController.logout</span><strong>Destroy the session</strong><p>Clear <code>connect.sid</code> and return <code>{ success: true, redirect: '/' }</code>. Session read history is removed too.</p></li>
+<li><span class="lane">Browser</span><strong>Navigate to the homepage</strong><p>Request fresh guest HTML via <code>window.location.assign</code>. On failure, re-enable the button without a displayed logout error.</p></li>
+</ol>
+</figure>
+<p>Comment text entered but not posted is local form state; the logout navigation leaves that document.</p>
+<p class="sources">Sources: <a href="../../public/js/api.js">logout handler</a> · <a href="../../routes/auth.js">auth routes</a> · <a href="../../controllers/authController.js">logout</a></p>
+</section>
+<section id="footer">
+<span class="type">Static included component</span>
+<h2>22. Footer</h2>
+<figure>
+<figcaption>Shared publication information becomes initial HTML</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">article.ejs</span><strong>Include public/footer.ejs</strong><p>The footer comes after the article/weather layout and before the page scripts.</p></li>
+<li><span class="lane">EJS → HTML</span><strong>Output fixed publication text</strong><p>The Daily Web title, course-project description, and demo-content disclaimer.</p></li>
+<li><span class="lane">Browser</span><strong>Show the footer</strong><p>No database query, JSON API, or later update belongs to this component.</p></li>
+</ol>
+</figure>
+<p class="sources">Sources: <a href="../../views/partials/public/footer.ejs">footer.ejs</a> · <a href="../../views/pages/public/article.ejs">footer inclusion</a></p>
+</section>
+<section id="errors">
+<span class="type">Response branches · Current behavior</span>
+<h2>23. Errors, empty states, and no JavaScript</h2>
+<figure>
+<figcaption>Comment action success/error controls the DOM update</figcaption>
+<ol class="flow flow--across">
+<li><span class="lane">Local validation</span><strong>Is trimmed text nonempty?</strong><p>If not, show an error without a POST/PUT request. Delete instead asks for confirmation.</p></li>
+<li><span class="lane">API result</span><strong>Was the request successful?</strong><p><code>api.js</code> parses JSON and throws for non-success HTTP status or a network failure.</p></li>
+<li><span class="lane">comments.js</span><strong>Update after success; preserve after failure</strong><p>Successful create/edit/delete changes the appropriate item. Failed requests show text in <code>#comment-status</code> and restore the relevant button.</p></li>
+</ol>
+</figure>
+<div class="table-wrap"><table>
+<caption>Failures and boundaries</caption>
+<thead><tr><th scope="col">Situation</th><th scope="col">Response / screen behavior</th></tr></thead>
+<tbody>
+<tr><td>Valid ID, missing/unpublished article</td><td>The page controller calls next(); normal document request → HTTP 404 error HTML.</td></tr>
+<tr><td>Invalid MongoDB identifier</td><td>Central CastError handling → HTTP 400. Document requests get error HTML; API requests get <code>{ error: 'Invalid identifier' }</code>.</td></tr>
+<tr><td>Story/comments/related query failure</td><td>asyncHandler forwards to the central error handler; normally HTTP 500 error HTML instead of the article. ValidationError maps to 400; status-bearing errors retain their status. The same <code>wantsJson</code> helper is shared with authorization: API URLs, XHR, or an Accept header containing application/json get JSON.</td></tr>
+<tr><td>View increment fails</td><td>Log the failure; asynchronous tracking does not block or replace the reading page.</td></tr>
+<tr><td>POST exceeds rate limit</td><td>HTTP 429 JSON; show its error, retain the draft comment, and re-enable Post Comment.</td></tr>
+<tr><td>Guest/Reporter calls moderation API</td><td>HTTP 401/403 JSON from server role checks. No comment is edited or deleted.</td></tr>
+<tr><td>Comment missing on Edit/Delete</td><td>HTTP 404 <code>{ error: 'Comment not found' }</code>; preserve the loaded UI and show the error.</td></tr>
+<tr><td>No initial comments</td><td>Count 0 plus server-rendered empty-state sentence. First successful post does not remove that sentence.</td></tr>
+<tr><td>Last loaded comment deleted</td><td>Count 0 and empty list; no new empty-state sentence is added.</td></tr>
+<tr><td>Weather endpoint/network failure</td><td>Display unavailable text in the weather widget. External-service failure instead normally yields successful stale/fallback JSON.</td></tr>
+<tr><td>JavaScript disabled</td><td>Story/body, metadata, initial comments, related cards, links, header search, footer, and native mobile menu work. Counter, JSON posting, moderation, logout, and weather do not run.</td></tr>
+</tbody>
+</table></div>
+<p class="note">The comment form has no HTML <code>action</code> or <code>method</code> fallback. Without JavaScript, submitting it defaults to GET on the article URL with <code>name</code>/<code>comment</code> query fields; it does not save a comment. Visible editor buttons are type=button and do nothing without their handlers.</p>
+<p>The shared comment status has <code>role="status"</code>. Messages do not automatically clear on a timer. There is no background synchronization of discussion changes from other visitors.</p>
+<p class="sources">Sources: <a href="../../middleware/errorHandler.js">errorHandler and notFound</a> · <a href="../../utils/asyncHandler.js">asyncHandler</a> · <a href="../../middleware/auth.js">role errors</a> · <a href="../../public/js/comments.js">action outcomes</a> · <a href="../../views/pages/public/article.ejs">form and empty state</a></p>
+</section>
+<section id="practice">
+<span class="type">Learning checkpoint</span>
+<h2>24. Trace it yourself in the browser</h2>
+<ol>
+<li>Open a published article. Inspect the <code>/articles/:id</code> document response in DevTools → Network: the headline, full paragraphs, related cards, and initial comments are already HTML.</li>
+<li>Check asset requests: <code>api.js</code>, <code>comments.js</code>, <code>weather.js</code>, CSS/fonts, and images. The startup JSON request is <code>/api/weather</code>; there is no initial comments-list or article-content API call.</li>
+<li>Type in Your comment and watch the remaining-character counter. Typing alone sends no request. Enter an optional name, then Post Comment.</li>
+<li>Inspect the POST URL and JSON <code>authorName/content</code>. Check the 201 response. The new comment appears first, the loaded-count badge updates, and the textarea clears without reloading.</li>
+<li>Try whitespace-only text. The local message appears without a POST. Server blank/length rules also apply to requests sent outside the form.</li>
+<li>Sign in as an Editor and reload the article. Click Edit: a textarea appears with no request. Click Save: inspect the PUT body/response and the text replacement.</li>
+<li>Click Delete. Cancel once to see that no request occurs; confirm another time to inspect DELETE and removal/count updates.</li>
+<li>Compare the view counter across reloads. Each page request starts increments, but the displayed number is the pre-increment snapshot. The feed API can later show this article as Read in the same session.</li>
+<li>On a thread with no comments, post one and notice the current empty-sentence behavior. On an Editor page with one loaded comment, delete it and notice that no new empty sentence is created.</li>
+</ol>
+<div class="rule"><strong>The article-page mental model:</strong> the server sends the approved story and discussion snapshot, records the visit, and remembers reading history. Browser JSON actions then change individual comments and fill the weather widget.</div>
+<details>
+<summary>How this walkthrough was verified</summary>
+<p>This update compared <code>adir-dynamic_category_page</code> with the current implementation and traced the article page route, controller, models, shared view mapper, EJS partials, browser scripts, CSS layers, role middleware, and central error handling. Local source links and in-document anchors were checked against this checkout.</p>
+<p>The review is static source verification. The browser exercises above remain suggested checks; this update did not run live application, MongoDB, weather-service, responsive-layout, or role-action tests.</p>
+</details>
+<p class="next">Article chapter complete. Continue adding page walkthroughs in this folder.</p>
+<p><a href="search-flow-walkthrough.html">Return to the search walkthrough</a> · <a href="#top">Back to the component list ↑</a></p>
+</section>
+</main>
+<footer>Documentation only · Diagrams use selectable HTML text and work offline · Source links are relative to this repository checkout.</footer>
+</body>
+</html>
