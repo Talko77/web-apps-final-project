@@ -27,6 +27,10 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // The session store is MongoDB rather than the process memory,
 // so a signed-in user stays signed in even after the server restarts.
 app.set('trust proxy', 1);
+// Without a real secret anyone could forge a session cookie, so production refuses to start
+if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+  throw new Error('SESSION_SECRET must be set in production');
+}
 app.use(session({
   name: 'connect.sid',
   secret: process.env.SESSION_SECRET || 'daily_web_dev_secret_change_me',

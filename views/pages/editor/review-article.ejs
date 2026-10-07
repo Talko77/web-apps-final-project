@@ -245,7 +245,7 @@
                     <span class="icon comparison-pane__footer-icon" aria-hidden="true">visibility</span>
                     <span><%= page.article.views %> views <% if (page.article.isUpdate) { %>(from current version)<% } %></span>
                   </div>
-                  <a class="comparison-pane__footer-link" href="<%= page.article.published ? '/articles/' + page.article.id : '#' %>" target="_blank" rel="noopener noreferrer">
+                  <a class="comparison-pane__footer-link" href="/editor/reviews/<%= page.article.id %>/preview" target="_blank" rel="noopener noreferrer">
                     <span>Preview as it will appear</span>
                     <span class="icon comparison-pane__link-icon" aria-hidden="true">open_in_new</span>
                   </a>

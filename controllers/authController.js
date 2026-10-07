@@ -20,8 +20,14 @@ exports.login = asyncHandler(async (req, res) => {
     return res.status(401).json({ error: 'Incorrect username or password' });
   }
 
+  // A new session id on login, so an id a guest held before signing in is never reused
+  // (session fixation). The viewed-articles list is carried over to the new session.
+  const viewedArticles = req.session.viewedArticles;
+  await new Promise((resolve, reject) => req.session.regenerate(err => (err ? reject(err) : resolve())));
+
   // The role is stored in the server-side session and never taken from the request
   req.session.user = user.toPublic();
+  if (viewedArticles) req.session.viewedArticles = viewedArticles;
 
   logger.info(`Login succeeded: ${user.username} (${user.role})`);
   res.json({

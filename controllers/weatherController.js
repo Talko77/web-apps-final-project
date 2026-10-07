@@ -14,14 +14,14 @@ let inFlight = null;
 const RETRY_AFTER = 60 * 1000;
 let failedAt = 0;
 
-const FALLBACK = { city: 'Tel Aviv', temp: null, condition: 'Weather data is unavailable right now', icon: '01d' };
+const FALLBACK = { city: CITY, temp: null, condition: 'Weather data is unavailable right now', icon: '01d' };
 
 async function fetchFromApi() {
   const key = process.env.WEATHER_API_KEY;
   if (!key) throw new Error('WEATHER_API_KEY is not set');
 
   const url = 'https://api.openweathermap.org/data/2.5/weather' +
-    `?q=${encodeURIComponent(CITY)}&units=metric&lang=en&appid=${key}`;
+    `?q=${encodeURIComponent(CITY)}&units=metric&lang=en&appid=${encodeURIComponent(String(key).trim())}`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 5000);

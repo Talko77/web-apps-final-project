@@ -97,9 +97,9 @@
                   <td class="review-queue__category-cell"><span class="review-queue__category"><%= a.category %></span></td>
                   <td class="review-queue__status-cell">
                     <span class="review-queue__status" data-status="<%= a.statusCode %>">
-                      <span class="status-badge status-badge--pending">
-                        <span class="status-badge__indicator state-loading"></span>
-                        <%= a.statusLabel || 'Pending Review' %>
+                      <span class="status-badge <%= a.statusClass %>">
+                        <% if (a.statusCode === 'pending') { %><span class="status-badge__indicator state-loading"></span><% } %>
+                        <%= a.statusLabel || '' %>
                       </span>
                     </span>
                   </td>

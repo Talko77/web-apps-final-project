@@ -54,7 +54,7 @@ articleSchema.index({ status: 1, updatedAt: -1 });
 // Whether the content is complete and may be submitted for approval
 articleSchema.methods.isDraftComplete = function () {
   const d = this.draftVersion || {};
-  return Boolean(d.title && d.summary && d.content && CATEGORIES.includes(d.category));
+  return Boolean(d.title && d.summary && String(d.content || '').trim() && CATEGORIES.includes(d.category));
 };
 
 module.exports = mongoose.model('Article', articleSchema);

@@ -10,7 +10,8 @@
   const passwordEl = document.getElementById('staffPassword');
   const statusEl = document.getElementById('statusMessage');
   const submitEl = form.querySelector('button[type="submit"]');
-  const nextUrl = form.dataset.next || '';
+  // Only a path on this site is a valid destination: not //host, not javascript:
+  const nextUrl = /^\/(?![\/\\])/.test(form.dataset.next || '') ? form.dataset.next : '';
 
   form.addEventListener('submit', async event => {
     event.preventDefault();

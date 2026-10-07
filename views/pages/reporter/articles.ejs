@@ -140,7 +140,7 @@
                         <% } %>
                         <div class="reporter-articles__article-details">
                           <a class="reporter-articles__article-title" href="<%= a.editUrl %>"><%= a.title %></a>
-                          <span class="reporter-articles__article-detail<%= a.status === 'Changes Requested' || a.status === 'Rejected' ? ' reporter-articles__article-detail--alert' : '' %>"><%= a.detail %></span>
+                          <span class="reporter-articles__article-detail<%= a.isReturned ? ' reporter-articles__article-detail--alert' : '' %>"><%= a.detail %></span>
                         </div>
                       </div>
                     </td>

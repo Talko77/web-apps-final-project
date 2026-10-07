@@ -45,9 +45,9 @@
                   <td class="review-queue__category-cell"><span class="review-queue__category">${esc(a.category)}</span></td>
                   <td class="review-queue__status-cell">
                     <span class="review-queue__status" data-status="${esc(a.statusCode)}">
-                      <span class="status-badge status-badge--pending">
-                        <span class="status-badge__indicator state-loading"></span>
-                        ${esc(a.statusLabel || 'Pending Review')}
+                      <span class="status-badge ${esc(a.statusClass)}">
+                        ${a.statusCode === 'pending' ? '<span class="status-badge__indicator state-loading"></span>' : ''}
+                        ${esc(a.statusLabel || '')}
                       </span>
                     </span>
                   </td>

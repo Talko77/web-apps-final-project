@@ -7,6 +7,8 @@ const logger = require('../utils/logger');
 exports.commentLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 3,
+  // A rejected post (empty, too long, unknown article) must not use up the quota
+  skipFailedRequests: true,
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {

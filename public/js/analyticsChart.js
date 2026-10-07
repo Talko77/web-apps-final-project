@@ -21,7 +21,11 @@
     text: '#5c5c57'
   };
 
-  let current = { timeline: [], publishEvents: [] };
+  const HOUR = 3600 * 1000;
+  const COMPARE_HOURS = 24; // hours compared on each side of an update
+
+  let current = { timeline: [], publishEvents: [], since: 0, until: 0, end: 0 };
+  let plot = null; // geometry of the last draw, used by the hover tooltip
 
   // Match the resolution to the pixel density so the chart does not look blurry
   function fitCanvas() {
@@ -38,12 +42,24 @@
     day: '2-digit', month: '2-digit', hour: '2-digit'
   });
 
+  // Hours nobody read the article have no bucket in the database, so add them back as 0
+  // views. Otherwise the line would be drawn straight across the quiet hours.
+  function fillHours(timeline, since, until) {
+    const byHour = new Map(timeline.map(p => [new Date(p.timestamp).getTime(), p.viewsCount]));
+    const points = [];
+    for (let t = since; t <= until; t += HOUR) {
+      points.push({ timestamp: t, viewsCount: byHour.get(t) || 0 });
+    }
+    return points;
+  }
+
   function draw() {
     const { width, height } = fitCanvas();
     ctx.clearRect(0, 0, width, height);
 
     const points = current.timeline;
-    if (!points.length) {
+    plot = null;
+    if (!points.some(p => p.viewsCount)) {
       ctx.fillStyle = COLORS.text;
       ctx.font = '14px Inter, sans-serif';
       ctx.textAlign = 'center';
@@ -54,14 +70,17 @@
     const plotW = width - PADDING.left - PADDING.right;
     const plotH = height - PADDING.top - PADDING.bottom;
 
-    const times = points.map(p => new Date(p.timestamp).getTime());
-    const minT = Math.min(...times);
-    const maxT = Math.max(...times);
+    const times = points.map(p => p.timestamp);
+    // The axis covers the whole selected range, so every update marker fits on it
+    const minT = times[0];
+    // The axis runs to the end of the current hour, so an update approved in this hour fits
+    const maxT = current.end;
     const maxV = Math.max(...points.map(p => p.viewsCount), 1);
     const spanT = maxT - minT || 1;
 
     const x = t => PADDING.left + ((t - minT) / spanT) * plotW;
     const y = v => PADDING.top + plotH - (v / maxV) * plotH;
+    plot = { minT, spanT, plotW, times, points };
 
     // Views axis with horizontal gridlines
     ctx.strokeStyle = COLORS.axis;
@@ -84,10 +103,9 @@
     // Time axis
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    const labelCount = Math.min(6, points.length);
+    const labelCount = 6;
     for (let i = 0; i < labelCount; i++) {
-      const idx = Math.round((points.length - 1) * (i / Math.max(1, labelCount - 1)));
-      const t = times[idx];
+      const t = minT + (spanT * i) / (labelCount - 1);
       ctx.save();
       ctx.translate(x(t), PADDING.top + plotH + 10);
       ctx.rotate(-Math.PI / 8);
@@ -126,7 +144,7 @@
 
     current.publishEvents.forEach((evt, i) => {
       const t = new Date(evt).getTime();
-      if (t < minT || t > maxT) return;
+      if (t < minT || t >= maxT) return; // an older update, outside the selected range
       const ex = x(t);
       ctx.beginPath();
       ctx.moveTo(ex, PADDING.top);
@@ -138,6 +156,43 @@
     ctx.setLineDash([]);
   }
 
+  // One line per update: average views per hour in the 24 hours before and after it
+  function renderSummary() {
+    const listEl = document.getElementById('updateSummary');
+    if (!listEl) return;
+    listEl.textContent = '';
+
+    const avg = (from, to) => {
+      const inside = current.timeline.filter(p => p.timestamp >= from && p.timestamp < to);
+      if (!inside.length) return null;
+      return inside.reduce((sum, p) => sum + p.viewsCount, 0) / inside.length;
+    };
+    const fmt = v => (v === null ? 'no data' : `${v.toFixed(1)} views/hr`);
+
+    current.publishEvents.forEach((evt, i) => {
+      const t = new Date(evt).getTime();
+      if (t < current.since || t >= current.end) return;
+      const window = COMPARE_HOURS * HOUR;
+      const before = avg(t - window, t);
+      const after = avg(t, t + window);
+      const item = document.createElement('li');
+      item.textContent = `${i === 0 ? 'Published' : `Update ${i}`} · ${fmtHour(t)}: ` +
+        `${fmt(before)} in the ${COMPARE_HOURS}h before → ${fmt(after)} in the ${COMPARE_HOURS}h after`;
+      listEl.appendChild(item);
+    });
+  }
+
+  // Native browser tooltip with the exact value of the hour under the pointer
+  canvas.addEventListener('mousemove', e => {
+    if (!plot) { canvas.title = ''; return; }
+    const rect = canvas.getBoundingClientRect();
+    const frac = (e.clientX - rect.left - PADDING.left) / plot.plotW;
+    if (frac < 0 || frac > 1) { canvas.title = ''; return; }
+    const hour = Math.round((frac * plot.spanT) / HOUR);
+    const p = plot.points[Math.min(plot.points.length - 1, Math.max(0, hour))];
+    canvas.title = `${fmtHour(p.timestamp)}: ${p.viewsCount} views`;
+  });
+
   async function load(articleId, hours) {
     if (!articleId) return;
     window.api.flash(statusEl, 'Loading view data...', false);
@@ -145,13 +200,26 @@
     try {
       const query = hours ? `?hours=${encodeURIComponent(hours)}` : '';
       const data = await window.api.getJSON(`/api/analytics/article/${articleId}${query}`);
-      current = { timeline: data.timeline || [], publishEvents: data.publishEvents || [] };
+      const since = new Date(data.since).getTime();
+      const until = Math.floor(new Date(data.until).getTime() / HOUR) * HOUR;
+      current = {
+        timeline: fillHours(data.timeline || [], since, until),
+        publishEvents: data.publishEvents || [],
+        since,
+        until,
+        end: until + HOUR
+      };
       draw();
+      renderSummary();
 
-      const updates = Math.max(0, current.publishEvents.length - 1);
+      // Only the updates inside the selected range are drawn on the chart
+      const updates = current.publishEvents.filter((evt, i) => {
+        const t = new Date(evt).getTime();
+        return i > 0 && t >= current.since && t < current.end;
+      }).length;
       window.api.flash(
         statusEl,
-        `${data.totalViews} views in total · ${updates} updates marked on the chart`,
+        `${data.totalViews} views in total · ${updates} ${updates === 1 ? 'update' : 'updates'} marked on the chart`,
         false
       );
     } catch (err) {

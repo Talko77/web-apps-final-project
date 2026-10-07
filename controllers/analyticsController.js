@@ -27,7 +27,10 @@ exports.getArticleTimeline = asyncHandler(async (req, res) => {
     title: (article.publishedVersion && article.publishedVersion.title) || article.draftVersion.title,
     totalViews: article.totalViews,
     timeline,
-    publishEvents: (article.publishEvents || []).filter(d => new Date(d) >= since)
+    // Every approval, oldest first, so the client can number them even when the range cuts some off
+    publishEvents: [...(article.publishEvents || [])].sort((a, b) => new Date(a) - new Date(b)),
+    since,
+    until: new Date()
   });
 });
 

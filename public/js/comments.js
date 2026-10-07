@@ -8,6 +8,14 @@
 
   const list = document.getElementById('comments-list');
   const countEl = document.getElementById('comments-count');
+  const emptyEl = document.getElementById('comments-empty');
+
+  // The server renders at most 50 comments but reports the real total, so the count is
+  // adjusted by one per action instead of being recounted from the list in the page
+  function bumpCount(delta) {
+    if (countEl) countEl.textContent = String(Math.max(0, Number(countEl.textContent) + delta));
+    if (emptyEl) emptyEl.hidden = list.querySelectorAll('.comment-item').length > 0;
+  }
   const nameEl = document.getElementById('guest-name');
   const textEl = document.getElementById('comment-text');
   const counterEl = document.getElementById('char-counter');
@@ -84,7 +92,7 @@
         text: c.content
       }));
 
-      if (countEl) countEl.textContent = String(list.querySelectorAll('.comment-item').length);
+      bumpCount(1);
 
       textEl.value = '';
       if (counterEl) counterEl.textContent = `${MAX} characters remaining`;
@@ -115,7 +123,7 @@
         try {
           await window.api.sendJSON(`/api/comments/${commentId}`, 'DELETE');
           item.remove();
-          if (countEl) countEl.textContent = String(list.querySelectorAll('.comment-item').length);
+          bumpCount(-1);
         } catch (err) {
           window.api.flash(statusEl, err.message, true);
           button.disabled = false;
