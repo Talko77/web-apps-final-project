@@ -16,7 +16,10 @@
 
   let page = Number(grid.dataset.page || 1);
   let hasMore = grid.dataset.hasMore === 'true';
+  // On the home page the first articles are already shown as headlines above the grid
+  const skip = Number(grid.dataset.skip || 0);
   let loading = false;
+  let observer = null;
   let requestId = 0; // prevents a slow response from overwriting a newer result
 
   function params(nextPage) {
@@ -75,8 +78,12 @@
       // A response that went stale while the user changed a filter - ignore it
       if (myRequest !== requestId) return;
 
+      // With no filter active the grid shows what follows the headlines, as on first load
+      const unfiltered = !(searchEl && searchEl.value.trim()) && !(categoryEl && categoryEl.value) &&
+        !(seenEl && seenEl.value) && (!sortEl || sortEl.value === 'publishedAt');
+      const shown = replace && unfiltered ? data.articles.slice(skip) : data.articles;
       if (replace) grid.innerHTML = '';
-      grid.insertAdjacentHTML('beforeend', data.articles.map(cardHtml).join(''));
+      grid.insertAdjacentHTML('beforeend', shown.map(cardHtml).join(''));
 
       page = data.page;
       hasMore = data.hasMore;
@@ -91,7 +98,15 @@
     } catch (err) {
       if (myRequest === requestId) window.api.flash(statusEl, err.message, true);
     } finally {
-      if (myRequest === requestId) loading = false;
+      if (myRequest === requestId) {
+        loading = false;
+        // The observer only reports changes. If the sentinel is still on screen after this
+        // page, observing it again triggers another check so the feed keeps filling.
+        if (observer && hasMore) {
+          observer.unobserve(sentinel);
+          observer.observe(sentinel);
+        }
+      }
     }
   }
 
@@ -107,8 +122,9 @@
 
   // Load the next page as the user approaches the bottom of the feed
   if (sentinel && 'IntersectionObserver' in window) {
-    new IntersectionObserver(entries => {
+    observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore && !loading) load(page + 1, false);
-    }, { rootMargin: '400px' }).observe(sentinel);
+    }, { rootMargin: '400px' });
+    observer.observe(sentinel);
   }
 })();

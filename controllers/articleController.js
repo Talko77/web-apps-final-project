@@ -26,8 +26,9 @@ function buildFeedQuery(req) {
     query['publishedVersion.category'] = req.query.category;
   }
 
-  if (req.query.search && String(req.query.search).trim()) {
-    query['publishedVersion.title'] = { $regex: escapeRegex(req.query.search.trim()), $options: 'i' };
+  const search = String(req.query.search || '').trim();
+  if (search) {
+    query['publishedVersion.title'] = { $regex: escapeRegex(search), $options: 'i' };
   }
 
   // Seen / unseen filtering based on the articles read in the current session
@@ -40,7 +41,7 @@ function buildFeedQuery(req) {
 
 // GET /api/articles/feed - public feed for infinite scrolling
 exports.getFeed = asyncHandler(async (req, res) => {
-  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const page = Math.min(10000, Math.max(1, parseInt(req.query.page, 10) || 1));
   const query = buildFeedQuery(req);
   const sort = req.query.sortBy === 'popularity'
     ? { totalViews: -1, publishedAt: -1, _id: -1 }
@@ -163,13 +164,23 @@ exports.saveDraft = asyncHandler(async (req, res) => {
     return res.status(409).json({ error: 'This article is awaiting editor approval and cannot be edited right now' });
   }
 
-  article.draftVersion = sanitizeContent(req.body || {});
+  const incoming = sanitizeContent(req.body || {});
+  const current = article.draftVersion || {};
+  const changed = Object.keys(incoming).some(k => incoming[k] !== (current[k] || ''));
+  article.draftVersion = incoming;
+
+  // A reporter's draft may be partial (autosave), but an editor's edit goes straight to review
+  // and can be approved, so it has to be complete
+  if (user.role === ROLES.EDITOR && !article.isDraftComplete()) {
+    return res.status(400).json({ error: 'A title, summary, content and category are all required' });
+  }
 
   // Editing a published article starts a new draft; the approved version stays in
   // publishedVersion and keeps being shown to the public. An editor's own edit goes
   // straight to "pending review" so the editor can approve it, instead of leaving it
   // as a draft only the reporter could submit.
-  if (article.status === STATUS.PUBLISHED) {
+  // A save with nothing changed (for example from a stale tab) leaves a published article as it is
+  if (article.status === STATUS.PUBLISHED && changed) {
     article.status = user.role === ROLES.EDITOR ? STATUS.PENDING : STATUS.DRAFT;
   }
 
@@ -213,6 +224,9 @@ exports.changeStatus = asyncHandler(async (req, res) => {
     }
 
     if (newStatus === STATUS.PUBLISHED) {
+      if (!article.isDraftComplete()) {
+        return res.status(400).json({ error: 'The article needs a title, summary, content and category before it can be published' });
+      }
       // Approving the update makes the draft the version shown to readers
       article.publishedVersion = (article.draftVersion && typeof article.draftVersion.toObject === 'function')
         ? article.draftVersion.toObject()

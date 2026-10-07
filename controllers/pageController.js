@@ -10,6 +10,7 @@ const { escapeRegex, buildQueueQuery, analyzableArticles } = require('../utils/q
 const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 const MAX_TRACKED_VIEWS = 500;
+const HEADLINE_COUNT = 11; // featured (3) + dispatches (8) at the top of the home page
 const PUBLISHED = { isPublished: true };
 
 // The locals that the mastheads and top headers in the templates expect on every public page
@@ -23,6 +24,22 @@ const publicChrome = (overrides = {}) => ({
   categories: CATEGORIES,
   ...overrides
 });
+
+// Two readers can create the same hour bucket at once; the unique index rejects the second
+// upsert (E11000), and a retry then finds the bucket and increments it
+async function countHourlyView(articleId) {
+  const bump = () => Analytics.updateOne(
+    { article: articleId, timestamp: Analytics.hourBucket() },
+    { $inc: { viewsCount: 1 } },
+    { upsert: true }
+  );
+  try {
+    await bump();
+  } catch (err) {
+    if (err.code !== 11000) throw err;
+    await bump();
+  }
+}
 
 // An article card in the public feed
 function toCard(article) {
@@ -55,7 +72,7 @@ exports.home = asyncHandler(async (req, res) => {
   const [feed, mostRead] = await Promise.all([
     Article.find(PUBLISHED).sort({ publishedAt: -1, _id: -1 }).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
-    Article.find(PUBLISHED).sort({ totalViews: -1 }).limit(5)
+    Article.find(PUBLISHED).sort({ totalViews: -1, _id: -1 }).limit(5)
       .select('publishedVersion.title publishedVersion.category totalViews').lean()
   ]);
 
@@ -65,7 +82,7 @@ exports.home = asyncHandler(async (req, res) => {
   res.render('pages/public/home', publicChrome({
     pageTitle: 'The Daily Web — News',
     featured: cards.slice(0, 3),
-    dispatches: cards.slice(3, 11).map(c => ({
+    dispatches: cards.slice(3, HEADLINE_COUNT).map(c => ({
       time: c.dateLabel, category: c.category, readTime: c.readLabel, title: c.title, url: c.url
     })),
     mostRead: mostRead.map(a => ({
@@ -74,7 +91,8 @@ exports.home = asyncHandler(async (req, res) => {
       category: a.publishedVersion.category,
       views: m.formatViews(a.totalViews)
     })),
-    feed: cards,
+    feed: cards.slice(HEADLINE_COUNT), // the headlines above already show the first ones
+    feedSkip: HEADLINE_COUNT,
     hasMore: feed.length === FEED_PAGE_SIZE
   }));
 });
@@ -92,8 +110,9 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
   const v = article.publishedVersion;
   const reporterName = m.reporterName(article);
 
-  const [comments, related] = await Promise.all([
+  const [comments, commentsTotal, related] = await Promise.all([
     Comment.find({ article: article._id }).sort({ createdAt: -1 }).limit(50).lean(),
+    Comment.countDocuments({ article: article._id }),
     Article.find({
       ...PUBLISHED,
       _id: { $ne: article._id },
@@ -104,11 +123,7 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
   // Recording a view: an atomic $inc on the hour bucket and on the cumulative counter.
   // We do not await the result so rendering is not delayed, and a failure here does not break the page.
   Promise.all([
-    Analytics.updateOne(
-      { article: article._id, timestamp: Analytics.hourBucket() },
-      { $inc: { viewsCount: 1 } },
-      { upsert: true }
-    ),
+    countHourlyView(article._id),
     // timestamps: false - a reader's visit is not an edit, so updatedAt (the queue order
     // and the reporter's "last updated" time) must not change
     Article.updateOne({ _id: article._id }, { $inc: { totalViews: 1 } }, { timestamps: false })
@@ -143,7 +158,7 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
     },
     tags: [v.category].filter(Boolean),
     related: related.map(toCard),
-    commentsCount: comments.length,
+    commentsCount: commentsTotal,
     comments: comments.map(c => ({
       id: String(c._id),
       initials: m.initials(c.authorName),
@@ -152,6 +167,44 @@ exports.articlePage = asyncHandler(async (req, res, next) => {
       dateLabel: m.formatRelative(c.createdAt),
       text: c.content
     }))
+  }));
+});
+
+// GET /editor/reviews/:id/preview - editor-only: the article as it will look once the pending
+// version is approved. Reads draftVersion; does not record a view and shows no comments.
+exports.articlePreview = asyncHandler(async (req, res, next) => {
+  const article = await Article.findById(req.params.id)
+    .populate('reporter', 'username displayName')
+    .lean();
+  if (!article) return next();
+
+  const v = article.draftVersion || {};
+  const reporterName = m.reporterName(article);
+  const date = article.publishedAt || new Date();
+
+  res.render('pages/public/article', publicChrome({
+    pageTitle: v.title,
+    isPreview: true,
+    article: {
+      id: String(article._id),
+      title: v.title,
+      summary: v.summary,
+      paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
+      category: v.category || 'News',
+      imageUrl: v.imageUrl || '',
+      imageAlt: v.title,
+      reporterName,
+      initials: m.initials(reporterName),
+      dateLabel: m.formatDateTime(date),
+      datetime: new Date(date).toISOString(),
+      readLabel: m.readingLabel(v.content),
+      views: m.formatViews(article.totalViews),
+      updateCount: 0
+    },
+    tags: [v.category].filter(Boolean),
+    related: [],
+    commentsCount: 0,
+    comments: []
   }));
 });
 
@@ -165,8 +218,8 @@ exports.search = asyncHandler(async (req, res) => {
   if (category) query['publishedVersion.category'] = category;
 
   const sort = req.query.sort === 'popularity'
-    ? { totalViews: -1, publishedAt: -1 }
-    : { publishedAt: -1 };
+    ? { totalViews: -1, publishedAt: -1, _id: -1 }
+    : { publishedAt: -1, _id: -1 };
 
   const [results, resultCount, categoryCounts] = await Promise.all([
     // Bounded by FEED_PAGE_SIZE: without a limit this renders every published
@@ -223,7 +276,7 @@ exports.category = asyncHandler(async (req, res, next) => {
   // The first page is server-rendered; feed.js loads the rest on scroll.
   const [articles, articleCount] = await Promise.all([
     Article.find(categoryQuery)
-      .sort({ publishedAt: -1 })
+      .sort({ publishedAt: -1, _id: -1 })
       .limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName')
       .lean(),
@@ -498,10 +551,26 @@ exports.editorAnalyticsIndex = asyncHandler(async (req, res, next) => {
 
 // ---------- Sign in ----------
 
+const staffHome = user => (user.role === ROLES.EDITOR ? '/editor/reviews' : '/reporter/articles');
+
+// GET /login - alias for /staff/login that keeps the query string (e.g. ?next=)
+exports.loginAlias = (req, res) => {
+  const query = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  res.redirect('/staff/login' + query);
+};
+
+// GET /editor and /reporter - signed-in staff go to their own home, everyone else signs in first
+const staffEntry = target => (req, res) => {
+  if (req.session && req.session.user) return res.redirect(staffHome(req.session.user));
+  res.redirect('/staff/login?next=' + encodeURIComponent(target));
+};
+exports.editorEntry = staffEntry('/editor/reviews');
+exports.reporterEntry = staffEntry('/reporter/articles');
+
 // GET /staff/login
 exports.staffLogin = (req, res) => {
   if (req.session.user) {
-    return res.redirect(req.session.user.role === ROLES.EDITOR ? '/editor/reviews' : '/reporter/articles');
+    return res.redirect(staffHome(req.session.user));
   }
 
   res.render('pages/auth/staff-login', {

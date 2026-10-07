@@ -62,7 +62,7 @@ Adding a headless browser would mean a dependency the course did not cover.
 | Variable | Required | Description |
 |---|---|---|
 | `MONGO_URI` | no | Defaults to `mongodb://127.0.0.1:27017/daily_web` |
-| `SESSION_SECRET` | in production | Key used to sign the session cookie |
+| `SESSION_SECRET` | in production | Key used to sign the session cookie. The server refuses to start in production without it |
 | `PORT` | no | Defaults to 3000 |
 | `NODE_ENV` | no | `development` or `production` |
 | `WEATHER_API_KEY` | no | Free key from OpenWeatherMap. Without it the widget shows fallback data |
@@ -196,6 +196,11 @@ by `Article.countDocuments()` rather than inferred from the rows on screen. When
 exceed one page the response sets `hasMore` and the page says so, so the queue stays fast with
 thousands of articles instead of rendering every row.
 
+The "Preview as it will appear" link on the review page opens `/editor/reviews/:id/preview`,
+an editor-only page that renders the saved pending version (`draftVersion`) with the public
+article template. It records no view and shows no comments, and works for articles that have
+never been published. The public `/articles/:id` page keeps showing the approved version.
+
 Editors also moderate comments in place on the public article page — editing the text or
 deleting the comment — and can reset an article's recorded view data from the analytics page.
 
@@ -209,14 +214,18 @@ administrator.
 
 ### Impact Analytics
 `public/js/analyticsChart.js` draws on a plain `<canvas>` with no external library: a time
-axis, view counts along it, and dashed vertical lines at every point where an editor approved
-and published an update. This makes it possible to see how the view count changed before and
-after each update. The page opens on a three-week range so the original publication and
-the seeded update markers are all visible.
+axis covering the whole selected range, view counts along it (hours with no views are drawn as
+zero), and dashed vertical lines at every point where an editor approved and published an
+update. Markers are numbered by their position in the article's full approval history, so
+"Update 3" stays "Update 3" whichever range is selected. Under the chart, one line per update
+gives the average views per hour in the 24 hours before and after it, and hovering the line
+shows the exact views for that hour. The page opens on a three-week range so the original
+publication and the seeded update markers are all visible.
 
 Views are pre-aggregated into hourly buckets (`models/Analytics.js`) rather than one row per
 view. Each view is a single atomic `$inc` with `upsert`, so thousands of concurrent readers
-neither lose counts nor create write pressure. Counting a view does not touch `updatedAt`, so
+neither lose counts nor create write pressure. If two readers create the same hour bucket at
+the same moment, the unique index rejects the second upsert and the view is retried once. Counting a view does not touch `updatedAt`, so
 reader traffic never reorders the review queue or changes the reporter's "last updated" time. `Article.totalViews` is maintained alongside so
 that sorting by popularity is a single query with no aggregation.
 
@@ -244,8 +253,9 @@ every page view into another failing call.
   across a server restart.
 - All user text is output through `<%= %>` in EJS or `escapeHtml` on the client, preventing
   HTML injection.
-- Rate limits: up to 3 comments per minute per device, and up to 20 sign-in attempts per
-  5 minutes.
+- Rate limits: up to 3 comments per minute per device, identified by its IP address (the
+  server cannot see a device any other way), and up to 20 sign-in attempts per 5 minutes.
+- The session id is regenerated on sign-in, so an id held before signing in is never reused.
 - User input is truncated to allowed lengths and categories are validated against a fixed list.
 - Errors are handled on both sides. The client marks the four required fields on the reporter
   form and names the missing one before submitting for review; the server rejects the same
@@ -300,7 +310,8 @@ afterwards. That is what keeps the counter correct under concurrent readers.
 `/` home · `/category/:category` category · `/search` search · `/articles/:id` article page ·
 `/staff/login` sign in · `/reporter/articles` my articles · `/reporter/articles/new/edit` new article ·
 `/reporter/articles/:id/edit` edit · `/editor/reviews` review queue ·
-`/editor/reviews/:id` version comparison · `/editor/staff` staff directory ·
+`/editor/reviews/:id` version comparison · `/editor/reviews/:id/preview` editor-only preview of
+the pending version as readers will see it · `/editor/staff` staff directory ·
 `/editor/analytics` and `/editor/articles/:id/analytics` analytics
 
 ## Models and indexes

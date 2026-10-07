@@ -64,13 +64,20 @@
       event.preventDefault();
       saveEditsBtn.disabled = true;
       try {
-        await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', {
+        const data = await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', {
           title: value('editorDraftTitle'),
           summary: value('editorDraftSummary'),
           content: value('editorDraftBody'),
           category: value('editorDraftCategory'),
           imageUrl: value('editorDraftImageUrl')
         });
+        // Editing a live article turns it into a pending update; reload so the status, badge and
+        // the approve / return buttons match the new state
+        const approveBtn = document.getElementById('btn-approve');
+        if (data && data.status === 'pending' && approveBtn && approveBtn.disabled) {
+          window.location.reload();
+          return;
+        }
         window.api.flash(draftStatusEl, 'Your edits are saved to the pending version.', false);
       } catch (err) {
         window.api.flash(draftStatusEl, err.message, true);

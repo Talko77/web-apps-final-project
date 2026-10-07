@@ -26,7 +26,7 @@
   const counterEl = document.getElementById('charCounter');
   let articleId = form.dataset.articleId || '';
   const locked = form.dataset.locked === 'true';
-  let saving = false;
+  let saving = null; // the promise of the save in flight, if any
 
   const AUTOSAVE_DELAY = 5000;
   let autosaveTimer = null;
@@ -48,9 +48,17 @@
 
   // Shared persistence path. `isAuto` only changes the messaging and whether
   // the action buttons are disabled - autosave must not block the reporter.
-  async function persist(isAuto) {
-    if (saving || locked) return false;
-    saving = true;
+  async function persist(isAuto, keepalive) {
+    if (locked) return false;
+    // A timer-driven autosave just tries again later. A click, or a tab being closed,
+    // waits for the save in flight and then saves what was typed meanwhile.
+    if (saving && isAuto && !keepalive) {
+      scheduleAutosave();
+      return false;
+    }
+    while (saving) await saving;
+    let finished;
+    saving = new Promise(resolve => { finished = resolve; });
     if (!isAuto) {
       if (saveBtn) saveBtn.disabled = true;
       if (submitBtn) submitBtn.disabled = true;
@@ -60,13 +68,13 @@
 
     try {
       if (!articleId) {
-        const created = await window.api.sendJSON('/api/articles', 'POST', payload);
+        const created = await window.api.sendJSON('/api/articles', 'POST', payload, { keepalive });
         articleId = created.articleId;
         form.dataset.articleId = articleId;
         // Update the URL without reloading so a refresh returns to this article
         window.history.replaceState({}, '', `/reporter/articles/${articleId}/edit`);
       } else {
-        await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', payload);
+        await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', payload, { keepalive });
       }
 
       lastPersisted = JSON.stringify(payload);
@@ -82,7 +90,8 @@
       showMessage(`${isAuto ? 'Autosave' : 'Save'} failed: ${error.message}`, true);
       return false;
     } finally {
-      saving = false;
+      saving = null;
+      finished();
       if (!isAuto) {
         if (saveBtn) saveBtn.disabled = locked;
         if (submitBtn) submitBtn.disabled = locked;
@@ -135,7 +144,7 @@
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
         clearTimeout(autosaveTimer);
-        persist(true);
+        persist(true, true); // keepalive lets the request finish while the tab closes
       }
     });
   }

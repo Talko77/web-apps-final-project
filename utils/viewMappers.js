@@ -118,6 +118,7 @@ function toReporterRow(article) {
     detailClass,
     category: version.category || 'Uncategorised',
     status: STATUS_LABELS[status],
+    isReturned: status === STATUS.RETURNED,
     statusClass: STATUS_STYLE[status],
     updated: formatDateTime(article.updatedAt),
     // Machine-readable form for the <time datetime="..."> attribute in the table

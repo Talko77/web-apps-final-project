@@ -40,7 +40,8 @@
 
   const getJSON = url => request(url, { method: 'GET' });
 
-  const sendJSON = (url, method, payload) => request(url, {
+  const sendJSON = (url, method, payload, extra) => request(url, {
+    ...extra,
     method,
     headers: { 'Content-Type': 'application/json' },
     body: payload === undefined ? undefined : JSON.stringify(payload)

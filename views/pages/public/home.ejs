@@ -119,7 +119,7 @@
               </select>
             </div>
           </div>
-          <div class="home-page__articles-grid" id="feedGrid" data-page="1" data-has-more="<%= hasMore %>">
+          <div class="home-page__articles-grid" id="feedGrid" data-skip="<%= locals.feedSkip || 0 %>" data-page="1" data-has-more="<%= hasMore %>">
             <% (locals.feed || []).forEach(function (item) { %>
             <%- include('../../partials/public/article-card', { article: item }) %>
             <% }) %>

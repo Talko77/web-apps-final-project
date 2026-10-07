@@ -193,15 +193,26 @@ async function seed() {
   await Comment.insertMany(comments);
   console.log(`Created ${comments.length} comments`);
 
-  // Hourly view data for the first 40 articles that received an update.
-  // Views spike around each publish event so the graph shows the impact of
-  // an update before and after the approval point.
-  const updated = published.filter(a => a.publishEvents.length > 1).slice(0, 40);
-  const buckets = [];
+  // Hourly view data for EVERY published article, so the Impact Analytics chart has data
+  // whichever article the editor picks. Views decay from the moment of publication, and
+  // spike in the 24 hours after each approved update so the chart shows the impact of an
+  // update before and after the approval point. Each article gets its own popularity
+  // level, so the totals (and the popularity sort) differ between articles.
   const HOURS_BACK = 21 * 24;
+  const BATCH = 10000;
+  let bucketCount = 0;
+  let buckets = [];
 
-  for (const article of updated) {
+  const flushBuckets = async () => {
+    if (!buckets.length) return;
+    await Analytics.insertMany(buckets);
+    bucketCount += buckets.length;
+    buckets = [];
+  };
+
+  for (const article of published) {
     const events = article.publishEvents.map(d => new Date(d).getTime());
+    const popularity = 0.2 + Math.random() * 1.3;
     let total = 0;
 
     for (let h = HOURS_BACK; h >= 0; h--) {
@@ -209,29 +220,43 @@ async function seed() {
       const t = ts.getTime();
       if (t < new Date(article.publishedAt).getTime()) continue;
 
-      // Natural decay of attention from the moment of publication
       const hoursSincePublish = (t - events[0]) / HOUR;
-      let views = Math.max(3, Math.round(120 / (1 + hoursSincePublish / 24)));
+      let views = Math.max(3, Math.round((120 * popularity) / (1 + hoursSincePublish / 24)));
 
-      // Spike in the 24 hours following each approved update
       for (const evt of events.slice(1)) {
         const delta = (t - evt) / HOUR;
-        if (delta >= 0 && delta <= 24) views += Math.round(250 / (1 + delta / 4));
+        if (delta >= 0 && delta <= 24) views += Math.round((250 * popularity) / (1 + delta / 4));
       }
 
-      views += rand(-5, 15);
-      views = Math.max(0, views);
+      views = Math.max(0, views + rand(-5, 15));
       total += views;
       buckets.push({ article: article._id, timestamp: ts, viewsCount: views });
+      if (buckets.length >= BATCH) await flushBuckets();
     }
 
     // The running counter must agree with the sum of the buckets,
     // otherwise sorting by popularity would be wrong.
-    await Article.updateOne({ _id: article._id }, { $set: { totalViews: total } }, { timestamps: false });
+    article.totalViews = total;
   }
+  await flushBuckets();
 
-  await Analytics.insertMany(buckets);
-  console.log(`Created ${buckets.length} view buckets for ${updated.length} articles`);
+  // Realistic created / updated times. insertMany stamps every document with "now", which
+  // would make every article look edited at the moment of seeding and hide the real order.
+  const now = Date.now();
+  await Article.bulkWrite(articles.map(a => {
+    const lastEvent = a.publishEvents.length ? new Date(a.publishEvents[a.publishEvents.length - 1]).getTime() : null;
+    const createdAt = a.isPublished
+      ? new Date(a.publishedAt.getTime() - rand(1, 48) * HOUR)
+      : new Date(now - rand(2, 10) * DAY);
+    // A published article with an update waiting was edited most recently
+    const updatedAt = a.isPublished
+      ? new Date(a.status === STATUS.PENDING ? now - rand(1, 48) * HOUR : lastEvent)
+      : new Date(Math.min(createdAt.getTime() + rand(1, 72) * HOUR, now));
+    const set = { createdAt, updatedAt };
+    if (a.isPublished) set.totalViews = a.totalViews;
+    return { updateOne: { filter: { _id: a._id }, update: { $set: set } } };
+  }), { timestamps: false });
+  console.log(`Created ${bucketCount} view buckets for ${published.length} articles`);
 
   console.log('\nDemo users (password for all: %s)', DEMO_PASSWORD);
   [...REPORTERS, ...EDITORS].forEach(u => console.log(`  ${u.username} - ${u.displayName}`));
