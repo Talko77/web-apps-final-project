@@ -157,7 +157,6 @@ function toQueueRow(article) {
 }
 
 module.exports = {
-  STATUS_STYLE,
   formatDateTime,
   formatRelative,
   formatViews,

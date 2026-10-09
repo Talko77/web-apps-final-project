@@ -3,6 +3,7 @@ const Comment = require('../models/Comment');
 const Article = require('../models/Article');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
+const { escapeRegex } = require('../utils/queries');
 
 // One place for the comment text rules, shared by posting and by editor moderation.
 // Returns the trimmed text, or an error message when the text is not acceptable.
@@ -13,13 +14,17 @@ function readContent(body) {
   return { content };
 }
 
-// GET /api/comments/article/:articleId - the list of comments on an article
+// GET /api/comments/article/:articleId?search= - the comments on an article, optionally by text
 exports.listByArticle = asyncHandler(async (req, res) => {
   // Same rule as posting: only a published article exposes its discussion
   const article = await Article.findOne({ _id: req.params.articleId, isPublished: true }).select('_id');
   if (!article) return res.status(404).json({ error: 'Article not found' });
 
-  const comments = await Comment.find({ article: article._id })
+  const query = { article: article._id };
+  const search = String(req.query.search || '').trim();
+  if (search) query.content = { $regex: escapeRegex(search), $options: 'i' };
+
+  const comments = await Comment.find(query)
     .sort({ createdAt: -1 })
     .limit(200)
     .lean();

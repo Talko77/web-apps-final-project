@@ -6,7 +6,7 @@
     <%- include('../../partials/shared/head', { pageTitle }) %>
   </head>
   <body class="category-page">
-    <%- include('../../partials/public/header-standard', { editionLabel, searchQuery: '' }) %>
+    <%- include('../../partials/public/header-standard', { searchQuery: '' }) %>
 
     <main class="category-page__main">
       <div class="category-page__container page-shell">
@@ -22,7 +22,7 @@
               <span class="category-page__kicker">Category Beat</span>
               <h1 class="category-page__title"><%= category %></h1>
               <p class="category-page__description">
-                <%= typeof categoryDescription !== 'undefined' && categoryDescription ? categoryDescription : `Latest reporting, analysis, and dispatches in ${category}.` %>
+                <%= categoryDescription %>
               </p>
             </div>
             <div class="category-page__stats">

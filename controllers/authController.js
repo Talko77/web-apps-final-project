@@ -33,8 +33,7 @@ exports.login = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     user: req.session.user,
-    // Must match the real view routes in routes/pages.js.
-    // Bare /editor and /reporter do not exist and would land the user on a 404.
+    // Must match the real view routes in routes/pages.js
     redirect: user.role === ROLES.EDITOR ? '/editor/reviews' : '/reporter/articles'
   });
 });

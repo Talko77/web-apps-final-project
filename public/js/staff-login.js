@@ -26,7 +26,7 @@
     }
 
     submitEl.disabled = true;
-    form.classList.add('is-authenticating');
+    submitEl.classList.add('is-authenticating');
 
     try {
       const data = await window.api.sendJSON('/api/auth/login', 'POST', { username, password });
@@ -39,7 +39,7 @@
       if (data.user && data.user.role === 'Reporter' && target.startsWith('/editor')) {
         target = '/reporter/articles';
       }
-      window.location.assign(target || data.redirect);
+      window.location.assign(target);
     } catch (err) {
       window.api.flash(statusEl, err.message, true);
       statusEl.classList.add('login-feedback-error');
@@ -47,7 +47,7 @@
       passwordEl.focus();
     } finally {
       submitEl.disabled = false;
-      form.classList.remove('is-authenticating');
+      submitEl.classList.remove('is-authenticating');
     }
   });
 })();

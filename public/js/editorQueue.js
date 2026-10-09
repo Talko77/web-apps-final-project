@@ -27,7 +27,7 @@
       ? '<span class="review-queue__update-label"><span class="icon review-queue__update-icon">update</span>Update to a published story - not a new article</span>\n                    '
       : '';
 
-    return `<tr class="review-queue__row" data-status="${esc(a.statusCode)}" data-category="${esc(a.categoryCode)}" data-title="${esc(a.title)}" data-reporter="${esc(a.reporterName)}">
+    return `<tr class="review-queue__row" data-status="${esc(a.statusCode)}" data-category="${esc(a.categoryCode)}" data-title="${esc(a.title)}">
                   <td class="review-queue__reporter-cell">
                     <div class="review-queue__reporter">
                       <div class="review-queue__avatar">${esc(a.initials)}</div>
@@ -44,7 +44,7 @@
                   </td>
                   <td class="review-queue__category-cell"><span class="review-queue__category">${esc(a.category)}</span></td>
                   <td class="review-queue__status-cell">
-                    <span class="review-queue__status" data-status="${esc(a.statusCode)}">
+                    <span class="review-queue__status">
                       <span class="status-badge ${esc(a.statusClass)}">
                         ${a.statusCode === 'pending' ? '<span class="status-badge__indicator state-loading"></span>' : ''}
                         ${esc(a.statusLabel || '')}
@@ -126,12 +126,4 @@
       reload();
     });
   }
-
-  window.addEventListener('popstate', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (searchEl) searchEl.value = urlParams.get('search') || '';
-    if (categoryEl) categoryEl.value = urlParams.get('category') || '';
-    if (statusEl) statusEl.value = urlParams.get('status') || '';
-    reload();
-  });
 })();

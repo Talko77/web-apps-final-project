@@ -65,8 +65,6 @@ a {
 .article-card__footer { margin-top: var(--space-3); }
 .article-card__read-state { display: block; margin-top: var(--space-2); }
 
-.comment-form { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-6); padding: var(--space-5); background: var(--color-surface-container-low); border-radius: var(--radius-lg); }
-.comment-form .form-field { gap: 0; }
 
 .comment-item { padding-block: var(--space-4); border-bottom: 1px solid var(--color-outline-variant); }
 .comment-item__header { display: flex; align-items: flex-start; gap: var(--space-3); }
@@ -213,9 +211,6 @@ table {
   color: var(--color-on-surface);
 }
 
-.site-header a[data-path="login"]:hover {
-  color: var(--color-error);
-}
 
 .comparison-pane article {
   max-height: var(--workspace-review-max-height);
@@ -278,12 +273,10 @@ table {
   text-align: center;
 }
 
-.public-page button:hover,
-.public-page .motion-colors:hover {
+.public-page button:hover {
   color: var(--color-on-surface);
 }
 
-.public-page input[type="checkbox"],
 .public-page input[type="radio"] {
   width: 16px;
   height: 16px;

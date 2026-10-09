@@ -28,6 +28,8 @@
     if (categoryEl && categoryEl.value) q.set('category', categoryEl.value);
     if (sortEl && sortEl.value) q.set('sortBy', sortEl.value);
     if (seenEl && seenEl.value) q.set('seen', seenEl.value);
+    // The search page shows result counts, which the server adds to the first page on request
+    if (grid.dataset.counts === 'true' && nextPage === 1) q.set('counts', '1');
     return q.toString();
   }
 
@@ -44,7 +46,7 @@
       : '';
     const read = a.readLabel ? ` · ${esc(a.readLabel)}` : '';
 
-    return `<article class="article-card" data-id="${esc(a._id)}" data-seen="${a.seen ? 'true' : 'false'}">
+    return `<article class="article-card">
   <a class="article-card__link" href="/articles/${esc(a._id)}">
     ${media}
     <div class="article-card__body">
@@ -87,6 +89,8 @@
 
       page = data.page;
       hasMore = data.hasMore;
+      // Lets a page script (searchPage.js) update its own header and counts from the same response
+      grid.dispatchEvent(new CustomEvent('feed:loaded', { detail: data }));
 
       if (!grid.children.length) {
         window.api.flash(statusEl, 'No articles match your search.', false);

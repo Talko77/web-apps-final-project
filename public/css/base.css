@@ -58,8 +58,7 @@ textarea {
   font: inherit;
 }
 
-button,
-[role="button"] {
+button {
   cursor: pointer;
 }
 
@@ -85,8 +84,7 @@ button {
   background: transparent;
 }
 
-button:disabled,
-[aria-disabled="true"] {
+button:disabled {
   cursor: not-allowed;
 }
 

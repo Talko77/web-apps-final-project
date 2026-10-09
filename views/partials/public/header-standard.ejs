@@ -1,7 +1,7 @@
 <%# Standard header for public pages: logo, edition date, main navigation, search, and staff login/newsroom actions. %>
 <header class="site-header site-header--standard">
   <div class="site-header__bar page-shell">
-    <%- include('../shared/site-logo', { logoHref: '/', publicationName: 'The Daily Web', editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null }) %>
+    <%- include('../shared/site-logo', { logoHref: '/' }) %>
     <nav class="site-header__nav" aria-label="Main navigation">
       <a class="site-header__nav-link" href="/">Home</a>
       <a class="site-header__nav-link" href="/search">Search</a>
@@ -10,7 +10,7 @@
       <form class="site-search" action="/search" method="get">
         <label class="state-hidden" for="siteSearch">Search articles</label>
         <span class="site-search__icon icon">search</span>
-        <input class="site-search__input" id="siteSearch" name="q" placeholder="Search the site" type="search" value="<%= typeof searchQuery !== 'undefined' && searchQuery ? searchQuery : '' %>">
+        <input class="site-search__input" id="siteSearch" name="q" placeholder="Search the site" type="search" value="<%= searchQuery %>">
       </form>
       <% if (typeof currentUser !== 'undefined' && currentUser) { %>
         <a class="button button--secondary site-header__action" href="<%= currentUser.role === 'Editor' ? '/editor/reviews' : '/reporter/articles' %>">Newsroom</a>

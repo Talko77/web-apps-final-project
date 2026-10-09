@@ -1,8 +1,8 @@
-<%# Article card used in the public feed.
+<%# Article card used by the home feed, search, category pages and related articles.
     Single source of truth for the card markup: public/js/feed.js builds identical DOM
     for the articles loaded by infinite scroll. Any change here must be mirrored there. %>
 <% const card = typeof article !== 'undefined' && article ? article : {}; %>
-<article class="article-card" data-id="<%= card.id || '' %>" data-seen="<%= card.seen ? 'true' : 'false' %>">
+<article class="article-card">
   <a class="article-card__link" href="<%= card.url || '#' %>">
     <% if (card.imageUrl) { %>
     <div class="article-card__media"><img class="article-card__image" src="<%= card.imageUrl %>" alt="<%= card.imageAlt || '' %>" loading="lazy"></div>

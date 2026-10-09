@@ -24,7 +24,7 @@
   const HOUR = 3600 * 1000;
   const COMPARE_HOURS = 24; // hours compared on each side of an update
 
-  let current = { timeline: [], publishEvents: [], since: 0, until: 0, end: 0 };
+  let current = { timeline: [], publishEvents: [], since: 0, end: 0 };
   let plot = null; // geometry of the last draw, used by the hover tooltip
 
   // Match the resolution to the pixel density so the chart does not look blurry
@@ -80,7 +80,7 @@
 
     const x = t => PADDING.left + ((t - minT) / spanT) * plotW;
     const y = v => PADDING.top + plotH - (v / maxV) * plotH;
-    plot = { minT, spanT, plotW, times, points };
+    plot = { spanT, plotW, points };
 
     // Views axis with horizontal gridlines
     ctx.strokeStyle = COLORS.axis;
@@ -206,7 +206,6 @@
         timeline: fillHours(data.timeline || [], since, until),
         publishEvents: data.publishEvents || [],
         since,
-        until,
         end: until + HOUR
       };
       draw();

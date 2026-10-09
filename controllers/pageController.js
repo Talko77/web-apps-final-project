@@ -13,12 +13,8 @@ const MAX_TRACKED_VIEWS = 500;
 const HEADLINE_COUNT = 11; // featured (3) + dispatches (8) at the top of the home page
 const PUBLISHED = { isPublished: true };
 
-// The locals that the mastheads and top headers in the templates expect on every public page
+// The locals every public page template expects
 const publicChrome = (overrides = {}) => ({
-  editionLabel: new Date().toLocaleDateString('en-US', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-  }),
-  searchQuery: '',
   categories: CATEGORIES,
   ...overrides
 });
@@ -43,7 +39,6 @@ async function countHourlyView(articleId) {
 function toCard(article) {
   const v = article.publishedVersion || {};
   return {
-    id: String(article._id),
     url: `/articles/${article._id}`,
     title: v.title,
     summary: v.summary,
@@ -220,9 +215,10 @@ exports.search = asyncHandler(async (req, res) => {
     Article.find(query).sort(sort).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
     Article.countDocuments(query),
-    // A grouped count in a single query instead of a separate query per category
+    // A grouped count in a single query instead of a separate query per category.
+    // It applies the search term but not the category, so each count is what that category would show.
     Article.aggregate([
-      { $match: PUBLISHED },
+      { $match: q ? { ...PUBLISHED, 'publishedVersion.title': query['publishedVersion.title'] } : PUBLISHED },
       { $group: { _id: '$publishedVersion.category', count: { $sum: 1 } } }
     ])
   ]);
@@ -285,7 +281,7 @@ exports.category = asyncHandler(async (req, res, next) => {
   res.render('pages/public/category', publicChrome({
     pageTitle: `${matchedCategory} — The Daily Web`,
     category: matchedCategory,
-    categoryDescription: CATEGORY_DESCRIPTIONS[matchedCategory] || `Latest reporting, analysis, and dispatches in ${matchedCategory}.`,
+    categoryDescription: CATEGORY_DESCRIPTIONS[matchedCategory],
     articles: cards,
     // The true total for the whole category, not just the rendered first page
     articleCount,
@@ -437,9 +433,7 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
   };
   const pubDate = article.publishedAt || (article.publishEvents && article.publishEvents[0]);
   const submittedFormatted = m.formatDateTime(article.updatedAt);
-  const submittedLabelLower = submittedFormatted
-    ? (submittedFormatted.charAt(0).toLowerCase() + submittedFormatted.slice(1))
-    : '';
+  const submittedLabelLower = submittedFormatted.charAt(0).toLowerCase() + submittedFormatted.slice(1);
 
   res.render('pages/editor/review-article', {
     pageTitle: `Review: ${draft.title || pub && pub.title || 'Article'}`,
@@ -564,7 +558,6 @@ exports.staffLogin = (req, res) => {
   res.render('pages/auth/staff-login', {
     pageTitle: 'Staff Login',
     page: {
-      publicationName: 'The Daily Web',
       publicWebsiteHref: '/',
       heading: 'Staff Login',
       intro: 'Sign in for reporters and editors.',

@@ -73,7 +73,6 @@
         });
         // Editing a live article turns it into a pending update; reload so the status, badge and
         // the approve / return buttons match the new state
-        const approveBtn = document.getElementById('btn-approve');
         if (data && data.status === 'pending' && approveBtn && approveBtn.disabled) {
           window.location.reload();
           return;

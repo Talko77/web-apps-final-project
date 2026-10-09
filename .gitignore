@@ -28,5 +28,14 @@ build/
 .DS_Store
 Thumbs.db
 
-# Local course documents
+# Local course documents and team/AI working notes (kept locally, not published)
 text files/
+docs/
+AGENTS.md
+DESIGN.md
+
+# Editor and tool settings
+.vscode/
+.idea/
+.claude/
+*.swp

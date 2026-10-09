@@ -14,7 +14,6 @@ exports.notFound = (req, res) => {
   if (wantsJson(req)) return res.status(404).json({ error: 'The requested resource was not found' });
   res.status(404).render('error', {
     pageTitle: 'Page Not Found — The Daily Web',
-    title: '404 - Page Not Found',
     statusCode: 404,
     statusMessage: 'Dispatch Missing',
     message: 'The story or desk you requested has moved or does not exist.'

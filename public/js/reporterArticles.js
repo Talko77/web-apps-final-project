@@ -22,7 +22,7 @@
 
     tbody.querySelectorAll('.article-row').forEach(row => {
       const matchStatus = activeStatus === 'All' || row.dataset.status === activeStatus;
-      const matchCategory = !category || category === 'All' || row.dataset.category === category;
+      const matchCategory = category === 'All' || row.dataset.category === category;
       const matchTerm = !term || row.dataset.title.toLowerCase().includes(term);
       const show = matchStatus && matchCategory && matchTerm;
 
@@ -51,7 +51,7 @@
   // Submit for approval. The transition itself is validated and enforced on the server.
   tbody.addEventListener('click', async event => {
     const btn = event.target.closest('button[data-submit-id]');
-    if (!btn || btn.disabled) return;
+    if (!btn) return;
 
     btn.disabled = true;
     try {
