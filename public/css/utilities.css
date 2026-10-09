@@ -1,8 +1,6 @@
 
 /* Display and positioning */
-.block { display: block; }
 .flex { display: flex; }
-.grid { display: grid; }
 .fixed { position: fixed; }
 .flex-column { flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
@@ -58,7 +56,6 @@
 .color-info { color: var(--color-on-info-container); }
 .color-warning { color: var(--color-on-warning-container); }
 .color-success { color: var(--color-on-success-container); }
-.rule { border: 1px solid var(--color-outline-variant); }
 .radius-standard { border-radius: var(--radius-default); }
 .radius-card { border-radius: var(--radius-lg); }
 .shadow-subtle { box-shadow: var(--shadow-sm); }
@@ -72,4 +69,3 @@
 .motion-colors { transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
 
 @keyframes pulse { 50% { opacity: 0.5; } }
-@keyframes spin { to { transform: rotate(360deg); } }

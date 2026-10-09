@@ -4,7 +4,7 @@
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
 <body class="public-page search-page">
-<%- include('../../partials/public/header-standard', { editionLabel, searchQuery }) %>
+<%- include('../../partials/public/header-standard', { searchQuery }) %>
 <main class="search-page__main">
   <div class="search-page__container page-shell">
     <%# Search console bar %>
@@ -14,8 +14,8 @@
         <form class="search-page__form" id="searchForm" action="/search" method="get">
           <div class="search-page__input-wrapper">
             <span class="icon search-page__input-icon" aria-hidden="true">search</span>
-            <label class="state-hidden" for="searchInput">Search terms</label>
-            <input class="search-page__input" id="searchInput" name="q" type="search" placeholder="Search by headline" value="<%= searchQuery %>">
+            <label class="state-hidden" for="feedSearch">Search terms</label>
+            <input class="search-page__input" id="feedSearch" name="q" type="search" placeholder="Search by headline" value="<%= searchQuery %>">
           </div>
           <button class="search-page__submit-btn" type="submit">
             <span class="icon" aria-hidden="true">manage_search</span>
@@ -44,7 +44,7 @@
                   <input class="search-page__radio" form="searchForm" name="category" type="radio" value="<%= category.value %>" <% if (category.checked) { %>checked<% } %>>
                   <span><%= category.label %></span>
                 </span>
-                <span class="search-page__option-count"><%= category.count %></span>
+                <span class="search-page__option-count" data-category-count="<%= category.value %>"><%= category.count %></span>
               </label>
               <% }) %>
             </div>
@@ -65,25 +65,24 @@
               <% }) %>
             </div>
           </fieldset>
-          <button class="search-page__apply-btn" form="searchForm" type="submit">Apply Filters</button>
+          <%# Only needed without JavaScript; searchPage.js hides it and applies filters on change %>
+          <button class="search-page__apply-btn" id="searchApplyBtn" form="searchForm" type="submit">Apply Filters</button>
         </div>
       </aside>
 
       <%# Search results list %>
       <section class="search-page__results" aria-label="Search results">
-        <% if (searchQuery) { %>
-        <header class="search-page__results-header">
-          <h2 class="search-page__results-title">Search results for: "<%= searchQuery %>"</h2>
-          <p class="search-page__results-count"><%= resultCount %> articles found</p>
+        <header class="search-page__results-header<%= searchQuery ? '' : ' state-hidden' %>" id="searchResultsHeader">
+          <h2 class="search-page__results-title">Search results for: "<span id="searchResultsQuery"><%= searchQuery %></span>"</h2>
+          <p class="search-page__results-count"><span id="searchResultsCount"><%= resultCount %></span> articles found</p>
         </header>
-        <% } %>
         <%# The first page is server-rendered so results work without JavaScript.
             public/js/feed.js appends further pages on scroll via /api/articles/feed.
-            These hidden inputs pin the feed to the current query, category and sort. %>
-        <input id="feedSearch" type="hidden" value="<%= searchQuery %>">
+            The search box above and these hidden inputs hold the current query, category and sort;
+            searchPage.js updates them when a filter changes, and feed.js reloads the results. %>
         <input id="feedCategory" type="hidden" value="<%= (locals.categories || []).filter(function (c) { return c.checked && c.value; }).map(function (c) { return c.value; })[0] || '' %>">
         <input id="feedSort" type="hidden" value="<%= locals.sort === 'popularity' ? 'popularity' : 'publishedAt' %>">
-        <div class="search-page__results-list" id="feedGrid" data-page="1" data-has-more="<%= locals.hasMore ? 'true' : 'false' %>">
+        <div class="search-page__results-list" id="feedGrid" data-page="1" data-counts="true" data-has-more="<%= locals.hasMore ? 'true' : 'false' %>">
           <% (locals.results || []).forEach(function (item) { %>
           <%- include('../../partials/public/article-card', { article: item }) %>
           <% }) %>
@@ -91,7 +90,7 @@
         <p class="search-page__results-status state-hidden" id="feedStatus" aria-live="polite"></p>
         <div id="feedSentinel" aria-hidden="true"></div>
         <% if (!(locals.results || []).length) { %>
-        <div class="search-page__empty">
+        <div class="search-page__empty" id="searchEmpty">
           <span class="icon search-page__empty-icon" aria-hidden="true">search_off</span>
           <h2 class="search-page__empty-title">No articles found</h2>
           <p class="search-page__empty-text">Try different search terms, or pick another category.</p>
@@ -103,5 +102,6 @@
 </main>
 <%- include('../../partials/public/footer') %>
 <script src="/js/feed.js" defer></script>
+<script src="/js/searchPage.js" defer></script>
 </body>
 </html>

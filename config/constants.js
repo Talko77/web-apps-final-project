@@ -8,7 +8,7 @@ const STATUS = {
   RETURNED: 'returned'
 };
 
-// Editorial vocabulary from the original prototypes.
+// Editorial vocabulary shown to users for each status
 const STATUS_LABELS = {
   draft: 'Draft',
   pending: 'Pending Review',

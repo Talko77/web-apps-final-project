@@ -22,7 +22,7 @@ function sanitizeContent(body) {
 function buildFeedQuery(req) {
   const query = { isPublished: true };
 
-  if (req.query.category && CATEGORIES.includes(req.query.category)) {
+  if (CATEGORIES.includes(req.query.category)) {
     query['publishedVersion.category'] = req.query.category;
   }
 
@@ -47,14 +47,27 @@ exports.getFeed = asyncHandler(async (req, res) => {
     ? { totalViews: -1, publishedAt: -1, _id: -1 }
     : { publishedAt: -1, _id: -1 };
 
-  // Only the fields the feed card displays are fetched, not the full article body
-  const articles = await Article.find(query)
-    .populate('reporter', 'username displayName')
-    .sort(sort)
-    .skip((page - 1) * FEED_PAGE_SIZE)
-    .limit(FEED_PAGE_SIZE)
-    .select('publishedVersion.title publishedVersion.summary publishedVersion.category publishedVersion.imageUrl publishedVersion.content publishedAt totalViews reporter')
-    .lean();
+  // The search page asks for result counts along with the first page, so its header and
+  // category counts follow the filters without a reload. They ignore the category filter,
+  // so each category shows how many matches it would give.
+  const withCounts = page === 1 && req.query.counts === '1';
+  const countQuery = { ...query };
+  delete countQuery['publishedVersion.category'];
+
+  // Only the fields the feed card displays are fetched; the body is used for the reading time
+  const [articles, total, grouped] = await Promise.all([
+    Article.find(query)
+      .populate('reporter', 'username displayName')
+      .sort(sort)
+      .skip((page - 1) * FEED_PAGE_SIZE)
+      .limit(FEED_PAGE_SIZE)
+      .select('publishedVersion.title publishedVersion.summary publishedVersion.category publishedVersion.imageUrl publishedVersion.content publishedAt totalViews reporter')
+      .lean(),
+    withCounts ? Article.countDocuments(query) : null,
+    withCounts
+      ? Article.aggregate([{ $match: countQuery }, { $group: { _id: '$publishedVersion.category', count: { $sum: 1 } } }])
+      : null
+  ]);
 
   const seen = new Set((req.session.viewedArticles || []).map(String));
 
@@ -63,6 +76,7 @@ exports.getFeed = asyncHandler(async (req, res) => {
   res.json({
     page,
     hasMore: articles.length === FEED_PAGE_SIZE,
+    ...(withCounts && { total, categoryCounts: Object.fromEntries(grouped.map(g => [g._id, g.count])) }),
     articles: articles.map(a => ({
       _id: a._id,
       title: a.publishedVersion.title,
@@ -223,9 +237,7 @@ exports.changeStatus = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: 'The article needs a title, summary, content and category before it can be published' });
       }
       // Approving the update makes the draft the version shown to readers
-      article.publishedVersion = (article.draftVersion && typeof article.draftVersion.toObject === 'function')
-        ? article.draftVersion.toObject()
-        : { ...article.draftVersion };
+      article.publishedVersion = article.draftVersion.toObject();
       article.status = STATUS.PUBLISHED;
       article.isPublished = true;
       article.publishedAt = article.publishedAt || new Date();

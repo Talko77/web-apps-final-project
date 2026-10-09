@@ -24,8 +24,6 @@ app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: process.env.NODE_ENV === 'production' ? '1h' : 0
 }));
 
-// The session store is MongoDB rather than the process memory,
-// so a signed-in user stays signed in even after the server restarts.
 // Trusting X-Forwarded-For without a real proxy in front would let any client fake its IP
 // and dodge the comment limit, so it is enabled only when TRUST_PROXY is set.
 if (process.env.TRUST_PROXY === 'true') app.set('trust proxy', 1);
@@ -33,6 +31,8 @@ if (process.env.TRUST_PROXY === 'true') app.set('trust proxy', 1);
 if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET must be set in production');
 }
+// The session store is MongoDB rather than the process memory,
+// so a signed-in user stays signed in even after the server restarts.
 app.use(session({
   name: 'connect.sid',
   secret: process.env.SESSION_SECRET || 'daily_web_dev_secret_change_me',
@@ -61,7 +61,7 @@ app.use('/api/comments', require('./routes/comments'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/weather', require('./routes/weather'));
 
-// View pages (EJS) - keeps the path structure established during the EJS migration
+// View pages (EJS)
 app.use('/', require('./routes/pages'));
 
 app.use(notFound);
@@ -77,8 +77,7 @@ if (require.main === module) {
   process.on('unhandledRejection', err => logger.error('unhandledRejection', err));
   process.on('uncaughtException', err => {
     logger.error('uncaughtException', err);
-    if (server) server.close(() => process.exit(1));
-    else process.exit(1);
+    server.close(() => process.exit(1));
   });
 }
 

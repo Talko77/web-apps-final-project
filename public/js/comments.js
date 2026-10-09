@@ -74,7 +74,6 @@
     }
 
     submitEl.disabled = true;
-    submitEl.classList.add('is-authenticating');
 
     try {
       const data = await window.api.sendJSON(`/api/comments/article/${articleId}`, 'POST', {
@@ -102,7 +101,6 @@
       window.api.flash(statusEl, err.message, true);
     } finally {
       submitEl.disabled = false;
-      submitEl.classList.remove('is-authenticating');
     }
   });
 

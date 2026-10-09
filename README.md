@@ -58,6 +58,19 @@ Two things are deliberately left to the live demonstration because they need a b
 infinite scroll firing on scroll, and a new comment appearing without the list reloading.
 Adding a headless browser would mean a dependency the course did not cover.
 
+### Dependencies
+
+| Package | Why it is used |
+|---|---|
+| `express` | Web server and routing |
+| `mongoose` | MongoDB models, validation and queries |
+| `ejs` | Server-rendered views |
+| `express-session` | Session-based sign-in |
+| `connect-mongo` | Stores sessions in MongoDB, so a signed-in user survives a server restart |
+| `bcryptjs` | One-way password hashing (pure JavaScript, no native build step) |
+| `express-rate-limit` | Server-side limit of 3 comments per minute and sign-in attempt limit |
+| `dotenv` | Loads settings from `.env`, so no secret is written in the code |
+
 ### Environment variables
 
 | Variable | Required | Description |
@@ -129,7 +142,6 @@ public/
   css/                    Design system (variables, base, utilities, components, layouts, pages)
   js/                     Client-side JavaScript (vanilla, no framework)
 logs/app.log              Error and operational event log
-DESIGN.md                 Design system documentation
 ```
 
 ## Core functionality
@@ -138,7 +150,9 @@ DESIGN.md                 Design system documentation
 A feed of published articles only, with infinite scroll loading 20 articles at a time
 (`IntersectionObserver` in `public/js/feed.js`), title search, category filtering,
 read/unread filtering and sorting by publication date or popularity. All of these run over
-Ajax with no full page reload.
+Ajax with no full page reload. The `/search` page works the same way: its search box,
+category and sort filters update the results, the result count and the per-category counts
+in place (`public/js/searchPage.js`), and the address bar follows so a refresh keeps them.
 
 ### Article page
 Fully server-rendered: the headline, body and comments are present in the initial HTML, so
@@ -283,7 +297,7 @@ every page view into another failing call.
 | PUT | `/api/articles/:id` | Reporter/Editor | Save draft |
 | PATCH | `/api/articles/:id/status` | Reporter/Editor | State transition |
 | DELETE | `/api/articles/:id` | Editor | Delete article |
-| GET | `/api/comments/article/:id` | public | Comments for an article |
+| GET | `/api/comments/article/:id` | public | Comments for an article (`?search=` filters by text) |
 | POST | `/api/comments/article/:id` | public | Add comment (rate limited) |
 | PUT | `/api/comments/:id` | Editor | Edit comment text |
 | DELETE | `/api/comments/:id` | Editor | Delete comment |
@@ -302,7 +316,7 @@ Every model supports the full set of operations through the REST API.
 |---|---|---|---|---|
 | `User` | `POST /api/users` | `GET /api/users`, `GET /api/users?search=` | `PUT /api/users/:id` | `DELETE /api/users/:id` |
 | `Article` | `POST /api/articles` | `GET /api/articles/feed?search=&category=`, `/mine`, `/manage?status=`, `GET /api/articles/:id` | `PUT /api/articles/:id`, `PATCH /api/articles/:id/status` | `DELETE /api/articles/:id` |
-| `Comment` | `POST /api/comments/article/:id` | `GET /api/comments/article/:id` | `PUT /api/comments/:id` | `DELETE /api/comments/:id` |
+| `Comment` | `POST /api/comments/article/:id` | `GET /api/comments/article/:id`, `GET /api/comments/article/:id?search=` | `PUT /api/comments/:id` | `DELETE /api/comments/:id` |
 | `Analytics` | `POST /api/analytics/article/:id`, and one atomic `upsert` + `$inc` per article view (`pageController.articlePage`) | `GET /api/analytics/articles`, `GET /api/analytics/article/:id` | `PUT /api/analytics/article/:id`, and the same `$inc` per view | `DELETE /api/analytics/article/:id`, and cascaded on article deletion |
 
 Reader traffic never goes through the POST/PUT endpoints: a view is one atomic `updateOne`
@@ -337,8 +351,9 @@ thousands of articles.
 
 1. **Permissions** — try `/editor/reviews` as a guest and as a reporter, and try editing
    another reporter's article.
-2. **Work continuity** — type in the article editor, refresh the page, and return to the
-   same content.
+2. **Work continuity** — type in the article editor without clicking Save, then refresh the
+   page, close the browser, or open the same article in another browser: the latest text is
+   there.
 3. **Server restart** — stop and restart the server while signed in.
 4. **Versions** — edit a published article, submit it for approval, and confirm the public
    still sees the previous version.
@@ -352,49 +367,3 @@ thousands of articles.
    deleting your own account and demoting the last editor; both are refused by the server.
 10. **Editor edits a story** — open a pending article in the review queue, change the headline
     in the pending pane, reload to confirm it persisted, then approve and see it go public.
-
-## Team contributions
-
-Repository: <https://github.com/Talko77/web-apps-final-project> (open for viewing).
-
-| Student | Commits | Main areas | Branches opened |
-|---|---|---|---|
-| Adir Avraham | 30 | CSS design system (`variables`/`base`/`utilities`/`components`/`layouts`/`pages`), the EJS/BEM migration of the page templates, the dynamic category page, the review-comparison redesign, project documentation | `adir`, `adir-documentation`, `adir-dynamic_category_page` |
-| Tal Naor | 31 | Backend (models, controllers, routes, middleware, sessions), client-side JavaScript, database seeding, translation to English, staff directory and full CRUD, later fixes | `feat/ejs-migration`, `tal_branch`, `tal_branch_final` |
-
-Commit counts come from `git shortlog -sne --all` (as of 9 October 2026, before the final
-update); both students committed under more than one Git identity, and the counts above are
-the totals per person across all of them.
-
-### Pull requests
-
-| PR | Branch | Content |
-|---|---|---|
-| #1 | `adir` | Initial page templates and styling |
-| #2 | `feat/ejs-migration` | Migration to EJS with Express, MongoDB and the REST API |
-| #3 | `tal_branch` | Article card rework, search page improvements, English translation |
-| #4 | `adir-documentation` | File-level documentation, EJS formatting, project structure notes |
-| #5 | `adir-dynamic_category_page` | Dynamic category route and its BEM migration |
-| #6 | `tal_branch_final` | Staff directory, editable review pane, bounded review queue, `verify.js` requirement checks |
-| #7 | `tal_branch_final` | Workflow and permission fixes, demo data, unused CSS removed |
-| #8 | `tal_branch_final` | Remaining fixes in sign-in, the review flow, analytics and demo data |
-| #9 | `tal_branch_final` | Ignore the local `text files/` folder |
-
-### AI tool usage
-
-Claude Code was used as an assistant on parts of this project. What it produced was reviewed
-line by line and then verified by running it, not accepted on trust:
-
-- **Where it helped:** the initial Express/Mongoose scaffolding, the EJS migration of the
-  prototype HTML, the staff directory, seeding, and documentation.
-- **How it was verified:** every REST endpoint was exercised with `curl` and the status code
-  recorded; the role and workflow rules were tested from the wrong role and from the wrong
-  state to confirm the server rejects them; the pages were driven in a real browser to confirm
-  the client-side JavaScript paths; and the seeded database was restored afterwards.
-- **What was written or corrected by hand:** the workflow rules themselves (which transition
-  is legal for which role), the separation of `draftVersion` from `publishedVersion`, and the
-  decision to pre-aggregate analytics into hourly buckets.
-
-One dependency was not chosen by the team: `bcryptjs` replaced `bcrypt` because `bcrypt`
-needs a native build step that failed on macOS. Both implement the same one-way hashing;
-`bcryptjs` is pure JavaScript, so the same `node_modules` works on every machine.

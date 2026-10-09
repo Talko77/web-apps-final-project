@@ -26,11 +26,6 @@
   margin-left: auto;
 }
 
-@media (min-width: 768px) {
-  .public-footer > div > .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
 
 @media (min-width: 1024px) {
   .public-footer > .width-content:not(.page-shell) {

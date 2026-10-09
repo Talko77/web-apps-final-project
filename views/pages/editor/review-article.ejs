@@ -6,7 +6,6 @@
     <%- include('../../partials/newsroom/header', { newsroomRole }) %>
     <main class="review-article__main">
       <div class="review-article__content">
-        <%# Review command summary bar %>
         <%# Article review header and update notice %>
         <header class="review-article-header">
           <div class="review-article-header__intro">
@@ -59,13 +58,13 @@
             <div class="review-version-strip__version review-version-strip__version--proposed">
               <div class="review-version-strip__version-main">
                 <span class="review-version-strip__dot review-version-strip__dot--proposed" aria-hidden="true"></span>
-                <span class="review-version-strip__version-tag"><%= page.article.proposedVersion || 'v1.0' %></span>
+                <span class="review-version-strip__version-tag"><%= page.article.proposedVersion %></span>
                 <span class="review-version-strip__version-status review-version-strip__version-status--proposed">
                   <%= page.article.status === 'pending' ? 'Pending approval' : page.article.statusLabel %>
                 </span>
               </div>
               <div class="review-version-strip__version-sub">
-                Submitted <%= page.article.submittedLabelLower || page.article.submittedLabel.toLowerCase() %>
+                Submitted <%= page.article.submittedLabelLower %>
               </div>
             </div>
           </div>
@@ -188,12 +187,12 @@
                   <div class="comparison-pane__header-left">
                     <span class="comparison-pane__dot comparison-pane__dot--proposed" aria-hidden="true"></span>
                     <span class="comparison-pane__header-title">
-                      <%= page.article.isUpdate ? 'Proposed Update' : 'Proposed Version' %> (<%= page.article.proposedVersion || 'v1.0' %>)
+                      <%= page.article.isUpdate ? 'Proposed Update' : 'Proposed Version' %> (<%= page.article.proposedVersion %>)
                     </span>
                   </div>
                   <div class="comparison-pane__header-right">
                     <span class="comparison-pane__header-date">
-                      Submitted <%= page.article.submittedLabelLower || page.article.submittedLabel.toLowerCase() %>
+                      Submitted <%= page.article.submittedLabelLower %>
                     </span>
                   </div>
                 </div>
