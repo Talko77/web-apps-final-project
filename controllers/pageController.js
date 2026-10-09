@@ -6,7 +6,7 @@ const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const m = require('../utils/viewMappers');
-const { escapeRegex, buildQueueQuery, analyzableArticles } = require('../utils/queries');
+const { publishedQuery, feedSort, categoryCounts, buildQueueQuery, analyzableArticles } = require('../utils/queries');
 const { CATEGORIES, STATUS, STATUS_LABELS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 const MAX_TRACKED_VIEWS = 500;
@@ -60,7 +60,7 @@ function toCard(article) {
 exports.home = asyncHandler(async (req, res) => {
   // One query serves both the headline blocks (the newest 11) and the first feed page (the newest 20)
   const [feed, mostRead] = await Promise.all([
-    Article.find(PUBLISHED).sort({ publishedAt: -1, _id: -1 }).limit(FEED_PAGE_SIZE)
+    Article.find(PUBLISHED).sort(feedSort()).limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName').lean(),
     Article.find(PUBLISHED).sort({ totalViews: -1, _id: -1 }).limit(5)
       .select('publishedVersion.title publishedVersion.category totalViews').lean()
@@ -201,15 +201,10 @@ exports.search = asyncHandler(async (req, res) => {
   const q = String(req.query.q || '').trim();
   const category = CATEGORIES.includes(req.query.category) ? req.query.category : '';
 
-  const query = { ...PUBLISHED };
-  if (q) query['publishedVersion.title'] = { $regex: escapeRegex(q), $options: 'i' };
-  if (category) query['publishedVersion.category'] = category;
+  const query = publishedQuery({ search: q, category });
+  const sort = feedSort(req.query.sort);
 
-  const sort = req.query.sort === 'popularity'
-    ? { totalViews: -1, publishedAt: -1, _id: -1 }
-    : { publishedAt: -1, _id: -1 };
-
-  const [results, resultCount, categoryCounts] = await Promise.all([
+  const [results, resultCount, counts] = await Promise.all([
     // Bounded by FEED_PAGE_SIZE: without a limit this renders every published
     // article into one page, which does not stay usable on a large database.
     Article.find(query).sort(sort).limit(FEED_PAGE_SIZE)
@@ -217,13 +212,8 @@ exports.search = asyncHandler(async (req, res) => {
     Article.countDocuments(query),
     // A grouped count in a single query instead of a separate query per category.
     // It applies the search term but not the category, so each count is what that category would show.
-    Article.aggregate([
-      { $match: q ? { ...PUBLISHED, 'publishedVersion.title': query['publishedVersion.title'] } : PUBLISHED },
-      { $group: { _id: '$publishedVersion.category', count: { $sum: 1 } } }
-    ])
+    categoryCounts(publishedQuery({ search: q }))
   ]);
-
-  const counts = Object.fromEntries(categoryCounts.map(c => [c._id, c.count]));
 
   res.render('pages/public/search-results', publicChrome({
     pageTitle: q ? `Search results: ${q}` : 'Search Articles',
@@ -258,14 +248,14 @@ exports.category = asyncHandler(async (req, res, next) => {
 
   if (!matchedCategory) return next();
 
-  const categoryQuery = { ...PUBLISHED, 'publishedVersion.category': matchedCategory };
+  const categoryQuery = publishedQuery({ category: matchedCategory });
 
   // Bounded for the same reason as the search page: a category can hold
   // thousands of articles and they must not all be rendered at once.
   // The first page is server-rendered; feed.js loads the rest on scroll.
   const [articles, articleCount] = await Promise.all([
     Article.find(categoryQuery)
-      .sort({ publishedAt: -1, _id: -1 })
+      .sort(feedSort())
       .limit(FEED_PAGE_SIZE)
       .populate('reporter', 'username displayName')
       .lean(),

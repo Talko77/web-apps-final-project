@@ -5,7 +5,7 @@ const Analytics = require('../models/Analytics');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const { formatDateTime, formatViews, readingLabel, reporterName, toQueueRow } = require('../utils/viewMappers');
-const { escapeRegex, buildQueueQuery } = require('../utils/queries');
+const { publishedQuery, feedSort, categoryCounts, buildQueueQuery } = require('../utils/queries');
 const { CATEGORIES, STATUS, ROLES, FEED_PAGE_SIZE, QUEUE_PAGE_SIZE } = require('../config/constants');
 
 function sanitizeContent(body) {
@@ -20,16 +20,7 @@ function sanitizeContent(body) {
 
 // Builds the public feed query from the request query parameters
 function buildFeedQuery(req) {
-  const query = { isPublished: true };
-
-  if (CATEGORIES.includes(req.query.category)) {
-    query['publishedVersion.category'] = req.query.category;
-  }
-
-  const search = String(req.query.search || '').trim();
-  if (search) {
-    query['publishedVersion.title'] = { $regex: escapeRegex(search), $options: 'i' };
-  }
+  const query = publishedQuery({ search: req.query.search, category: req.query.category });
 
   // Seen / unseen filtering based on the articles read in the current session
   const seen = (req.session.viewedArticles || []);
@@ -43,9 +34,7 @@ function buildFeedQuery(req) {
 exports.getFeed = asyncHandler(async (req, res) => {
   const page = Math.min(10000, Math.max(1, parseInt(req.query.page, 10) || 1));
   const query = buildFeedQuery(req);
-  const sort = req.query.sortBy === 'popularity'
-    ? { totalViews: -1, publishedAt: -1, _id: -1 }
-    : { publishedAt: -1, _id: -1 };
+  const sort = feedSort(req.query.sortBy);
 
   // The search page asks for result counts along with the first page, so its header and
   // category counts follow the filters without a reload. They ignore the category filter,
@@ -55,7 +44,7 @@ exports.getFeed = asyncHandler(async (req, res) => {
   delete countQuery['publishedVersion.category'];
 
   // Only the fields the feed card displays are fetched; the body is used for the reading time
-  const [articles, total, grouped] = await Promise.all([
+  const [articles, total, counts] = await Promise.all([
     Article.find(query)
       .populate('reporter', 'username displayName')
       .sort(sort)
@@ -64,9 +53,7 @@ exports.getFeed = asyncHandler(async (req, res) => {
       .select('publishedVersion.title publishedVersion.summary publishedVersion.category publishedVersion.imageUrl publishedVersion.content publishedAt totalViews reporter')
       .lean(),
     withCounts ? Article.countDocuments(query) : null,
-    withCounts
-      ? Article.aggregate([{ $match: countQuery }, { $group: { _id: '$publishedVersion.category', count: { $sum: 1 } } }])
-      : null
+    withCounts ? categoryCounts(countQuery) : null
   ]);
 
   const seen = new Set((req.session.viewedArticles || []).map(String));
@@ -76,7 +63,7 @@ exports.getFeed = asyncHandler(async (req, res) => {
   res.json({
     page,
     hasMore: articles.length === FEED_PAGE_SIZE,
-    ...(withCounts && { total, categoryCounts: Object.fromEntries(grouped.map(g => [g._id, g.count])) }),
+    ...(withCounts && { total, categoryCounts: counts }),
     articles: articles.map(a => ({
       _id: a._id,
       title: a.publishedVersion.title,
@@ -125,19 +112,32 @@ exports.getAllForEditor = asyncHandler(async (req, res) => {
   });
 });
 
-// GET /api/articles/:id - a single article for editing or review
-exports.getOne = asyncHandler(async (req, res) => {
-  const article = await Article.findById(req.params.id)
-    .populate('reporter', 'username displayName')
-    .lean();
+// Loads the article named in the URL and checks that a reporter owns it; editors may use any article.
+// Sends the 404 or 403 response itself and returns null when the request cannot go on.
+async function loadForUser(req, res, message, { populated = false } = {}) {
+  const article = populated
+    ? await Article.findById(req.params.id).populate('reporter', 'username displayName').lean()
+    : await Article.findById(req.params.id);
 
-  if (!article) return res.status(404).json({ error: 'Article not found' });
+  if (!article) {
+    res.status(404).json({ error: 'Article not found' });
+    return null;
+  }
 
   const user = req.session.user;
-  // A reporter may access only their own articles; an editor may access all of them
-  if (user.role === ROLES.REPORTER && String(article.reporter && article.reporter._id) !== String(user._id)) {
-    return res.status(403).json({ error: 'You do not have permission to view this article' });
+  // A populated reporter is a user object, otherwise it is the reporter's id
+  const owner = article.reporter && (populated ? article.reporter._id : article.reporter);
+  if (user.role === ROLES.REPORTER && String(owner) !== String(user._id)) {
+    res.status(403).json({ error: message });
+    return null;
   }
+  return article;
+}
+
+// GET /api/articles/:id - a single article for editing or review
+exports.getOne = asyncHandler(async (req, res) => {
+  const article = await loadForUser(req, res, 'You do not have permission to view this article', { populated: true });
+  if (!article) return;
 
   res.json({ article });
 });
@@ -158,14 +158,9 @@ exports.create = asyncHandler(async (req, res) => {
 // so a refresh, closing the browser or switching computers does not lose work.
 exports.saveDraft = asyncHandler(async (req, res) => {
   const user = req.session.user;
-  const article = await Article.findById(req.params.id);
-
-  if (!article) return res.status(404).json({ error: 'Article not found' });
-
   // A reporter edits only their own articles, an editor edits any article
-  if (user.role === ROLES.REPORTER && String(article.reporter) !== String(user._id)) {
-    return res.status(403).json({ error: 'You do not have permission to edit this article' });
-  }
+  const article = await loadForUser(req, res, 'You do not have permission to edit this article');
+  if (!article) return;
 
   // An article currently awaiting the editor's decision must not be edited
   if (article.status === STATUS.PENDING && user.role === ROLES.REPORTER) {
@@ -207,14 +202,10 @@ exports.saveDraft = asyncHandler(async (req, res) => {
 exports.changeStatus = asyncHandler(async (req, res) => {
   const user = req.session.user;
   const { newStatus, editorNote } = req.body || {};
-  const article = await Article.findById(req.params.id);
-
-  if (!article) return res.status(404).json({ error: 'Article not found' });
+  const article = await loadForUser(req, res, 'You do not have permission to change this article');
+  if (!article) return;
 
   if (user.role === ROLES.REPORTER) {
-    if (String(article.reporter) !== String(user._id)) {
-      return res.status(403).json({ error: 'You do not have permission to change this article' });
-    }
     // Submitting a published article with nothing changed would only re-review the live version
     if (article.status === STATUS.PUBLISHED) {
       return res.status(400).json({ error: 'There are no changes to submit - edit the article first' });

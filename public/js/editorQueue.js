@@ -17,6 +17,7 @@
   const countEl = document.getElementById('queueCount');
   const totalEl = document.getElementById('queueTotal');
   const capNoteEl = document.getElementById('queueCapNote');
+  const messageEl = document.getElementById('queueStatus');
 
   const esc = window.api.escapeHtml;
 
@@ -93,10 +94,12 @@
       // The server caps the rows it returns, so say when the list is only part of the matches.
       if (capNoteEl) capNoteEl.classList.toggle('state-hidden', !data.hasMore);
 
+      if (messageEl) messageEl.classList.add('state-hidden');
+
       window.history.replaceState(null, '', pageUrl);
     } catch (err) {
       if (requestId !== activeRequest) return;
-      console.error('Failed to reload review queue:', err);
+      window.api.flash(messageEl, err.message, true);
     }
   }
 
