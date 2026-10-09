@@ -27,3 +27,6 @@ build/
 # Local OS files
 .DS_Store
 Thumbs.db
+
+# Local course documents
+text files/
