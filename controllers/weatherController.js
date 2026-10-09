@@ -51,8 +51,9 @@ exports.getWeather = async (req, res) => {
     return res.json({ source: 'cache', ageSeconds: Math.round((now - cachedAt) / 1000), data: cache });
   }
 
+  // Past this point any cached value is more than 15 minutes old, so it is never shown
   if (now - failedAt < RETRY_AFTER) {
-    return res.json({ source: cache ? 'stale-cache' : 'fallback', data: cache || FALLBACK });
+    return res.json({ source: 'fallback', data: FALLBACK });
   }
 
   try {
@@ -65,7 +66,7 @@ exports.getWeather = async (req, res) => {
   } catch (err) {
     failedAt = Date.now();
     logger.warn(`Weather lookup failed: ${err.message}`);
-    // Return the stale cache if there is one, otherwise the fallback - the widget must not break the page
-    res.json({ source: cache ? 'stale-cache' : 'fallback', data: cache || FALLBACK });
+    // A clear "unavailable" state instead of data older than the 15-minute limit - the widget must not break the page
+    res.json({ source: 'fallback', data: FALLBACK });
   }
 };

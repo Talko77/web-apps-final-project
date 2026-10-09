@@ -1,10 +1,8 @@
 
 /* Display and positioning */
 .block { display: block; }
-.inline { display: inline; }
 .flex { display: flex; }
 .grid { display: grid; }
-.relative { position: relative; }
 .fixed { position: fixed; }
 .flex-column { flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
@@ -39,7 +37,6 @@
 .text-body { font-family: var(--font-interface); }
 .text-label { font-family: var(--font-interface); font-weight: 600; }
 .text-caption { font-family: var(--font-interface); }
-.text-medium { font-weight: 500; }
 .text-semibold { font-weight: 600; }
 .text-bold { font-weight: 700; }
 .text-uppercase { text-transform: uppercase; }
@@ -49,7 +46,6 @@
 .surface-paper { background: var(--color-surface-container-lowest); }
 .surface-muted { background: var(--color-surface-container-low); }
 .surface-panel { background: var(--color-surface-container); }
-.surface-raised { background: var(--color-surface-container-high); }
 .surface-alert { background: var(--color-error-container); color: var(--color-on-error-container); }
 .surface-info { background: var(--color-info-container); color: var(--color-on-info-container); }
 .surface-warning { background: var(--color-warning-container); color: var(--color-on-warning-container); }
@@ -58,7 +54,6 @@
 .color-body { color: var(--color-on-surface); }
 .color-muted { color: var(--color-secondary); }
 .color-subtle { color: var(--color-outline); }
-.color-inverse { color: var(--color-on-primary); }
 .color-alert { color: var(--color-error); }
 .color-info { color: var(--color-on-info-container); }
 .color-warning { color: var(--color-on-warning-container); }
@@ -72,10 +67,7 @@
 .width-full { width: 100%; }
 .width-content { max-width: var(--max-content-width); }
 .height-screen { min-height: 100vh; }
-.media-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.control-disabled { cursor: not-allowed; }
 .state-hidden { display: none !important; }
-.state-muted { opacity: 0.4; }
 .state-loading { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 .motion-colors { transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
 

@@ -49,7 +49,7 @@ utilities or a parallel spacing/type/color system.
 ### `components.css`
 
 Cross-page patterns: `.button*`, `.form-field*`, `.site-logo`, `.site-header*`,
-`.site-search*`, `.site-mobile-menu*`, `.site-breaking-bar`, `.article-card*`,
+`.site-search*`, `.site-mobile-menu*`, `.article-card*`,
 `.comment-form*`, `.comment-item*`, `.status-badge*`,
 `.article-filter-strip*`, `.analytics-summary-metric*`,
 `.analytics-chart-legend*`, media frames, `.control-*`, `.icon`, table defaults,
@@ -97,8 +97,8 @@ the convention of their component, and do not introduce a third naming style.
 
 The standard/newsroom mastheads, article card, and comment item have dedicated
 EJS partials. Their shared semantic selectors belong in `components.css`.
-Cross-page component styles for status badges (`.status-badge*`), breaking bars
-(`.breaking-strip*`), and analytics summary cards (`.analytics-summary-metric*`)
+Cross-page component styles for status badges (`.status-badge*`) and analytics
+summary cards (`.analytics-summary-metric*`)
 remain in `components.css`, while their markup is inlined directly in their
 owning templates.
 
@@ -126,7 +126,7 @@ exist. Preserve them rather than inventing nearby breakpoints.
 
 - `.page-shell` uses shared gutters and a 1280px maximum.
 - The article layout uses the named 820px content token for its reading measure.
-- Shared tokens/rules reserve fixed public header and breaking-strip space.
+- Shared tokens/rules reserve fixed public header space.
 - Reporter/editor multi-column workspaces begin at 1024px.
 - Tables retain structure inside overflow wrappers on narrow screens.
 - Navigation compacts below 768px; forms/controls refine below 640px.

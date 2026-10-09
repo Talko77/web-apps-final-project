@@ -147,7 +147,7 @@ async function seed() {
       if (hasUpdates) {
         // Updates are spread evenly between the first publication and a recent last
         // update (2-48 hours ago), so no approval point lies in the future.
-        const updates = rand(1, 3);
+        const updates = rand(2, 3); // "several" updates, so never just one
         const lastUpdate = Date.now() - rand(2, 48) * HOUR;
         const step = (lastUpdate - firstPublish.getTime()) / updates;
         for (let u = 1; u <= updates; u++) {

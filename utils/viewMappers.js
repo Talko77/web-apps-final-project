@@ -12,9 +12,6 @@ const STATUS_STYLE = {
   [STATUS.DRAFT]: 'surface-panel color-body'
 };
 
-const ACTION_ENABLED = 'surface-success color-inverse motion-colors';
-const ACTION_DISABLED = 'surface-raised color-subtle state-muted control-disabled';
-
 // The action a reporter can take on an article in its current state.
 const ACTION = {
   [STATUS.DRAFT]: { label: 'Submit for Review', disabled: false },
@@ -102,34 +99,27 @@ function toReporterRow(article) {
 
   // The detail line tells the reporter what is needed or where the article stands.
   let detail = version.title ? `Category: ${version.category || 'Not set'}` : 'No content yet';
-  let detailClass = 'color-muted';
   if (status === STATUS.RETURNED && article.editorNote) {
     detail = `Editor note: ${article.editorNote}`;
-    detailClass = 'color-alert text-medium';
   } else if (article.isPublished && status === STATUS.PENDING) {
     detail = 'Update awaiting approval — the previous version is still live';
-    detailClass = 'color-alert';
   }
 
   return {
     id: String(article._id),
     title: version.title || '(Untitled article)',
     detail,
-    detailClass,
     category: version.category || 'Uncategorised',
     status: STATUS_LABELS[status],
     isReturned: status === STATUS.RETURNED,
-    statusClass: STATUS_STYLE[status],
     updated: formatDateTime(article.updatedAt),
     // Machine-readable form for the <time datetime="..."> attribute in the table
     updatedAt: article.updatedAt ? new Date(article.updatedAt).toISOString() : '',
     // Unpublished articles show a dash, which the view renders as muted.
     views: article.isPublished ? formatViews(article.totalViews) : '-',
-    rowClass: article.isPublished ? 'surface-muted' : 'surface-paper',
     image: version.imageUrl || '',
     imageAlt: version.title || 'Untitled article',
     action: action.label,
-    actionClass: action.disabled ? ACTION_DISABLED : ACTION_ENABLED,
     disabled: action.disabled,
     editUrl: `/reporter/articles/${article._id}/edit`
   };

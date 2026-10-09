@@ -215,8 +215,7 @@
 
   /* PUBLIC PARITY: shared public-page shells, media, and responsive offsets. */
   --public-standard-header-height: 64px;
-  --public-breaking-bar-height: 32px;
-  --public-standard-offset: 96px;
+  --public-standard-offset: 64px;
   --public-desk-header-height: 112px;
   --public-desk-offset: 136px;
   --public-filter-height: 56px;

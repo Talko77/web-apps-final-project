@@ -5,7 +5,7 @@
   <%- include('partials/shared/head', { pageTitle: typeof pageTitle !== 'undefined' ? pageTitle : (typeof title !== 'undefined' ? title : 'Error') }) %>
 </head>
 <body class="public-page error-page surface-canvas flex flex-column height-screen">
-  <%- include('partials/public/header-standard', { editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null, showBreaking: false, searchQuery: '' }) %>
+  <%- include('partials/public/header-standard', { editionLabel: typeof editionLabel !== 'undefined' ? editionLabel : null, searchQuery: '' }) %>
   <main class="error-page__main page-shell width-content pad-inline-5 pad-block-6 flex-grow flex align-center justify-center">
     <section class="error-page__card surface-paper radius-card shadow-subtle pad-6 text-center width-full" style="max-width: 640px;">
       <% if (typeof statusCode !== 'undefined' && statusCode === 404) { %>

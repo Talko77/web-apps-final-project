@@ -26,7 +26,9 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // The session store is MongoDB rather than the process memory,
 // so a signed-in user stays signed in even after the server restarts.
-app.set('trust proxy', 1);
+// Trusting X-Forwarded-For without a real proxy in front would let any client fake its IP
+// and dodge the comment limit, so it is enabled only when TRUST_PROXY is set.
+if (process.env.TRUST_PROXY === 'true') app.set('trust proxy', 1);
 // Without a real secret anyone could forge a session cookie, so production refuses to start
 if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET must be set in production');
