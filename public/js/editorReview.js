@@ -20,9 +20,25 @@
     }
   }
 
+  // The in-place edit form for the pending version, if this article has one
+  const draftForm = document.getElementById('editorDraftForm');
+  const value = id => document.getElementById(id).value;
+  const draftPayload = () => ({
+    title: value('editorDraftTitle'),
+    summary: value('editorDraftSummary'),
+    content: value('editorDraftBody'),
+    category: value('editorDraftCategory'),
+    imageUrl: value('editorDraftImageUrl')
+  });
+  let savedDraft = draftForm ? JSON.stringify(draftPayload()) : null;
+  const saveDraft = () => window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', draftPayload());
+
   const approveBtn = document.getElementById('btn-approve');
   if (approveBtn) {
     approveBtn.addEventListener('click', () => act(approveBtn, async () => {
+      // Edits typed in the pane but not saved yet are saved first, so the version that
+      // gets published is exactly the one on screen
+      if (draftForm && JSON.stringify(draftPayload()) !== savedDraft) await saveDraft();
       await window.api.sendJSON(`/api/articles/${articleId}/status`, 'PATCH', { newStatus: 'published' });
       window.location.assign('/editor/reviews');
     }));
@@ -51,33 +67,23 @@
   // The editor may edit the pending version himself before deciding on it.
   // This reuses PUT /api/articles/:id, which leaves a pending article pending,
   // so the approve and return actions stay valid straight after a save.
-  const draftForm = document.getElementById('editorDraftForm');
   if (draftForm) {
     const draftStatusEl = document.getElementById('editorDraftStatus');
     const saveEditsBtn = document.getElementById('btn-save-draft-edits');
-    const value = id => {
-      const el = document.getElementById(id);
-      return el ? el.value : '';
-    };
 
     draftForm.addEventListener('submit', async event => {
       event.preventDefault();
       saveEditsBtn.disabled = true;
       try {
-        const data = await window.api.sendJSON(`/api/articles/${articleId}`, 'PUT', {
-          title: value('editorDraftTitle'),
-          summary: value('editorDraftSummary'),
-          content: value('editorDraftBody'),
-          category: value('editorDraftCategory'),
-          imageUrl: value('editorDraftImageUrl')
-        });
+        const data = await saveDraft();
+        savedDraft = JSON.stringify(draftPayload());
         // Editing a live article turns it into a pending update; reload so the status, badge and
         // the approve / return buttons match the new state
         if (data && data.status === 'pending' && approveBtn && approveBtn.disabled) {
           window.location.reload();
           return;
         }
-        window.api.flash(draftStatusEl, 'Your edits are saved to the pending version.', false);
+        window.api.flash(draftStatusEl, 'Your edits are saved.', false);
       } catch (err) {
         window.api.flash(draftStatusEl, err.message, true);
       } finally {

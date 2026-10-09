@@ -35,10 +35,8 @@ The site runs at <http://localhost:3000>.
 
 `npm run verify` runs `verify.js`, which starts a server of its own on port 3101 (so a
 running development server on 3000 is not disturbed), works through the requirements over
-HTTP, and shuts the server down again. Every line of output names the clause it checks — the
-number in brackets is the line number of that requirement in the course requirements
-document (`דרישות פרויקט מסכם - סמסטר קיץ.txt`, kept locally and not committed to the
-repository) — and the run ends with a pass/fail count:
+HTTP, and shuts the server down again. Every line of output describes the requirement it
+checks, with a check number in brackets, and the run ends with a pass/fail count:
 
 ```
 PASS  [195] the editor queue API is bounded to one page of rows  :: 200 rows (cap 200) in 11ms
@@ -80,7 +78,7 @@ Adding a headless browser would mean a dependency the course did not cover.
 | `PORT` | no | Defaults to 3000 |
 | `NODE_ENV` | no | `development` or `production` |
 | `TRUST_PROXY` | no | `true` only behind a reverse proxy; otherwise clients could fake their IP to dodge the comment limit |
-| `WEATHER_API_KEY` | no | Free key from OpenWeatherMap. Without it the widget shows fallback data |
+| `WEATHER_API_KEY` | no | Free key from OpenWeatherMap. Without it the widget shows "Weather data is unavailable right now" |
 | `WEATHER_CITY` | no | Defaults to `Tel Aviv` |
 
 `.env` is never committed. `.env.example` is the only template kept in the repository.
@@ -141,7 +139,7 @@ views/                    View layer (EJS)
 public/
   css/                    Design system (variables, base, utilities, components, layouts, pages)
   js/                     Client-side JavaScript (vanilla, no framework)
-logs/app.log              Error and operational event log
+logs/app.log              Error and operational event log (created at runtime)
 ```
 
 ## Core functionality

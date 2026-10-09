@@ -62,7 +62,7 @@ button {
   cursor: pointer;
 }
 
-/* EDITOR PARITY: retain the prototype's reset after removing Tailwind preflight. */
+/* Heading and text resets, so typography comes only from the classes below. */
 h1,
 h2,
 h3,

@@ -215,6 +215,10 @@ exports.changeStatus = asyncHandler(async (req, res) => {
     if (String(article.reporter) !== String(user._id)) {
       return res.status(403).json({ error: 'You do not have permission to change this article' });
     }
+    // Submitting a published article with nothing changed would only re-review the live version
+    if (article.status === STATUS.PUBLISHED) {
+      return res.status(400).json({ error: 'There are no changes to submit - edit the article first' });
+    }
     // The only transition allowed for a reporter: draft / changes requested -> pending review
     const allowed = article.status === STATUS.DRAFT || article.status === STATUS.RETURNED;
     if (!allowed || newStatus !== STATUS.PENDING) {
