@@ -4,7 +4,7 @@
 <html lang="en">
 <head><%- include('../../partials/shared/head', { pageTitle }) %></head>
 <body class="public-page home-page publication-page">
-<%- include('../../partials/public/header-standard', { editionLabel, showBreaking, breakingText, searchQuery: '' }) %>
+<%- include('../../partials/public/header-standard', { editionLabel, searchQuery: '' }) %>
 <main class="home-page__main">
   <div class="home-page__container page-shell">
     <div class="home-page__grid">
@@ -21,6 +21,10 @@
           <% } %>
           <div class="home-page__lead-body">
             <div class="home-page__lead-meta">
+              <% if (!lead.imageUrl) { %>
+              <span><%= lead.category %></span>
+              <span class="home-page__meta-separator">•</span>
+              <% } %>
               <span class="home-page__lead-author">By <%= lead.author %></span>
               <span class="home-page__meta-separator">•</span>
               <span class="home-page__lead-date"><%= lead.dateLabel %></span>
@@ -69,16 +73,9 @@
             </div>
             <span class="home-page__dispatches-subtitle">Live updates from the newsroom</span>
           </div>
-          <div class="home-page__dispatches-list">
+          <div class="home-page__articles-grid">
             <% (locals.dispatches || []).forEach(function (item) { %>
-            <div class="dispatch-item">
-              <div class="dispatch-meta">
-                <span class="dispatch-time"><%= item.time %></span>
-                <span class="dispatch-category"><%= item.category %></span>
-                <span class="dispatch-read-time"><%= item.readTime %></span>
-              </div>
-              <a class="dispatch-headline" href="<%= item.url %>"><%= item.title %></a>
-            </div>
+            <%- include('../../partials/public/article-card', { article: item }) %>
             <% }) %>
           </div>
         </section>

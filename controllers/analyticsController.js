@@ -34,6 +34,56 @@ exports.getArticleTimeline = asyncHandler(async (req, res) => {
   });
 });
 
+// Reads { timestamp, viewsCount } from the body; null when either value is invalid
+function parseBucket(body) {
+  const time = new Date(body.timestamp);
+  const views = Number(body.viewsCount);
+  if (Number.isNaN(time.getTime()) || time > new Date() || !Number.isInteger(views) || views < 0) return null;
+  return { timestamp: Analytics.hourBucket(time), viewsCount: views };
+}
+
+// POST /api/analytics/article/:articleId - records the view count of one hour manually.
+// The article counter moves by the same amount, so popularity sorting matches the chart.
+exports.createBucket = asyncHandler(async (req, res) => {
+  const bucket = parseBucket(req.body);
+  if (!bucket) return res.status(400).json({ error: 'A past timestamp and a non-negative whole viewsCount are required' });
+
+  const article = await Article.findById(req.params.articleId).select('_id');
+  if (!article) return res.status(404).json({ error: 'Article not found' });
+
+  try {
+    await Analytics.create({ article: article._id, ...bucket });
+  } catch (err) {
+    if (err.code === 11000) return res.status(409).json({ error: 'That hour already has data; update it instead' });
+    throw err;
+  }
+  await Article.updateOne({ _id: article._id }, { $inc: { totalViews: bucket.viewsCount } }, { timestamps: false });
+
+  logger.info(`View data for article ${article._id} at ${bucket.timestamp.toISOString()} created by ${req.session.user.username}`);
+  res.status(201).json({ success: true, bucket });
+});
+
+// PUT /api/analytics/article/:articleId - corrects the view count of an existing hour
+exports.updateBucket = asyncHandler(async (req, res) => {
+  const bucket = parseBucket(req.body);
+  if (!bucket) return res.status(400).json({ error: 'A past timestamp and a non-negative whole viewsCount are required' });
+
+  const previous = await Analytics.findOneAndUpdate(
+    { article: req.params.articleId, timestamp: bucket.timestamp },
+    { $set: { viewsCount: bucket.viewsCount } }
+  );
+  if (!previous) return res.status(404).json({ error: 'No view data for that article and hour' });
+
+  await Article.updateOne(
+    { _id: previous.article },
+    { $inc: { totalViews: bucket.viewsCount - previous.viewsCount } },
+    { timestamps: false }
+  );
+
+  logger.info(`View data for article ${previous.article} at ${bucket.timestamp.toISOString()} updated by ${req.session.user.username}`);
+  res.json({ success: true, bucket });
+});
+
 // DELETE /api/analytics/article/:articleId - clears the recorded view data for one article.
 // The cumulative counter on the article is reset together with the hourly buckets,
 // otherwise sorting by popularity would disagree with the chart.

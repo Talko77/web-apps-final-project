@@ -94,24 +94,18 @@ exports.getAllForEditor = asyncHandler(async (req, res) => {
   const query = await buildQueueQuery(req.query);
 
   // The rows are capped so the queue stays responsive with thousands of articles,
-  // while matchingCount reports how many articles the filters actually match and the
-  // aggregate keeps feeding the system-wide per-status counters.
-  const [articles, grouped, matchingCount] = await Promise.all([
+  // while matchingCount reports how many articles the filters actually match.
+  const [articles, matchingCount] = await Promise.all([
     Article.find(query)
       .populate('reporter', 'username displayName')
       .sort({ updatedAt: -1 })
       .limit(QUEUE_PAGE_SIZE)
       .lean(),
-    Article.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
     Article.countDocuments(query)
   ]);
 
-  const counts = Object.fromEntries(grouped.map(g => [g._id, g.count]));
-  const totalCount = Object.values(counts).reduce((a, b) => a + b, 0);
-
   res.json({
     total: matchingCount,
-    totalInSystem: totalCount,
     hasMore: matchingCount > articles.length,
     articles: articles.map(toQueueRow)
   });
@@ -166,7 +160,8 @@ exports.saveDraft = asyncHandler(async (req, res) => {
 
   const incoming = sanitizeContent(req.body || {});
   const current = article.draftVersion || {};
-  const changed = Object.keys(incoming).some(k => incoming[k] !== (current[k] || ''));
+  // Compared trimmed, because the schema trims title and summary on save
+  const changed = Object.keys(incoming).some(k => incoming[k].trim() !== String(current[k] || '').trim());
   article.draftVersion = incoming;
 
   // A reporter's draft may be partial (autosave), but an editor's edit goes straight to review

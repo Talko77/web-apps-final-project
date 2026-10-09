@@ -14,10 +14,6 @@
     const extra = d.feelsLike !== undefined
       ? `<span class="text-caption text-1 color-muted">Feels like ${esc(d.feelsLike)}° · Humidity ${esc(d.humidity)}%</span>`
       : '';
-    // Tell the user when the data is not fresh, instead of presenting it as current
-    const staleNote = payload.source === 'fallback' || payload.source === 'stale-cache'
-      ? '<span class="text-caption text-1 color-alert">Data may be stale</span>'
-      : '';
 
     widget.innerHTML = `<div class="flex align-center justify-between gap-2">
   <span class="text-label text-1 text-uppercase color-primary">Weather</span>
@@ -25,8 +21,7 @@
 </div>
 <p class="text-headline text-5 color-body margin-top-2">${esc(temp)}</p>
 <p class="text-body text-1 color-muted">${esc(d.condition || '')}</p>
-${extra}
-${staleNote}`;
+${extra}`;
   }
 
   window.api.getJSON('/api/weather')

@@ -2,7 +2,7 @@
 // automatically checkable requirement from "דרישות פרויקט מסכם - סמסטר קיץ".
 //
 // The number in brackets on each line is the line number of that requirement in the
-// requirements file at the root of this repository (the .txt file), so a failure names the clause it breaks.
+// requirements .txt file (kept locally in `text files/`, not committed), so a failure names the clause it breaks.
 //
 //   npm run seed     # restore the demo state first
 //   npm run verify

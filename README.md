@@ -36,8 +36,9 @@ The site runs at <http://localhost:3000>.
 `npm run verify` runs `verify.js`, which starts a server of its own on port 3101 (so a
 running development server on 3000 is not disturbed), works through the requirements over
 HTTP, and shuts the server down again. Every line of output names the clause it checks — the
-number in brackets is the line number of that requirement in
-`דרישות פרויקט מסכם - סמסטר קיץ.txt` — and the run ends with a pass/fail count:
+number in brackets is the line number of that requirement in the course requirements
+document (`דרישות פרויקט מסכם - סמסטר קיץ.txt`, kept locally and not committed to the
+repository) — and the run ends with a pass/fail count:
 
 ```
 PASS  [195] the editor queue API is bounded to one page of rows  :: 200 rows (cap 200) in 11ms
@@ -65,6 +66,7 @@ Adding a headless browser would mean a dependency the course did not cover.
 | `SESSION_SECRET` | in production | Key used to sign the session cookie. The server refuses to start in production without it |
 | `PORT` | no | Defaults to 3000 |
 | `NODE_ENV` | no | `development` or `production` |
+| `TRUST_PROXY` | no | `true` only behind a reverse proxy; otherwise clients could fake their IP to dodge the comment limit |
 | `WEATHER_API_KEY` | no | Free key from OpenWeatherMap. Without it the widget shows fallback data |
 | `WEATHER_CITY` | no | Defaults to `Tel Aviv` |
 
@@ -103,7 +105,7 @@ controllers/              Controller layer
   userController.js       Staff accounts (editors only)
   articleController.js    Feed, drafts, state transitions, deletion
   commentController.js    Comments and editor moderation
-  analyticsController.js  Chart data, resetting view data
+  analyticsController.js  Chart data, manual view data, resetting view data
   weatherController.js    External service with caching
   pageController.js       EJS page rendering
 routes/                   REST routes and view routes
@@ -233,8 +235,8 @@ that sorting by popularity is a single query with no aggregation.
 `controllers/weatherController.js` calls OpenWeatherMap on the free tier (no payment details)
 and caches the result for 15 minutes. An `inFlight` guard prevents parallel calls when the
 cache expires, so thousands of visitors translate into one external call per 15 minutes. On
-failure it returns a stale cache or fallback data, and the widget marks the value as not
-current; the external service is then not retried for a minute, so an outage does not turn
+failure it never serves a value older than 15 minutes: the widget shows "Weather data is
+unavailable right now" instead; the external service is then not retried for a minute, so an outage does not turn
 every page view into another failing call.
 
 ## Security and permissions
@@ -287,6 +289,8 @@ every page view into another failing call.
 | DELETE | `/api/comments/:id` | Editor | Delete comment |
 | GET | `/api/analytics/articles` | Editor | Articles selectable in the chart |
 | GET | `/api/analytics/article/:id` | Editor | Timeline, views and publish events |
+| POST | `/api/analytics/article/:id` | Editor | Record one hour's view count (`{ timestamp, viewsCount }`) |
+| PUT | `/api/analytics/article/:id` | Editor | Correct an existing hour's view count |
 | DELETE | `/api/analytics/article/:id` | Editor | Reset an article's view data |
 | GET | `/api/weather` | public | Cached weather |
 
@@ -299,11 +303,13 @@ Every model supports the full set of operations through the REST API.
 | `User` | `POST /api/users` | `GET /api/users`, `GET /api/users?search=` | `PUT /api/users/:id` | `DELETE /api/users/:id` |
 | `Article` | `POST /api/articles` | `GET /api/articles/feed?search=&category=`, `/mine`, `/manage?status=`, `GET /api/articles/:id` | `PUT /api/articles/:id`, `PATCH /api/articles/:id/status` | `DELETE /api/articles/:id` |
 | `Comment` | `POST /api/comments/article/:id` | `GET /api/comments/article/:id` | `PUT /api/comments/:id` | `DELETE /api/comments/:id` |
-| `Analytics` | one atomic `upsert` + `$inc` per article view (`pageController.articlePage`) | `GET /api/analytics/articles`, `GET /api/analytics/article/:id` | the same `$inc` increments the existing hourly bucket | `DELETE /api/analytics/article/:id`, and cascaded on article deletion |
+| `Analytics` | `POST /api/analytics/article/:id`, and one atomic `upsert` + `$inc` per article view (`pageController.articlePage`) | `GET /api/analytics/articles`, `GET /api/analytics/article/:id` | `PUT /api/analytics/article/:id`, and the same `$inc` per view | `DELETE /api/analytics/article/:id`, and cascaded on article deletion |
 
-`Analytics` deliberately has no separate create and update path: a view is one atomic
-`updateOne` with `upsert`, which creates the hourly bucket the first time and increments it
-afterwards. That is what keeps the counter correct under concurrent readers.
+Reader traffic never goes through the POST/PUT endpoints: a view is one atomic `updateOne`
+with `upsert`, which creates the hourly bucket the first time and increments it afterwards.
+That is what keeps the counter correct under concurrent readers. The editor-only POST/PUT
+endpoints record or correct one hour's count manually and move the article's `totalViews`
+by the same amount, so popularity sorting stays consistent with the chart.
 
 ### View routes
 
@@ -353,11 +359,12 @@ Repository: <https://github.com/Talko77/web-apps-final-project> (open for viewin
 
 | Student | Commits | Main areas | Branches opened |
 |---|---|---|---|
-| Adir Avraham | 29 | CSS design system (`variables`/`base`/`utilities`/`components`/`layouts`/`pages`), the EJS/BEM migration of the page templates, the dynamic category page, the review-comparison redesign, project documentation | `adir`, `adir-documentation`, `adir-dynamic_category_page` |
-| Tal Naor | 21 | Backend (models, controllers, routes, middleware, sessions), client-side JavaScript, database seeding, translation to English, staff directory and full CRUD, later fixes | `feat/ejs-migration`, `tal_branch`, `tal_branch_final` |
+| Adir Avraham | 30 | CSS design system (`variables`/`base`/`utilities`/`components`/`layouts`/`pages`), the EJS/BEM migration of the page templates, the dynamic category page, the review-comparison redesign, project documentation | `adir`, `adir-documentation`, `adir-dynamic_category_page` |
+| Tal Naor | 31 | Backend (models, controllers, routes, middleware, sessions), client-side JavaScript, database seeding, translation to English, staff directory and full CRUD, later fixes | `feat/ejs-migration`, `tal_branch`, `tal_branch_final` |
 
-Commit counts come from `git shortlog -sne --all`; both students committed under more than one
-Git identity, and the counts above are the totals per person.
+Commit counts come from `git shortlog -sne --all` (as of 9 October 2026, before the final
+update); both students committed under more than one Git identity, and the counts above are
+the totals per person across all of them.
 
 ### Pull requests
 
@@ -368,6 +375,10 @@ Git identity, and the counts above are the totals per person.
 | #3 | `tal_branch` | Article card rework, search page improvements, English translation |
 | #4 | `adir-documentation` | File-level documentation, EJS formatting, project structure notes |
 | #5 | `adir-dynamic_category_page` | Dynamic category route and its BEM migration |
+| #6 | `tal_branch_final` | Staff directory, editable review pane, bounded review queue, `verify.js` requirement checks |
+| #7 | `tal_branch_final` | Workflow and permission fixes, demo data, unused CSS removed |
+| #8 | `tal_branch_final` | Remaining fixes in sign-in, the review flow, analytics and demo data |
+| #9 | `tal_branch_final` | Ignore the local `text files/` folder |
 
 ### AI tool usage
 

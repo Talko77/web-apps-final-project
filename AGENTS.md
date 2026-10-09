@@ -58,7 +58,7 @@ Partials are grouped into `shared/`, `public/`, `newsroom/`, and
 `comments/`. Actual active reuse matters more than a file's presence:
 
 - `shared/head` is universal; `shared/site-logo` is used by headers and login.
-- `public/header-standard` serves active public and error pages (with inlined breaking strip banner).
+- `public/header-standard` serves active public and error pages.
 - `public/footer` serves all active public and error pages.
 - `newsroom/header` serves all active reporter/editor pages.
 - `public/article-card` serves home, search, category, and related articles.

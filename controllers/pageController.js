@@ -18,8 +18,6 @@ const publicChrome = (overrides = {}) => ({
   editionLabel: new Date().toLocaleDateString('en-US', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   }),
-  showBreaking: true,
-  breakingText: 'Demo edition — all content on this site is sample data for the course project',
   searchQuery: '',
   categories: CATEGORIES,
   ...overrides
@@ -55,11 +53,8 @@ function toCard(article) {
     dateLabel: m.formatDateTime(article.publishedAt),
     datetime: article.publishedAt ? new Date(article.publishedAt).toISOString() : '',
     views: m.formatViews(article.totalViews),
-    reads: `${m.formatViews(article.totalViews)} views`,
     readLabel: m.readingLabel(v.content),
-    author: m.reporterName(article),
-    initials: m.initials(m.reporterName(article)),
-    role: v.category ? `${v.category} Reporter` : 'Reporter'
+    author: m.reporterName(article)
   };
 }
 
@@ -82,9 +77,7 @@ exports.home = asyncHandler(async (req, res) => {
   res.render('pages/public/home', publicChrome({
     pageTitle: 'The Daily Web — News',
     featured: cards.slice(0, 3),
-    dispatches: cards.slice(3, HEADLINE_COUNT).map(c => ({
-      time: c.dateLabel, category: c.category, readTime: c.readLabel, title: c.title, url: c.url
-    })),
+    dispatches: cards.slice(3, HEADLINE_COUNT),
     mostRead: mostRead.map(a => ({
       url: `/articles/${a._id}`,
       title: a.publishedVersion.title,
@@ -351,7 +344,6 @@ exports.reporterEdit = asyncHandler(async (req, res, next) => {
     article: {
       id: article ? String(article._id) : '',
       isNew,
-      status: article ? article.status : STATUS.DRAFT,
       statusLabel: article ? STATUS_LABELS[article.status] : STATUS_LABELS[STATUS.DRAFT],
       // Editing is locked while the article is under editor review
       locked: Boolean(article && article.status === STATUS.PENDING),
@@ -425,8 +417,8 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
   const draft = article.draftVersion || {};
   const reporterName = m.reporterName(article);
 
-  const asPane = (v, label) => v ? {
-    label,
+  // draftVersion defaults to an empty object, so "no content" counts as no version
+  const asPane = v => (v && (v.title || v.content)) ? {
     title: v.title || '(Untitled article)',
     summary: v.summary || '',
     paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
@@ -458,9 +450,7 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         id: String(article._id),
         status: article.status,
         statusLabel: STATUS_LABELS[article.status],
-        statusClass: m.STATUS_STYLE[article.status],
         reporter: reporterName,
-        initials: m.initials(reporterName),
         category: draft.category || (pub && pub.category) || 'Uncategorised',
         submittedLabel: submittedFormatted,
         submittedLabelLower,
@@ -472,8 +462,8 @@ exports.editorReview = asyncHandler(async (req, res, next) => {
         liveVersion: approved ? `v${approved}.0` : (article.isPublished ? 'v1.0' : null),
         proposedVersion: article.isPublished ? `v${approved + 1}.0` : 'v1.0',
         publishedDateLabel: formatPubDate(pubDate),
-        published: asPane(pub, approved ? `v${approved}.0 — currently live` : 'Not yet published'),
-        draft: asPane(draft, article.isPublished ? `v${approved + 1}.0 — pending approval` : 'New version')
+        published: asPane(pub),
+        draft: asPane(draft)
       }
     }
   });
@@ -521,10 +511,8 @@ exports.editorAnalytics = asyncHandler(async (req, res, next) => {
     newsroomRole: 'Editor',
     page: {
       article: {
-        id: String(article._id),
         title: v.title || '(Untitled article)',
         reporter: reporterName,
-        imageUrl: v.imageUrl || '',
         category: v.category || 'Uncategorised'
       },
       // The template receives the id and analyticsChart.js fetches the data from the API
@@ -576,7 +564,6 @@ exports.staffLogin = (req, res) => {
   res.render('pages/auth/staff-login', {
     pageTitle: 'Staff Login',
     page: {
-      title: 'Staff Login',
       publicationName: 'The Daily Web',
       publicWebsiteHref: '/',
       heading: 'Staff Login',

@@ -85,7 +85,6 @@ a {
 .comment-item__edit { width: 100%; margin-top: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-surface-container-low); color: var(--color-on-surface); border-radius: var(--radius-lg); font-family: var(--font-interface); font-size: var(--text-2); line-height: var(--line-2); }
 
 .status-badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-2) var(--space-3); border-radius: var(--radius-default); font-family: var(--font-interface); font-size: var(--text-1); font-weight: 600; text-transform: uppercase; }
-.status-badge--pending { background: var(--color-info-container); color: var(--color-on-info-container); }
 .status-badge__indicator { width: var(--avatar-small); height: var(--avatar-small); border-radius: var(--radius-full); background: var(--color-error-container); }
 
 .article-filter-strip { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-4); padding: var(--space-4); background: var(--color-surface-container-lowest); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
@@ -116,20 +115,6 @@ figure,
 blockquote,
 cite {
   margin: 0;
-}
-
-/* Media frames keep image ratios stable while content and images load. */
-.media-frame {
-  position: relative;
-  overflow: hidden;
-  background: var(--color-primary-container);
-}
-
-.media-frame > img,
-.media-frame > video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 /* Form controls share borders, radius, focus treatment, and action sizing. */
@@ -270,54 +255,6 @@ table {
   height: 32px;
   padding: var(--space-1) var(--space-2) var(--space-1) var(--space-6);
   border-color: transparent;
-}
-
-/* Breaking news ticker strip */
-.breaking-strip,
-.site-breaking-bar {
-  min-height: var(--public-breaking-bar-height);
-  padding-block: var(--space-1);
-  padding-inline: var(--space-5);
-  background: var(--color-error-container);
-  color: var(--color-on-error-container);
-}
-
-.breaking-strip__inner,
-.site-breaking-bar > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  min-width: 0;
-  text-align: center;
-  font-family: var(--font-interface);
-  font-size: var(--text-1);
-}
-
-.breaking-strip__badge,
-.site-breaking-bar > div > :first-child {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px var(--space-2);
-  background: var(--color-error);
-  color: var(--color-on-error);
-  font-family: var(--font-interface);
-  font-size: var(--text-1);
-  font-weight: 700;
-  line-height: var(--text-label-caps-line);
-  letter-spacing: var(--text-label-caps-tracking);
-  text-transform: uppercase;
-  border-radius: var(--radius-standard);
-  flex-shrink: 0;
-}
-
-.breaking-strip__text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: var(--font-interface);
-  font-size: var(--text-1);
-  color: var(--color-error);
 }
 
 /* Public footer component */

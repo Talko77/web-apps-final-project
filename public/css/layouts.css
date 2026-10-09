@@ -27,7 +27,7 @@
 }
 
 @media (min-width: 768px) {
-  .public-footer > div > .grid:not(.editorial-grid) {
+  .public-footer > div > .grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

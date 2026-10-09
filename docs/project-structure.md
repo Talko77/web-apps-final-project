@@ -141,7 +141,6 @@ Modular EJS fragments grouped by domain for consistent rendering across pages.
 ### Public Partials (`views/partials/public/`)
 - **`views/partials/public/header-standard.ejs`**: Standard header with logo, primary navigation links, search bar, and staff login/logout buttons.
 - **`views/partials/public/article-card.ejs`**: Universal article preview card displaying image, category, headline, excerpt, author, date, and reading time.
-- **`views/partials/public/breaking-strip.ejs`**: High-visibility banner displayed beneath the header for breaking news alerts.
 - **`views/partials/public/footer.ejs`**: Shared publication footer displaying brand title, course project disclaimer, and demo data notice across all active public pages.
 
 ### Newsroom Partials (`views/partials/newsroom/`)

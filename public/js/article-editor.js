@@ -88,6 +88,9 @@
       return true;
     } catch (error) {
       showMessage(`${isAuto ? 'Autosave' : 'Save'} failed: ${error.message}`, true);
+      // A network or server hiccup is retried on its own; a rejection (4xx) would only fail again
+      const transient = !error.status || error.status >= 500 || error.status === 429;
+      if (transient && !keepalive) scheduleAutosave();
       return false;
     } finally {
       saving = null;
@@ -138,6 +141,17 @@
       if (!el) return;
       el.addEventListener('input', scheduleAutosave);
       el.addEventListener('change', scheduleAutosave);
+      // Leaving a field saves at once instead of waiting for the typing pause
+      el.addEventListener('blur', () => {
+        if (!hasUnsavedChanges()) return;
+        clearTimeout(autosaveTimer);
+        persist(true);
+      });
+    });
+
+    // Warn before leaving while an edit has not reached the server yet
+    window.addEventListener('beforeunload', event => {
+      if (hasUnsavedChanges() || saving) event.preventDefault();
     });
 
     // Closing the tab or switching away must not lose the pending edit
