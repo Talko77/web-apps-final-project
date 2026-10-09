@@ -36,9 +36,9 @@
       if (target === '/editor' || target === '/editor/') target = '/editor/reviews';
       if (target === '/reporter' || target === '/reporter/') target = '/reporter/articles';
       if (target === '/login' || target === '/staff/login' || target === '/staff/login/') target = data.redirect;
-      if (data.user && data.user.role === 'Reporter' && target.startsWith('/editor')) {
-        target = '/reporter/articles';
-      }
+      // A link meant for the other role's area would only end on an access-denied page
+      if (data.user && data.user.role === 'Reporter' && target.startsWith('/editor')) target = data.redirect;
+      if (data.user && data.user.role === 'Editor' && target.startsWith('/reporter')) target = data.redirect;
       window.location.assign(target);
     } catch (err) {
       window.api.flash(statusEl, err.message, true);

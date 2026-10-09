@@ -15,8 +15,10 @@
         <article class="article-page__content">
           <nav aria-label="Breadcrumb" class="article-page__breadcrumb">
             <a class="article-page__breadcrumb-link" href="/">Home</a>
+            <% if (article.category) { %>
             <span class="article-page__breadcrumb-separator icon" aria-hidden="true">chevron_right</span>
             <a class="article-page__breadcrumb-link" href="/category/<%= article.category.toLowerCase() %>"><%= article.category %></a>
+            <% } %>
           </nav>
 
           <%# Article header and byline %>

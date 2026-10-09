@@ -178,7 +178,7 @@ exports.articlePreview = asyncHandler(async (req, res, next) => {
       title: v.title,
       summary: v.summary,
       paragraphs: String(v.content || '').split(/\n\s*\n/).filter(Boolean),
-      category: v.category || 'News',
+      category: v.category,
       imageUrl: v.imageUrl || '',
       imageAlt: v.title,
       reporterName,

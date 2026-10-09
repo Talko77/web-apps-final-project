@@ -1,8 +1,7 @@
 // Spec verification harness: boots its own copy of the server and re-proves every
 // automatically checkable requirement from "דרישות פרויקט מסכם - סמסטר קיץ".
 //
-// The number in brackets on each line is the line number of that requirement in the
-// requirements .txt file (kept locally in `text files/`, not committed), so a failure names the clause it breaks.
+// Each line describes the requirement it checks; the number in brackets is a check number.
 //
 //   npm run seed     # restore the demo state first
 //   npm run verify
