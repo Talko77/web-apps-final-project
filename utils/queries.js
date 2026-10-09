@@ -6,6 +6,29 @@ const { CATEGORIES, STATUS } = require('../config/constants');
 // Escapes special characters so free-text input is not interpreted as a regular expression
 const escapeRegex = str => String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+// Published articles, optionally narrowed by a title search and a category
+function publishedQuery({ search, category } = {}) {
+  const query = { isPublished: true };
+  const term = String(search || '').trim();
+  if (term) query['publishedVersion.title'] = { $regex: escapeRegex(term), $options: 'i' };
+  if (CATEGORIES.includes(category)) query['publishedVersion.category'] = category;
+  return query;
+}
+
+// Feed order: newest first, or most viewed first; _id breaks ties so paging stays stable
+const feedSort = key => (key === 'popularity'
+  ? { totalViews: -1, publishedAt: -1, _id: -1 }
+  : { publishedAt: -1, _id: -1 });
+
+// How many articles matching the filter fall into each category, as { [category]: count }
+async function categoryCounts(match) {
+  const grouped = await Article.aggregate([
+    { $match: match },
+    { $group: { _id: '$publishedVersion.category', count: { $sum: 1 } } }
+  ]);
+  return Object.fromEntries(grouped.map(g => [g._id, g.count]));
+}
+
 // Builds the editor review queue query from the status, category and search parameters.
 // The search matches the draft or published headline, or the reporter's name.
 async function buildQueueQuery(params) {
@@ -41,4 +64,6 @@ const analyzableArticles = () => Article.find({ isPublished: true })
   .select('publishedVersion.title totalViews publishEvents')
   .lean();
 
-module.exports = { escapeRegex, buildQueueQuery, analyzableArticles };
+module.exports = {
+  escapeRegex, publishedQuery, feedSort, categoryCounts, buildQueueQuery, analyzableArticles
+};

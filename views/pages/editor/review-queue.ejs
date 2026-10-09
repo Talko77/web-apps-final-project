@@ -116,6 +116,7 @@
           </div>
           <div class="review-queue__empty-container">
             <p class="review-queue__empty <%= page.articles.length > 0 ? 'state-hidden' : '' %>" id="queueEmptyState">No articles match the selected filters.</p>
+            <p class="review-queue__empty state-hidden" id="queueStatus" role="status" aria-live="polite"></p>
           </div>
         </div>
       </div>
