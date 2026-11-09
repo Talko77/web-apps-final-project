@@ -8,6 +8,7 @@ const Comment = require('./models/Comment');
 const Analytics = require('./models/Analytics');
 const { CATEGORIES, STATUS, ROLES } = require('./config/constants');
 const { MONGO_URI } = require('./config/db');
+const { hourBucket } = require('./domain/analytics');
 
 const HOUR = 3600 * 1000;
 const DAY = 24 * HOUR;
@@ -216,7 +217,7 @@ async function seed() {
     let total = 0;
 
     for (let h = HOURS_BACK; h >= 0; h--) {
-      const ts = Analytics.hourBucket(Date.now() - h * HOUR);
+      const ts = hourBucket(Date.now() - h * HOUR);
       const t = ts.getTime();
       if (t < new Date(article.publishedAt).getTime()) continue;
 
