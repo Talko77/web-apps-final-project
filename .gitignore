@@ -39,3 +39,6 @@ DESIGN.md
 .idea/
 .claude/
 *.swp
+
+# Course assignment brief (not part of the project)
+assigment.txt

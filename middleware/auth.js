@@ -1,5 +1,5 @@
 // Authentication and role-authorization middleware enforcing server-side session permissions.
-const User = require('../models/User');
+const { userRepository } = require('../container');
 const { ROLES } = require('../config/constants');
 const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
@@ -23,7 +23,7 @@ const requireRole = (...roles) => asyncHandler(async (req, res, next) => {
   const sessionUser = req.session && req.session.user;
   if (!sessionUser) return deny(req, res, 401, 'You must be signed in to access this area');
 
-  const user = await User.findById(sessionUser._id).select('role').lean();
+  const user = await userRepository.findById(sessionUser._id);
   if (!user) {
     req.session.destroy(() => {});
     return deny(req, res, 401, 'Your account no longer exists');

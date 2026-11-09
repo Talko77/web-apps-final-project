@@ -1,5 +1,5 @@
 // Handles staff authentication requests: credential validation, session creation, and logout.
-const User = require('../models/User');
+const { userRepository } = require('../container');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
 const { ROLES } = require('../config/constants');
@@ -12,10 +12,10 @@ exports.login = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'Enter a username and password' });
   }
 
-  const user = await User.findOne({ username: String(username).trim() });
+  const user = await userRepository.findByCredentials(username, password);
 
   // The same message for a wrong username and a wrong password, so we do not reveal which names exist
-  if (!user || !(await user.verifyPassword(String(password)))) {
+  if (!user) {
     logger.warn(`Login failed for "${username}" from ${req.ip}`);
     return res.status(401).json({ error: 'Incorrect username or password' });
   }
@@ -26,7 +26,7 @@ exports.login = asyncHandler(async (req, res) => {
   await new Promise((resolve, reject) => req.session.regenerate(err => (err ? reject(err) : resolve())));
 
   // The role is stored in the server-side session and never taken from the request
-  req.session.user = user.toPublic();
+  req.session.user = user;
   if (viewedArticles) req.session.viewedArticles = viewedArticles;
 
   logger.info(`Login succeeded: ${user.username} (${user.role})`);

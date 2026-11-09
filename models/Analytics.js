@@ -12,11 +12,4 @@ const analyticsSchema = new mongoose.Schema({
 
 analyticsSchema.index({ article: 1, timestamp: 1 }, { unique: true });
 
-// Rounds a date down to the start of the hour - the bucket key
-analyticsSchema.statics.hourBucket = function (date = new Date()) {
-  const d = new Date(date);
-  d.setMinutes(0, 0, 0);
-  return d;
-};
-
 module.exports = mongoose.model('Analytics', analyticsSchema);

@@ -1,11 +1,11 @@
 // Model representing articles with separate draft and published revisions, workflow statuses, and view metrics.
 const mongoose = require('mongoose');
-const { CATEGORIES, STATUS } = require('../config/constants');
+const { STATUS } = require('../config/constants');
 
 // The content fields are not required so a partial draft can be saved, whether by
 // the explicit Save Draft action or by autosave.
 // The completeness check happens when the draft is submitted for review
-// (articleController.changeStatus)
+// (domain/article.js isDraftComplete)
 const contentSchema = new mongoose.Schema({
   title: { type: String, default: '', trim: true, maxlength: 200 },
   summary: { type: String, default: '', trim: true, maxlength: 500 },
@@ -50,11 +50,5 @@ articleSchema.index({ isPublished: 1, totalViews: -1 });
 articleSchema.index({ isPublished: 1, 'publishedVersion.category': 1, publishedAt: -1 });
 articleSchema.index({ reporter: 1, updatedAt: -1 });
 articleSchema.index({ status: 1, updatedAt: -1 });
-
-// Whether the content is complete and may be submitted for approval
-articleSchema.methods.isDraftComplete = function () {
-  const d = this.draftVersion || {};
-  return Boolean(d.title && d.summary && String(d.content || '').trim() && CATEGORIES.includes(d.category));
-};
 
 module.exports = mongoose.model('Article', articleSchema);

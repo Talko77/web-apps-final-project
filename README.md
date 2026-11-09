@@ -4,6 +4,14 @@ A news publication and newsroom workspace covering the full article lifecycle: d
 autosaving, editorial review, requested changes, approval, publication, post-publication
 revisions, comments, view tracking and Impact Analytics.
 
+**Technologies:** Node.js, Express, MongoDB with Mongoose, EJS server-side views, vanilla
+JavaScript on the client, and the built-in `node:test` runner for automated tests.
+
+**Main features:** a public news feed with infinite scroll, search, filters and sorting;
+server-rendered article pages with guest comments; a reporter workspace with autosave; an
+editorial review workflow (submit, approve, request changes, update a live article); a staff
+directory; per-article Impact Analytics; and a cached external weather widget.
+
 ## Install and run
 
 Requirements: **Node.js 18 or newer** (the app uses the built-in `fetch`) and **MongoDB**,
@@ -15,6 +23,7 @@ line — zsh does not treat `#` as an inline comment and will expand `~`.
 ```bash
 npm install
 cp .env.example .env
+npm test
 npm run seed
 npm start
 npm run verify
@@ -25,11 +34,40 @@ npm run verify
 2. `cp .env.example .env` — creates the environment file. Open `.env` and set
    `SESSION_SECRET`, and `WEATHER_API_KEY` if you want a live weather widget. The app also
    starts without the file, using defaults.
-3. `npm run seed` — seeds 500 articles, 6 users, comments and view history.
-4. `npm start` — starts the server. Use `npm run dev` for automatic reload.
-5. `npm run verify` — optional. Re-checks the project against the course requirements.
+3. `npm test` — runs the unit tests. No database is needed (see [Testing](#testing)).
+4. `npm run seed` — seeds 500 articles, 6 users, comments and view history.
+5. `npm start` — starts the server. Use `npm run dev` for automatic reload.
+6. `npm run verify` — optional. Re-checks the project against the course requirements.
 
 The site runs at <http://localhost:3000>.
+
+## Testing
+
+The project has two complementary test suites.
+
+| Command | What it tests | Needs MongoDB |
+|---|---|---|
+| `npm test` | Unit tests of the business rules (services and domain), in `tests/` | No |
+| `npm run verify` | End-to-end checks of the running server over HTTP | Yes |
+
+`npm test` uses Node's built-in test runner (`node --test`), so no test framework is
+installed. The services are tested against in-memory repositories
+(`tests/support/memoryRepositories.js`) instead of MongoDB, which keeps the tests fast and
+shows that the storage can be replaced without touching the business logic. They cover:
+
+- the article state machine — every allowed and forbidden transition, ownership (403),
+  missing articles (404), locking while pending (409), editing a live article, and
+  deleting an article together with its comments and view data;
+- staff accounts — validation, duplicate usernames, the last-editor rule, self-deletion;
+- comments — empty and over-long text, comments only on published articles, author name;
+- analytics — hourly buckets and the article total staying in sync, duplicate hours (409),
+  invalid input;
+- pure helpers — draft completeness, input sanitising, view formatting.
+
+Run a single file with `node --test tests/articleService.test.js`.
+
+The unit tests also run automatically on every push and pull request on Node 18, 20 and 22
+(GitHub Actions, `.github/workflows/test.yml`).
 
 ### Verifying the requirements
 
@@ -97,21 +135,98 @@ The password for every seeded user is `123456`. These accounts are created by
 | `editor1` | Editor | Sarah Chen |
 | `editor2` | Editor | Daniel Okafor |
 
+## Architecture
+
+The code is split into layers. Each layer has one job and talks only to the layer below it.
+
+```mermaid
+flowchart TD
+    Browser([Browser]) --> Routes
+    subgraph HTTP
+        Routes[routes/ <br/> URL to handler, auth middleware] --> Controllers
+        Controllers[controllers/ <br/> read request, send JSON or render EJS]
+    end
+    subgraph Business
+        Services[services/ <br/> workflow and permission rules]
+        Domain[domain/ <br/> pure rules: draft completeness, hour buckets]
+    end
+    subgraph Data
+        Repos[repositories/mongo/ <br/> the only code that queries MongoDB]
+        Models[models/ <br/> Mongoose schemas and indexes]
+    end
+    Container[container.js <br/> composition root] -. wires .-> Services
+    Container -. wires .-> Repos
+    Controllers --> Services
+    Controllers -- simple reads --> Repos
+    Services --> Domain
+    Services --> Repos
+    Repos --> Models --> DB[(MongoDB)]
+    Controllers --> Views[views/ EJS]
+```
+
+A request flows like this: `routes/articles.js` checks the role → `articleController.changeStatus`
+reads the body → `articleService.changeStatus` checks ownership and the allowed transition →
+`articleRepository.update` writes to MongoDB → the controller logs and sends the JSON.
+
+### Architecture decisions
+
+- **Repository layer — the database is replaceable.** Only `repositories/mongo/*` imports the
+  Mongoose models. They accept storage-neutral filters (`{ search, category, excludeIds }`)
+  and return plain objects, so no other layer knows the query language. Moving to another
+  database means writing new repositories with the same methods and changing the four
+  `require` lines in `container.js`; services and controllers stay unchanged. The in-memory
+  repositories used by the tests are a working second implementation.
+- **Services hold the business rules (single responsibility).** The article state machine,
+  the last-editor rule, comment validation and view counting live in `services/`. Controllers
+  only translate between HTTP and the services.
+- **Dependency injection (dependency inversion).** Each service is a factory —
+  `createArticleService({ articleRepository, ... })` — that receives its repositories instead
+  of importing them. `container.js` is the single place where the real implementations are
+  chosen, which is also what lets the tests pass in fakes.
+- **Errors as types, mapped in one place.** Services throw `AppError(status, message)`;
+  repositories turn MongoDB's duplicate-key code into `DuplicateKeyError`. The central
+  `middleware/errorHandler.js` turns any error into a JSON or HTML response, so error
+  formatting is not repeated in every controller.
+- **Open for extension.** A new workflow rule is a change in one service; a new storage, a
+  new set of repositories. The routes, views and other services do not change.
+- **Simple reads skip the service layer.** Page and feed reads with no rules (for example
+  "the newest 20 published articles") call a repository directly from the controller. A
+  pass-through service method would add code without adding a rule. Anything that decides
+  something goes through a service.
+- **Pure rules in `domain/`.** Logic that needs neither a framework nor a database (is the
+  draft complete, which hour bucket a time falls into) is plain functions, used by services
+  and tested directly.
+
 ## Project structure
 
 ```
 server.js                 Entry point: middleware, session, route mounting
+container.js              Composition root: picks the repositories and builds the services
 seed.js                   Demo data seeding
 verify.js                 Requirement checks, clause by clause (npm run verify)
 config/
   constants.js            Categories, article states, roles, feed and queue page sizes
   db.js                   MongoDB connection
-models/                   Model layer
+domain/                   Pure business rules (no framework, no database)
+  article.js              Input sanitising, draft completeness, ownership
+  analytics.js            Hour buckets and manual bucket parsing
+services/                 Business logic, receives repositories by injection
+  articleService.js       Drafts, autosave, editorial state machine, deletion
+  userService.js          Staff accounts and the last-editor rule
+  commentService.js       Comment rules and moderation
+  analyticsService.js     View recording, chart data, manual view data
+repositories/mongo/       Data access - the only code that uses the Mongoose models
+  articleRepository.js    Feed, search, queue and article writes
+  userRepository.js       Accounts; returns users without the password hash
+  commentRepository.js    Comments
+  analyticsRepository.js  Hourly view buckets
+  queryHelpers.js         Regex escaping, duplicate-key translation
+models/                   Mongoose schemas and indexes
   User.js                 Users, one-way password hashing
   Article.js              Articles, draft and published versions, indexes
   Comment.js              Comments
   Analytics.js            Hourly view buckets
-controllers/              Controller layer
+controllers/              HTTP layer: request in, service call, response out
   authController.js       Sign in, sign out, current identity
   userController.js       Staff accounts (editors only)
   articleController.js    Feed, drafts, state transitions, deletion
@@ -128,7 +243,9 @@ utils/
   logger.js               Writes logs to file and console
   asyncHandler.js         Forwards async errors to the error handler
   viewMappers.js          Maps DB documents onto view fields
-  queries.js              Query builders shared by the pages and the API
+  errors.js               AppError and DuplicateKeyError
+tests/                    Unit tests (npm test)
+  support/                In-memory repositories used by the tests
 views/                    View layer (EJS)
   error.ejs               Generic error page
   pages/public/           Home, article page, search results, category page
@@ -273,7 +390,7 @@ every page view into another failing call.
 - User input is truncated to allowed lengths and categories are validated against a fixed list.
 - Errors are handled on both sides. The client marks the four required fields on the reporter
   form and names the missing one before submitting for review; the server rejects the same
-  submission independently in `Article.isDraftComplete()`. Autosave deliberately skips that
+  submission independently in `isDraftComplete()` in `domain/article.js`. Autosave deliberately skips that
   check so a partial draft is still saved and no work is lost.
 
 ## REST endpoints

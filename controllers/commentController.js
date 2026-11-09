@@ -1,75 +1,30 @@
-// Handles public comment submissions, comment listings, and editor comment moderation.
-const Comment = require('../models/Comment');
-const Article = require('../models/Article');
+// HTTP layer for comments: public posting and listing, editor moderation.
+const { commentService } = require('../container');
 const asyncHandler = require('../utils/asyncHandler');
 const logger = require('../utils/logger');
-const { escapeRegex } = require('../utils/queries');
-
-// One place for the comment text rules, shared by posting and by editor moderation.
-// Returns the trimmed text, or an error message when the text is not acceptable.
-function readContent(body) {
-  const content = String((body && body.content) || '').trim();
-  if (!content) return { error: 'Comment cannot be empty' };
-  if (content.length > 1000) return { error: 'Comment is too long (1000 characters maximum)' };
-  return { content };
-}
 
 // GET /api/comments/article/:articleId?search= - the comments on an article, optionally by text
 exports.listByArticle = asyncHandler(async (req, res) => {
-  // Same rule as posting: only a published article exposes its discussion
-  const article = await Article.findOne({ _id: req.params.articleId, isPublished: true }).select('_id');
-  if (!article) return res.status(404).json({ error: 'Article not found' });
-
-  const query = { article: article._id };
-  const search = String(req.query.search || '').trim();
-  if (search) query.content = { $regex: escapeRegex(search), $options: 'i' };
-
-  const comments = await Comment.find(query)
-    .sort({ createdAt: -1 })
-    .limit(200)
-    .lean();
-  res.json({ comments });
+  res.json({ comments: await commentService.listForArticle(req.params.articleId, req.query.search) });
 });
 
-// POST /api/comments/article/:articleId - adds a comment, open to guests as well
+// POST /api/comments/article/:articleId - adds a comment, open to guests as well.
+// Only the new comment is returned, so the client can append it without a reload
 exports.create = asyncHandler(async (req, res) => {
-  const { content, error } = readContent(req.body);
-  if (error) return res.status(400).json({ error });
-
-  // Comments are only allowed on an article that is actually published
-  const article = await Article.findOne({ _id: req.params.articleId, isPublished: true }).select('_id');
-  if (!article) return res.status(404).json({ error: 'Article not found' });
-
-  const rawName = String((req.body && req.body.authorName) || '').trim();
-  const authorName = rawName ? rawName.slice(0, 40)
-    : (req.session.user ? req.session.user.displayName : 'Guest');
-
-  const comment = await Comment.create({ article: article._id, authorName, content });
-
-  // Only the single new comment is returned, so the client can append it to the list without a reload
+  const comment = await commentService.create(req.params.articleId, req.body, req.session.user);
   res.status(201).json({ success: true, comment });
 });
 
-// PUT /api/comments/:id - editors only. Moderates the text of an existing comment
-// instead of having to delete it outright.
+// PUT /api/comments/:id - editors only
 exports.update = asyncHandler(async (req, res) => {
-  const { content, error } = readContent(req.body);
-  if (error) return res.status(400).json({ error });
-
-  const comment = await Comment.findById(req.params.id);
-  if (!comment) return res.status(404).json({ error: 'Comment not found' });
-
-  comment.content = content;
-  await comment.save();
-
+  const comment = await commentService.update(req.params.id, req.body);
   logger.info(`Comment ${comment._id} edited by ${req.session.user.username}`);
   res.json({ success: true, comment });
 });
 
 // DELETE /api/comments/:id - editors only
 exports.remove = asyncHandler(async (req, res) => {
-  const comment = await Comment.findByIdAndDelete(req.params.id);
-  if (!comment) return res.status(404).json({ error: 'Comment not found' });
+  const comment = await commentService.remove(req.params.id);
   logger.info(`Comment ${comment._id} deleted by ${req.session.user.username}`);
   res.json({ success: true });
 });
